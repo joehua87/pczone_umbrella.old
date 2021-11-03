@@ -18,6 +18,9 @@ defmodule XeonWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    live "/chipsets", ChipsetsLive, :index
+    live "/motherboards", MotherboardsLive, :index
+    live "/memory-types", MemoryTypesLive, :index
   end
 
   # Other scopes may use custom stacks.
