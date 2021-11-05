@@ -1,4 +1,5 @@
 defmodule Xeon.Processors do
+  require Logger
   alias Xeon.{Repo, Processor, ProcessorScore}
   @url "https://browser.geekbench.com/processor-benchmarks"
   @cache_dir "/Users/achilles/.cache"
@@ -10,6 +11,22 @@ defmodule Xeon.Processors do
   def import_processors() do
     processors = get_processors()
     Repo.insert_all(Processor, processors, returning: true, on_conflict: :nothing)
+  end
+
+  def get_all_detail() do
+    # processors = Repo.all(from p in Processor, where: is_nil(p.cores))
+    processors = Repo.all(Processor)
+
+    processors
+    |> Task.async_stream(
+      fn processor ->
+        get_detail(processor)
+        Logger.info("Get #{processor.name} detail")
+      end,
+      max_concurrency: 4,
+      timeout: 30_000
+    )
+    |> Enum.into([])
   end
 
   def get_detail(processor = %{id: id, links: %{"geekbench" => url}}) do
@@ -25,7 +42,9 @@ defmodule Xeon.Processors do
         test_name: "geekbench5",
         single: single,
         multi: multi
-      })
+      }),
+      on_conflict: :replace_all,
+      conflict_target: [:processor_id, :test_name]
     )
     |> Repo.transaction()
   end
@@ -48,7 +67,7 @@ defmodule Xeon.Processors do
     if File.exists?(cache_path) do
       File.read(cache_path)
     else
-      with {:ok, %{body: html}} <-
+      with {:ok, %{status: 200, body: html}} <-
              Finch.build(:get, url) |> Finch.request(MyFinch),
            :ok <- cache_path |> Path.dirname() |> File.mkdir_p(),
            :ok <- File.write(cache_path, html) do
@@ -56,6 +75,8 @@ defmodule Xeon.Processors do
       end
     end
   end
+
+  defp get_mhz(""), do: nil
 
   defp get_mhz(value) do
     value |> String.split(" ") |> List.first() |> String.to_integer()
@@ -77,6 +98,7 @@ defmodule Xeon.Processors do
       maximum_frequency = Map.get(map, "Maximum Frequency", "") |> get_mhz()
       cores = Map.get(map, "Cores", "") |> String.to_integer()
       threads = Map.get(map, "Threads", "") |> String.to_integer()
+      tdp = Map.get(map, "TDP", "") |> get_mhz()
       gpu = Map.get(map, "GPU", "")
       family_code = Map.get(map, "Codename", "")
       socket = Map.get(map, "Package", "")
@@ -92,6 +114,7 @@ defmodule Xeon.Processors do
         cores: cores,
         threads: threads,
         gpu: gpu,
+        tdp: tdp,
         family_code: family_code,
         socket: socket,
         scores: %{

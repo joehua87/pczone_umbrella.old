@@ -19,6 +19,7 @@ defmodule XeonWeb.Router do
 
     get "/", PageController, :index
     live "/chipsets", ChipsetsLive, :index
+    live "/processors", ProcessorsLive, :index
     live "/motherboards", MotherboardsLive, :index
     live "/memory-types", MemoryTypesLive, :index
   end
