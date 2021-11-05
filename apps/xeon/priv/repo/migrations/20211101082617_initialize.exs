@@ -16,12 +16,35 @@ defmodule Xeon.Repo.Migrations.Initialize do
 
     create table(:processor_family) do
       add :name, :string, null: false
+      add :code, :string, null: false
+      add :socket, :string, null: false
     end
 
     create table(:processor) do
       add :name, :string, null: false
-      add :processor_family_id, references(:processor_family), null: false
+      add :processor_family_id, references(:processor_family)
+      add :frequency, :integer
+      add :maximum_frequency, :integer
+      add :cores, :integer
+      add :threads, :integer
+      add :tdp, :integer
+      add :gpu, :string
+      add :family_code, :string
+      add :socket, :string
+      add :links, :map, default: %{}
+      add :meta, :map, default: %{}
     end
+
+    create unique_index(:processor, [:name])
+
+    create table(:processor_score) do
+      add :processor_id, references(:processor), null: false
+      add :test_name, :string, null: false
+      add :single, :integer, null: false
+      add :multi, :integer, null: false
+    end
+
+    create unique_index(:processor_score, [:processor_id, :test_name])
 
     create table(:memory_type) do
       add :name, :string, null: false

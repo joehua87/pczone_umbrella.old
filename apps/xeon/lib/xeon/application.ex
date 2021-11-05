@@ -11,7 +11,8 @@ defmodule Xeon.Application do
       # Start the Ecto repository
       Xeon.Repo,
       # Start the PubSub system
-      {Phoenix.PubSub, name: Xeon.PubSub}
+      {Phoenix.PubSub, name: Xeon.PubSub},
+      {Finch, name: MyFinch}
       # Start a worker by calling: Xeon.Worker.start_link(arg)
       # {Xeon.Worker, arg}
     ]
