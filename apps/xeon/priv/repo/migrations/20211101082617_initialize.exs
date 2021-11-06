@@ -2,23 +2,26 @@ defmodule Xeon.Repo.Migrations.Initialize do
   use Ecto.Migration
 
   def change do
-    create table(:chipset) do
-      add :name, :string, null: false
-    end
-
     create table(:motherboard) do
       add :name, :string, null: false
       add :max_memory_capacity, :integer, null: false
       add :memory_slot, :integer, null: false
       add :processor_slot, :integer, null: false, default: 1
-      add :chipset_id, references(:chipset), null: false
+      add :chipset, :string, null: false
+      add :socket, :string, null: false
+      add :note, :string
     end
+
+    create unique_index(:motherboard, [:name])
 
     create table(:processor_family) do
       add :name, :string, null: false
-      add :code, :string, null: false
-      add :socket, :string, null: false
+      add :other_names, {:array, :string}, null: false, default: []
+      add :code, :string
+      add :socket, :string
     end
+
+    create unique_index(:processor_family, [:name])
 
     create table(:processor) do
       add :name, :string, null: false
@@ -49,6 +52,8 @@ defmodule Xeon.Repo.Migrations.Initialize do
     create table(:memory_type) do
       add :name, :string, null: false
     end
+
+    create unique_index(:memory_type, [:name])
 
     create table(:brand) do
       add :name, :string, null: false

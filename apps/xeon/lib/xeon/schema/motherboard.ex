@@ -2,7 +2,7 @@ defmodule Xeon.Motherboard do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @required [:name, :memory_slot, :max_memory_capacity, :chipset_id]
+  @required [:name, :memory_slot, :max_memory_capacity, :chipset]
   @optional [:processor_slot]
 
   schema "motherboard" do
@@ -10,7 +10,9 @@ defmodule Xeon.Motherboard do
     field :max_memory_capacity, :integer
     field :memory_slot, :integer
     field :processor_slot, :integer, default: 1
-    belongs_to :chipset, Xeon.Chipset
+    field :chipset, :string
+    field :socket, :string
+    field :note, :string
   end
 
   def changeset(entity, params) do
