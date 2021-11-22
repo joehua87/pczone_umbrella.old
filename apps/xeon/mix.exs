@@ -40,7 +40,7 @@ defmodule Xeon.MixProject do
       {:finch, "~> 0.9.0"},
       {:floki, "~> 0.32.0"},
       {:phoenix_pubsub, "~> 2.0"},
-      {:ecto_sql, "~> 3.6"},
+      {:ecto_sql, "~> 3.7"},
       {:postgrex, ">= 0.0.0"},
       {:jason, "~> 1.2"},
       {:swoosh, "~> 1.3"}

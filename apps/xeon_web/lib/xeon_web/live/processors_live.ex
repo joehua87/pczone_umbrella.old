@@ -18,6 +18,7 @@ defmodule XeonWeb.ProcessorsLive do
       <%= for entity <- @entities do %>
         <div><%= entity.name %></div>
         <div><%= entity.cores %></div>
+        <div><%= entity.family_code %></div>
         <div><%= entity.threads %></div>
         <div><%= entity.frequency %></div>
         <div><%= entity.maximum_frequency %></div>
