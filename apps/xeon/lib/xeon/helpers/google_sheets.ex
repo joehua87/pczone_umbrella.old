@@ -2,7 +2,7 @@ defmodule Xeon.Helpers.GoogleSheets do
   import GoogleApi.Sheets.V4.Api.Spreadsheets
 
   def read_doc(conn, range) when is_bitstring(range) do
-    sheet_id = sheet_id() |> IO.inspect()
+    sheet_id = sheet_id()
     {:ok, %{values: values}} = sheets_spreadsheets_values_get(conn, sheet_id, range)
     rows_to_items(values)
   end

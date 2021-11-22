@@ -3,7 +3,6 @@ defmodule Xeon.MotherboardsTest do
   alias Xeon.Motherboards
 
   describe "get motherboards" do
-    @tag :wip
     test "success" do
       assert {:ok,
               %{

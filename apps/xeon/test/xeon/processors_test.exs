@@ -13,7 +13,6 @@ defmodule Xeon.ProcessorsTest do
   end
 
   describe "get_processor" do
-    @tag :wip
     test "get processor" do
       assert %{
                cores: 4,

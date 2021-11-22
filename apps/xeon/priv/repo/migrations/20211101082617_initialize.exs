@@ -61,7 +61,8 @@ defmodule Xeon.Repo.Migrations.Initialize do
 
     create table(:memory) do
       add :name, :string, null: false
-      add :brand_id, references(:brand), null: false
+      add :capacity, :integer, null: false
+      add :brand_id, references(:brand)
       add :memory_type_id, references(:memory_type), null: false
     end
 
