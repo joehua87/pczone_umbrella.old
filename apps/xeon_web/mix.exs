@@ -37,6 +37,7 @@ defmodule XeonWeb.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:mime, "~> 2.0", override: true},
       {:phoenix, "~> 1.6.2"},
       {:phoenix_ecto, "~> 4.4"},
       {:phoenix_html, "~> 3.0"},

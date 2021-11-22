@@ -7,53 +7,37 @@ defmodule Xeon.Motherboards do
     ProcessorFamily,
     Motherboard,
     MotherboardMemoryType,
-    MotherboardProcessorFamily
+    MotherboardProcessorFamily,
+    Helpers.GoogleSheets
   }
 
-  @headers [
-    "name",
-    "state",
-    "chipset",
-    "max_memory_capacity",
-    "memory_slot",
-    "processor_slot",
-    "note",
-    "memory_types",
-    "processor_families",
-    "socket",
-    "compatible",
-    "url"
-  ]
   def import() do
-    headers = @headers
-
-    [^headers | rows] =
-      :code.priv_dir(:xeon)
-      |> Path.join("data/motherboards.csv")
-      |> File.read!()
-      |> TabCsvParser.parse_string(skip_headers: false)
+    rows = GoogleSheets.get_connection() |> GoogleSheets.read_doc("motherboard!A:Z")
 
     items =
-      for [
-            name,
-            "published",
-            chipset,
-            max_memory_capacity,
-            memory_slot,
-            processor_slot,
-            note,
-            memory_types,
-            processor_families,
-            socket,
-            _compatible,
-            _url
-          ] <- rows do
+      for %{
+            "chipset" => "" <> chipset,
+            "compatible" => _compatible,
+            "form" => _form,
+            "max_memory_capacity" => max_memory_capacity,
+            "memory_slot" => memory_slot,
+            "memory_types" => memory_types,
+            "name" => name,
+            "note" => note,
+            "price" => _price,
+            "processor_families" => processor_families,
+            "processor_slot" => processor_slot,
+            "separate_cpu_power_pin" => _separate_cpu_power_pin,
+            "socket" => socket,
+            "state" => _state,
+            "url" => _url
+          } <- rows do
         %{
           name: name,
           chipset: chipset,
-          max_memory_capacity: String.to_integer(max_memory_capacity),
-          memory_slot: String.to_integer(memory_slot),
-          processor_slot: String.to_integer(processor_slot),
+          max_memory_capacity: to_integer(max_memory_capacity),
+          memory_slot: to_integer(memory_slot),
+          processor_slot: to_integer(processor_slot),
           note: note,
           memory_types: split_array(memory_types),
           processor_families: split_array(processor_families),
@@ -157,6 +141,12 @@ defmodule Xeon.Motherboards do
     )
     |> Repo.transaction()
   end
+
+  def to_integer(nil), do: nil
+
+  def to_integer(v), do: String.to_integer(v)
+
+  defp split_array(nil), do: []
 
   defp split_array(content) do
     content

@@ -11,7 +11,8 @@ import Config
 
 # Configure Mix tasks and generators
 config :xeon,
-  ecto_repos: [Xeon.Repo]
+  ecto_repos: [Xeon.Repo],
+  sheet_id: "1gqCHoE7dVKAcRoKhMvJjlNaozDpQGGTN_YDfE4QBfb0"
 
 # Configures the mailer
 #

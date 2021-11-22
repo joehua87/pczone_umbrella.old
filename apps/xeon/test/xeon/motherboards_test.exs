@@ -7,11 +7,11 @@ defmodule Xeon.MotherboardsTest do
     test "success" do
       assert {:ok,
               %{
-                motherboards: {20, _},
+                motherboards: {19, _},
                 processor_families: {6, _},
                 memory_types: {14, _},
-                motherboard_memory_types: {53, nil},
-                motherboard_processor_families: {36, nil}
+                motherboard_memory_types: {51, nil},
+                motherboard_processor_families: {34, nil}
               }} = Motherboards.import()
     end
   end
