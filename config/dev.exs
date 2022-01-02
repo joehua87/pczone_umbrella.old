@@ -3,9 +3,10 @@ import Config
 # Configure your database
 config :xeon, Xeon.Repo,
   username: "postgres",
-  password: "postgres",
+  password: "HaHGHwo8ddMY",
   database: "xeon_dev",
-  hostname: "localhost",
+  hostname: "192.168.0.201",
+  port: 31432,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 

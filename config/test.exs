@@ -7,9 +7,10 @@ import Config
 # Run `mix help test` for more information.
 config :xeon, Xeon.Repo,
   username: "postgres",
-  password: "postgres",
+  password: "HaHGHwo8ddMY",
   database: "xeon_test#{System.get_env("MIX_TEST_PARTITION")}",
-  hostname: "localhost",
+  hostname: "192.168.0.201",
+  port: 31432,
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: 10
 
