@@ -26,7 +26,12 @@ config :xeon_web, XeonWeb.Endpoint,
   secret_key_base: "4tOuf5HcdWLq8prYZKvd5OwRK+0EtEL6ZIo/0nu4+cGEEsIDb+B2PjJ94MoA11Xl",
   watchers: [
     # Start the esbuild watcher by calling Esbuild.install_and_run(:default, args)
-    esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]}
+    esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]},
+    npm: [
+      "run",
+      "dev:css",
+      cd: Path.expand("../apps/xeon_web/assets", __DIR__)
+    ]
   ]
 
 # ## SSL Support

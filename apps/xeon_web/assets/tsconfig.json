@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "module": "ESNext",
+    "target": "ESNext",
+    "outDir": "./dist",
+    "declaration": true,
+    "resolveJsonModule": true,
+    "jsx": "react",
+    "noImplicitAny": false,
+    "strictNullChecks": true,
+    "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["src/*"]
+    }
+  },
+  "exclude": ["**/tests/**"]
+}
