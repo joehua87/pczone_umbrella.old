@@ -50,7 +50,7 @@ defmodule Xeon.ProcessorsTest do
                   maximum_frequency: 4400,
                   meta: %{},
                   name: "Intel Core i5-11300H",
-                  processor_family_id: nil,
+                  processor_collection_id: nil,
                   socket: "FCBGA1449",
                   tdp: nil,
                   threads: 8

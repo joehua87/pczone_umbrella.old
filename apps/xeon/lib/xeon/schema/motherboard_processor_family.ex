@@ -1,8 +1,8 @@
-defmodule Xeon.MotherboardProcessorFamily do
+defmodule Xeon.MotherboardProcessorCollection do
   use Ecto.Schema
 
-  schema "motherboard_processor_family" do
+  schema "motherboard_processor_collection" do
     belongs_to :motherboard, Xeon.Motherboard
-    belongs_to :processor_family, Xeon.ProcessorFamily
+    belongs_to :processor_collection, Xeon.ProcessorCollection
   end
 end

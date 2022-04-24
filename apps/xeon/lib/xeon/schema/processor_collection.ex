@@ -1,11 +1,11 @@
-defmodule Xeon.ProcessorFamily do
+defmodule Xeon.ProcessorCollection do
   use Ecto.Schema
   import Ecto.Changeset
 
   @required [:name, :code, :socket]
   @optional []
 
-  schema "processor_family" do
+  schema "processor_collection" do
     field :name, :string
     field :code, :string
     field :socket, :string

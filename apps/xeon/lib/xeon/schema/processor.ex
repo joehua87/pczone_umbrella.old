@@ -19,18 +19,40 @@ defmodule Xeon.Processor do
   ]
 
   schema "processor" do
+    field :code, :string
     field :name, :string
-    field :frequency, :integer
-    field :maximum_frequency, :integer
+    field :sub, :string
+    belongs_to :collection, Xeon.ProcessorCollection
+    field :collection_name, :string
+    field :launch_date, :string
+    field :status, :string
+    field :socket, :string
+    field :case_temperature, :decimal
+    field :lithography, :string
+    field :base_frequency, :decimal
+    field :tdp_up_base_frequency, :decimal
+    field :tdp_down_base_frequency, :decimal
+    field :max_turbo_frequency, :decimal
+    field :tdp, :decimal
+    field :tdp_up, :decimal
+    field :tdp_down, :decimal
+    field :cache_size, :decimal
     field :cores, :integer
     field :threads, :integer
-    field :tdp, :integer
-    field :gpu, :string
-    field :family_code, :string
-    field :socket, :string
-    field :links, {:map, :string}, default: %{}
+    field :processor_graphics, :string
+    field :url, :string
     field :meta, :map, default: %{}
-    belongs_to :processor_family, Xeon.ProcessorFamily
+    field :memory_types, {:array, :string}
+    field :ecc_memory_supported, :boolean
+
+    embeds_many :attributes, Attribute do
+      field :group, :string
+
+      embeds_many :items, AttributeItem do
+        field :label, :string
+        field :value, :string
+      end
+    end
   end
 
   def changeset(entity, params) do

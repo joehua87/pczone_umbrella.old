@@ -1,6 +1,6 @@
 defmodule XeonWeb.ProcessorFamiliesLive do
   use XeonWeb, :live_view
-  alias Xeon.{Repo, Chipset, ProcessorFamily}
+  alias Xeon.{Repo, Chipset, ProcessorCollection}
 
   def handle_params(params, _uri, socket) do
     {:noreply, socket |> load_data(params)}
@@ -8,8 +8,8 @@ defmodule XeonWeb.ProcessorFamiliesLive do
 
   def handle_event("create", params, socket) do
     with {:ok, _chipset} <-
-           %ProcessorFamily{}
-           |> ProcessorFamily.changeset(params)
+           %ProcessorCollection{}
+           |> ProcessorCollection.changeset(params)
            |> Repo.insert() do
       {:noreply, socket}
     end
@@ -46,7 +46,7 @@ defmodule XeonWeb.ProcessorFamiliesLive do
 
   defp load_data(socket, _params) do
     chipsets = Repo.all(Chipset)
-    entities = Repo.all(ProcessorFamily)
+    entities = Repo.all(ProcessorCollection)
     socket |> assign(%{entities: entities, chipsets: chipsets})
   end
 end

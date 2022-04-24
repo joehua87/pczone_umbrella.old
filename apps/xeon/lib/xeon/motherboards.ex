@@ -4,10 +4,10 @@ defmodule Xeon.Motherboards do
   alias Xeon.{
     Repo,
     MemoryType,
-    ProcessorFamily,
+    ProcessorCollection,
     Motherboard,
     MotherboardMemoryType,
-    MotherboardProcessorFamily,
+    MotherboardProcessorCollection,
     Helpers.GoogleSheets
   }
 
@@ -66,7 +66,7 @@ defmodule Xeon.Motherboards do
       conflict_target: :name,
       returning: true
     )
-    |> Multi.insert_all(:processor_families, ProcessorFamily, processor_families,
+    |> Multi.insert_all(:processor_families, ProcessorCollection, processor_families,
       on_conflict: :replace_all,
       conflict_target: :name,
       returning: true
@@ -126,13 +126,13 @@ defmodule Xeon.Motherboards do
               processor_families,
               &%{
                 motherboard_id: motherboards_map[motherboard_name],
-                processor_family_id: processor_families_map[&1]
+                processor_collection_id: processor_families_map[&1]
               }
             )
           end)
 
         with {_, _} = result <-
-               Repo.insert_all(MotherboardProcessorFamily, motherboard_processor_families,
+               Repo.insert_all(MotherboardProcessorCollection, motherboard_processor_families,
                  on_conflict: :nothing
                ) do
           {:ok, result}

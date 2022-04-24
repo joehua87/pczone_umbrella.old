@@ -2,6 +2,10 @@ defmodule Xeon.Repo.Migrations.Initialize do
   use Ecto.Migration
 
   def change do
+    create table(:motherboard_type) do
+      add :name, :string, null: false
+    end
+
     create table(:motherboard) do
       add :name, :string, null: false
       add :max_memory_capacity, :integer, null: false
@@ -14,31 +18,44 @@ defmodule Xeon.Repo.Migrations.Initialize do
 
     create unique_index(:motherboard, [:name])
 
-    create table(:processor_family) do
+    create table(:processor_collection) do
       add :name, :string, null: false
-      add :other_names, {:array, :string}, null: false, default: []
       add :code, :string
       add :socket, :string
     end
 
-    create unique_index(:processor_family, [:name])
+    create unique_index(:processor_collection, [:name])
 
     create table(:processor) do
+      add :code, :string, null: false
       add :name, :string, null: false
-      add :processor_family_id, references(:processor_family)
-      add :frequency, :integer
-      add :maximum_frequency, :integer
-      add :cores, :integer
-      add :threads, :integer
-      add :tdp, :integer
-      add :gpu, :string
-      add :family_code, :string
+      add :sub, :string, null: false
+      add :collection_id, references(:processor_collection)
+      add :collection_name, :string, null: false
+      add :launch_date, :string, null: false
+      add :status, :string, null: false
       add :socket, :string
-      add :links, :map, default: %{}
-      add :meta, :map, default: %{}
+      add :case_temperature, :decimal
+      add :lithography, :string
+      add :base_frequency, :decimal
+      add :tdp_up_base_frequency, :decimal
+      add :tdp_down_base_frequency, :decimal
+      add :max_turbo_frequency, :decimal
+      add :tdp, :decimal
+      add :tdp_up, :decimal
+      add :tdp_down, :decimal
+      add :cache_size, :decimal, null: false
+      add :cores, :integer, null: false
+      add :threads, :integer
+      add :processor_graphics, :string
+      add :url, :string, null: false
+      add :memory_types, {:array, :string}, null: false
+      add :ecc_memory_supported, :boolean, default: false
+      add :meta, :map
+      add :attributes, :map, default: "[]"
     end
 
-    create unique_index(:processor, [:name])
+    create unique_index(:processor, [:name, :sub])
 
     create table(:processor_score) do
       add :processor_id, references(:processor), null: false
@@ -71,9 +88,9 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :memory_type_id, references(:memory_type), null: false
     end
 
-    create table(:motherboard_processor_family) do
+    create table(:motherboard_processor_collection) do
       add :motherboard_id, references(:motherboard), null: false
-      add :processor_family_id, references(:processor_family), null: false
+      add :processor_collection_id, references(:processor_collection), null: false
     end
 
     create table(:skeleton) do

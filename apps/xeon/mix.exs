@@ -39,6 +39,7 @@ defmodule Xeon.MixProject do
       {:nimble_csv, "~> 1.1"},
       {:finch, "~> 0.9.0"},
       {:floki, "~> 0.32.0"},
+      {:mongodb_driver, "~> 0.8.4"},
       {:mime, "~> 2.0", override: true},
       {:tesla, "~> 1.4"},
       {:google_api_sheets, "~> 0.29"},
