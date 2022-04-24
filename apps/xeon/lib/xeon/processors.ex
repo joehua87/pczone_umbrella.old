@@ -1,8 +1,31 @@
 defmodule Xeon.Processors do
   require Logger
+  import Ecto.Query, only: [where: 2]
+  import Dew.FilterParser
   alias Xeon.{Repo, Processor, ProcessorScore}
   @url "https://browser.geekbench.com/processor-benchmarks"
   @cache_dir "/Users/achilles/.cache"
+
+  def get(id) do
+    Repo.one(Processor, id)
+  end
+
+  def list(attrs \\ %{})
+
+  def list(%Dew.Filter{
+        filter: filter,
+        paging: paging,
+        selection: selection,
+        order_by: order_by
+      }) do
+    Processor
+    |> where(^parse_filter(filter))
+    |> select_fields(selection, [:attributes])
+    |> sort_by(order_by, [])
+    |> Repo.paginate(paging)
+  end
+
+  def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
 
   def create(params) do
     Processor.new(params) |> Repo.insert()
@@ -72,7 +95,7 @@ defmodule Xeon.Processors do
     attributes =
       Enum.map(attributes, fn %{"group" => group, "items" => items} ->
         %Xeon.Processor.Attribute{
-          group: group,
+          title: group,
           items:
             Enum.map(
               items,
@@ -326,5 +349,17 @@ defmodule Xeon.Processors do
         }
       end
     end
+  end
+
+  def parse_filter(filter) do
+    filter
+    |> Enum.reduce(nil, fn {field, value}, acc ->
+      case field do
+        :id -> parse_id_filter(acc, field, value)
+        :code -> parse_string_filter(acc, field, value)
+        :display_name -> parse_string_filter(acc, field, value)
+        _ -> acc
+      end
+    end) || true
   end
 end

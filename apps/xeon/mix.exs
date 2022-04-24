@@ -36,11 +36,14 @@ defmodule Xeon.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:dew_util, "~> 0.2"},
       {:nimble_csv, "~> 1.1"},
       {:finch, "~> 0.9.0"},
       {:floki, "~> 0.32.0"},
       {:mongodb_driver, "~> 0.8.4"},
       {:mime, "~> 2.0", override: true},
+      {:recase, "~> 0.7"},
+      {:scrivener_ecto, "~> 2.7"},
       {:tesla, "~> 1.4"},
       {:google_api_sheets, "~> 0.29"},
       {:goth, "~> 1.2.0"},

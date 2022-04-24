@@ -12,6 +12,8 @@ defmodule XeonWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    forward "/graphql", Absinthe.Plug, schema: XeonWeb.Schema
+    forward "/graphiql", Absinthe.Plug.GraphiQL, schema: XeonWeb.Schema, interface: :playground
   end
 
   scope "/", XeonWeb do

@@ -46,7 +46,7 @@ defmodule Xeon.Processor do
     field :ecc_memory_supported, :boolean
 
     embeds_many :attributes, Attribute do
-      field :group, :string
+      field :title, :string
 
       embeds_many :items, AttributeItem do
         field :label, :string

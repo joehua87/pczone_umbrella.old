@@ -37,6 +37,8 @@ defmodule XeonWeb.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:absinthe, "~> 1.7"},
+      {:absinthe_plug, "~> 1.5"},
       {:mime, "~> 2.0", override: true},
       {:phoenix, "~> 1.6.2"},
       {:phoenix_ecto, "~> 4.4"},
