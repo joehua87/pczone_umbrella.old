@@ -14,6 +14,7 @@ defmodule XeonWeb.Schema.Processors do
   end
 
   object :processor do
+    field :id, non_null(:id)
     field :code, non_null(:string)
     field :name, non_null(:string)
     field :sub, non_null(:string)
@@ -70,7 +71,7 @@ defmodule XeonWeb.Schema.Processors do
     end
 
     field :processor, :processor do
-      arg :id, :id
+      arg :id, non_null(:id)
 
       resolve(fn %{id: id}, _info ->
         {:ok, Processors.get(id)}

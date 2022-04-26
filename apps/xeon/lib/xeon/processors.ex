@@ -7,7 +7,7 @@ defmodule Xeon.Processors do
   @cache_dir "/Users/achilles/.cache"
 
   def get(id) do
-    Repo.one(Processor, id)
+    Repo.get(Processor, id)
   end
 
   def list(attrs \\ %{})
