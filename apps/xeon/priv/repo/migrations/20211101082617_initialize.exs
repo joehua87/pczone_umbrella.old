@@ -2,6 +2,19 @@ defmodule Xeon.Repo.Migrations.Initialize do
   use Ecto.Migration
 
   def change do
+    create table(:chipset) do
+      add :shortname, :string, null: false
+      add :code_name, :string, null: false
+      add :name, :string, null: false
+      add :launch_date, :string, null: false
+      add :collection_name, :string, null: false
+      add :vertical_segment, :string, null: false
+      add :status, :string, null: false
+      add :attributes, :map, null: false
+    end
+
+    create unique_index(:chipset, [:shortname])
+
     create table(:motherboard_type) do
       add :name, :string, null: false
     end
@@ -34,6 +47,7 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :collection_name, :string, null: false
       add :launch_date, :string, null: false
       add :status, :string, null: false
+      add :vertical_segment, :string, null: false
       add :socket, :string
       add :case_temperature, :decimal
       add :lithography, :string

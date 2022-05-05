@@ -44,7 +44,7 @@ defmodule XeonWeb.Schema.Processors do
   input_object :processor_filter_input do
     field :id, :id_filter_input
     field :code, :string_filter_input
-    field :display_name, :string_filter_input
+    field :name, :string_filter_input
   end
 
   object :processor_list_result do

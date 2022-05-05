@@ -1,30 +1,14 @@
 defmodule Xeon.Processor do
   use Ecto.Schema
-  import Ecto.Changeset
-
-  @required [
-    :name
-  ]
-
-  @optional [
-    :frequency,
-    :maximum_frequency,
-    :cores,
-    :threads,
-    :tdp,
-    :family_code,
-    :socket,
-    :gpu,
-    :links
-  ]
 
   schema "processor" do
     field :code, :string
     field :name, :string
     field :sub, :string
-    belongs_to :collection, Xeon.ProcessorCollection
+    belongs_to(:collection, Xeon.ProcessorCollection)
     field :collection_name, :string
     field :launch_date, :string
+    field :vertical_segment, :string
     field :status, :string
     field :socket, :string
     field :case_temperature, :decimal
@@ -44,24 +28,6 @@ defmodule Xeon.Processor do
     field :meta, :map, default: %{}
     field :memory_types, {:array, :string}
     field :ecc_memory_supported, :boolean
-
-    embeds_many :attributes, Attribute do
-      field :title, :string
-
-      embeds_many :items, AttributeItem do
-        field :label, :string
-        field :value, :string
-      end
-    end
-  end
-
-  def changeset(entity, params) do
-    entity
-    |> cast(params, @required ++ @optional)
-    |> validate_required(@required)
-  end
-
-  def new(params) do
-    changeset(%__MODULE__{}, params)
+    embeds_many(:attributes, Xeon.AttributeGroup)
   end
 end
