@@ -4,14 +4,8 @@ defmodule Xeon.MotherboardsTest do
 
   describe "get motherboards" do
     test "success" do
-      assert {:ok,
-              %{
-                motherboards: {19, _},
-                processor_families: {6, _},
-                memory_types: {14, _},
-                motherboard_memory_types: {51, nil},
-                motherboard_processor_families: {34, nil}
-              }} = Motherboards.import()
+      Xeon.Chipsets.import_chipsets()
+      assert {154, _} = Motherboards.import_barebone_motherboards()
     end
   end
 end

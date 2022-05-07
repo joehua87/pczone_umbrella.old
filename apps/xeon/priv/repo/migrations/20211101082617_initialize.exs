@@ -22,10 +22,11 @@ defmodule Xeon.Repo.Migrations.Initialize do
     create table(:motherboard) do
       add :name, :string, null: false
       add :max_memory_capacity, :integer, null: false
-      add :memory_slot, :integer, null: false
-      add :processor_slot, :integer, null: false, default: 1
-      add :chipset, :string, null: false
-      add :socket, :string, null: false
+      add :memory_slots, :integer, null: false
+      add :memory_types, {:array, :string}, null: false
+      add :processor_slots, :integer, null: false, default: 1
+      add :chipset_id, references(:chipset), null: false
+      # add :socket, :string, null: false
       add :note, :string
     end
 
