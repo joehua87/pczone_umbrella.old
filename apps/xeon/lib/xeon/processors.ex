@@ -1,6 +1,6 @@
 defmodule Xeon.Processors do
   require Logger
-  import Ecto.Query, only: [where: 2]
+  import Ecto.Query, only: [from: 2, where: 2]
   import Dew.FilterParser
   import Xeon.Helpers
   alias Xeon.{Repo, Processor}
@@ -37,6 +37,49 @@ defmodule Xeon.Processors do
     |> Enum.filter(fn {_, v} -> v > 1 end)
 
     Repo.insert_all(Processor, entities, on_conflict: :replace_all, conflict_target: [:name, :sub])
+  end
+
+  def import_processor_chipsets() do
+    {:ok, conn} = Mongo.start_link(url: "mongodb://172.16.43.5:27017/xeon")
+
+    cursor =
+      Mongo.find(conn, "IntelChipset", %{
+        "attributes.0" => %{"$exists" => true},
+        "processors.0" => %{"$exists" => true}
+      })
+
+    chipsets_map = Repo.all(from c in Xeon.Chipset, select: {c.name, c.id}) |> Enum.into(%{})
+    processors_map = Repo.all(from p in Processor, select: {p.url, p.id}) |> Enum.into(%{})
+
+    processor_chipsets =
+      Enum.flat_map(
+        cursor,
+        &parse_chipset_processor(&1,
+          processors_map: processors_map,
+          chipsets_map: chipsets_map
+        )
+      )
+
+    Repo.insert_all("processor_chipset", processor_chipsets)
+  end
+
+  defp parse_chipset_processor(%{"title" => chipset_name, "processors" => processors},
+         processors_map: processors_map,
+         chipsets_map: chipsets_map
+       ) do
+    processors
+    |> Enum.reduce([], fn %{"url" => url}, acc ->
+      processor_url =
+        String.replace("https://ark.intel.com#{url}", "products/sku", "ark/products")
+
+      case processors_map[processor_url] do
+        nil ->
+          acc
+
+        processor_id ->
+          acc ++ [%{processor_id: processor_id, chipset_id: chipsets_map[chipset_name]}]
+      end
+    end)
   end
 
   defp parse_processor(%{
