@@ -1,6 +1,7 @@
 defmodule Xeon.Motherboards do
   alias Ecto.Multi
-  import Ecto.Query, only: [from: 2]
+  import Dew.FilterParser
+  import Ecto.Query, only: [from: 2, where: 2]
 
   alias Xeon.{
     Repo,
@@ -11,6 +12,39 @@ defmodule Xeon.Motherboards do
     MotherboardProcessorCollection,
     Helpers.GoogleSheets
   }
+
+  def get(id) do
+    Repo.get(Motherboard, id)
+  end
+
+  def list(attrs \\ %{})
+
+  def list(%Dew.Filter{
+        filter: filter,
+        paging: paging,
+        selection: selection,
+        order_by: order_by
+      }) do
+    Motherboard
+    |> where(^parse_filter(filter))
+    |> select_fields(selection, [:attributes])
+    |> sort_by(order_by, [])
+    |> Repo.paginate(paging)
+  end
+
+  def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
+
+  def get_built_specs(motherboard_id) do
+    %{chipset_id: chipset_id} = get(motherboard_id)
+
+    processor_ids_query =
+      from pc in Xeon.ProcessorChipset,
+        where: pc.chipset_id == ^chipset_id,
+        select: pc.processor_id
+
+    processors = Repo.all(from p in Xeon.Processor, where: p.id in subquery(processor_ids_query))
+    {:ok, %{processors: processors, memories: [], drives: []}}
+  end
 
   def import_barebone_motherboards() do
     {:ok, conn} = Mongo.start_link(url: "mongodb://172.16.43.5:27017/xeon")
@@ -239,5 +273,16 @@ defmodule Xeon.Motherboards do
     |> String.split(",", trim: true)
     |> Enum.map(&String.trim/1)
     |> Enum.filter(&(&1 != ""))
+  end
+
+  def parse_filter(filter) do
+    filter
+    |> Enum.reduce(nil, fn {field, value}, acc ->
+      case field do
+        :id -> parse_id_filter(acc, field, value)
+        :name -> parse_string_filter(acc, field, value)
+        _ -> acc
+      end
+    end) || true
   end
 end

@@ -7,9 +7,11 @@ defmodule XeonWeb.Schema do
 
   import_types XeonWeb.Schema.Common
   import_types XeonWeb.Schema.Processors
+  import_types XeonWeb.Schema.Motherboards
 
   query do
     import_fields :processor_queries
+    import_fields :motherboard_queries
   end
 
   # mutation do

@@ -3,16 +3,6 @@ defmodule XeonWeb.Schema.Processors do
 
   alias Xeon.Processors
 
-  object :attribute_item do
-    field :label, non_null(:string)
-    field :value, :string
-  end
-
-  object :attribute_group do
-    field :title, non_null(:string)
-    field :items, non_null(list_of(non_null(:attribute_item)))
-  end
-
   object :processor do
     field :id, non_null(:id)
     field :code, non_null(:string)

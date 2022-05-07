@@ -8,7 +8,6 @@ defmodule Xeon.Motherboard do
     field :memory_slots, :integer
     field :processor_slots, :integer, default: 1
     belongs_to :chipset, Xeon.Chipset
-    field :socket, :string
     field :note, :string
   end
 end
