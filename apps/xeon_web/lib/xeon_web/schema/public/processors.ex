@@ -1,6 +1,6 @@
 defmodule XeonWeb.Schema.Processors do
   use Absinthe.Schema.Notation
-
+  alias Absinthe.Resolution.Helpers
   alias Xeon.Processors
 
   object :processor do
@@ -29,6 +29,10 @@ defmodule XeonWeb.Schema.Processors do
     field :memory_types, non_null(list_of(non_null(:string)))
     field :ecc_memory_supported, :boolean
     field :attributes, non_null(list_of(non_null(:attribute_group)))
+
+    field :products,
+          non_null(list_of(non_null(:product))),
+          resolve: Helpers.dataloader(XeonWeb.Dataloader)
   end
 
   input_object :processor_filter_input do

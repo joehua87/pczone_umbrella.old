@@ -1,10 +1,8 @@
-defmodule Xeon.Memory do
+defmodule Xeon.Psu do
   use Ecto.Schema
 
-  schema "memory" do
+  schema "psu" do
     field :name, :string
-    field :capacity, :integer
-    field :type, :string
     belongs_to :brand, Xeon.Brand
     has_many :products, Xeon.Product
   end

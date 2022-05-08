@@ -16,16 +16,6 @@ defmodule XeonWeb.Router do
     forward "/graphiql", Absinthe.Plug.GraphiQL, schema: XeonWeb.Schema, interface: :playground
   end
 
-  scope "/", XeonWeb do
-    pipe_through :browser
-
-    get "/", PageController, :index
-    live "/chipsets", ChipsetsLive, :index
-    live "/processors", ProcessorsLive, :index
-    live "/motherboards", MotherboardsLive, :index
-    live "/memory-types", MemoryTypesLive, :index
-  end
-
   # Other scopes may use custom stacks.
   # scope "/api", XeonWeb do
   #   pipe_through :api

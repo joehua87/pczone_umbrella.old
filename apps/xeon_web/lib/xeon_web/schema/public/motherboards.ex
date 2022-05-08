@@ -3,22 +3,6 @@ defmodule XeonWeb.Schema.Motherboards do
   alias Absinthe.Resolution.Helpers
   alias Xeon.Motherboards
 
-  object :chipset do
-    field :id, non_null(:id)
-    field :name, non_null(:string)
-    field :processors, non_null(list_of(non_null(:processor)))
-  end
-
-  object :memory do
-    field :id, non_null(:id)
-    field :name, non_null(:string)
-  end
-
-  object :drive do
-    field :id, non_null(:id)
-    field :name, non_null(:string)
-  end
-
   object :motherboard do
     field :id, non_null(:id)
     field :name, non_null(:string)
@@ -26,7 +10,14 @@ defmodule XeonWeb.Schema.Motherboards do
     field :memory_types, non_null(list_of(non_null(:string)))
     field :memory_slots, non_null(:integer)
     field :processor_slots, non_null(:integer)
-    field :chipset, non_null(:chipset), resolve: Helpers.dataloader(XeonWeb.Dataloader)
+
+    field :chipset,
+          non_null(:chipset),
+          resolve: Helpers.dataloader(XeonWeb.Dataloader)
+
+    field :products,
+          non_null(list_of(non_null(:product))),
+          resolve: Helpers.dataloader(XeonWeb.Dataloader)
   end
 
   input_object :motherboard_filter_input do
@@ -39,21 +30,7 @@ defmodule XeonWeb.Schema.Motherboards do
     field :paging, non_null(:paging)
   end
 
-  object :built_specs_result do
-    field :processors, non_null(list_of(non_null(:processor)))
-    field :memories, non_null(list_of(non_null(:memory)))
-    field :drives, non_null(list_of(non_null(:drive)))
-  end
-
   object :motherboard_queries do
-    field :built_specs, non_null(:built_specs_result) do
-      arg :motherboard_id, non_null(:id)
-
-      resolve fn %{motherboard_id: motherboard_id}, _info ->
-        Motherboards.get_built_specs(motherboard_id)
-      end
-    end
-
     field :motherboards, non_null(:motherboard_list_result) do
       arg :filter, :motherboard_filter_input
       arg :order_by, list_of(non_null(:order_by_input))

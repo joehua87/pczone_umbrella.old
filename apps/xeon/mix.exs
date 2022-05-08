@@ -43,6 +43,7 @@ defmodule Xeon.MixProject do
       {:mongodb_driver, "~> 0.8.4"},
       {:mime, "~> 2.0", override: true},
       {:recase, "~> 0.7"},
+      {:slugify, "~> 1.3"},
       {:scrivener_ecto, "~> 2.7"},
       {:tesla, "~> 1.4"},
       {:google_api_sheets, "~> 0.29"},

@@ -5,7 +5,7 @@ defmodule Xeon.Processor do
     field :code, :string
     field :name, :string
     field :sub, :string
-    belongs_to(:collection, Xeon.ProcessorCollection)
+    belongs_to :collection, Xeon.ProcessorCollection
     field :collection_name, :string
     field :launch_date, :string
     field :vertical_segment, :string
@@ -28,6 +28,7 @@ defmodule Xeon.Processor do
     field :meta, :map, default: %{}
     field :memory_types, {:array, :string}
     field :ecc_memory_supported, :boolean
-    embeds_many(:attributes, Xeon.AttributeGroup)
+    embeds_many :attributes, Xeon.AttributeGroup
+    has_many :products, Xeon.Product
   end
 end

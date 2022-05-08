@@ -29,7 +29,7 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :memory_slots, :integer, null: false
       add :memory_types, {:array, :string}, null: false
       add :processor_slots, :integer, null: false, default: 1
-      add :drive_slots, :map, null: false
+      add :hard_drive_slots, :map, null: false
       add :pci_slots, :map, null: false
       add :form_factor, :string
       add :chipset_id, references(:chipset), null: false
@@ -43,7 +43,7 @@ defmodule Xeon.Repo.Migrations.Initialize do
     create table(:barebone) do
       add :name, :string, null: false
       add :motherboard_id, references(:motherboard), null: false
-      add :drive_slots, :map, null: false
+      add :hard_drive_slots, :map, null: false
       add :wattage, :integer, null: false
       add :form_factor, :string
       add :attributes, :map, null: false
@@ -118,7 +118,7 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :processor_collection_id, references(:processor_collection), null: false
     end
 
-    create table(:drive) do
+    create table(:hard_drive) do
       add :name, :string, null: false
       add :type, :string, null: false
       add :capacity, :integer, null: false
@@ -148,9 +148,9 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :brand_id, references(:brand)
     end
 
-    create table(:drive_extension_device) do
+    create table(:hard_drive_extension_device) do
       add :name, :string, null: false
-      add :drive_slots, :map, null: false
+      add :hard_drive_slots, :map, null: false
     end
 
     create table(:product_category) do
@@ -172,12 +172,12 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :barebone_id, references(:barebone)
       add :motherboard_id, references(:motherboard)
       add :processor_id, references(:processor)
-      add :drive_id, references(:drive)
+      add :hard_drive_id, references(:hard_drive)
       add :memory_id, references(:memory)
       add :gpu_id, references(:gpu)
       add :chassis_id, references(:chassis)
       add :psu_id, references(:psu)
-      add :drive_extension_device_id, references(:drive_extension_device)
+      add :hard_drive_extension_device_id, references(:hard_drive_extension_device)
     end
 
     create table(:built) do
