@@ -120,7 +120,10 @@ defmodule Xeon.Motherboards do
       memory_types: memory_types,
       memory_slots: memory_slots,
       processor_slots: 1,
-      max_memory_capacity: max_memory_capacity
+      max_memory_capacity: max_memory_capacity,
+      drive_slots: [],
+      pci_slots: [],
+      attributes: []
     }
   end
 

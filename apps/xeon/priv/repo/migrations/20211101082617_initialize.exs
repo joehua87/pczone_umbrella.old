@@ -2,6 +2,10 @@ defmodule Xeon.Repo.Migrations.Initialize do
   use Ecto.Migration
 
   def change do
+    create table(:brand) do
+      add :name, :string, null: false
+    end
+
     create table(:chipset) do
       add :shortname, :string, null: false
       add :code_name, :string, null: false
@@ -25,12 +29,25 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :memory_slots, :integer, null: false
       add :memory_types, {:array, :string}, null: false
       add :processor_slots, :integer, null: false, default: 1
+      add :drive_slots, :map, null: false
+      add :pci_slots, :map, null: false
+      add :form_factor, :string
       add :chipset_id, references(:chipset), null: false
-      # add :socket, :string, null: false
+      add :brand_id, references(:brand)
+      add :attributes, :map, null: false
       add :note, :string
     end
 
     create unique_index(:motherboard, [:name])
+
+    create table(:barebone) do
+      add :name, :string, null: false
+      add :motherboard_id, references(:motherboard), null: false
+      add :drive_slots, :map, null: false
+      add :wattage, :integer, null: false
+      add :form_factor, :string
+      add :attributes, :map, null: false
+    end
 
     create table(:processor_collection) do
       add :name, :string, null: false
@@ -88,26 +105,12 @@ defmodule Xeon.Repo.Migrations.Initialize do
 
     create unique_index(:processor_score, [:processor_id, :test_name])
 
-    create table(:memory_type) do
-      add :name, :string, null: false
-    end
-
-    create unique_index(:memory_type, [:name])
-
-    create table(:brand) do
-      add :name, :string, null: false
-    end
-
     create table(:memory) do
       add :name, :string, null: false
+      add :type, :string, null: false
       add :capacity, :integer, null: false
+      add :tdp, :integer
       add :brand_id, references(:brand)
-      add :memory_type_id, references(:memory_type), null: false
-    end
-
-    create table(:motherboard_memory_type) do
-      add :motherboard_id, references(:motherboard), null: false
-      add :memory_type_id, references(:memory_type), null: false
     end
 
     create table(:motherboard_processor_collection) do
@@ -115,20 +118,80 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :processor_collection_id, references(:processor_collection), null: false
     end
 
-    create table(:skeleton) do
+    create table(:drive) do
       add :name, :string, null: false
-      add :custom_motherboard, :boolean, null: false
-      add :custom_cpu, :boolean, null: false
-      add :custom_ram, :boolean, null: false
-      add :custom_drive, :boolean, null: false
-      add :custom_case, :boolean, null: false
-      add :custom_psu, :boolean, null: false
-      add :min_psu, :integer, null: false
+      add :type, :string, null: false
+      add :capacity, :integer, null: false
+      add :tdp, :integer
+      add :brand_id, references(:brand)
     end
 
-    create table(:skeleton_motherboard) do
-      add :skeleton_id, references(:skeleton), null: false
-      add :motherboard_id, references(:motherboard), null: false
+    create table(:gpu) do
+      add :name, :string, null: false
+      add :memory_capacity, :integer, null: false
+      add :form_factors, {:array, :string}, null: false
+      add :tdp, :integer
+      add :brand_id, references(:brand)
+    end
+
+    create table(:chassis) do
+      add :name, :string, null: false
+      add :form_factor, :string
+      add :psu_form_factors, {:array, :string}, null: false
+      add :brand_id, references(:brand)
+    end
+
+    create table(:psu) do
+      add :name, :string, null: false
+      add :wattage, :integer, null: false
+      add :form_factor, :string
+      add :brand_id, references(:brand)
+    end
+
+    create table(:drive_extension_device) do
+      add :name, :string, null: false
+      add :drive_slots, :map, null: false
+    end
+
+    create table(:product_category) do
+      add :slug, :string, null: false
+      add :title, :string, null: false
+    end
+
+    create table(:product) do
+      add :slug, :string, null: false
+      add :title, :string, null: false
+      add :description, :string
+      add :condition, :string, null: false
+      add :list_price, :decimal, null: false
+      add :sale_price, :decimal, null: false
+      add :percentage_off, :decimal, null: false
+      add :type, :string
+      add :category, references(:product_category)
+      add :keywords, {:array, :string}, default: [], null: false
+      add :barebone_id, references(:barebone)
+      add :motherboard_id, references(:motherboard)
+      add :processor_id, references(:processor)
+      add :drive_id, references(:drive)
+      add :memory_id, references(:memory)
+      add :gpu_id, references(:gpu)
+      add :chassis_id, references(:chassis)
+      add :psu_id, references(:psu)
+      add :drive_extension_device_id, references(:drive_extension_device)
+    end
+
+    create table(:built) do
+      add :barebone_id, references(:barebone)
+      add :motherboard_id, references(:motherboard)
+      add :total, :decimal
+    end
+
+    create table(:built_product) do
+      add :built_id, references(:built), null: false
+      add :product_id, references(:product), null: false
+      add :quantity, :integer
+      add :price, :decimal, null: false
+      add :amount, :decimal, null: false
     end
   end
 end

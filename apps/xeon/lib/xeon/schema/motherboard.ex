@@ -9,5 +9,8 @@ defmodule Xeon.Motherboard do
     field :processor_slots, :integer, default: 1
     belongs_to :chipset, Xeon.Chipset
     field :note, :string
+    embeds_many :drive_slots, Xeon.DriveSlot
+    embeds_many :pci_slots, Xeon.PciSlot
+    embeds_many :attributes, Xeon.AttributeGroup
   end
 end
