@@ -40,6 +40,7 @@ defmodule XeonWeb.MixProject do
       {:absinthe, "~> 1.7"},
       {:absinthe_plug, "~> 1.5"},
       {:cors_plug, "~> 2.0"},
+      {:dataloader, "~> 1.0"},
       {:mime, "~> 2.0", override: true},
       {:phoenix, "~> 1.6.2"},
       {:phoenix_ecto, "~> 4.4"},

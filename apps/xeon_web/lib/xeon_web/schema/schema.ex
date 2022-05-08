@@ -24,15 +24,15 @@ defmodule XeonWeb.Schema do
   #   end
   # end
 
-  # def context(ctx) do
-  #   loader =
-  #     Dataloader.new()
-  #     |> Dataloader.add_source(XeonWeb.Dataloader, XeonWeb.Dataloader.data(ctx))
+  def context(ctx) do
+    loader =
+      Dataloader.new()
+      |> Dataloader.add_source(XeonWeb.Dataloader, XeonWeb.Dataloader.data(ctx))
 
-  #   Map.put(ctx, :loader, loader)
-  # end
+    Map.put(ctx, :loader, loader)
+  end
 
-  # def plugins do
-  #   [Absinthe.Middleware.Dataloader] ++ Absinthe.Plugin.defaults()
-  # end
+  def plugins do
+    [Absinthe.Middleware.Dataloader] ++ Absinthe.Plugin.defaults()
+  end
 end

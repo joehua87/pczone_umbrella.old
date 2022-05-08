@@ -1,6 +1,6 @@
 defmodule XeonWeb.Schema.Motherboards do
   use Absinthe.Schema.Notation
-
+  alias Absinthe.Resolution.Helpers
   alias Xeon.Motherboards
 
   object :chipset do
@@ -26,7 +26,7 @@ defmodule XeonWeb.Schema.Motherboards do
     field :memory_types, non_null(list_of(non_null(:string)))
     field :memory_slots, non_null(:integer)
     field :processor_slots, non_null(:integer)
-    field :chipset, non_null(:chipset)
+    field :chipset, non_null(:chipset), resolve: Helpers.dataloader(XeonWeb.Dataloader)
   end
 
   input_object :motherboard_filter_input do
@@ -49,7 +49,7 @@ defmodule XeonWeb.Schema.Motherboards do
     field :built_specs, non_null(:built_specs_result) do
       arg :motherboard_id, non_null(:id)
 
-      resolve fn %{motherboard_id: motherboard_id}, info ->
+      resolve fn %{motherboard_id: motherboard_id}, _info ->
         Motherboards.get_built_specs(motherboard_id)
       end
     end
