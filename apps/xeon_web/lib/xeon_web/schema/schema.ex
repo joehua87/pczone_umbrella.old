@@ -20,6 +20,10 @@ defmodule XeonWeb.Schema do
     import_fields :built_queries
   end
 
+  mutation do
+    import_fields :motherboard_mutations
+  end
+
   def context(ctx) do
     loader =
       Dataloader.new()

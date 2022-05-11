@@ -14,5 +14,6 @@ defmodule Xeon.Motherboard do
     embeds_many :pci_slots, Xeon.PciSlot
     embeds_many :attributes, Xeon.AttributeGroup
     has_many :products, Xeon.Product
+    many_to_many :processors, Xeon.Processor, join_through: Xeon.MotherboardProcessor
   end
 end

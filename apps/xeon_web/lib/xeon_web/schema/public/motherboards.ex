@@ -10,6 +10,7 @@ defmodule XeonWeb.Schema.Motherboards do
     field :memory_types, non_null(list_of(non_null(:string)))
     field :memory_slots, non_null(:integer)
     field :processor_slots, non_null(:integer)
+    field :chipset_id, non_null(:id)
 
     field :chipset,
           non_null(:chipset),
@@ -17,6 +18,10 @@ defmodule XeonWeb.Schema.Motherboards do
 
     field :products,
           non_null(list_of(non_null(:product))),
+          resolve: Helpers.dataloader(XeonWeb.Dataloader)
+
+    field :processors,
+          non_null(list_of(non_null(:processor))),
           resolve: Helpers.dataloader(XeonWeb.Dataloader)
   end
 
@@ -61,6 +66,48 @@ defmodule XeonWeb.Schema.Motherboards do
 
       resolve(fn args, _info ->
         {:ok, Motherboards.get(args)}
+      end)
+    end
+  end
+
+  input_object :motherboard_processor_input do
+    field :motherboard_id, non_null(:integer)
+    field :processor_id, non_null(:integer)
+  end
+
+  input_object :motherboard_processors_input do
+    field :motherboard_id, non_null(:integer)
+    field :processor_ids, non_null(list_of(non_null(:integer)))
+  end
+
+  object :motherboard_mutations do
+    field :add_motherboard_processor, non_null(:integer) do
+      arg :data, non_null(:motherboard_processor_input)
+
+      resolve(fn %{data: data}, _info ->
+        with %{} <- Motherboards.add_processor(data) do
+          {:ok, 1}
+        end
+      end)
+    end
+
+    field :remove_motherboard_processor, non_null(:integer) do
+      arg :data, non_null(:motherboard_processor_input)
+
+      resolve(fn %{data: data}, _info ->
+        with %{} <- Motherboards.remove_processor(data) do
+          {:ok, 1}
+        end
+      end)
+    end
+
+    field :update_motherboard_processors, non_null(:integer) do
+      arg :data, non_null(:motherboard_processors_input)
+
+      resolve(fn %{data: data}, _info ->
+        with {updated, _} <- Motherboards.update_processors(data) do
+          {:ok, updated}
+        end
       end)
     end
   end

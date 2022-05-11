@@ -14,6 +14,8 @@ defmodule Xeon do
     Xeon.Processors.import_processors()
     Xeon.Processors.import_processor_chipsets()
     Xeon.Motherboards.import_barebone_motherboards()
+    import_memories()
+    generate_products()
   end
 
   def import_brands() do

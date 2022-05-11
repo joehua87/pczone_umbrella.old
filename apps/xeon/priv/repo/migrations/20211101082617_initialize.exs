@@ -113,9 +113,9 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :brand_id, references(:brand)
     end
 
-    create table(:motherboard_processor_collection) do
+    create table(:motherboard_processor) do
       add :motherboard_id, references(:motherboard), null: false
-      add :processor_collection_id, references(:processor_collection), null: false
+      add :processor_id, references(:processor), null: false
     end
 
     create table(:hard_drive) do

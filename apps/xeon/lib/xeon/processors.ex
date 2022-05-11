@@ -19,6 +19,7 @@ defmodule Xeon.Processors do
       }) do
     Processor
     |> where(^parse_filter(filter))
+    |> parse_chipset_filter(filter)
     |> select_fields(selection, [:attributes])
     |> sort_by(order_by, [])
     |> Repo.paginate(paging)
@@ -211,5 +212,18 @@ defmodule Xeon.Processors do
         _ -> acc
       end
     end) || true
+  end
+
+  def parse_chipset_filter(acc, %{chipset_id: %{eq: chipset_id}}) do
+    processor_chipset_query =
+      from pc in Xeon.ProcessorChipset,
+        where: pc.chipset_id == ^chipset_id,
+        select: pc.processor_id
+
+    from p in acc, where: p.id in subquery(processor_chipset_query)
+  end
+
+  def parse_chipset_filter(acc, _) do
+    acc
   end
 end

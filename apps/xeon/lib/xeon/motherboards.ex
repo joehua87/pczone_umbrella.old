@@ -1,15 +1,7 @@
 defmodule Xeon.Motherboards do
-  alias Ecto.Multi
   import Dew.FilterParser
   import Ecto.Query, only: [from: 2, where: 2]
-
-  alias Xeon.{
-    Repo,
-    ProcessorCollection,
-    Motherboard,
-    MotherboardProcessorCollection,
-    Helpers.GoogleSheets
-  }
+  alias Xeon.{Repo, Motherboard, MotherboardProcessor}
 
   def get(id) do
     Repo.get(Motherboard, id)
@@ -31,6 +23,36 @@ defmodule Xeon.Motherboards do
   end
 
   def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
+
+  def add_processor(params) do
+    params
+    |> MotherboardProcessor.new_changeset()
+    |> Repo.insert()
+  end
+
+  def remove_processor(%{motherboard_id: motherboard_id, processor_id: processor_id}) do
+    Repo.delete_all(
+      from(MotherboardProcessor,
+        where: [motherboard_id: ^motherboard_id, processor_id: ^processor_id]
+      )
+    )
+  end
+
+  def update_processors(%{motherboard_id: motherboard_id, processor_ids: processor_ids}) do
+    Ecto.Multi.new()
+    |> Ecto.Multi.delete_all(
+      :delete,
+      from(mp in MotherboardProcessor,
+        where: mp.motherboard_id == ^motherboard_id and mp.processor_id in ^processor_ids
+      )
+    )
+    |> Ecto.Multi.insert_all(
+      :insert,
+      MotherboardProcessor,
+      Enum.map(processor_ids, &%{motherboard_id: motherboard_id, processor_id: &1})
+    )
+    |> Repo.transaction()
+  end
 
   def import_barebone_motherboards() do
     {:ok, conn} = Mongo.start_link(url: "mongodb://172.16.43.5:27017/xeon")
