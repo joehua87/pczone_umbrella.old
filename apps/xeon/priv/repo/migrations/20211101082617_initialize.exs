@@ -2,6 +2,8 @@ defmodule Xeon.Repo.Migrations.Initialize do
   use Ecto.Migration
 
   def change do
+    create_extension(["citext", "unaccent", "ltree"])
+
     create table(:brand) do
       add :name, :string, null: false
     end
@@ -156,18 +158,22 @@ defmodule Xeon.Repo.Migrations.Initialize do
     create table(:product_category) do
       add :slug, :string, null: false
       add :title, :string, null: false
+      add :path, :ltree, null: false
     end
+
+    create unique_index(:product_category, [:path])
 
     create table(:product) do
       add :slug, :string, null: false
       add :title, :string, null: false
       add :description, :string
       add :condition, :string, null: false
-      add :list_price, :decimal, null: false
-      add :sale_price, :decimal, null: false
+      add :list_price, :integer, null: false
+      add :sale_price, :integer, null: false
       add :percentage_off, :decimal, null: false
+      add :stock, :integer, null: false, default: 0
       add :type, :string
-      add :category, references(:product_category)
+      add :category_id, references(:product_category)
       add :keywords, {:array, :string}, default: [], null: false
       add :barebone_id, references(:barebone)
       add :motherboard_id, references(:motherboard)
@@ -183,7 +189,7 @@ defmodule Xeon.Repo.Migrations.Initialize do
     create table(:built) do
       add :barebone_id, references(:barebone)
       add :motherboard_id, references(:motherboard)
-      add :total, :decimal
+      add :total, :integer
     end
 
     create table(:built_product) do
@@ -193,5 +199,20 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :price, :decimal, null: false
       add :amount, :decimal, null: false
     end
+  end
+
+  defp create_extension(names) when is_list(names) do
+    Enum.each(names, &create_extension/1)
+  end
+
+  defp create_extension(name) do
+    execute(
+      """
+      CREATE EXTENSION IF NOT EXISTS "#{name}" SCHEMA pg_catalog;
+      """,
+      """
+      DROP EXTENSION IF EXISTS "#{name}" SCHEMA pg_catalog;
+      """
+    )
   end
 end

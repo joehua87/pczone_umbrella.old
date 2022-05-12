@@ -14,6 +14,7 @@ config :xeon,
   ecto_repos: [Xeon.Repo],
   sheet_id: "1gqCHoE7dVKAcRoKhMvJjlNaozDpQGGTN_YDfE4QBfb0"
 
+config :xeon, Xeon.Repo, types: Xeon.PostgresTypes
 # Configures the mailer
 #
 # By default it uses the "Local" adapter which stores the emails

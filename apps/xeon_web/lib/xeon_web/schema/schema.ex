@@ -12,16 +12,21 @@ defmodule XeonWeb.Schema do
   import_types XeonWeb.Schema.Processors
   import_types XeonWeb.Schema.Memories
   import_types XeonWeb.Schema.Builts
+  import_types XeonWeb.Schema.ProductCategories
   import_types XeonWeb.Schema.Products
 
   query do
     import_fields :processor_queries
     import_fields :motherboard_queries
+    import_fields :product_category_queries
+    import_fields :product_queries
     import_fields :built_queries
   end
 
   mutation do
     import_fields :motherboard_mutations
+    import_fields :product_category_mutations
+    import_fields :product_mutations
   end
 
   def context(ctx) do

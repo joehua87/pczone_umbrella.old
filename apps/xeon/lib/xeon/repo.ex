@@ -32,3 +32,8 @@ defmodule Xeon.Repo do
     }
   end
 end
+
+Postgrex.Types.define(
+  Xeon.PostgresTypes,
+  [EctoLtree.Postgrex.Lquery, EctoLtree.Postgrex.Ltree] ++ Ecto.Adapters.Postgres.extensions()
+)

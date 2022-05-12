@@ -37,6 +37,7 @@ defmodule Xeon.MixProject do
   defp deps do
     [
       {:dew_util, "~> 0.2"},
+      {:ecto_ltree, "~> 0.4.0"},
       {:nimble_csv, "~> 1.1"},
       {:finch, "~> 0.9.0"},
       {:floki, "~> 0.32.0"},
