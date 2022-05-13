@@ -21,18 +21,41 @@ defmodule Xeon.Repo.Migrations.Initialize do
 
     create unique_index(:chipset, [:shortname])
 
-    create table(:motherboard_type) do
+    create table(:gpu) do
       add :name, :string, null: false
+      add :memory_capacity, :integer, null: false
+      add :form_factors, {:array, :string}, null: false
+      add :tdp, :integer
+      add :brand_id, references(:brand)
+    end
+
+    create table(:chassis) do
+      add :name, :string, null: false
+      add :form_factor, :string
+      add :psu_form_factors, {:array, :string}, null: false
+      add :brand_id, references(:brand)
+    end
+
+    create table(:psu) do
+      add :name, :string, null: false
+      add :wattage, :integer, null: false
+      add :form_factor, :string
+      add :brand_id, references(:brand)
     end
 
     create table(:motherboard) do
       add :name, :string, null: false
       add :max_memory_capacity, :integer, null: false
-      add :memory_slots, :integer, null: false
-      add :memory_types, {:array, :string}, null: false
-      add :processor_slots, :integer, null: false, default: 1
-      add :hard_drive_slots, :map, null: false
+      add :processor_slots, :map, null: false
+      add :memory_slots, :map, null: false
+      add :sata_slots, :map, null: false
+      add :m2_slots, :map, null: false
       add :pci_slots, :map, null: false
+      add :processor_slots_count, :integer
+      add :memory_slots_count, :integer
+      add :sata_slots_count, :integer
+      add :m2_slots_count, :integer
+      add :pci_slots_count, :integer
       add :form_factor, :string
       add :chipset_id, references(:chipset), null: false
       add :brand_id, references(:brand)
@@ -45,10 +68,9 @@ defmodule Xeon.Repo.Migrations.Initialize do
     create table(:barebone) do
       add :name, :string, null: false
       add :motherboard_id, references(:motherboard), null: false
-      add :hard_drive_slots, :map, null: false
-      add :wattage, :integer, null: false
+      add :chassis_id, references(:chassis), null: false
+      add :psu_id, references(:psu), null: false
       add :form_factor, :string
-      add :attributes, :map, null: false
     end
 
     create table(:processor_collection) do
@@ -82,6 +104,7 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :cores, :integer, null: false
       add :threads, :integer
       add :processor_graphics, :string
+      add :gpu_id, references(:gpu)
       add :url, :string, null: false
       add :memory_types, {:array, :string}, null: false
       add :ecc_memory_supported, :boolean, default: false
@@ -128,33 +151,6 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :brand_id, references(:brand)
     end
 
-    create table(:gpu) do
-      add :name, :string, null: false
-      add :memory_capacity, :integer, null: false
-      add :form_factors, {:array, :string}, null: false
-      add :tdp, :integer
-      add :brand_id, references(:brand)
-    end
-
-    create table(:chassis) do
-      add :name, :string, null: false
-      add :form_factor, :string
-      add :psu_form_factors, {:array, :string}, null: false
-      add :brand_id, references(:brand)
-    end
-
-    create table(:psu) do
-      add :name, :string, null: false
-      add :wattage, :integer, null: false
-      add :form_factor, :string
-      add :brand_id, references(:brand)
-    end
-
-    create table(:hard_drive_extension_device) do
-      add :name, :string, null: false
-      add :hard_drive_slots, :map, null: false
-    end
-
     create table(:product_category) do
       add :slug, :string, null: false
       add :title, :string, null: false
@@ -183,7 +179,6 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :gpu_id, references(:gpu)
       add :chassis_id, references(:chassis)
       add :psu_id, references(:psu)
-      add :hard_drive_extension_device_id, references(:hard_drive_extension_device)
     end
 
     create table(:built) do

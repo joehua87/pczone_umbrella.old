@@ -11,11 +11,40 @@ defmodule Xeon.AttributeGroup do
   end
 end
 
-defmodule Xeon.DriveSlot do
+defmodule Xeon.ProcessorSlot do
   use Ecto.Schema
 
   embedded_schema do
-    field :type, Ecto.Enum, values: [:sata_3_5, :sata_2_5, :msata, :nvme_3x4, :nvme_4x4]
+    field :socket, :string
+    field :heatsink, :string
+    field :slots, :integer
+  end
+end
+
+defmodule Xeon.MemorySlot do
+  use Ecto.Schema
+
+  embedded_schema do
+    field :max_capacity, :integer
+    field :types, {:array, :string}
+    field :slots, :integer
+  end
+end
+
+defmodule Xeon.SataSlot do
+  use Ecto.Schema
+
+  embedded_schema do
+    field :types, {:array, :string}
+    field :slots, :integer
+  end
+end
+
+defmodule Xeon.M2Slot do
+  use Ecto.Schema
+
+  embedded_schema do
+    field :types, {:array, :string}
     field :slots, :integer
   end
 end
@@ -24,7 +53,7 @@ defmodule Xeon.PciSlot do
   use Ecto.Schema
 
   embedded_schema do
-    field :type, Ecto.Enum, values: []
+    field :types, {:array, :string}
     field :slots, :integer
   end
 end

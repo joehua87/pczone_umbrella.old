@@ -125,11 +125,22 @@ defmodule Xeon.Motherboards do
       name: name,
       chipset: chipset,
       chipset_id: chipset_id,
-      memory_types: memory_types,
-      memory_slots: memory_slots,
-      processor_slots: 1,
+      processor_slots: [
+        %Xeon.ProcessorSlot{
+          slots: 1
+        }
+      ],
+      memory_slots: [
+        %Xeon.MemorySlot{
+          types: memory_types,
+          slots: memory_slots
+        }
+      ],
+      processor_slots_count: 1,
+      memory_slots_count: memory_slots,
       max_memory_capacity: max_memory_capacity,
-      hard_drive_slots: [],
+      sata_slots: [],
+      m2_slots: [],
       pci_slots: [],
       attributes: []
     }
