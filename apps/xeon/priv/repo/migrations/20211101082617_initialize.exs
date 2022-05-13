@@ -16,7 +16,7 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :collection_name, :string, null: false
       add :vertical_segment, :string, null: false
       add :status, :string, null: false
-      add :attributes, :map, null: false
+      add :attributes, :map, null: false, default: "[]"
     end
 
     create unique_index(:chipset, [:shortname])
@@ -32,13 +32,13 @@ defmodule Xeon.Repo.Migrations.Initialize do
     create table(:chassis) do
       add :name, :string, null: false
       add :form_factor, :string
-      add :psu_form_factors, {:array, :string}, null: false
+      add :psu_form_factors, {:array, :string}
       add :brand_id, references(:brand)
     end
 
     create table(:psu) do
       add :name, :string, null: false
-      add :wattage, :integer, null: false
+      add :wattage, :integer
       add :form_factor, :string
       add :brand_id, references(:brand)
     end
@@ -59,7 +59,7 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :form_factor, :string
       add :chipset_id, references(:chipset), null: false
       add :brand_id, references(:brand)
-      add :attributes, :map, null: false
+      add :attributes, :map, null: false, default: "[]"
       add :note, :string
     end
 
@@ -69,8 +69,11 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :name, :string, null: false
       add :motherboard_id, references(:motherboard), null: false
       add :chassis_id, references(:chassis), null: false
-      add :psu_id, references(:psu), null: false
+      add :psu_id, references(:psu)
+      add :brand_id, references(:brand)
       add :form_factor, :string
+      add :launch_date, :string
+      add :url, :string
     end
 
     create table(:processor_collection) do

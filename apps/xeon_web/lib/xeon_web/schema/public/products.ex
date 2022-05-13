@@ -46,7 +46,6 @@ defmodule XeonWeb.Schema.Products do
           |> Map.merge(%{
             selection: XeonWeb.AbsintheHelper.project(info) |> Keyword.get(:entities)
           })
-          |> IO.inspect(label: "TTT")
           |> Products.list()
 
         {:ok, list}

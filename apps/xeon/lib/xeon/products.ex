@@ -20,7 +20,6 @@ defmodule Xeon.Products do
     |> where(^parse_filter(filter))
     |> select_fields(selection)
     |> sort_by(order_by, ["title"])
-    |> IO.inspect(label: "TTT")
     |> Repo.paginate(paging)
   end
 

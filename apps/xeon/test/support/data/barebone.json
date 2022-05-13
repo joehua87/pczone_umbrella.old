@@ -1,0 +1,93 @@
+{
+    "domain": "www.hardware-corner.net",
+    "fieldValues": [
+        {
+            "label": "Form factor",
+            "value": "Micro"
+        },
+        {
+            "label": "CPU options",
+            "value": "Intel Gen6 i3/i5/i7; Celeron; Pentium;"
+        },
+        {
+            "label": "Chipset",
+            "value": "Q170"
+        },
+        {
+            "label": "Dedicated GPU *",
+            "value": "N.A."
+        },
+        {
+            "label": "RAM",
+            "value": "SODIMM DDR4-2133"
+        },
+        {
+            "label": "RAM slots",
+            "value": "2"
+        },
+        {
+            "label": "RAM speed",
+            "value": "2133 MT/s"
+        },
+        {
+            "label": "RAM max",
+            "value": "32 GB"
+        },
+        {
+            "label": "USB ports",
+            "value": "USB-C 3.0; (6x)USB-A 3.0;"
+        },
+        {
+            "label": "Video ports",
+            "value": "DisplayPort; VGA;"
+        },
+        {
+            "label": "Other ports",
+            "value": "RJ45; Hdph; Mic;"
+        },
+        {
+            "label": "Optional ports",
+            "value": "DP/HDMI/Serial; WiFi antenna;"
+        },
+        {
+            "label": "SATA ports",
+            "value": "1"
+        },
+        {
+            "label": "PCI slots",
+            "value": "N.A."
+        },
+        {
+            "label": "M.2 slots",
+            "value": "M.2 2280 M-key (PCIe x4); M.2 2230 (WiFi/BT);"
+        },
+        {
+            "label": "Drive bays",
+            "value": "2.5in;"
+        },
+        {
+            "label": "PSU",
+            "value": "65/90 W"
+        },
+        {
+            "label": "Weight",
+            "value": "1.3 kg (2.9 lb)"
+        },
+        {
+            "label": "Released",
+            "value": "2015"
+        },
+        {
+            "label": "Manual",
+            "value": "link"
+        },
+        {
+            "label": "Price**",
+            "value": "Check Price"
+        }
+    ],
+    "get_detail": true,
+    "title": "HP EliteDesk 800 G2 Mini",
+    "updatedAt": "2022-04-20T07:26:54.743Z",
+    "url": "https://www.hardware-corner.net/desktop-models/HP-EliteDesk-800-G2-Mini/"
+}

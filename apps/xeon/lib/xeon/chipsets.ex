@@ -1,5 +1,6 @@
 defmodule Xeon.Chipsets do
   import Xeon.Helpers
+  import Ecto.Query, only: [from: 2]
   alias Xeon.{Repo, Chipset}
 
   def import_chipsets() do
@@ -13,6 +14,10 @@ defmodule Xeon.Chipsets do
 
     entities = Enum.map(cursor, &parse/1)
     Repo.insert_all(Chipset, entities, on_conflict: :replace_all, conflict_target: [:shortname])
+  end
+
+  def get_map_by_shortname() do
+    Repo.all(from c in Chipset, select: {c.shortname, c.id}) |> Enum.into(%{})
   end
 
   def parse(%{"title" => name, "attributes" => attributes}) do

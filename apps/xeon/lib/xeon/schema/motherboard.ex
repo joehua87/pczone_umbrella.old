@@ -1,5 +1,17 @@
 defmodule Xeon.Motherboard do
   use Ecto.Schema
+  import Ecto.Changeset
+
+  @required [:name, :max_memory_capacity, :chipset_id]
+  @optional [
+    :brand_id,
+    :note,
+    :memory_slots_count,
+    :processor_slots_count,
+    :sata_slots_count,
+    :m2_slots_count,
+    :pci_slots_count
+  ]
 
   schema "motherboard" do
     field :name, :string
@@ -20,5 +32,29 @@ defmodule Xeon.Motherboard do
     embeds_many :attributes, Xeon.AttributeGroup
     has_many :products, Xeon.Product
     many_to_many :processors, Xeon.Processor, join_through: Xeon.MotherboardProcessor
+  end
+
+  def changeset(entity, params) do
+    entity
+    |> cast(params, @required ++ @optional)
+    |> cast_embed(:memory_slots)
+    |> cast_embed(:processor_slots)
+    |> cast_embed(:sata_slots)
+    |> cast_embed(:m2_slots)
+    |> cast_embed(:pci_slots)
+    |> cast_embed(:attributes)
+    |> validate_required(@required)
+  end
+
+  def new_changeset(params) do
+    %__MODULE__{}
+    |> cast(params, @required ++ @optional)
+    |> cast_embed(:memory_slots)
+    |> cast_embed(:processor_slots)
+    |> cast_embed(:sata_slots)
+    |> cast_embed(:m2_slots)
+    |> cast_embed(:pci_slots)
+    |> cast_embed(:attributes)
+    |> validate_required(@required)
   end
 end
