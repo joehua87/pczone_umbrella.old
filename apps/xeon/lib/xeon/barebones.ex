@@ -46,10 +46,46 @@ defmodule Xeon.Barebones do
 
   defp parse_barebone(
          :hardware_corner,
-         %{"title" => name, "fieldValues" => field_values}
+         %{
+           "title" => name,
+           "fieldValues" => field_values,
+           "tables" => tables,
+           "manualLink" => manual_link,
+           "url" => source_url
+         }
        ) do
-    weight = get_field_value(field_values, "Weight")
-    %{name: name, weight: weight}
+    [weight | _] = get_field_value(field_values, "Weight") |> String.split(" kg")
+    launch_date = get_field_value(field_values, "Released")
+    psu_text = get_field_value(field_values, "PSU")
+
+    psu_form_factor =
+      cond do
+        String.starts_with?(psu_text, "ATX") -> "ATX"
+        String.starts_with?(psu_text, "TFX") -> "TFX"
+        true -> nil
+      end
+
+    psu_options =
+      psu_text
+      |> String.replace("W", "")
+      |> String.replace(~r/^(ATX|TFX)/, "")
+      |> String.split("/")
+      |> Enum.map(&(&1 |> String.trim() |> String.to_integer()))
+
+    %{
+      name: name,
+      weight: Decimal.new(weight),
+      launch_date: launch_date,
+      psu_form_factor: psu_form_factor,
+      psu_options: psu_options,
+      source_url: source_url,
+      source_website: URI.new!(source_url).host,
+      raw_data: %{
+        field_values: field_values,
+        tables: tables,
+        manual_link: manual_link
+      }
+    }
   end
 
   defp parse_motherboard(
@@ -66,10 +102,17 @@ defmodule Xeon.Barebones do
 
     memory_types = Xeon.MemoryTypes.get(:hardware_corner, get_field_value(field_values, "RAM"))
 
+    m2_slots =
+      get_field_value(field_values, "M.2 slots")
+      |> String.split(";")
+      |> Enum.map(&String.trim/1)
+      |> Enum.filter(&(!Enum.member?(["", "N.A."], &1)))
+
     %{
       name: name,
       chipset: chipset,
       chipset_id: chipset_id,
+      _m2_slots: m2_slots,
       processor_slots: [
         %{
           slots: 1

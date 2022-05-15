@@ -38,7 +38,7 @@ defmodule Xeon.Repo.Migrations.Initialize do
 
     create table(:psu) do
       add :name, :string, null: false
-      add :wattage, :integer
+      add :wattage, :string
       add :form_factor, :string
       add :brand_id, references(:brand)
     end
@@ -69,11 +69,17 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :name, :string, null: false
       add :motherboard_id, references(:motherboard), null: false
       add :chassis_id, references(:chassis), null: false
+      add :weight, :decimal
+      add :psu_form_factor, :string
+      add :psu_options, {:array, :integer}
       add :psu_id, references(:psu)
       add :brand_id, references(:brand)
       add :form_factor, :string
       add :launch_date, :string
       add :url, :string
+      add :raw_data, :map
+      add :source_website, :string
+      add :source_url, :string
     end
 
     create table(:processor_collection) do
