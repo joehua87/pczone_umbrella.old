@@ -31,6 +31,7 @@ defmodule Xeon.MemorySlot do
   import Ecto.Changeset
 
   embedded_schema do
+    field :processor, :integer, default: 1
     field :max_capacity, :integer
     field :types, {:array, :string}
     field :slots, :integer
@@ -46,6 +47,7 @@ defmodule Xeon.SataSlot do
   import Ecto.Changeset
 
   embedded_schema do
+    field :processor, :integer, default: 1
     field :types, {:array, :string}
     field :slots, :integer
   end
@@ -60,6 +62,7 @@ defmodule Xeon.M2Slot do
   import Ecto.Changeset
 
   embedded_schema do
+    field :processor, :integer, default: 1
     field :types, {:array, :string}
     field :slots, :integer
   end
@@ -74,6 +77,7 @@ defmodule Xeon.PciSlot do
   import Ecto.Changeset
 
   embedded_schema do
+    field :processor, :integer, default: 1
     field :types, {:array, :string}
     field :slots, :integer
   end
