@@ -1,8 +1,8 @@
-defmodule XeonWeb.Schema.HardDrives do
+defmodule XeonWeb.Schema.Chassises do
   use Absinthe.Schema.Notation
   alias Absinthe.Resolution.Helpers
 
-  object :hard_drive do
+  object :chassis do
     field :id, non_null(:id)
     field :name, non_null(:string)
 

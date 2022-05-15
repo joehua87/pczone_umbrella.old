@@ -1,4 +1,30 @@
 defmodule Xeon.Barebones do
+  require Logger
+  import Ecto.Query, only: [where: 2]
+  import Dew.FilterParser
+  alias Xeon.{Repo, Barebone}
+
+  def get(id) do
+    Repo.get(Barebone, id)
+  end
+
+  def list(attrs \\ %{})
+
+  def list(%Dew.Filter{
+        filter: filter,
+        paging: paging,
+        selection: selection,
+        order_by: order_by
+      }) do
+    Barebone
+    |> where(^parse_filter(filter))
+    |> select_fields(selection, [])
+    |> sort_by(order_by, [])
+    |> Repo.paginate(paging)
+  end
+
+  def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
+
   def create(%{
         motherboard: motherboard,
         chassis: chassis,
@@ -172,5 +198,15 @@ defmodule Xeon.Barebones do
       nil -> nil
       %{"value" => value} -> value
     end
+  end
+
+  def parse_filter(filter) do
+    filter
+    |> Enum.reduce(nil, fn {field, value}, acc ->
+      case field do
+        :name -> parse_string_filter(acc, field, value)
+        _ -> acc
+      end
+    end) || true
   end
 end
