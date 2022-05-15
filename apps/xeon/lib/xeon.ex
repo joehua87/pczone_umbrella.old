@@ -13,9 +13,25 @@ defmodule Xeon do
     Xeon.Chipsets.import_chipsets()
     Xeon.Processors.import_processors()
     Xeon.Processors.import_processor_chipsets()
-    Xeon.Motherboards.import_barebone_motherboards()
     import_memories()
-    generate_products()
+    import_barebones(:hardware_corner)
+  end
+
+  def import_barebones(:hardware_corner) do
+    {:ok, conn} = Mongo.start_link(url: "mongodb://172.16.43.5:27017/xeon")
+
+    chipsets_map = Xeon.Chipsets.get_map_by_shortname()
+
+    cursor =
+      Mongo.find(conn, "Product", %{
+        "fieldValues.0" => %{"$exists" => true}
+      })
+
+    Enum.map(
+      cursor,
+      &(Xeon.Barebones.parse(:hardware_corner, &1, chipsets_map: chipsets_map)
+        |> Xeon.Barebones.create())
+    )
   end
 
   def import_brands() do
@@ -34,7 +50,8 @@ defmodule Xeon do
       "Micron",
       "MSI",
       "Nvidia",
-      "Samsung"
+      "Samsung",
+      "Mixed"
     ]
 
     entities = brands |> Enum.map(&%{name: &1})
@@ -42,16 +59,20 @@ defmodule Xeon do
   end
 
   def import_memories() do
+    memory_slots = Xeon.Repo.all(from(m in Xeon.Motherboard, select: m.memory_slots))
+
     memory_types =
-      Xeon.Repo.all(from m in Xeon.Motherboard, select: m.memory_types)
-      |> List.flatten()
+      memory_slots
+      |> Enum.flat_map(& &1.types)
       |> Enum.uniq()
+      |> IO.inspect()
 
     capacity_list = [4, 8, 16, 32]
 
-    brands_map = Xeon.Repo.all(from b in Xeon.Brand, select: {b.name, b.id}) |> Enum.into(%{})
+    brands_map = Xeon.Repo.all(from(b in Xeon.Brand, select: {b.name, b.id})) |> Enum.into(%{})
 
     brands = [
+      "Mixed",
       "ADATA",
       "Kingmax",
       "Kingston",

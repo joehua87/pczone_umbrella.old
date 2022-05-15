@@ -54,7 +54,9 @@ defmodule Xeon.Barebones do
            "url" => source_url
          }
        ) do
-    [weight | _] = get_field_value(field_values, "Weight") |> String.split(" kg")
+    [weight | _] =
+      get_field_value(field_values, "Weight") |> String.split(~r/kg/i) |> Enum.map(&String.trim/1)
+
     launch_date = get_field_value(field_values, "Released")
     psu_text = get_field_value(field_values, "PSU")
 
