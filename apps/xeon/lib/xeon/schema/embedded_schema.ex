@@ -17,12 +17,12 @@ defmodule Xeon.ProcessorSlot do
 
   embedded_schema do
     field :socket, :string
-    field :heatsink, :string
+    field :heatsink_type, :string
     field :slots, :integer
   end
 
   def changeset(entity, params) do
-    cast(entity, params, [:socket, :heatsink, :slots])
+    cast(entity, params, [:socket, :heatsink_type, :slots])
   end
 end
 

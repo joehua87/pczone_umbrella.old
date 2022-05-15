@@ -6,6 +6,10 @@ defmodule XeonWeb.Schema.Barebones do
   object :barebone do
     field :id, non_null(:id)
     field :name, non_null(:string)
+    field :motherboard_id, non_null(:id)
+    field :chassis_id, non_null(:id)
+    field :psu_id, :id
+    field :brand_id, :id
     field :motherboard, non_null(:motherboard), resolve: Helpers.dataloader(XeonWeb.Dataloader)
     field :chassis, non_null(:chassis), resolve: Helpers.dataloader(XeonWeb.Dataloader)
     field :psu, :psu, resolve: Helpers.dataloader(XeonWeb.Dataloader)

@@ -3,13 +3,41 @@ defmodule XeonWeb.Schema.Motherboards do
   alias Absinthe.Resolution.Helpers
   alias Xeon.Motherboards
 
+  object :memory_slot do
+    field :types, non_null(list_of(non_null(:string)))
+    field :slots, non_null(:integer)
+  end
+
+  object :sata_slot do
+    field :types, list_of(non_null(:string))
+    field :slots, non_null(:integer)
+  end
+
+  object :m2_slot do
+    field :types, list_of(non_null(:string))
+    field :slots, non_null(:integer)
+  end
+
+  object :pci_slot do
+    field :types, list_of(non_null(:string))
+    field :slots, non_null(:integer)
+  end
+
+  object :processor_slot do
+    field :socket, :string
+    field :heatsink_type, :string
+    field :slots, non_null(:integer)
+  end
+
   object :motherboard do
     field :id, non_null(:id)
     field :name, non_null(:string)
     field :max_memory_capacity, non_null(:string)
-    field :memory_types, non_null(list_of(non_null(:string)))
-    field :memory_slots, non_null(:integer)
-    field :processor_slots, non_null(:integer)
+    field :memory_slots, non_null(list_of(non_null(:memory_slot)))
+    field :processor_slots, non_null(list_of(non_null(:processor_slot)))
+    field :sata_slots, non_null(list_of(non_null(:sata_slot)))
+    field :m2_slots, non_null(list_of(non_null(:m2_slot)))
+    field :pci_slots, non_null(list_of(non_null(:pci_slot)))
     field :chipset_id, non_null(:id)
 
     field :chipset,
