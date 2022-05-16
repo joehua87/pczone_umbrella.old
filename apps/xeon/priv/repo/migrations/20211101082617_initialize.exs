@@ -215,6 +215,7 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :built_id, references(:built), null: false
       add :extension_device_id, references(:extension_device), null: false
       add :product_id, references(:product), null: false
+      add :slot, :string, null: false
       add :quantity, :integer
     end
 

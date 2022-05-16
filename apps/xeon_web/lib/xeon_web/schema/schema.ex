@@ -10,6 +10,7 @@ defmodule XeonWeb.Schema do
   import_types XeonWeb.Schema.Chipsets
   import_types XeonWeb.Schema.Motherboards
   import_types XeonWeb.Schema.Barebones
+  import_types XeonWeb.Schema.ExtensionDevices
   import_types XeonWeb.Schema.Processors
   import_types XeonWeb.Schema.Memories
   import_types XeonWeb.Schema.Psus
