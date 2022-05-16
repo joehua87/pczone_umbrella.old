@@ -16,4 +16,32 @@ defmodule XeonWeb.Schema.Memories do
           non_null(list_of(non_null(:product))),
           resolve: Helpers.dataloader(XeonWeb.Dataloader)
   end
+
+  input_object :memory_filter_input do
+    field :name, :string_filter_input
+  end
+
+  object :memory_list_result do
+    field :entities, non_null(list_of(non_null(:memory)))
+    field :paging, non_null(:paging)
+  end
+
+  object :memory_queries do
+    field :memorys, non_null(:memory_list_result) do
+      arg :filter, :memory_filter_input
+      arg :order_by, list_of(non_null(:order_by_input))
+      arg :paging, :paging_input
+
+      resolve(fn args, info ->
+        list =
+          args
+          |> Map.merge(%{
+            selection: XeonWeb.AbsintheHelper.project(info) |> Keyword.get(:entities)
+          })
+          |> Xeon.Memories.list()
+
+        {:ok, list}
+      end)
+    end
+  end
 end

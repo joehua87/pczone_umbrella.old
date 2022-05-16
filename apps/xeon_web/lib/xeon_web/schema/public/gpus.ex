@@ -1,8 +1,8 @@
-defmodule XeonWeb.Schema.HardDrives do
+defmodule XeonWeb.Schema.Gpus do
   use Absinthe.Schema.Notation
   alias Absinthe.Resolution.Helpers
 
-  object :hard_drive do
+  object :gpu do
     field :id, non_null(:id)
     field :name, non_null(:string)
 
@@ -15,18 +15,18 @@ defmodule XeonWeb.Schema.HardDrives do
           resolve: Helpers.dataloader(XeonWeb.Dataloader)
   end
 
-  input_object :hard_drive_filter_input do
+  input_object :gpu_filter_input do
     field :name, :string_filter_input
   end
 
-  object :hard_drive_list_result do
-    field :entities, non_null(list_of(non_null(:hard_drive)))
+  object :gpu_list_result do
+    field :entities, non_null(list_of(non_null(:gpu)))
     field :paging, non_null(:paging)
   end
 
-  object :hard_drive_queries do
-    field :hard_drives, non_null(:hard_drive_list_result) do
-      arg :filter, :hard_drive_filter_input
+  object :gpu_queries do
+    field :gpus, non_null(:gpu_list_result) do
+      arg :filter, :gpu_filter_input
       arg :order_by, list_of(non_null(:order_by_input))
       arg :paging, :paging_input
 
@@ -36,7 +36,7 @@ defmodule XeonWeb.Schema.HardDrives do
           |> Map.merge(%{
             selection: XeonWeb.AbsintheHelper.project(info) |> Keyword.get(:entities)
           })
-          |> Xeon.HardDrives.list()
+          |> Xeon.Gpus.list()
 
         {:ok, list}
       end)

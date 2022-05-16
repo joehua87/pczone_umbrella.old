@@ -65,6 +65,14 @@ defmodule Xeon.Repo.Migrations.Initialize do
 
     create unique_index(:motherboard, [:name])
 
+    create table(:extension_device) do
+      add :name, :string, null: false
+      add :processor_slots, :map
+      add :memory_slots, :map
+      add :sata_slots, :map
+      add :m2_slots, :map
+    end
+
     create table(:barebone) do
       add :name, :string, null: false
       add :motherboard_id, references(:motherboard), null: false
@@ -193,15 +201,55 @@ defmodule Xeon.Repo.Migrations.Initialize do
     create table(:built) do
       add :barebone_id, references(:barebone)
       add :motherboard_id, references(:motherboard)
-      add :total, :integer
+      add :chassis_id, references(:chassis)
     end
 
-    create table(:built_product) do
+    create table(:built_psu) do
       add :built_id, references(:built), null: false
+      add :psu_id, references(:psu), null: false
       add :product_id, references(:product), null: false
       add :quantity, :integer
-      add :price, :decimal, null: false
-      add :amount, :decimal, null: false
+    end
+
+    create table(:built_extension_device) do
+      add :built_id, references(:built), null: false
+      add :extension_device_id, references(:extension_device), null: false
+      add :product_id, references(:product), null: false
+      add :quantity, :integer
+    end
+
+    create table(:built_processor) do
+      add :built_id, references(:built), null: false
+      add :processor_id, references(:processor), null: false
+      add :product_id, references(:product), null: false
+      add :extension_device_id, references(:extension_device)
+      add :quantity, :integer
+    end
+
+    create table(:built_memory) do
+      add :built_id, references(:built), null: false
+      add :memory_id, references(:memory), null: false
+      add :product_id, references(:product), null: false
+      add :extension_device_id, references(:extension_device)
+      add :slot, :string, null: false
+      add :quantity, :integer
+    end
+
+    create table(:built_hard_drive) do
+      add :built_id, references(:built), null: false
+      add :hard_drive_id, references(:hard_drive), null: false
+      add :product_id, references(:product), null: false
+      add :extension_device_id, references(:extension_device)
+      add :slot, :string, null: false
+      add :quantity, :integer
+    end
+
+    create table(:built_gpu) do
+      add :built_id, references(:built), null: false
+      add :slot, :string, null: false
+      add :gpu_id, references(:gpu), null: false
+      add :product_id, references(:product), null: false
+      add :quantity, :integer
     end
   end
 
