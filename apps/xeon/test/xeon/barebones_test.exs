@@ -3,6 +3,7 @@ defmodule Xeon.BarebonesTest do
   alias Xeon.Barebones
 
   describe "barebones" do
+    @tag :wip
     test "parse from hardware-corner" do
       params = get_sample_barebone()
       Xeon.Chipsets.import_chipsets()
@@ -30,10 +31,12 @@ defmodule Xeon.BarebonesTest do
                  attributes: [],
                  chipset: "Q170",
                  chipset_id: _,
-                 memory_slots: [%{slots: 2, types: ["SODIMM DDR4-2133"]}],
+                 memory_slots: [
+                   %{quantity: 2, supported_types: ["SODIMM DDR4-2133"], type: "SODIMM DDR4-2133"}
+                 ],
                  memory_slots_count: 2,
                  name: "HP EliteDesk 800 G2 Mini",
-                 processor_slots: [%{slots: 1}],
+                 processor_slots: [%{}],
                  processor_slots_count: 1
                },
                psu: %{name: "HP EliteDesk 800 G2 Mini", wattage: "65/90 W"}

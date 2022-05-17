@@ -2,7 +2,14 @@ defmodule Xeon.BuiltHardDrive do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @required [:built_id, :hard_drive_id, :product_id, :slot, :quantity]
+  @required [
+    :built_id,
+    :hard_drive_id,
+    :product_id,
+    :slot_type,
+    :processor_index,
+    :quantity
+  ]
   @optional [:extension_device_id]
 
   schema "built_hard_drive" do
@@ -10,7 +17,8 @@ defmodule Xeon.BuiltHardDrive do
     belongs_to :hard_drive, Xeon.HardDrive
     belongs_to :product, Xeon.Product
     belongs_to :extension_device, Xeon.ExtensionDevice
-    field :slot, :string
+    field :slot_type, :string
+    field :processor_index, :string
     field :quantity, :integer
   end
 

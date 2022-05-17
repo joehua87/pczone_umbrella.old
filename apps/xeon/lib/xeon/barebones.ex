@@ -128,7 +128,8 @@ defmodule Xeon.Barebones do
     max_memory_capacity =
       get_field_value(field_values, "RAM max") |> String.replace(" GB", "") |> String.to_integer()
 
-    memory_types = Xeon.MemoryTypes.get(:hardware_corner, get_field_value(field_values, "RAM"))
+    {type, supported_types} =
+      Xeon.MemoryTypes.get(:hardware_corner, get_field_value(field_values, "RAM"))
 
     m2_slots =
       get_field_value(field_values, "M.2 slots")
@@ -143,28 +144,29 @@ defmodule Xeon.Barebones do
       _m2_slots: m2_slots,
       processor_slots: [
         %{
-          slots: 1
+          quantity: 1
         }
       ],
       memory_slots: [
         %{
-          types: memory_types,
-          slots: memory_slots
+          type: type,
+          supported_types: supported_types,
+          quantity: memory_slots
         }
       ],
       sata_slots: [
         %{
-          slots: 1
+          quantity: 0
         }
       ],
       m2_slots: [
         %{
-          slots: 1
+          quantity: 0
         }
       ],
       pci_slots: [
         %{
-          slots: 0
+          quantity: 0
         }
       ],
       attributes: [],
@@ -179,6 +181,7 @@ defmodule Xeon.Barebones do
 
     %{
       name: name,
+      form_factor: "custom",
       wattage: wattage
       # type: "virtual"
     }

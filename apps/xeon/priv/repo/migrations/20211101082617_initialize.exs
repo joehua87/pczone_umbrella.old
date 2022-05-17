@@ -32,7 +32,7 @@ defmodule Xeon.Repo.Migrations.Initialize do
     create table(:chassis) do
       add :name, :string, null: false
       add :form_factor, :string
-      add :psu_form_factors, {:array, :string}
+      add :psu_form_factors, {:array, :string}, default: []
       add :brand_id, references(:brand)
     end
 
@@ -57,6 +57,7 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :m2_slots_count, :integer
       add :pci_slots_count, :integer
       add :form_factor, :string
+      add :chassis_form_factors, {:array, :string}
       add :chipset_id, references(:chipset), null: false
       add :brand_id, references(:brand)
       add :attributes, :map, null: false, default: "[]"
@@ -215,7 +216,8 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :built_id, references(:built), null: false
       add :extension_device_id, references(:extension_device), null: false
       add :product_id, references(:product), null: false
-      add :slot, :string, null: false
+      add :processor_index, :integer, null: false
+      add :slot_type, :string, null: false
       add :quantity, :integer
     end
 
@@ -232,7 +234,8 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :memory_id, references(:memory), null: false
       add :product_id, references(:product), null: false
       add :extension_device_id, references(:extension_device)
-      add :slot, :string, null: false
+      add :processor_index, :integer, null: false
+      add :slot_type, :string, null: false
       add :quantity, :integer
     end
 
@@ -241,13 +244,15 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :hard_drive_id, references(:hard_drive), null: false
       add :product_id, references(:product), null: false
       add :extension_device_id, references(:extension_device)
-      add :slot, :string, null: false
+      add :processor_index, :integer, null: false
+      add :slot_type, :string, null: false
       add :quantity, :integer
     end
 
     create table(:built_gpu) do
       add :built_id, references(:built), null: false
-      add :slot, :string, null: false
+      add :processor_index, :integer, null: false
+      add :slot_type, :string, null: false
       add :gpu_id, references(:gpu), null: false
       add :product_id, references(:product), null: false
       add :quantity, :integer

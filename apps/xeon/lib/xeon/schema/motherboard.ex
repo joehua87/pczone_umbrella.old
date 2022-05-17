@@ -6,6 +6,7 @@ defmodule Xeon.Motherboard do
   @optional [
     :brand_id,
     :note,
+    :chassis_form_factors,
     :memory_slots_count,
     :processor_slots_count,
     :sata_slots_count,
@@ -19,6 +20,7 @@ defmodule Xeon.Motherboard do
     belongs_to :chipset, Xeon.Chipset
     belongs_to :brand, Xeon.Brand
     field :note, :string
+    field :chassis_form_factors, {:array, :string}
     embeds_many :memory_slots, Xeon.MemorySlot
     embeds_many :processor_slots, Xeon.ProcessorSlot
     embeds_many :sata_slots, Xeon.SataSlot

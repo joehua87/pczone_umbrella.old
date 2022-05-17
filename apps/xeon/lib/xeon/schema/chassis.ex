@@ -2,11 +2,13 @@ defmodule Xeon.Chassis do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @required [:name]
+  @required [:name, :form_factor, :psu_form_factors]
   @optional [:brand_id]
 
   schema "chassis" do
     field :name, :string
+    field :form_factor, :string
+    field :psu_form_factors, {:array, :string}, default: []
     belongs_to :brand, Xeon.Brand
     has_many :products, Xeon.Product
   end

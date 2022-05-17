@@ -88,13 +88,13 @@ defmodule Xeon.Motherboards do
       chipset_id: chipset_id,
       processor_slots: [
         %Xeon.ProcessorSlot{
-          slots: 1
+          quantity: 1
         }
       ],
       memory_slots: [
         %Xeon.MemorySlot{
-          types: memory_types,
-          slots: memory_slots
+          supported_types: memory_types,
+          quantity: memory_slots
         }
       ],
       processor_slots_count: 1,

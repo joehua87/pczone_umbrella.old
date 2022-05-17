@@ -2,11 +2,12 @@ defmodule Xeon.Psu do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @required [:name]
+  @required [:name, :form_factor]
   @optional [:brand_id]
 
   schema "psu" do
     field :name, :string
+    field :form_factor, :string
     belongs_to :brand, Xeon.Brand
     has_many :products, Xeon.Product
   end

@@ -18,11 +18,11 @@ defmodule Xeon.ProcessorSlot do
   embedded_schema do
     field :socket, :string
     field :heatsink_type, :string
-    field :slots, :integer
+    field :quantity, :integer
   end
 
   def changeset(entity, params) do
-    cast(entity, params, [:socket, :heatsink_type, :slots])
+    cast(entity, params, [:socket, :heatsink_type, :quantity])
   end
 end
 
@@ -31,14 +31,15 @@ defmodule Xeon.MemorySlot do
   import Ecto.Changeset
 
   embedded_schema do
-    field :processor, :integer, default: 1
+    field :type, :string
+    field :processor_index, :integer, default: 1
     field :max_capacity, :integer
-    field :types, {:array, :string}
-    field :slots, :integer
+    field :supported_types, {:array, :string}
+    field :quantity, :integer
   end
 
   def changeset(entity, params) do
-    cast(entity, params, [:max_capacity, :types, :slots])
+    cast(entity, params, [:type, :processor_index, :max_capacity, :supported_types, :quantity])
   end
 end
 
@@ -47,13 +48,14 @@ defmodule Xeon.SataSlot do
   import Ecto.Changeset
 
   embedded_schema do
-    field :processor, :integer, default: 1
-    field :types, {:array, :string}
-    field :slots, :integer
+    field :type, :string
+    field :processor_index, :integer, default: 1
+    field :supported_types, {:array, :string}
+    field :quantity, :integer
   end
 
   def changeset(entity, params) do
-    cast(entity, params, [:types, :slots])
+    cast(entity, params, [:type, :processor_index, :supported_types, :quantity])
   end
 end
 
@@ -62,13 +64,14 @@ defmodule Xeon.M2Slot do
   import Ecto.Changeset
 
   embedded_schema do
-    field :processor, :integer, default: 1
-    field :types, {:array, :string}
-    field :slots, :integer
+    field :type, :string
+    field :processor_index, :integer, default: 1
+    field :supported_types, {:array, :string}
+    field :quantity, :integer
   end
 
   def changeset(entity, params) do
-    cast(entity, params, [:types, :slots])
+    cast(entity, params, [:type, :processor_index, :supported_types, :quantity])
   end
 end
 
@@ -77,12 +80,13 @@ defmodule Xeon.PciSlot do
   import Ecto.Changeset
 
   embedded_schema do
-    field :processor, :integer, default: 1
-    field :types, {:array, :string}
-    field :slots, :integer
+    field :type, :string
+    field :processor_index, :integer, default: 1
+    field :supported_types, {:array, :string}
+    field :quantity, :integer
   end
 
   def changeset(entity, params) do
-    cast(entity, params, [:types, :slots])
+    cast(entity, params, [:type, :processor_index, :supported_types, :quantity])
   end
 end

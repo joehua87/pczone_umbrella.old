@@ -10,7 +10,6 @@ defmodule Xeon.BuiltProcessor do
     belongs_to :processor, Xeon.Processor
     belongs_to :product, Xeon.Product
     belongs_to :extension_device, Xeon.ExtensionDevice
-    field :slot, :string
     field :quantity, :integer
   end
 
