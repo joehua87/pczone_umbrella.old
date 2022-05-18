@@ -3,6 +3,7 @@ defmodule Xeon.Gpu do
 
   schema "gpu" do
     field :name, :string
+    field :slot_type, :string
     belongs_to :brand, Xeon.Brand
     has_many :products, Xeon.Product
   end

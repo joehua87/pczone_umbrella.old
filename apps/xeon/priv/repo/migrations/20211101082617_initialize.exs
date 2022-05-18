@@ -4,6 +4,14 @@ defmodule Xeon.Repo.Migrations.Initialize do
   def change do
     create_extension(["citext", "unaccent", "ltree"])
 
+    create table(:enum) do
+      add :name, :string, null: false
+      add :type, :string, null: false
+      add :value, :string, null: false
+    end
+
+    create index(:enum, [:name])
+
     create table(:brand) do
       add :name, :string, null: false
     end
@@ -26,6 +34,7 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :memory_capacity, :integer, null: false
       add :form_factors, {:array, :string}, null: false
       add :tdp, :integer
+      add :slot_type, :string, null: false
       add :brand_id, references(:brand)
     end
 
@@ -163,7 +172,7 @@ defmodule Xeon.Repo.Migrations.Initialize do
 
     create table(:hard_drive) do
       add :name, :string, null: false
-      add :type, :string, null: false
+      add :slot_type, :string, null: false
       add :capacity, :integer, null: false
       add :tdp, :integer
       add :brand_id, references(:brand)

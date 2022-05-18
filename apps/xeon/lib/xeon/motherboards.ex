@@ -80,7 +80,8 @@ defmodule Xeon.Motherboards do
     max_memory_capacity =
       get_field_value(field_values, "RAM max") |> String.replace(" GB", "") |> String.to_integer()
 
-    memory_types = Xeon.MemoryTypes.get(:hardware_corner, get_field_value(field_values, "RAM"))
+    {type, supported_types} =
+      Xeon.MemoryTypes.get(:hardware_corner, get_field_value(field_values, "RAM"))
 
     %{
       name: name,
@@ -93,7 +94,8 @@ defmodule Xeon.Motherboards do
       ],
       memory_slots: [
         %Xeon.MemorySlot{
-          supported_types: memory_types,
+          type: type,
+          supported_types: supported_types,
           quantity: memory_slots
         }
       ],

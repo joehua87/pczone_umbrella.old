@@ -107,15 +107,7 @@ defmodule Xeon.Builts do
   end
 
   def validate_memories(%Xeon.Motherboard{memory_slots: memory_slots}, memories) do
-    memory_slots_map =
-      Enum.map(
-        memory_slots,
-        fn %Xeon.MemorySlot{type: type, processor_index: processor_index} = slot ->
-          {"#{type}:#{processor_index}", slot}
-        end
-      )
-      |> Enum.into(%{})
-
+    memory_slots_map = get_slots_map(memory_slots)
     memories_map = Repo.all(from m in Xeon.Memory, select: {m.id, m}) |> Enum.into(%{})
 
     errors =
@@ -123,26 +115,35 @@ defmodule Xeon.Builts do
       |> Enum.map(fn %{
                        memory_id: memory_id,
                        processor_index: processor_index,
-                       slot_type: slot_type
+                       slot_type: slot_type,
+                       quantity: quantity
                      } ->
         memory = memories_map[memory_id]
+        slot = memory_slots_map["#{slot_type}:#{processor_index}"]
+        is_supported = Enum.member?(slot.supported_types, memory.type)
 
-        %{
-          supported_types: supported_types,
-          max_capacity: max_capacity
-        } = memory_slots_map["#{slot_type}:#{processor_index}"]
-
-        if Enum.member?(supported_types, memory.type) do
-          if max_capacity >= memory.capacity do
-            :ok
-          else
+        cond do
+          quantity > slot.quantity ->
             {:error,
-             {"Motherboard does not support memory capacity more than {capacity}",
-              capacity: max_capacity}}
-          end
-        else
-          {:error,
-           {"Motherboard does not support memory type {memory_type}", memory_type: memory.type}}
+             {"Slot {slot_type} only support {slot_quantity} items",
+              [slot_type: slot_type, slot_quantity: slot.quantity]}}
+
+          is_supported && memory.capacity > slot.max_capacity ->
+            {:error,
+             {
+               "Motherboard does not support memory capacity more than {capacity}",
+               capacity: slot.max_capacity
+             }}
+
+          is_supported ->
+            :ok
+
+          true ->
+            {:error,
+             {
+               "Motherboard does not support memory type {memory_type}",
+               memory_type: memory.type
+             }}
         end
       end)
       |> Enum.filter(&(&1 != :ok))
@@ -155,16 +156,94 @@ defmodule Xeon.Builts do
     end
   end
 
-  def validate_memories(
-        %Xeon.Motherboard{memory_slots: memory_slots},
-        [
-          %{memory_id: memory_id, type: type, quantity: quantity}
-        ]
+  def validate_hard_drives(
+        %Xeon.Motherboard{m2_slots: m2_slots, sata_slots: sata_slots},
+        hard_drives
       ) do
-    []
+    m2_slots_map = get_slots_map(m2_slots)
+    sata_slots_map = get_slots_map(sata_slots)
+    slots_map = Map.merge(m2_slots_map, sata_slots_map)
+    hard_drives_map = Repo.all(from m in Xeon.HardDrive, select: {m.id, m}) |> Enum.into(%{})
+
+    errors =
+      hard_drives
+      |> Enum.map(fn %{
+                       hard_drive_id: hard_drive_id,
+                       processor_index: processor_index,
+                       slot_type: slot_type,
+                       quantity: quantity
+                     } ->
+        hard_drive = hard_drives_map[hard_drive_id]
+        slot = slots_map["#{slot_type}:#{processor_index}"]
+        is_supported = Enum.member?(slot.supported_types, hard_drive.type)
+
+        cond do
+          quantity > slot.quantity ->
+            {:error,
+             {"Slot {slot_type} only support {slot_quantity} items",
+              [slot_type: slot_type, slot_quantity: slot.quantity]}}
+
+          is_supported ->
+            :ok
+
+          true ->
+            {:error,
+             {
+               "Motherboard does not support type {slot_type}",
+               slot_type: hard_drive.slot_type
+             }}
+        end
+      end)
+      |> Enum.filter(&(&1 != :ok))
+
+    if length(errors) == 0 do
+      :ok
+    else
+      # TODO: Combine errors
+      errors[0]
+    end
   end
 
   def validate_gpus(%Xeon.Motherboard{pci_slots: pci_slots}, gpus) do
+    pci_slots_map = get_slots_map(pci_slots)
+    gpus_map = Repo.all(from m in Xeon.Gpu, select: {m.id, m}) |> Enum.into(%{})
+
+    errors =
+      gpus
+      |> Enum.map(fn %{
+                       gpu_id: gpu_id,
+                       processor_index: processor_index,
+                       slot_type: slot_type,
+                       quantity: quantity
+                     } ->
+        gpu = gpus_map[gpu_id]
+        slot = pci_slots_map["#{slot_type}:#{processor_index}"]
+        is_supported = Enum.member?(slot.supported_types, gpu.slot_type)
+
+        cond do
+          quantity > slot.quantity ->
+            {:error,
+             {"Slot {slot_type} only support {slot_quantity} items",
+              [slot_type: slot_type, slot_quantity: slot.quantity]}}
+
+          is_supported ->
+            :ok
+
+          true ->
+            {
+              :error,
+              {"Motherboard does not support pci type {slot_type}", slot_type: gpu.slot_type}
+            }
+        end
+      end)
+      |> Enum.filter(&(&1 != :ok))
+
+    if length(errors) == 0 do
+      :ok
+    else
+      # TODO: Combine errors
+      errors[0]
+    end
   end
 
   @doc """
@@ -177,5 +256,15 @@ defmodule Xeon.Builts do
   Check if products is in stocks for a built
   """
   def validate_products(built_id) do
+  end
+
+  defp get_slots_map(slots) do
+    Enum.map(
+      slots,
+      fn %{type: type, processor_index: processor_index} = slot ->
+        {"#{type}:#{processor_index}", slot}
+      end
+    )
+    |> Enum.into(%{})
   end
 end

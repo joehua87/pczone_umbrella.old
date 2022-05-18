@@ -3,7 +3,6 @@ defmodule Xeon.BarebonesTest do
   alias Xeon.Barebones
 
   describe "barebones" do
-    @tag :wip
     test "parse from hardware-corner" do
       params = get_sample_barebone()
       Xeon.Chipsets.import_chipsets()
