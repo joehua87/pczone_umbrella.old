@@ -29,8 +29,14 @@ defmodule Xeon.Motherboards do
   def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
 
   def upsert(entities, opts \\ []) do
+    brands_map = Xeon.Brands.get_map_by_slug()
     chipsets_map = Xeon.Chipsets.get_map_by_shortname()
-    entities = Enum.map(entities, &parse_entity_for_upsert(&1, chipsets_map: chipsets_map))
+
+    entities =
+      Enum.map(
+        entities,
+        &parse_entity_for_upsert(&1, brands_map: brands_map, chipsets_map: chipsets_map)
+      )
 
     Repo.insert_all(
       Motherboard,
@@ -39,13 +45,17 @@ defmodule Xeon.Motherboards do
     )
   end
 
-  def parse_entity_for_upsert(params, chipsets_map: chipsets_map) do
+  def parse_entity_for_upsert(params, brands_map: brands_map, chipsets_map: chipsets_map) do
     case params do
       %{chipset: chipset_shortname} ->
         Map.put(params, :chipset_id, chipsets_map[chipset_shortname])
 
       %{"chipset" => chipset_shortname} ->
         Map.put(params, "chipset_id", chipsets_map[chipset_shortname])
+    end
+    |> case do
+      params = %{brand: brand} -> Map.put(params, :brand_id, brands_map[brand])
+      params = %{"brand" => brand} -> Map.put(params, "brand_id", brands_map[brand])
     end
     |> Xeon.Helpers.ensure_slug()
     |> Xeon.Motherboard.new_changeset()

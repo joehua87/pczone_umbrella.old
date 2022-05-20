@@ -11,9 +11,8 @@ defmodule Xeon.Built do
     belongs_to :barebone, Xeon.Barebone
     belongs_to :motherboard, Xeon.Motherboard
     belongs_to :chassis, Xeon.Chassis
+    belongs_to :processor, Xeon.Processor
     belongs_to :barebone_product, Xeon.Product
-    belongs_to :motherboard_product, Xeon.Product
-    belongs_to :chassis_product, Xeon.Product
     has_many :built_psus, Xeon.BuiltPsu
     has_many :built_extension_devices, Xeon.BuiltExtensionDevice
     has_many :built_processors, Xeon.BuiltProcessor

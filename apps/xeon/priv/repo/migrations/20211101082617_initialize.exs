@@ -41,7 +41,7 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :memory_type, :string, null: false
       add :form_factors, {:array, :string}, null: false
       add :tdp, :integer
-      add :brand_id, references(:brand)
+      add :brand_id, references(:brand), null: false
     end
 
     create unique_index(:gpu, [:slug])
@@ -83,7 +83,7 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :form_factor, :string
       add :chassis_form_factors, {:array, :string}
       add :chipset_id, references(:chipset), null: false
-      add :brand_id, references(:brand)
+      add :brand_id, references(:brand), null: false
       add :attributes, :map, null: false, default: "[]"
       add :note, :string
     end
@@ -100,23 +100,6 @@ defmodule Xeon.Repo.Migrations.Initialize do
     end
 
     create unique_index(:extension_device, [:slug])
-
-    create table(:barebone) do
-      add :slug, :string, null: false
-      add :name, :string, null: false
-      add :motherboard_id, references(:motherboard), null: false
-      add :chassis_id, references(:chassis), null: false
-      add :psu_id, references(:psu)
-      add :brand_id, references(:brand), null: false
-      add :weight, :decimal
-      add :launch_date, :string
-      add :url, :string
-      add :raw_data, :map
-      add :source_website, :string
-      add :source_url, :string
-    end
-
-    create unique_index(:barebone, [:slug])
 
     create table(:processor_collection) do
       add :name, :string, null: false
@@ -180,6 +163,24 @@ defmodule Xeon.Repo.Migrations.Initialize do
 
     create unique_index(:processor_score, [:processor_id, :test_name])
 
+    create table(:barebone) do
+      add :slug, :string, null: false
+      add :name, :string, null: false
+      add :motherboard_id, references(:motherboard), null: false
+      add :chassis_id, references(:chassis), null: false
+      add :psu_id, references(:psu)
+      add :brand_id, references(:brand), null: false
+      add :processor_id, references(:processor)
+      add :weight, :decimal
+      add :launch_date, :string
+      add :url, :string
+      add :raw_data, :map
+      add :source_website, :string
+      add :source_url, :string
+    end
+
+    create unique_index(:barebone, [:slug])
+
     create table(:memory) do
       add :slug, :string, null: false
       add :name, :string, null: false
@@ -211,7 +212,7 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :random_write, :integer
       add :tbw, :integer
       add :tdp, :integer
-      add :brand_id, references(:brand)
+      add :brand_id, references(:brand), null: false
     end
 
     create unique_index(:hard_drive, [:slug])
@@ -252,9 +253,8 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :barebone_id, references(:barebone)
       add :motherboard_id, references(:motherboard)
       add :chassis_id, references(:chassis)
+      add :processor_id, references(:processor)
       add :barebone_product_id, references(:product)
-      add :motherboard_product_id, references(:product)
-      add :chassis_product_id, references(:product)
     end
 
     create table(:built_psu) do

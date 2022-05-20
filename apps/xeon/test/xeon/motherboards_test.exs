@@ -4,12 +4,14 @@ defmodule Xeon.MotherboardsTest do
   alias Xeon.{Repo, Motherboards, Motherboard}
 
   describe "motherboards" do
-    test "parse data for upsert" do
+    test "parse data for upsert", %{brands_map: brands_map, chipsets_map: chipsets_map} do
       [params | _] = Xeon.Fixtures.read_fixture("motherboards.yml")
-      chipsets_map = Xeon.Chipsets.get_map_by_shortname()
 
       assert %{chipset_id: _} =
-               Motherboards.parse_entity_for_upsert(params, chipsets_map: chipsets_map)
+               Motherboards.parse_entity_for_upsert(params,
+                 brands_map: brands_map,
+                 chipsets_map: chipsets_map
+               )
     end
 
     test "upsert" do
@@ -101,10 +103,10 @@ defmodule Xeon.MotherboardsTest do
   end
 
   setup do
-    "chipsets.yml"
-    |> Xeon.Fixtures.read_fixture()
-    |> Xeon.Chipsets.upsert()
+    "chipsets.yml" |> Xeon.Fixtures.read_fixture() |> Xeon.Chipsets.upsert()
+    "brands.yml" |> Xeon.Fixtures.read_fixture() |> Xeon.Brands.upsert()
 
-    :ok
+    {:ok,
+     chipsets_map: Xeon.Chipsets.get_map_by_shortname(), brands_map: Xeon.Brands.get_map_by_slug()}
   end
 end

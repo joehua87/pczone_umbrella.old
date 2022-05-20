@@ -1,5 +1,6 @@
 ---
 - chipset: Q170
+  brand: dell
   m2_slots:
     - processor_index: 1
       quantity: 1
@@ -32,6 +33,7 @@
       supported_types: ['sata 3']
       type: 'sata 3'
 - chipset: Q170
+  brand: hp
   m2_slots:
     - processor_index: 1
       quantity: 1
@@ -67,6 +69,7 @@
     - i7 6700T
 
 - chipset: Q170
+  brand: hp
   m2_slots:
     - processor_index: 1
       quantity: 1

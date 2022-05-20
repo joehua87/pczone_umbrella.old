@@ -4,6 +4,7 @@ defmodule Xeon.Barebone do
 
   @required [:slug, :name, :motherboard_id, :chassis_id, :brand_id]
   @optional [
+    :processor_id,
     :launch_date,
     :psu_id,
     :raw_data,
@@ -17,6 +18,7 @@ defmodule Xeon.Barebone do
     belongs_to :motherboard, Xeon.Motherboard
     belongs_to :chassis, Xeon.Chassis
     belongs_to :psu, Xeon.Psu
+    belongs_to :processor, Xeon.Processor
     belongs_to :brand, Xeon.Brand
     field :launch_date, :string
     field :raw_data, :map
