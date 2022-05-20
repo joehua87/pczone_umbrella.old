@@ -47,6 +47,7 @@ defmodule Xeon.MixProject do
       {:slugify, "~> 1.3"},
       {:scrivener_ecto, "~> 2.7"},
       {:tesla, "~> 1.4"},
+      {:yaml_elixir, "~> 2.9"},
       {:google_api_sheets, "~> 0.29"},
       {:goth, "~> 1.2.0"},
       {:phoenix_pubsub, "~> 2.0"},

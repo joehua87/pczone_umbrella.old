@@ -1,4 +1,12 @@
 defmodule Xeon.Helpers do
+  def get_changeset_changes(%Ecto.Changeset{changes: changes, valid?: true}) do
+    changes
+  end
+
+  def get_changeset_changes(changeset = %Ecto.Changeset{valid?: false}) do
+    {:error, changeset}
+  end
+
   def get_attribute_value(attributes, group, label) do
     attributes
     |> Enum.find(&(&1["group"] == group))

@@ -3,6 +3,19 @@ defmodule Xeon.Chipsets do
   import Ecto.Query, only: [from: 2]
   alias Xeon.{Repo, Chipset}
 
+  def upsert(entities, opts \\ []) do
+    entities =
+      Enum.map(entities, fn entity ->
+        Xeon.Chipset.new_changeset(entity) |> Xeon.Helpers.get_changeset_changes()
+      end)
+
+    Repo.insert_all(
+      Chipset,
+      entities,
+      Keyword.merge(opts, on_conflict: :replace_all, conflict_target: [:shortname])
+    )
+  end
+
   def import_chipsets() do
     {:ok, conn} = Mongo.start_link(url: "mongodb://172.16.43.5:27017/xeon")
 

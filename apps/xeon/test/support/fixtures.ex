@@ -9,7 +9,8 @@ defmodule Xeon.Fixtures do
 
     case ext do
       ".json" -> path |> File.read!() |> Jason.decode!()
-      _ -> %{}
+      ".yml" -> path |> YamlElixir.read_from_file!()
+      _ -> {:error, "File not found"}
     end
   end
 end
