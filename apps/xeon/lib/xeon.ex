@@ -1,6 +1,4 @@
 defmodule Xeon do
-  import Ecto.Query, only: [from: 2]
-
   @moduledoc """
   Xeon keeps the contexts that define your domain
   and business logic.
@@ -9,196 +7,27 @@ defmodule Xeon do
   if it comes from the database, an external API or others.
   """
 
-  def initial_data() do
-    Xeon.Chipsets.import_chipsets()
-    Xeon.Processors.import_processors()
-    Xeon.Processors.import_processor_chipsets()
-    import_memories()
-    import_barebones(:hardware_corner)
-  end
+  def initial_data(dir) do
+    barebones = dir |> Path.join("barebones.yml") |> YamlElixir.read_from_file!()
+    brands = dir |> Path.join("brands.yml") |> YamlElixir.read_from_file!()
+    chassises = dir |> Path.join("chassises.yml") |> YamlElixir.read_from_file!()
+    chipsets = dir |> Path.join("chipsets.yml") |> YamlElixir.read_from_file!()
+    gpus = dir |> Path.join("gpus.yml") |> YamlElixir.read_from_file!()
+    hard_drives = dir |> Path.join("hard_drives.yml") |> YamlElixir.read_from_file!()
+    memories = dir |> Path.join("memories.yml") |> YamlElixir.read_from_file!()
+    motherboards = dir |> Path.join("motherboards.yml") |> YamlElixir.read_from_file!()
+    processors = dir |> Path.join("processors.yml") |> YamlElixir.read_from_file!()
+    psus = dir |> Path.join("psus.yml") |> YamlElixir.read_from_file!()
 
-  def import_barebones(:hardware_corner) do
-    {:ok, conn} = Mongo.start_link(url: "mongodb://172.16.43.5:27017/xeon")
-
-    chipsets_map = Xeon.Chipsets.get_map_by_shortname()
-
-    cursor =
-      Mongo.find(conn, "Product", %{
-        "fieldValues.0" => %{"$exists" => true}
-      })
-
-    Enum.map(
-      cursor,
-      &(Xeon.Barebones.parse(:hardware_corner, &1, chipsets_map: chipsets_map)
-        |> Xeon.Barebones.create())
-    )
-  end
-
-  def import_brands() do
-    brands = [
-      "Acer",
-      "ADATA",
-      "AMD",
-      "Asus",
-      "Dell",
-      "Gigabyte",
-      "HP",
-      "Intel",
-      "Kingmax",
-      "Kingston",
-      "Lenovo",
-      "Micron",
-      "MSI",
-      "Nvidia",
-      "Samsung",
-      "Mixed"
-    ]
-
-    entities = brands |> Enum.map(&%{name: &1})
-    Xeon.Repo.insert_all(Xeon.Brand, entities)
-  end
-
-  def import_memories() do
-    memory_slots = Xeon.Repo.all(from(m in Xeon.Motherboard, select: m.memory_slots))
-
-    memory_types =
-      memory_slots
-      |> Enum.flat_map(& &1.types)
-      |> Enum.uniq()
-      |> IO.inspect()
-
-    capacity_list = [4, 8, 16, 32]
-
-    brands_map = Xeon.Repo.all(from(b in Xeon.Brand, select: {b.name, b.id})) |> Enum.into(%{})
-
-    brands = [
-      "Mixed",
-      "ADATA",
-      "Kingmax",
-      "Kingston",
-      "Micron",
-      "Samsung"
-    ]
-
-    entities =
-      memory_types
-      |> Enum.flat_map(fn type ->
-        Enum.map(capacity_list, fn capacity ->
-          %{
-            type: type,
-            capacity: capacity
-          }
-        end)
-      end)
-      |> Enum.flat_map(fn %{type: type, capacity: capacity} ->
-        Enum.map(brands, fn brand ->
-          brand_id = brands_map[brand]
-
-          %{
-            name: "#{capacity} Gb #{brand} #{type}",
-            type: type,
-            capacity: capacity,
-            brand_id: brand_id
-          }
-        end)
-      end)
-
-    Xeon.Repo.insert_all(Xeon.Memory, entities)
-  end
-
-  def generate_products() do
-    generate_motherboard_products()
-    generate_processor_products()
-    generate_memory_products()
-  end
-
-  def generate_motherboard_products() do
-    motherboards = Xeon.Repo.all(Xeon.Motherboard)
-
-    entities =
-      Enum.flat_map(motherboards, fn %{id: motherboard_id, name: name} ->
-        [
-          %{
-            slug: Slug.slugify(name),
-            title: name,
-            condition: "new",
-            list_price: 1_000_000,
-            sale_price: 1_000_000,
-            percentage_off: 0,
-            motherboard_id: motherboard_id
-          },
-          %{
-            slug: Slug.slugify(name),
-            title: name,
-            condition: "used",
-            list_price: 800_000,
-            sale_price: 800_000,
-            percentage_off: 0,
-            motherboard_id: motherboard_id
-          }
-        ]
-      end)
-
-    Xeon.Repo.insert_all(Xeon.Product, entities)
-  end
-
-  def generate_processor_products() do
-    processors = Xeon.Repo.all(Xeon.Processor)
-
-    entities =
-      Enum.flat_map(processors, fn %{id: processor_id, name: name} ->
-        [
-          %{
-            slug: Slug.slugify(name),
-            title: name,
-            condition: "new",
-            list_price: 1_000_000,
-            sale_price: 1_000_000,
-            percentage_off: 0,
-            processor_id: processor_id
-          },
-          %{
-            slug: Slug.slugify(name),
-            title: name,
-            condition: "used",
-            list_price: 800_000,
-            sale_price: 800_000,
-            percentage_off: 0,
-            processor_id: processor_id
-          }
-        ]
-      end)
-
-    Xeon.Repo.insert_all(Xeon.Product, entities)
-  end
-
-  def generate_memory_products() do
-    memories = Xeon.Repo.all(Xeon.Memory)
-
-    entities =
-      Enum.flat_map(memories, fn %{id: memory_id, name: name} ->
-        [
-          %{
-            slug: Slug.slugify(name),
-            title: name,
-            condition: "new",
-            list_price: 1_000_000,
-            sale_price: 1_000_000,
-            percentage_off: 0,
-            memory_id: memory_id
-          },
-          %{
-            slug: Slug.slugify(name),
-            title: name,
-            condition: "used",
-            list_price: 800_000,
-            sale_price: 800_000,
-            percentage_off: 0,
-            memory_id: memory_id
-          }
-        ]
-      end)
-
-    Xeon.Repo.insert_all(Xeon.Product, entities)
+    Xeon.Brands.upsert(brands)
+    Xeon.Chipsets.upsert(chipsets)
+    Xeon.Motherboards.upsert(motherboards)
+    Xeon.Processors.upsert(processors)
+    Xeon.Memories.upsert(memories)
+    Xeon.HardDrives.upsert(hard_drives)
+    Xeon.Gpus.upsert(gpus)
+    Xeon.Chassises.upsert(chassises)
+    Xeon.Psus.upsert(psus)
+    Xeon.Barebones.upsert(barebones)
   end
 end
