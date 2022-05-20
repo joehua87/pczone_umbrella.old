@@ -170,7 +170,7 @@ defmodule Xeon.Builts do
       |> Enum.map(fn %{
                        hard_drive_id: hard_drive_id,
                        processor_index: processor_index,
-                       slot_type: slot_type,
+                       type: slot_type,
                        quantity: quantity
                      } ->
         hard_drive = hard_drives_map[hard_drive_id]

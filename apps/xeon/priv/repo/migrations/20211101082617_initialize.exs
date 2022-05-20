@@ -180,11 +180,20 @@ defmodule Xeon.Repo.Migrations.Initialize do
 
     create table(:hard_drive) do
       add :name, :string, null: false
-      add :slot_type, :string, null: false
+      add :collection, :string, null: false
       add :capacity, :integer, null: false
+      add :type, :string, null: false
+      add :form_factor, :string
+      add :sequential_read, :integer
+      add :sequential_write, :integer
+      add :random_read, :integer
+      add :random_write, :integer
+      add :tbw, :integer
       add :tdp, :integer
       add :brand_id, references(:brand)
     end
+
+    create unique_index(:hard_drive, [:collection, :capacity, :brand_id])
 
     create table(:product_category) do
       add :slug, :string, null: false

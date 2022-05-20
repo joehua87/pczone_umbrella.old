@@ -1,0 +1,56 @@
+- name: 256Gb Samsung PM981 NVMe PCIe 3.0 x4
+  collection: PM981
+  capacity: 256
+  brand: samsung
+  type: 'nvme pcie 3.0 x4'
+  form_factor: 'm2 2280'
+- name: 512 Samsung PM981 NVMe PCIe 3.0 x4
+  collection: PM981
+  capacity: 512
+  brand: samsung
+  type: 'nvme pcie 3.0 x4'
+  form_factor: 'm2 2280'
+- name: 1Tb Samsung PM981 NVMe PCIe 3.0 x4
+  collection: PM981
+  capacity: 1024
+  brand: samsung
+  type: 'nvme pcie 3.0 x4'
+  form_factor: 'm2 2280'
+
+- name: 256Gb Samsung PM981a NVMe PCIe 3.0 x4
+  collection: PM981a
+  capacity: 256
+  brand: samsung
+  type: 'nvme pcie 3.0 x4'
+  form_factor: 'm2 2280'
+- name: 512 Samsung PM981a NVMe PCIe 3.0 x4
+  collection: PM981a
+  capacity: 512
+  brand: samsung
+  type: 'nvme pcie 3.0 x4'
+  form_factor: 'm2 2280'
+- name: 1Tb Samsung PM981a NVMe PCIe 3.0 x4
+  collection: PM981a
+  capacity: 1024
+  brand: samsung
+  type: 'nvme pcie 3.0 x4'
+  form_factor: 'm2 2280'
+
+- name: 256Gb Western Digital SN730 NVMe PCIe 3.0 x4
+  collection: SN730
+  capacity: 256
+  brand: wd
+  type: 'nvme pcie 3.0 x4'
+  form_factor: 'm2 2280'
+- name: 512 Western Digital SN730 NVMe PCIe 3.0 x4
+  collection: SN730
+  capacity: 512
+  brand: wd
+  type: 'nvme pcie 3.0 x4'
+  form_factor: 'm2 2280'
+- name: 1Tb Western Digital SN730 NVMe PCIe 3.0 x4
+  collection: SN730
+  capacity: 1024
+  brand: wd
+  type: 'nvme pcie 3.0 x4'
+  form_factor: 'm2 2280'

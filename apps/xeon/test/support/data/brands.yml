@@ -31,5 +31,9 @@
 - slug: samsung
   name: Samsung
 
+- slug: wd
+  name: WD
+  description: Western Digital
+
 - slug: mixed
   name: Mixed
