@@ -10,6 +10,6 @@
 - name: HP EliteDesk 800 G2 Mini
   form_factor: mini
   brand: hp
-- name: HP EliteDesk 800 G2 Mini 65W
+- name: HP EliteDesk 800 G2 Mini 65w
   form_factor: mini
   brand: hp

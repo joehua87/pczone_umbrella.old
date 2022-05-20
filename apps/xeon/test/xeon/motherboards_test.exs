@@ -15,7 +15,7 @@ defmodule Xeon.MotherboardsTest do
     test "upsert" do
       entities = Xeon.Fixtures.read_fixture("motherboards.yml")
 
-      assert {2,
+      assert {3,
               [
                 %Xeon.Motherboard{
                   chipset_id: _,

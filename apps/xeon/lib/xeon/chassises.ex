@@ -1,5 +1,10 @@
 defmodule Xeon.Chassises do
+  import Ecto.Query, only: [from: 2]
   alias Xeon.Repo
+
+  def get_map_by_slug() do
+    Repo.all(from c in Xeon.Chassis, select: {c.slug, c.id}) |> Enum.into(%{})
+  end
 
   def upsert(entities, opts \\ []) do
     brands_map = Xeon.Brands.get_map_by_slug()

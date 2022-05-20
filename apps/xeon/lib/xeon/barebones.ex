@@ -25,6 +25,60 @@ defmodule Xeon.Barebones do
 
   def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
 
+  def upsert(entities, opts \\ []) do
+    brands_map = Xeon.Brands.get_map_by_slug()
+    motherboards_map = Xeon.Motherboards.get_map_by_slug()
+    psus_map = Xeon.Psus.get_map_by_slug()
+    chassises_map = Xeon.Chassises.get_map_by_slug()
+
+    entities =
+      Enum.map(
+        entities,
+        &parse_entity_for_upsert(&1,
+          brands_map: brands_map,
+          motherboards_map: motherboards_map,
+          psus_map: psus_map,
+          chassises_map: chassises_map
+        )
+      )
+
+    Repo.insert_all(
+      Barebone,
+      entities,
+      Keyword.merge(opts, on_conflict: :replace_all, conflict_target: [:slug])
+    )
+  end
+
+  def parse_entity_for_upsert(params,
+        brands_map: brands_map,
+        motherboards_map: motherboards_map,
+        psus_map: psus_map,
+        chassises_map: chassises_map
+      ) do
+    case params do
+      %{brand: brand} -> Map.put(params, :brand_id, brands_map[brand])
+      %{"brand" => brand} -> Map.put(params, "brand_id", brands_map[brand])
+    end
+    |> case do
+      params = %{psu: psu} -> Map.put(params, :psu_id, psus_map[psu])
+      params = %{"psu" => psu} -> Map.put(params, "psu_id", psus_map[psu])
+    end
+    |> case do
+      params = %{chassis: chassis} -> Map.put(params, :chassis_id, chassises_map[chassis])
+      params = %{"chassis" => chassis} -> Map.put(params, "chassis_id", chassises_map[chassis])
+    end
+    |> case do
+      params = %{motherboard: motherboard} ->
+        Map.put(params, :motherboard_id, motherboards_map[motherboard])
+
+      params = %{"motherboard" => motherboard} ->
+        Map.put(params, "motherboard_id", motherboards_map[motherboard])
+    end
+    |> Xeon.Helpers.ensure_slug()
+    |> Xeon.Barebone.new_changeset()
+    |> Xeon.Helpers.get_changeset_changes()
+  end
+
   def create(%{
         motherboard: motherboard,
         chassis: chassis,

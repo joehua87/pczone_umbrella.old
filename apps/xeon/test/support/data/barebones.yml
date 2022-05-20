@@ -1,5 +1,17 @@
-- name:
-  brand:
-  motherboard:
-  chassis:
-  psu:
+- name: HP EliteDesk 800 G2 Mini
+  brand: hp
+  motherboard: hp-elitedesk-800-g2-mini
+  chassis: hp-elitedesk-800-g2-mini
+  psu: hp-elitedesk-800-g2-mini
+
+- name: HP EliteDesk 800 G2 Mini 65w
+  brand: hp
+  motherboard: hp-elitedesk-800-g2-mini-65w
+  chassis: hp-elitedesk-800-g2-mini-65w
+  psu: hp-elitedesk-800-g2-mini-65w
+
+- name: Dell OptiPlex 7040 SFF
+  brand: dell
+  motherboard: dell-optiplex-7040-sff
+  chassis: dell-optiplex-7040-sff
+  psu: dell-optiplex-7040-sff

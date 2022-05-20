@@ -3,6 +3,10 @@ defmodule Xeon.Motherboards do
   import Ecto.Query, only: [from: 2, where: 2]
   alias Xeon.{Repo, Motherboard, MotherboardProcessor}
 
+  def get_map_by_slug() do
+    Repo.all(from c in Motherboard, select: {c.slug, c.id}) |> Enum.into(%{})
+  end
+
   def get(id) do
     Repo.get(Motherboard, id)
   end
