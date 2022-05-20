@@ -1,0 +1,45 @@
+- name: 4Gb SODIMM DDR4 2133
+  description: Samsung / Hynix / Micro
+  capacity: 4
+  type: SODIMM DDR4-2133
+  brand: mixed
+- name: 8Gb SODIMM DDR4 2133
+  description: Samsung / Hynix / Micro
+  capacity: 8
+  type: SODIMM DDR4-2133
+  brand: mixed
+- name: 16Gb SODIMM DDR4 2133
+  description: Samsung / Hynix / Micro
+  capacity: 16
+  type: SODIMM DDR4-2133
+  brand: mixed
+- name: 4Gb SODIMM DDR4 2400
+  description: Samsung / Hynix / Micro
+  capacity: 4
+  type: SODIMM DDR4-2400
+  brand: mixed
+- name: 8Gb SODIMM DDR4 2400
+  description: Samsung / Hynix / Micro
+  capacity: 8
+  type: SODIMM DDR4-2400
+  brand: mixed
+- name: 16Gb SODIMM DDR4 2400
+  description: Samsung / Hynix / Micro
+  capacity: 16
+  type: SODIMM DDR4-2400
+  brand: mixed
+- name: 4Gb SODIMM DDR4 2666
+  description: Samsung / Hynix / Micro
+  capacity: 4
+  type: SODIMM DDR4-2666
+  brand: mixed
+- name: 8Gb SODIMM DDR4 2666
+  description: Samsung / Hynix / Micro
+  capacity: 8
+  type: SODIMM DDR4-2666
+  brand: mixed
+- name: 16Gb SODIMM DDR4 2666
+  description: Samsung / Hynix / Micro
+  capacity: 16
+  type: SODIMM DDR4-2666
+  brand: mixed

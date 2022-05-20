@@ -13,10 +13,11 @@ defmodule Xeon.Repo.Migrations.Initialize do
     create index(:enum, [:name])
 
     create table(:brand) do
+      add :slug, :string, null: false
       add :name, :string, null: false
     end
 
-    create unique_index(:brand, [:name])
+    create unique_index(:brand, [:slug])
 
     create table(:chipset) do
       add :shortname, :string, null: false
@@ -163,11 +164,14 @@ defmodule Xeon.Repo.Migrations.Initialize do
 
     create table(:memory) do
       add :name, :string, null: false
+      add :description, :string
       add :type, :string, null: false
       add :capacity, :integer, null: false
       add :tdp, :integer
-      add :brand_id, references(:brand)
+      add :brand_id, references(:brand), null: false
     end
+
+    create unique_index(:memory, [:type, :capacity, :brand_id])
 
     create table(:motherboard_processor) do
       add :motherboard_id, references(:motherboard), null: false

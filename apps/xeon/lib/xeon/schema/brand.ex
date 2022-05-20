@@ -4,10 +4,11 @@ defmodule Xeon.Brand do
 
   @derive Jason.Encoder
 
-  @required [:name]
+  @required [:slug, :name]
   @optional []
 
   schema "brand" do
+    field :slug, :string, null: false
     field :name, :string, null: false
   end
 
