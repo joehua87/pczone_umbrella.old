@@ -34,12 +34,15 @@ defmodule Xeon.Repo.Migrations.Initialize do
 
     create table(:gpu) do
       add :name, :string, null: false
+      add :type, :string, null: false
       add :memory_capacity, :integer, null: false
+      add :memory_type, :string, null: false
       add :form_factors, {:array, :string}, null: false
       add :tdp, :integer
-      add :slot_type, :string, null: false
       add :brand_id, references(:brand)
     end
+
+    create unique_index(:gpu, [:name])
 
     create table(:chassis) do
       add :name, :string, null: false

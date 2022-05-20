@@ -1,0 +1,44 @@
+- name: Quandro K600
+  memory_capacity: 1024
+  memory_type: DDR3
+  brand: nvidia
+  type: pcie 2.0 x16
+  form_factors:
+    - 'low'
+    - 'high'
+
+- name: Quandro K420
+  memory_capacity: 1024
+  memory_type: DDR3
+  brand: nvidia
+  type: pcie 2.0 x16
+  form_factors:
+    - 'low'
+    - 'high'
+
+- name: Quandro K420 2Gb
+  memory_capacity: 2048
+  memory_type: DDR3
+  brand: nvidia
+  type: pcie 2.0 x16
+  form_factors:
+    - 'low'
+    - 'high'
+
+- name: Quandro K620
+  memory_capacity: 2048
+  memory_type: DDR3
+  brand: nvidia
+  type: pcie 2.0 x16
+  form_factors:
+    - 'low'
+    - 'high'
+
+- name: Quandro K2000
+  memory_capacity: 2048
+  memory_type: DDR5
+  brand: nvidia
+  type: pcie 2.0 x16
+  form_factors:
+    - 'low'
+    - 'high'
