@@ -6,6 +6,7 @@ defmodule Xeon.Processor do
 
   @required [
     :code,
+    :slug,
     :name,
     :sub,
     :code_name,
@@ -40,6 +41,7 @@ defmodule Xeon.Processor do
 
   schema "processor" do
     field :code, :string
+    field :slug, :string
     field :name, :string
     field :sub, :string
     field :code_name, :string

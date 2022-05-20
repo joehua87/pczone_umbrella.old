@@ -10,7 +10,7 @@ defmodule Xeon.Chassises do
       entities,
       Keyword.merge(opts,
         on_conflict: :replace_all,
-        conflict_target: [:name]
+        conflict_target: [:slug]
       )
     )
   end
@@ -23,6 +23,7 @@ defmodule Xeon.Chassises do
       %{"brand" => brand} ->
         Map.put(params, "brand_id", brands_map[brand])
     end
+    |> Xeon.Helpers.ensure_slug()
     |> Xeon.Chassis.new_changeset()
     |> Xeon.Helpers.get_changeset_changes()
   end

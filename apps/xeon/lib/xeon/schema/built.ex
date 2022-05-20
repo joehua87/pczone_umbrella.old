@@ -2,10 +2,11 @@ defmodule Xeon.Built do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @required [:name, :motherboard_id, :chassis_id]
+  @required [:slug, :name, :motherboard_id, :chassis_id]
   @optional [:barebone_id]
 
   schema "built" do
+    field :slug, :string, null: false
     field :name, :string, null: false
     belongs_to :barebone, Xeon.Barebone
     belongs_to :motherboard, Xeon.Motherboard

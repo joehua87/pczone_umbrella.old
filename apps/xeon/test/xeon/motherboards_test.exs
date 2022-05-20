@@ -70,10 +70,7 @@ defmodule Xeon.MotherboardsTest do
               ]} = Motherboards.upsert(entities, returning: true)
     end
 
-    test "success" do
-      assert {154, _} = Motherboards.import_barebone_motherboards()
-    end
-
+    @tag :skip
     test "add processor" do
       Motherboards.import_barebone_motherboards()
       Xeon.Processors.import_processors()
@@ -85,6 +82,7 @@ defmodule Xeon.MotherboardsTest do
                Repo.get(from(Motherboard, preload: [:processors]), motherboard.id)
     end
 
+    @tag :skip
     test "remove processor" do
       Motherboards.import_barebone_motherboards()
       Xeon.Processors.import_processors()

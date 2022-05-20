@@ -6,13 +6,16 @@ defmodule Xeon.Chipsets do
   def upsert(entities, opts \\ []) do
     entities =
       Enum.map(entities, fn entity ->
-        Xeon.Chipset.new_changeset(entity) |> Xeon.Helpers.get_changeset_changes()
+        entity
+        |> ensure_slug
+        |> Xeon.Chipset.new_changeset()
+        |> Xeon.Helpers.get_changeset_changes()
       end)
 
     Repo.insert_all(
       Chipset,
       entities,
-      Keyword.merge(opts, on_conflict: :replace_all, conflict_target: [:shortname])
+      Keyword.merge(opts, on_conflict: :replace_all, conflict_target: [:slug])
     )
   end
 

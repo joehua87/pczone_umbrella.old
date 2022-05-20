@@ -10,7 +10,7 @@ defmodule Xeon.HardDrives do
       entities,
       Keyword.merge(opts,
         on_conflict: :replace_all,
-        conflict_target: [:collection, :capacity, :brand_id]
+        conflict_target: [:slug]
       )
     )
   end
@@ -23,6 +23,7 @@ defmodule Xeon.HardDrives do
       %{"brand" => brand} ->
         Map.put(params, "brand_id", brands_map[brand])
     end
+    |> Xeon.Helpers.ensure_slug()
     |> Xeon.HardDrive.new_changeset()
     |> Xeon.Helpers.get_changeset_changes()
   end

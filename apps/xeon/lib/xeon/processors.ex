@@ -39,6 +39,7 @@ defmodule Xeon.Processors do
 
   def parse_entity_for_upsert(params) do
     params
+    |> Xeon.Helpers.ensure_slug()
     |> Xeon.Processor.new_changeset()
     |> Xeon.Helpers.get_changeset_changes()
   end

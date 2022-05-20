@@ -1,4 +1,9 @@
 defmodule Xeon.Helpers do
+  def ensure_slug(%{slug: "" <> _} = params), do: params
+  def ensure_slug(%{"slug" => "" <> _} = params), do: params
+  def ensure_slug(%{name: name} = params), do: Map.put(params, :slug, Slug.slugify(name))
+  def ensure_slug(%{"name" => name} = params), do: Map.put(params, "slug", Slug.slugify(name))
+
   def get_changeset_changes(%Ecto.Changeset{changes: changes, valid?: true}) do
     for {key, value} <- changes, into: %{} do
       case value do

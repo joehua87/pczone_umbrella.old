@@ -31,7 +31,7 @@ defmodule Xeon.Motherboards do
     Repo.insert_all(
       Motherboard,
       entities,
-      Keyword.merge(opts, on_conflict: :replace_all, conflict_target: [:name])
+      Keyword.merge(opts, on_conflict: :replace_all, conflict_target: [:slug])
     )
   end
 
@@ -43,6 +43,7 @@ defmodule Xeon.Motherboards do
       %{"chipset" => chipset_shortname} ->
         Map.put(params, "chipset_id", chipsets_map[chipset_shortname])
     end
+    |> Xeon.Helpers.ensure_slug()
     |> Xeon.Motherboard.new_changeset()
     |> Xeon.Helpers.get_changeset_changes()
   end

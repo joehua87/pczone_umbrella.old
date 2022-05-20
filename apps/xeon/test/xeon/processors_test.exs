@@ -27,10 +27,7 @@ defmodule Xeon.ProcessorsTest do
       assert {13, [%Processor{} | _]} = Processors.upsert(entities, returning: true)
     end
 
-    test "import processors" do
-      assert {1286, _} = Xeon.Processors.import_processors()
-    end
-
+    @tag :skip
     test "import processor chipsets" do
       assert {_, _} = Xeon.Processors.import_processors()
       assert {_, _} = Xeon.Chipsets.import_chipsets()

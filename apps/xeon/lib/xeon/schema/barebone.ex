@@ -2,7 +2,7 @@ defmodule Xeon.Barebone do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @required [:name, :motherboard_id, :chassis_id, :brand_id]
+  @required [:slug, :name, :motherboard_id, :chassis_id, :brand_id]
   @optional [
     :launch_date,
     :psu_id,
@@ -12,6 +12,7 @@ defmodule Xeon.Barebone do
   ]
 
   schema "barebone" do
+    field :slug, :string
     field :name, :string
     belongs_to :motherboard, Xeon.Motherboard
     belongs_to :chassis, Xeon.Chassis

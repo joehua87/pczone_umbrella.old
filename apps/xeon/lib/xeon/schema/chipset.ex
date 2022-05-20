@@ -5,6 +5,7 @@ defmodule Xeon.Chipset do
   @derive Jason.Encoder
 
   @required [
+    :slug,
     :shortname,
     :code_name,
     :name,
@@ -16,6 +17,7 @@ defmodule Xeon.Chipset do
   @optional []
 
   schema "chipset" do
+    field :slug, :string
     field :shortname, :string
     field :code_name, :string
     field :name, :string

@@ -3,7 +3,7 @@ defmodule Xeon.Motherboard do
   import Ecto.Changeset
 
   @derive Jason.Encoder
-  @required [:name, :max_memory_capacity, :chipset_id]
+  @required [:slug, :name, :max_memory_capacity, :chipset_id]
   @optional [
     :brand_id,
     :note,
@@ -16,6 +16,7 @@ defmodule Xeon.Motherboard do
   ]
 
   schema "motherboard" do
+    field :slug, :string
     field :name, :string
     field :max_memory_capacity, :integer
     belongs_to :chipset, Xeon.Chipset
