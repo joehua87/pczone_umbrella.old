@@ -1,0 +1,35 @@
+- slug: huananzhi
+  name: Huananzhi
+
+- slug: intel
+  name: Intel
+
+- slug: asus
+  name: Asus
+
+- slug: gigabyte
+  name: Gigabyte
+
+- slug: dell
+  name: Dell
+
+- slug: hp
+  name: HP
+
+- slug: lenovo
+  name: Lenovo
+
+- slug: acer
+  name: Acer
+
+- slug: micron
+  name: Micron
+
+- slug: hynix
+  name: Hynix
+
+- slug: samsung
+  name: Samsung
+
+- slug: mixed
+  name: Mixed

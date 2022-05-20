@@ -16,6 +16,8 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :name, :string, null: false
     end
 
+    create unique_index(:brand, [:name])
+
     create table(:chipset) do
       add :shortname, :string, null: false
       add :code_name, :string, null: false
