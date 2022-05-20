@@ -35,5 +35,11 @@
   name: WD
   description: Western Digital
 
+- slug: nvidia
+  name: Nvidia
+
+- slug: amd
+  name: AMD
+
 - slug: mixed
   name: Mixed

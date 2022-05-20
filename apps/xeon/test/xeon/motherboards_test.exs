@@ -24,8 +24,9 @@ defmodule Xeon.MotherboardsTest do
                     %Xeon.M2Slot{
                       processor_index: 1,
                       quantity: 1,
-                      supported_types: ["NVMe"],
-                      type: "NVMe"
+                      type: "nvme pcie 3.0 x4",
+                      supported_types: ["nvme pcie 3.0 x4"],
+                      form_factors: ["m2 2230", "m2 2280"]
                     }
                   ],
                   m2_slots_count: nil,
@@ -59,53 +60,13 @@ defmodule Xeon.MotherboardsTest do
                     %Xeon.SataSlot{
                       processor_index: 1,
                       quantity: 1,
-                      supported_types: ["Sata 3.0"],
-                      type: "Sata 3.0"
-                    }
-                  ],
-                  sata_slots_count: nil
-                },
-                %Xeon.Motherboard{
-                  chipset_id: _,
-                  id: _,
-                  m2_slots: [
-                    %Xeon.M2Slot{
-                      processor_index: 1,
-                      quantity: 1,
-                      supported_types: ["NVMe"],
-                      type: "NVMe"
-                    }
-                  ],
-                  m2_slots_count: nil,
-                  max_memory_capacity: 32,
-                  memory_slots: [
-                    %Xeon.MemorySlot{
-                      max_capacity: nil,
-                      processor_index: 1,
-                      quantity: 2,
-                      supported_types: ["SODIMM DDR4-2133"],
-                      type: "SODIMM DDR4-2133"
-                    }
-                  ],
-                  memory_slots_count: nil,
-                  name: "HP EliteDesk 800 G2 Mini",
-                  note: nil,
-                  pci_slots: [],
-                  pci_slots_count: nil,
-                  processor_slots: [
-                    %Xeon.ProcessorSlot{heatsink_type: nil, quantity: 1, socket: nil}
-                  ],
-                  processor_slots_count: nil,
-                  sata_slots: [
-                    %Xeon.SataSlot{
-                      processor_index: 1,
-                      quantity: 1,
-                      supported_types: ["Sata 3.0"],
-                      type: "Sata 3.0"
+                      supported_types: ["sata 3"],
+                      type: "sata 3"
                     }
                   ],
                   sata_slots_count: nil
                 }
+                | _
               ]} = Motherboards.upsert(entities, returning: true)
     end
 

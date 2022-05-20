@@ -21,7 +21,6 @@ defmodule Xeon.HardDrivesTest do
              } = HardDrives.parse_entity_for_upsert(params, brands_map: brands_map)
     end
 
-    @tag :wip
     test "upsert" do
       entities = Xeon.Fixtures.read_fixture("hard_drives.yml")
 

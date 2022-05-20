@@ -99,11 +99,12 @@ defmodule Xeon.M2Slot do
     field :type, :string, primary_key: true
     field :processor_index, :integer, default: 1, primary_key: true
     field :supported_types, {:array, :string}
+    field :form_factors, {:array, :string}
     field :quantity, :integer
   end
 
   def changeset(entity, params) do
-    cast(entity, params, [:type, :processor_index, :supported_types, :quantity])
+    cast(entity, params, [:type, :processor_index, :supported_types, :form_factors, :quantity])
   end
 end
 
