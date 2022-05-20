@@ -2,8 +2,8 @@ defmodule Xeon.Chassis do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @required [:name, :form_factor, :psu_form_factors]
-  @optional [:brand_id]
+  @required [:name, :form_factor, :psu_form_factors, :brand_id]
+  @optional []
 
   schema "chassis" do
     field :name, :string

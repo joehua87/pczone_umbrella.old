@@ -1,0 +1,15 @@
+- name: Dell OptiPlex 7040 SFF
+  form_factor: sff
+  brand: dell
+- name: Dell OptiPlex 7050 SFF
+  form_factor: sff
+  brand: dell
+- name: Dell OptiPlex 7060 SFF
+  form_factor: sff
+  brand: dell
+- name: HP EliteDesk 800 G2 Mini
+  form_factor: mini
+  brand: hp
+- name: HP EliteDesk 800 G2 Mini 65W
+  form_factor: mini
+  brand: hp

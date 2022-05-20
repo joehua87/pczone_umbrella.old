@@ -13,6 +13,7 @@
       quantity: 4
       supported_types:
         - DIMM DDR4-2133
+        - DIMM DDR4-2400
       type: DIMM DDR4-2133
   name: Dell OptiPlex 7040 SFF
   pci_slots:
@@ -44,6 +45,7 @@
       quantity: 2
       supported_types:
         - SODIMM DDR4-2133
+        - SODIMM DDR4-2400
       type: SODIMM DDR4-2133
   name: HP EliteDesk 800 G2 Mini
   pci_slots: []

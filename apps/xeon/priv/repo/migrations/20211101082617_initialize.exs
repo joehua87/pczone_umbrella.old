@@ -48,15 +48,19 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :name, :string, null: false
       add :form_factor, :string
       add :psu_form_factors, {:array, :string}, default: []
-      add :brand_id, references(:brand)
+      add :brand_id, references(:brand), null: false
     end
+
+    create unique_index(:chassis, [:name])
 
     create table(:psu) do
       add :name, :string, null: false
-      add :wattage, :string
+      add :wattage, :integer, null: false
       add :form_factor, :string
-      add :brand_id, references(:brand)
+      add :brand_id, references(:brand), null: false
     end
+
+    create unique_index(:psu, [:name])
 
     create table(:motherboard) do
       add :name, :string, null: false
@@ -93,12 +97,9 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :name, :string, null: false
       add :motherboard_id, references(:motherboard), null: false
       add :chassis_id, references(:chassis), null: false
-      add :weight, :decimal
-      add :psu_form_factor, :string
-      add :psu_options, {:array, :integer}
       add :psu_id, references(:psu)
-      add :brand_id, references(:brand)
-      add :form_factor, :string
+      add :brand_id, references(:brand), null: false
+      add :weight, :decimal
       add :launch_date, :string
       add :url, :string
       add :raw_data, :map

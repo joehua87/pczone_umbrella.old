@@ -93,19 +93,11 @@ defmodule Xeon.Barebones do
         true -> nil
       end
 
-    psu_options =
-      psu_text
-      |> String.replace("W", "")
-      |> String.replace(~r/^(ATX|TFX)/, "")
-      |> String.split("/")
-      |> Enum.map(&(&1 |> String.trim() |> String.to_integer()))
-
     %{
       name: name,
       weight: Decimal.new(weight),
       launch_date: launch_date,
       psu_form_factor: psu_form_factor,
-      psu_options: psu_options,
       source_url: source_url,
       source_website: URI.new!(source_url).host,
       raw_data: %{

@@ -1,0 +1,20 @@
+- name: Dell OptiPlex 7040 SFF
+  wattage: 180
+  form_factor: sff
+  brand: dell
+- name: Dell OptiPlex 7050 SFF
+  wattage: 180
+  form_factor: sff
+  brand: dell
+- name: Dell OptiPlex 7060 SFF
+  wattage: 200
+  form_factor: sff
+  brand: dell
+- name: HP EliteDesk 800 G2 Mini
+  wattage: 35
+  form_factor: mini
+  brand: hp
+- name: HP EliteDesk 800 G2 Mini 65W
+  wattage: 65
+  form_factor: mini
+  brand: hp

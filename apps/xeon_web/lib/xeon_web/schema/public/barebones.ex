@@ -14,7 +14,6 @@ defmodule XeonWeb.Schema.Barebones do
     field :chassis, non_null(:chassis), resolve: Helpers.dataloader(XeonWeb.Dataloader)
     field :psu, :psu, resolve: Helpers.dataloader(XeonWeb.Dataloader)
     field :brand, :brand, resolve: Helpers.dataloader(XeonWeb.Dataloader)
-    field :psu_options, non_null(list_of(non_null(:integer)))
     field :launch_date, :string
     field :raw_data, :json
     field :source_website, :string

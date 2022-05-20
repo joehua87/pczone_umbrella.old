@@ -36,7 +36,7 @@ defmodule Xeon.MotherboardsTest do
                       max_capacity: nil,
                       processor_index: 1,
                       quantity: 4,
-                      supported_types: ["DIMM DDR4-2133"],
+                      supported_types: ["DIMM DDR4-2133" | _],
                       type: "DIMM DDR4-2133"
                     }
                   ],
