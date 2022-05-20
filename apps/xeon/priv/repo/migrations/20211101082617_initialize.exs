@@ -229,6 +229,9 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :barebone_id, references(:barebone)
       add :motherboard_id, references(:motherboard)
       add :chassis_id, references(:chassis)
+      add :barebone_product_id, references(:product)
+      add :motherboard_product_id, references(:product)
+      add :chassis_product_id, references(:product)
     end
 
     create table(:built_psu) do
