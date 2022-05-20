@@ -27,6 +27,22 @@ defmodule Xeon.Processors do
 
   def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
 
+  def upsert(entities, opts \\ []) do
+    entities = Enum.map(entities, &parse_entity_for_upsert/1)
+
+    Repo.insert_all(
+      Processor,
+      entities,
+      Keyword.merge(opts, on_conflict: :replace_all, conflict_target: [:url])
+    )
+  end
+
+  def parse_entity_for_upsert(params) do
+    params
+    |> Xeon.Processor.new_changeset()
+    |> Xeon.Helpers.get_changeset_changes()
+  end
+
   def import_processors() do
     {:ok, conn} = Mongo.start_link(url: "mongodb://172.16.43.5:27017/xeon")
     cursor = Mongo.find(conn, "Processor", %{"attributes.0" => %{"$exists" => true}})
@@ -37,7 +53,7 @@ defmodule Xeon.Processors do
     |> Enum.map(fn {k, v} -> {k, length(v)} end)
     |> Enum.filter(fn {_, v} -> v > 1 end)
 
-    Repo.insert_all(Processor, entities, on_conflict: :replace_all, conflict_target: [:name, :sub])
+    Repo.insert_all(Processor, entities, on_conflict: :replace_all, conflict_target: [:url])
   end
 
   def import_processor_chipsets() do
@@ -91,6 +107,7 @@ defmodule Xeon.Processors do
        }) do
     extract_attributes(attributes, [
       %{key: :code, group: "Essentials", label: "Processor Number"},
+      %{key: :code_name, group: "Essentials", label: "Code Name"},
       %{key: :collection_name, group: "Essentials", label: "Product Collection"},
       %{
         key: :launch_date,

@@ -114,6 +114,7 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :code, :string, null: false
       add :name, :string, null: false
       add :sub, :string, null: false
+      add :code_name, :string, null: false
       add :collection_id, references(:processor_collection)
       add :collection_name, :string, null: false
       add :launch_date, :string, null: false
@@ -141,7 +142,8 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :attributes, :map, default: "[]"
     end
 
-    create unique_index(:processor, [:name, :sub])
+    create index(:processor, [:code])
+    create unique_index(:processor, [:url])
 
     create table(:processor_chipset) do
       add :processor_id, references(:processor), null: false

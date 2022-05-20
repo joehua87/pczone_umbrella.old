@@ -1,11 +1,50 @@
 defmodule Xeon.Processor do
   use Ecto.Schema
+  import Ecto.Changeset
+
+  @derive Jason.Encoder
+
+  @required [
+    :code,
+    :name,
+    :sub,
+    :code_name,
+    :collection_name,
+    :launch_date,
+    :status,
+    :vertical_segment,
+    :cache_size,
+    :cores,
+    :url,
+    :memory_types
+  ]
+
+  @optional [
+    :collection_id,
+    :socket,
+    :case_temperature,
+    :lithography,
+    :base_frequency,
+    :tdp_up_base_frequency,
+    :tdp_down_base_frequency,
+    :max_turbo_frequency,
+    :tdp,
+    :tdp_up,
+    :tdp_down,
+    :threads,
+    :processor_graphics,
+    :gpu_id,
+    :memory_types,
+    :ecc_memory_supported
+  ]
 
   schema "processor" do
     field :code, :string
     field :name, :string
     field :sub, :string
+    field :code_name, :string
     belongs_to :collection, Xeon.ProcessorCollection
+    belongs_to :gpu, Xeon.Gpu
     field :collection_name, :string
     field :launch_date, :string
     field :vertical_segment, :string
@@ -30,5 +69,17 @@ defmodule Xeon.Processor do
     field :ecc_memory_supported, :boolean
     embeds_many :attributes, Xeon.AttributeGroup
     has_many :products, Xeon.Product
+  end
+
+  def changeset(entity, params) do
+    entity
+    |> cast(params, @required ++ @optional)
+    |> cast_embed(:attributes)
+    |> validate_required(@required)
+  end
+
+  def new_changeset(params) do
+    changeset(%__MODULE__{}, params)
+    |> validate_required(@required)
   end
 end
