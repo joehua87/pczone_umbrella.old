@@ -12,7 +12,12 @@ defmodule Xeon.HardDrivesTest do
                name: "256Gb Samsung PM981 NVMe PCIe 3.0 x4",
                type: "nvme pcie 3.0 x4",
                collection: "PM981",
-               form_factor: "m2 2280"
+               form_factor: "m2 2280",
+               sequential_read: 3000,
+               sequential_write: 1300,
+               random_read: 130_000,
+               random_write: 310_000,
+               tbw: 150
              } = HardDrives.parse_entity_for_upsert(params, brands_map: brands_map)
     end
 
@@ -20,7 +25,7 @@ defmodule Xeon.HardDrivesTest do
     test "upsert" do
       entities = Xeon.Fixtures.read_fixture("hard_drives.yml")
 
-      assert {9,
+      assert {12,
               [
                 %Xeon.HardDrive{
                   brand_id: _,

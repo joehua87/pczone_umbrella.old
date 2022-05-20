@@ -4,6 +4,11 @@
   brand: samsung
   type: 'nvme pcie 3.0 x4'
   form_factor: 'm2 2280'
+  sequential_read: 3000
+  sequential_write: 1300
+  random_read: 130000
+  random_write: 310000
+  tbw: 150
 - name: 512 Samsung PM981 NVMe PCIe 3.0 x4
   collection: PM981
   capacity: 512
@@ -54,3 +59,22 @@
   brand: wd
   type: 'nvme pcie 3.0 x4'
   form_factor: 'm2 2280'
+
+- name: 256Gb Samsung 860 Evo Sata 3
+  collection: 860 Evo
+  capacity: 256
+  brand: samsung
+  type: 'sata 3'
+  form_factor: '2.5'
+- name: 512 Samsung 860 Evo Sata 3
+  collection: 860 Evo
+  capacity: 512
+  brand: samsung
+  type: 'sata 3'
+  form_factor: '2.5'
+- name: 1Tb Samsung 860 Evo Sata 3
+  collection: 860 Evo
+  capacity: 1024
+  brand: samsung
+  type: 'sata 3'
+  form_factor: '2.5'

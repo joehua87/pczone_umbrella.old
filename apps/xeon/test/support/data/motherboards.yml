@@ -3,8 +3,8 @@
   m2_slots:
     - processor_index: 1
       quantity: 1
-      supported_types: ['NVMe']
-      type: 'NVMe'
+      form_factors: ['m2 2230', 'm2 2280']
+      supported_types: ['nvme pcie 3.0 x4']
   max_memory_capacity: 64
   memory_slots:
     - max_capacity:
@@ -26,13 +26,15 @@
   sata_slots:
     - processor_index: 1
       quantity: 1
-      supported_types: ['Sata 3.0']
-      type: 'Sata 3.0'
+      form_factors: ['2.5', '3.5']
+      supported_types: ['sata 3']
+      type: 'sata 3'
 - chipset: Q170
   m2_slots:
     - processor_index: 1
       quantity: 1
-      supported_types: ['NVMe']
+      form_factors: ['m2 2280']
+      supported_types: ['nvme pcie 3.0 x4']
       type: 'NVMe'
   max_memory_capacity: 32
   memory_slots:
@@ -51,8 +53,9 @@
   sata_slots:
     - processor_index: 1
       quantity: 1
-      supported_types: ['Sata 3.0']
-      type: 'Sata 3.0'
+      form_factors: ['2.5']
+      supported_types: ['sata 3']
+      type: 'sata 3'
   processors:
     - i3 6100T
     - i5 6400T
