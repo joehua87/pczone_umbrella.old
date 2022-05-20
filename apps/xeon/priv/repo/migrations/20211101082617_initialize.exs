@@ -57,11 +57,11 @@ defmodule Xeon.Repo.Migrations.Initialize do
     create table(:motherboard) do
       add :name, :string, null: false
       add :max_memory_capacity, :integer, null: false
-      add :processor_slots, :map, null: false
-      add :memory_slots, :map, null: false
-      add :sata_slots, :map, null: false
-      add :m2_slots, :map, null: false
-      add :pci_slots, :map, null: false
+      add :processor_slots, :map, null: false, default: "[]"
+      add :memory_slots, :map, null: false, default: "[]"
+      add :sata_slots, :map, null: false, default: "[]"
+      add :m2_slots, :map, null: false, default: "[]"
+      add :pci_slots, :map, null: false, default: "[]"
       add :processor_slots_count, :integer
       add :memory_slots_count, :integer
       add :sata_slots_count, :integer

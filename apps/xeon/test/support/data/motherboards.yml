@@ -1,0 +1,61 @@
+---
+- chipset: Q170
+  m2_slots:
+    - processor_index: 1
+      quantity: 1
+      supported_types: ['NVMe']
+      type: 'NVMe'
+  max_memory_capacity: 64
+  memory_slots:
+    - max_capacity:
+      processor_index: 1
+      quantity: 4
+      supported_types:
+        - DIMM DDR4-2133
+      type: DIMM DDR4-2133
+  name: Dell OptiPlex 7040 SFF
+  pci_slots:
+    - processor_index: 1
+      quantity: 0
+      supported_types:
+      type:
+  processor_slots:
+    - heatsink_type:
+      quantity: 1
+      socket:
+  sata_slots:
+    - processor_index: 1
+      quantity: 1
+      supported_types: ['Sata 3.0']
+      type: 'Sata 3.0'
+- chipset: Q170
+  m2_slots:
+    - processor_index: 1
+      quantity: 1
+      supported_types: ['NVMe']
+      type: 'NVMe'
+  max_memory_capacity: 32
+  memory_slots:
+    - max_capacity:
+      processor_index: 1
+      quantity: 2
+      supported_types:
+        - SODIMM DDR4-2133
+      type: SODIMM DDR4-2133
+  name: HP EliteDesk 800 G2 Mini
+  pci_slots: []
+  processor_slots:
+    - heatsink_type:
+      quantity: 1
+      socket:
+  sata_slots:
+    - processor_index: 1
+      quantity: 1
+      supported_types: ['Sata 3.0']
+      type: 'Sata 3.0'
+  processors:
+    - i3 6100T
+    - i5 6400T
+    - i5 6500T
+    - i5 6600T
+    - i7 6700T

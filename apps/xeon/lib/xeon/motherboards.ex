@@ -24,6 +24,29 @@ defmodule Xeon.Motherboards do
 
   def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
 
+  def upsert(entities, opts \\ []) do
+    chipsets_map = Xeon.Chipsets.get_map_by_shortname()
+    entities = Enum.map(entities, &parse_entity_for_upsert(&1, chipsets_map: chipsets_map))
+
+    Repo.insert_all(
+      Motherboard,
+      entities,
+      Keyword.merge(opts, on_conflict: :replace_all, conflict_target: [:name])
+    )
+  end
+
+  def parse_entity_for_upsert(params, chipsets_map: chipsets_map) do
+    case params do
+      %{chipset: chipset_shortname} ->
+        Map.put(params, :chipset_id, chipsets_map[chipset_shortname])
+
+      %{"chipset" => chipset_shortname} ->
+        Map.put(params, "chipset_id", chipsets_map[chipset_shortname])
+    end
+    |> Xeon.Motherboard.new_changeset()
+    |> Xeon.Helpers.get_changeset_changes()
+  end
+
   def add_processor(params) do
     params
     |> MotherboardProcessor.new_changeset()

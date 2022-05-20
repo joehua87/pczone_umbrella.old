@@ -1,6 +1,17 @@
 defmodule Xeon.Helpers do
   def get_changeset_changes(%Ecto.Changeset{changes: changes, valid?: true}) do
-    changes
+    for {key, value} <- changes, into: %{} do
+      case value do
+        %Ecto.Changeset{data: data} ->
+          {key, Map.merge(data, get_changeset_changes(value))}
+
+        [%Ecto.Changeset{data: data} | _] ->
+          {key, Enum.map(value, &Map.merge(data, get_changeset_changes(&1)))}
+
+        _ ->
+          {key, value}
+      end
+    end
   end
 
   def get_changeset_changes(changeset = %Ecto.Changeset{valid?: false}) do

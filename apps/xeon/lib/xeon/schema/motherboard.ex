@@ -2,6 +2,7 @@ defmodule Xeon.Motherboard do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @derive Jason.Encoder
   @required [:name, :max_memory_capacity, :chipset_id]
   @optional [
     :brand_id,
