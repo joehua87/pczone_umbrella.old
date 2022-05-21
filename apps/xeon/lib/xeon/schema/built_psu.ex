@@ -2,7 +2,7 @@ defmodule Xeon.BuiltPsu do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @required [:built_id, :gpu_id, :product_id, :quantity]
+  @required [:built_id, :psu_id, :product_id, :quantity]
   @optional []
 
   schema "built_psu" do

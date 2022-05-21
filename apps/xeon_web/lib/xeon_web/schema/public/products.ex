@@ -8,8 +8,9 @@ defmodule XeonWeb.Schema.Products do
     field :title, non_null(:string)
     field :condition, non_null(:string)
     field :type, :product_type
-    field :list_price, non_null(:integer)
+    field :list_price, :integer
     field :sale_price, non_null(:integer)
+    field :percentage_off, non_null(:decimal)
     field :stock, non_null(:integer)
     field :category_id, :id
     field :category, :product_category

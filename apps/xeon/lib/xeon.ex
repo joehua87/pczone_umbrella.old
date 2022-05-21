@@ -18,6 +18,7 @@ defmodule Xeon do
     motherboards = dir |> Path.join("motherboards.yml") |> YamlElixir.read_from_file!()
     processors = dir |> Path.join("processors.yml") |> YamlElixir.read_from_file!()
     psus = dir |> Path.join("psus.yml") |> YamlElixir.read_from_file!()
+    products = dir |> Path.join("products.yml") |> YamlElixir.read_from_file!()
 
     Xeon.Brands.upsert(brands)
     Xeon.Chipsets.upsert(chipsets)
@@ -31,5 +32,6 @@ defmodule Xeon do
     Xeon.Barebones.upsert(barebones)
     Xeon.Chipsets.upsert_chipset_processors(chipsets)
     Xeon.Motherboards.upsert_motherboard_processors(motherboards)
+    Xeon.Products.upsert(products)
   end
 end
