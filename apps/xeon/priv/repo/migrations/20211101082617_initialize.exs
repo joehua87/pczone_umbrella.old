@@ -231,11 +231,12 @@ defmodule Xeon.Repo.Migrations.Initialize do
     create unique_index(:product_category, [:path])
 
     create table(:product) do
+      add :sku, :string, null: false
       add :slug, :string, null: false
       add :title, :string, null: false
       add :description, :string
       add :condition, :string, null: false
-      add :list_price, :integer, null: false
+      add :list_price, :integer
       add :sale_price, :integer, null: false
       add :percentage_off, :decimal, null: false
       add :stock, :integer, null: false, default: 0
@@ -251,6 +252,8 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :chassis_id, references(:chassis)
       add :psu_id, references(:psu)
     end
+
+    create unique_index(:product, [:sku])
 
     create table(:built) do
       add :name, :string, null: false

@@ -4,10 +4,11 @@ defmodule Xeon.Product do
 
   @product_types [:barebone, :motherboard, :processor, :memory, :gpu, :hard_drive, :psu, :chassis]
 
-  @required [:slug, :title, :condition, :list_price, :sale_price]
+  @required [:sku, :slug, :title, :condition, :sale_price, :percentage_off]
   @optional [
     :type,
     :stock,
+    :list_price,
     :category_id,
     :barebone_id,
     :motherboard_id,
@@ -20,6 +21,7 @@ defmodule Xeon.Product do
   ]
 
   schema "product" do
+    field :sku, :string
     field :slug, :string
     field :title, :string
     field :condition, :string
