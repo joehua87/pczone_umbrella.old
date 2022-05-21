@@ -76,6 +76,13 @@ defmodule Xeon.MotherboardsTest do
               ]} = Motherboards.upsert(entities, returning: true)
     end
 
+    test "upsert motherboard processors" do
+      entities = "motherboards.yml" |> Xeon.Fixtures.read_fixture()
+      assert {_, _} = Motherboards.upsert(entities)
+      assert {_, _} = "processors.yml" |> Xeon.Fixtures.read_fixture() |> Xeon.Processors.upsert()
+      assert {13, _} = Motherboards.upsert_motherboard_processors(entities, returning: true)
+    end
+
     @tag :skip
     test "add processor" do
       Motherboards.import_barebone_motherboards()

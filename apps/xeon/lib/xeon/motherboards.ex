@@ -7,6 +7,11 @@ defmodule Xeon.Motherboards do
     Repo.all(from c in Motherboard, select: {c.slug, c.id}) |> Enum.into(%{})
   end
 
+  def get_map_by_slug(slugs) when is_list(slugs) do
+    Repo.all(from m in Motherboard, where: m.slug in ^slugs, select: {m.slug, m.id})
+    |> Enum.into(%{})
+  end
+
   def get(id) do
     Repo.get(Motherboard, id)
   end
@@ -43,6 +48,58 @@ defmodule Xeon.Motherboards do
       entities,
       Keyword.merge(opts, on_conflict: :replace_all, conflict_target: [:slug])
     )
+  end
+
+  def upsert_motherboard_processors(entities, opts \\ []) do
+    motherboard_slugs =
+      entities
+      |> Enum.map(&Xeon.Helpers.ensure_slug/1)
+      |> Enum.map(fn
+        %{"slug" => slug} -> slug
+        %{slug: slug} -> slug
+        _ -> nil
+      end)
+      |> Enum.filter(&(&1 != nil))
+
+    processor_codes =
+      Enum.flat_map(entities, fn
+        %{"processors" => processor_codes = [_ | _]} -> processor_codes
+        %{processors: processor_codes = [_ | _]} -> processor_codes
+        _ -> []
+      end)
+      |> Enum.filter(&(&1 != nil))
+
+    motherboards_map = get_map_by_slug(motherboard_slugs)
+    processors_map = Xeon.Processors.get_map_by_code(processor_codes)
+
+    entities =
+      entities
+      |> Enum.map(&Xeon.Helpers.ensure_slug/1)
+      |> Enum.flat_map(fn
+        %{slug: slug, processors: processors = [_ | _]} ->
+          Enum.map(
+            processors,
+            &%{
+              motherboard_id: motherboards_map[slug],
+              processor_id: processors_map[&1]
+            }
+          )
+
+        %{"slug" => slug, "processors" => processors = [_ | _]} ->
+          Enum.map(
+            processors,
+            &%{
+              motherboard_id: motherboards_map[slug],
+              processor_id: processors_map[&1]
+            }
+          )
+
+        _ ->
+          []
+      end)
+      |> Enum.filter(&(&1.motherboard_id != nil && &1.processor_id != nil))
+
+    Repo.insert_all(Xeon.MotherboardProcessor, entities, opts)
   end
 
   def parse_entity_for_upsert(params, brands_map: brands_map, chipsets_map: chipsets_map) do
