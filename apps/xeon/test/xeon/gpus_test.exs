@@ -11,7 +11,7 @@ defmodule Xeon.GpusTest do
                form_factors: ["low", "high"],
                memory_capacity: 1024,
                memory_type: "DDR3",
-               name: "Quandro K600",
+               name: "Nvidia Quandro K600",
                type: "pcie 2.0 x16"
              } = Gpus.parse_entity_for_upsert(params, brands_map: brands_map)
     end
@@ -27,7 +27,7 @@ defmodule Xeon.GpusTest do
                   id: _,
                   memory_capacity: 1024,
                   memory_type: "DDR3",
-                  name: "Quandro K600",
+                  name: "Nvidia Quandro K600",
                   tdp: nil,
                   type: "pcie 2.0 x16"
                 }

@@ -10,7 +10,7 @@ defmodule Xeon.MemoriesTest do
                brand_id: _,
                capacity: 4,
                description: "Samsung / Hynix / Micro",
-               name: "4Gb SODIMM DDR4 2133",
+               name: "4Gb SODIMM DDR4 2133 Mixed",
                type: "sodimm ddr4-2133"
              } = Memories.parse_entity_for_upsert(params, brands_map: brands_map)
     end
@@ -25,7 +25,7 @@ defmodule Xeon.MemoriesTest do
                   capacity: 4,
                   description: "Samsung / Hynix / Micro",
                   id: _,
-                  name: "4Gb SODIMM DDR4 2133",
+                  name: "4Gb SODIMM DDR4 2133 Mixed",
                   type: "sodimm ddr4-2133"
                 }
                 | _

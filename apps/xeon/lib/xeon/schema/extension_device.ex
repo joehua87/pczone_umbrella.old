@@ -2,10 +2,12 @@ defmodule Xeon.ExtensionDevice do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @required [:name]
+  @required [:slug, :code, :name]
   @optional [:brand_id]
 
   schema "extension_device" do
+    field :slug, :string, null: false
+    field :code, :string, null: false
     field :name, :string, null: false
     belongs_to :brand, Xeon.Brand
     embeds_many :processor_slots, Xeon.ProcessorSlot

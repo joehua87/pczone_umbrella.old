@@ -29,5 +29,7 @@ defmodule Xeon do
     Xeon.Chassises.upsert(chassises)
     Xeon.Psus.upsert(psus)
     Xeon.Barebones.upsert(barebones)
+    Xeon.Chipsets.upsert_chipset_processors(chipsets)
+    Xeon.Motherboards.upsert_motherboard_processors(motherboards)
   end
 end

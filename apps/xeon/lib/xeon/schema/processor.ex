@@ -21,7 +21,6 @@ defmodule Xeon.Processor do
   ]
 
   @optional [
-    :collection_id,
     :socket,
     :case_temperature,
     :lithography,
@@ -45,7 +44,6 @@ defmodule Xeon.Processor do
     field :name, :string
     field :sub, :string
     field :code_name, :string
-    belongs_to :collection, Xeon.ProcessorCollection
     belongs_to :gpu, Xeon.Gpu
     field :collection_name, :string
     field :launch_date, :string

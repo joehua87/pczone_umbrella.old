@@ -4,11 +4,12 @@ defmodule Xeon.Gpu do
 
   @derive Jason.Encoder
 
-  @required [:slug, :name, :type, :memory_capacity, :memory_type, :form_factors, :brand_id]
+  @required [:slug, :code, :name, :type, :memory_capacity, :memory_type, :form_factors, :brand_id]
   @optional [:tdp]
 
   schema "gpu" do
     field :slug, :string
+    field :code, :string
     field :name, :string
     field :type, :string
     field :memory_capacity, :integer

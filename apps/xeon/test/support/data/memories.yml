@@ -1,90 +1,108 @@
-- name: 4Gb SODIMM DDR4 2133
+- name: 4Gb SODIMM DDR4 2133 Mixed
+  code: 4gb-sodimm-ddr4-2133-mixed
   description: Samsung / Hynix / Micro
   capacity: 4
   type: sodimm ddr4-2133
   brand: mixed
-- name: 8Gb SODIMM DDR4 2133
+- name: 8Gb SODIMM DDR4 2133 Mixed
+  code: 8gb-sodimm-ddr4-2133-mixed
   description: Samsung / Hynix / Micro
   capacity: 8
   type: sodimm ddr4-2133
   brand: mixed
-- name: 16Gb SODIMM DDR4 2133
+- name: 16Gb SODIMM DDR4 2133 Mixed
+  code: 16gb-sodimm-ddr4-2133-mixed
   description: Samsung / Hynix / Micro
   capacity: 16
   type: sodimm ddr4-2133
   brand: mixed
-- name: 4Gb SODIMM DDR4 2400
+- name: 4Gb SODIMM DDR4 2400 Mixed
+  code: 4gb-sodimm-ddr4-2400-mixed
   description: Samsung / Hynix / Micro
   capacity: 4
   type: sodimm ddr4-2400
   brand: mixed
-- name: 8Gb SODIMM DDR4 2400
+- name: 8Gb SODIMM DDR4 2400 Mixed
+  code: 8gb-sodimm-ddr4-2400-mixed
   description: Samsung / Hynix / Micro
   capacity: 8
   type: sodimm ddr4-2400
   brand: mixed
-- name: 16Gb SODIMM DDR4 2400
+- name: 16Gb SODIMM DDR4 2400 Mixed
+  code: 16gb-sodimm-ddr4-2400-mixed
   description: Samsung / Hynix / Micro
   capacity: 16
   type: sodimm ddr4-2400
   brand: mixed
-- name: 4Gb SODIMM DDR4 2666
+- name: 4Gb SODIMM DDR4 2666 Mixed
+  code: 4gb-sodimm-ddr4-2666-mixed
   description: Samsung / Hynix / Micro
   capacity: 4
   type: sodimm ddr4-2666
   brand: mixed
-- name: 8Gb SODIMM DDR4 2666
+- name: 8Gb SODIMM DDR4 2666 Mixed
+  code: 8gb-sodimm-ddr4-2666-mixed
   description: Samsung / Hynix / Micro
   capacity: 8
   type: sodimm ddr4-2666
   brand: mixed
-- name: 16Gb SODIMM DDR4 2666
+- name: 16Gb SODIMM DDR4 2666 Mixed
+  code: 16gb-sodimm-ddr4-2666-mixed
   description: Samsung / Hynix / Micro
   capacity: 16
   type: sodimm ddr4-2666
   brand: mixed
 
-- name: 4Gb DIMM DDR4 2133
+- name: 4Gb DIMM DDR4 2133 Mixed
+  code: 4gb-dimm-ddr4-2133-mixed
   description: Samsung / Hynix / Micro
   capacity: 4
   type: dimm ddr4-2133
   brand: mixed
-- name: 8Gb DIMM DDR4 2133
+- name: 8Gb DIMM DDR4 2133 Mixed
+  code: 8gb-dimm-ddr4-2133-mixed
   description: Samsung / Hynix / Micro
   capacity: 8
   type: dimm ddr4-2133
   brand: mixed
-- name: 16Gb DIMM DDR4 2133
+- name: 16Gb DIMM DDR4 2133 Mixed
+  code: 16gb-dimm-ddr4-2133-mixed
   description: Samsung / Hynix / Micro
   capacity: 16
   type: dimm ddr4-2133
   brand: mixed
-- name: 4Gb DIMM DDR4 2400
+- name: 4Gb DIMM DDR4 2400 Mixed
+  code: 4gb-dimm-ddr4-2400-mixed
   description: Samsung / Hynix / Micro
   capacity: 4
   type: dimm ddr4-2400
   brand: mixed
-- name: 8Gb DIMM DDR4 2400
+- name: 8Gb DIMM DDR4 2400 Mixed
+  code: 8gb-dimm-ddr4-2400-mixed
   description: Samsung / Hynix / Micro
   capacity: 8
   type: dimm ddr4-2400
   brand: mixed
-- name: 16Gb DIMM DDR4 2400
+- name: 16Gb DIMM DDR4 2400 Mixed
+  code: 16gb-dimm-ddr4-2400-mixed
   description: Samsung / Hynix / Micro
   capacity: 16
   type: dimm ddr4-2400
   brand: mixed
-- name: 4Gb DIMM DDR4 2666
+- name: 4Gb DIMM DDR4 2666 Mixed
+  code: 4gb-dimm-ddr4-2666-mixed
   description: Samsung / Hynix / Micro
   capacity: 4
   type: dimm ddr4-2666
   brand: mixed
-- name: 8Gb DIMM DDR4 2666
+- name: 8Gb DIMM DDR4 2666 Mixed
+  code: 8gb-dimm-ddr4-2666-mixed
   description: Samsung / Hynix / Micro
   capacity: 8
   type: dimm ddr4-2666
   brand: mixed
-- name: 16Gb DIMM DDR4 2666
+- name: 16Gb DIMM DDR4 2666 Mixed
+  code: 16gb-dimm-ddr4-2666-mixed
   description: Samsung / Hynix / Micro
   capacity: 16
   type: dimm ddr4-2666

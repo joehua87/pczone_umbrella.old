@@ -1,4 +1,5 @@
 - name: 256Gb Samsung PM981 NVMe PCIe 3.0 x4
+  code: 256gb-samsung-pm981
   collection: PM981
   capacity: 256
   brand: samsung
@@ -10,12 +11,14 @@
   random_write: 310000
   tbw: 150
 - name: 512 Samsung PM981 NVMe PCIe 3.0 x4
+  code: 512-samsung-pm981
   collection: PM981
   capacity: 512
   brand: samsung
   type: 'nvme pcie 3.0 x4'
   form_factor: 'm2 2280'
 - name: 1Tb Samsung PM981 NVMe PCIe 3.0 x4
+  code: 1tb-samsung-pm981
   collection: PM981
   capacity: 1024
   brand: samsung
@@ -23,18 +26,21 @@
   form_factor: 'm2 2280'
 
 - name: 256Gb Samsung PM981a NVMe PCIe 3.0 x4
+  code: 256gb-samsung-pm981a
   collection: PM981a
   capacity: 256
   brand: samsung
   type: 'nvme pcie 3.0 x4'
   form_factor: 'm2 2280'
 - name: 512 Samsung PM981a NVMe PCIe 3.0 x4
+  code: 512-samsung-pm981a
   collection: PM981a
   capacity: 512
   brand: samsung
   type: 'nvme pcie 3.0 x4'
   form_factor: 'm2 2280'
 - name: 1Tb Samsung PM981a NVMe PCIe 3.0 x4
+  code: 1tb-samsung-pm981a
   collection: PM981a
   capacity: 1024
   brand: samsung
@@ -42,18 +48,21 @@
   form_factor: 'm2 2280'
 
 - name: 256Gb Western Digital SN730 NVMe PCIe 3.0 x4
+  code: 256gb-western-digital-sn730
   collection: SN730
   capacity: 256
   brand: wd
   type: 'nvme pcie 3.0 x4'
   form_factor: 'm2 2280'
 - name: 512 Western Digital SN730 NVMe PCIe 3.0 x4
+  code: 512-western-digital-sn730
   collection: SN730
   capacity: 512
   brand: wd
   type: 'nvme pcie 3.0 x4'
   form_factor: 'm2 2280'
 - name: 1Tb Western Digital SN730 NVMe PCIe 3.0 x4
+  code: 1tb-western-digital-sn730
   collection: SN730
   capacity: 1024
   brand: wd
@@ -61,18 +70,21 @@
   form_factor: 'm2 2280'
 
 - name: 256Gb Samsung 860 Evo Sata 3
+  code: 256gb-samsung-860-evo
   collection: 860 Evo
   capacity: 256
   brand: samsung
   type: 'sata 3'
   form_factor: '2.5'
 - name: 512 Samsung 860 Evo Sata 3
+  code: 512-samsung-860-evo
   collection: 860 Evo
   capacity: 512
   brand: samsung
   type: 'sata 3'
   form_factor: '2.5'
 - name: 1Tb Samsung 860 Evo Sata 3
+  code: 1tb-samsung-860-evo
   collection: 860 Evo
   capacity: 1024
   brand: samsung

@@ -17,6 +17,7 @@
         - dimm ddr4-2400
       type: dimm ddr4-2133
   name: Dell OptiPlex 7040 SFF
+  code: dell-optiplex-7040-sff
   pci_slots:
     - processor_index: 1
       quantity: 1
@@ -54,6 +55,7 @@
         - sodimm ddr4-2400
       type: sodimm ddr4-2133
   name: HP EliteDesk 800 G2 Mini
+  code: hp-elitedesk-800-g2-mini
   pci_slots: []
   processor_slots:
     - heatsink_type:
@@ -90,6 +92,7 @@
         - sodimm ddr4-2400
       type: sodimm ddr4-2133
   name: HP EliteDesk 800 G2 Mini 65w
+  code: hp-elitedesk-800-g2-mini-65w
   pci_slots: []
   processor_slots:
     - heatsink_type:

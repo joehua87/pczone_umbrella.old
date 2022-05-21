@@ -2,11 +2,12 @@ defmodule Xeon.Psu do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @required [:slug, :name, :wattage, :form_factor, :brand_id]
+  @required [:slug, :code, :name, :wattage, :form_factor, :brand_id]
   @optional []
 
   schema "psu" do
     field :slug, :string
+    field :code, :string
     field :name, :string
     field :wattage, :integer
     field :form_factor, :string

@@ -4,11 +4,12 @@ defmodule Xeon.HardDrive do
 
   @derive Jason.Encoder
 
-  @required [:slug, :name, :collection, :capacity, :type, :brand_id]
+  @required [:slug, :code, :name, :collection, :capacity, :type, :brand_id]
   @optional [:form_factor, :sequential_read, :sequential_write, :random_read, :random_write, :tbw]
 
   schema "hard_drive" do
     field :slug, :string
+    field :code, :string
     field :name, :string
     field :collection, :string
     field :capacity, :integer

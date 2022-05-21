@@ -4,11 +4,12 @@ defmodule Xeon.Memory do
 
   @derive Jason.Encoder
 
-  @required [:slug, :name, :capacity, :type, :brand_id]
+  @required [:slug, :code, :name, :capacity, :type, :brand_id]
   @optional [:description]
 
   schema "memory" do
     field :slug, :string
+    field :code, :string
     field :name, :string
     field :description, :string
     field :capacity, :integer
