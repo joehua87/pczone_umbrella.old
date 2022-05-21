@@ -8,7 +8,9 @@ defmodule Xeon.BuiltGpu do
     :product_id,
     :slot_type,
     :processor_index,
-    :quantity
+    :price,
+    :quantity,
+    :total
   ]
   @optional []
 
@@ -18,7 +20,9 @@ defmodule Xeon.BuiltGpu do
     belongs_to :product, Xeon.Product
     field :slot_type, :string
     field :processor_index, :integer
+    field :price, :integer
     field :quantity, :integer
+    field :total, :integer
   end
 
   def changeset(entity, params) do

@@ -2,7 +2,14 @@ defmodule Xeon.BuiltProcessor do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @required [:built_id, :processor_id, :product_id, :quantity]
+  @required [
+    :built_id,
+    :processor_id,
+    :product_id,
+    :price,
+    :quantity,
+    :total
+  ]
   @optional [:extension_device_id]
 
   schema "built_processor" do
@@ -10,7 +17,9 @@ defmodule Xeon.BuiltProcessor do
     belongs_to :processor, Xeon.Processor
     belongs_to :product, Xeon.Product
     belongs_to :extension_device, Xeon.ExtensionDevice
+    field :price, :integer
     field :quantity, :integer
+    field :total, :integer
   end
 
   def changeset(entity, params) do

@@ -261,15 +261,24 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :barebone_id, references(:barebone)
       add :motherboard_id, references(:motherboard)
       add :chassis_id, references(:chassis)
+      # Embedded processor
       add :processor_id, references(:processor)
       add :barebone_product_id, references(:product)
+      add :motherboard_product_id, references(:product)
+      add :chassis_product_id, references(:product)
+      add :barebone_price, :integer
+      add :motherboard_price, :integer
+      add :chassis_price, :integer
+      add :total, :integer
     end
 
     create table(:built_psu) do
       add :built_id, references(:built), null: false
       add :psu_id, references(:psu), null: false
       add :product_id, references(:product), null: false
-      add :quantity, :integer
+      add :quantity, :integer, null: false
+      add :price, :integer, null: false
+      add :total, :integer, null: false
     end
 
     create table(:built_extension_device) do
@@ -278,7 +287,9 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :product_id, references(:product), null: false
       add :processor_index, :integer, null: false
       add :slot_type, :string, null: false
-      add :quantity, :integer
+      add :quantity, :integer, null: false
+      add :price, :integer, null: false
+      add :total, :integer, null: false
     end
 
     create table(:built_processor) do
@@ -286,7 +297,9 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :processor_id, references(:processor), null: false
       add :product_id, references(:product), null: false
       add :extension_device_id, references(:extension_device)
-      add :quantity, :integer
+      add :quantity, :integer, null: false
+      add :price, :integer, null: false
+      add :total, :integer, null: false
     end
 
     create table(:built_memory) do
@@ -296,7 +309,9 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :extension_device_id, references(:extension_device)
       add :processor_index, :integer, null: false
       add :slot_type, :string, null: false
-      add :quantity, :integer
+      add :quantity, :integer, null: false
+      add :price, :integer, null: false
+      add :total, :integer, null: false
     end
 
     create table(:built_hard_drive) do
@@ -306,7 +321,9 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :extension_device_id, references(:extension_device)
       add :processor_index, :integer, null: false
       add :slot_type, :string, null: false
-      add :quantity, :integer
+      add :quantity, :integer, null: false
+      add :price, :integer, null: false
+      add :total, :integer, null: false
     end
 
     create table(:built_gpu) do
@@ -315,7 +332,9 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :slot_type, :string, null: false
       add :gpu_id, references(:gpu), null: false
       add :product_id, references(:product), null: false
-      add :quantity, :integer
+      add :quantity, :integer, null: false
+      add :price, :integer, null: false
+      add :total, :integer, null: false
     end
   end
 

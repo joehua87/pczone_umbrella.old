@@ -65,16 +65,22 @@ defmodule Xeon.Builts do
 
     hard_drives = Map.get(params, :hard_drives, [])
 
-    built_changeset =
-      Xeon.Built.new_changeset(%{
-        name: name,
-        slug: slug,
-        barebone_id: barebone_id,
-        barebone_product_id: barebone_product_id
-      })
-
     case Ecto.Multi.new()
-         |> Ecto.Multi.insert(:built, built_changeset)
+         |> get_products_map(params)
+         |> Ecto.Multi.run(:built, fn _, %{products_map: products_map} ->
+           %{barebone_price: barebone_price, total: total} =
+             calculate_built_price(params, products_map)
+
+           Xeon.Built.new_changeset(%{
+             name: name,
+             slug: slug,
+             barebone_id: barebone_id,
+             barebone_product_id: barebone_product_id,
+             barebone_price: barebone_price,
+             total: total
+           })
+           |> Repo.insert()
+         end)
          |> create_built_processor(processor)
          |> create_built_memory(memory)
          |> create_built_hard_drives(hard_drives)
@@ -85,17 +91,19 @@ defmodule Xeon.Builts do
     end
   end
 
-  def create(%{
-        motherboard_id: motherboard_id,
-        motherboard_product_id: motherboard_product_id,
-        chassis_id: chassis_id,
-        chassis_product_id: chassis_product_id,
-        psus: _psus,
-        processor: processor,
-        memory: memory,
-        hard_drives: hard_drives,
-        gpus: _gpus
-      }) do
+  def create(
+        %{
+          motherboard_id: motherboard_id,
+          motherboard_product_id: motherboard_product_id,
+          chassis_id: chassis_id,
+          chassis_product_id: chassis_product_id,
+          psus: _psus,
+          processor: processor,
+          memory: memory,
+          hard_drives: hard_drives,
+          gpus: _gpus
+        } = params
+      ) do
     built_changeset =
       Xeon.Built.new_changeset(%{
         motherboard_id: motherboard_id,
@@ -105,6 +113,7 @@ defmodule Xeon.Builts do
       })
 
     case Ecto.Multi.new()
+         |> get_products_map(params)
          |> Ecto.Multi.insert(:built, built_changeset)
          |> create_built_processor(processor)
          |> create_built_memory(memory)
@@ -116,36 +125,139 @@ defmodule Xeon.Builts do
     end
   end
 
-  defp create_built_processor(multi, processor) do
+  defp get_products_map(
+         multi,
+         %{
+           barebone_product_id: barebone_product_id,
+           processor: %{product_id: processor_product_id},
+           memory: %{product_id: memory_product_id}
+         } = params
+       ) do
+    hard_drives = Map.get(params, :hard_drives, [])
+    psus = Map.get(params, :psus, [])
+    gpus = Map.get(params, :gpus, [])
+
+    product_ids =
+      [barebone_product_id, processor_product_id, memory_product_id] ++
+        Enum.map(hard_drives, & &1.product_id) ++
+        Enum.map(psus, & &1.product_id) ++
+        Enum.map(gpus, & &1.product_id)
+
     multi
-    |> Ecto.Multi.run(:built_processor, fn _, %{built: %{id: built_id}} ->
-      processor
-      |> Map.put(:built_id, built_id)
-      |> Xeon.BuiltProcessor.new_changeset()
-      |> Repo.insert()
+    |> Ecto.Multi.run(:products_map, fn _, _ ->
+      case Repo.all(from p in Xeon.Product, where: p.id in ^product_ids, select: {p.id, p})
+           |> Enum.into(%{}) do
+        products_map = %{} -> {:ok, products_map}
+        reason -> reason
+      end
     end)
   end
 
-  defp create_built_memory(multi, memory) do
+  defp create_built_processor(multi, processor = %{product_id: product_id, quantity: quantity}) do
     multi
-    |> Ecto.Multi.run(:built_memory, fn _, %{built: %{id: built_id}} ->
-      memory
-      |> Map.put(:built_id, built_id)
-      |> Xeon.BuiltMemory.new_changeset()
-      |> Repo.insert()
-    end)
+    |> Ecto.Multi.run(
+      :built_processor,
+      fn _, %{built: %{id: built_id}, products_map: products_map} ->
+        %{sale_price: price} = products_map[product_id]
+
+        processor
+        |> Map.merge(%{
+          built_id: built_id,
+          price: price,
+          total: price * quantity
+        })
+        |> Xeon.BuiltProcessor.new_changeset()
+        |> Repo.insert()
+      end
+    )
+  end
+
+  defp create_built_memory(multi, memory = %{product_id: product_id, quantity: quantity}) do
+    multi
+    |> Ecto.Multi.run(
+      :built_memory,
+      fn _, %{built: %{id: built_id}, products_map: products_map} ->
+        %{sale_price: price} = products_map[product_id]
+
+        memory
+        |> Map.merge(%{
+          built_id: built_id,
+          price: price,
+          total: price * quantity
+        })
+        |> Xeon.BuiltMemory.new_changeset()
+        |> Repo.insert()
+      end
+    )
   end
 
   defp create_built_hard_drives(multi, hard_drives) do
     multi
-    |> Ecto.Multi.run(:built_hard_drives, fn _, %{built: %{id: built_id}} ->
-      hard_drives = Enum.map(hard_drives, &Map.put(&1, :built_id, built_id))
+    |> Ecto.Multi.run(
+      :built_hard_drives,
+      fn _, %{built: %{id: built_id}, products_map: products_map} ->
+        hard_drives =
+          Enum.map(hard_drives, fn %{product_id: product_id, quantity: quantity} = hard_drive ->
+            %{sale_price: price} = products_map[product_id]
 
-      case Repo.insert_all(Xeon.HardDrive, hard_drives, returning: true) do
-        {_, list} -> {:ok, list}
-        reason -> reason
+            hard_drive
+            |> Map.merge(%{
+              built_id: built_id,
+              price: price,
+              total: price * quantity
+            })
+          end)
+
+        case Repo.insert_all(Xeon.HardDrive, hard_drives, returning: true) do
+          {inserted, list} when is_integer(inserted) -> {:ok, list}
+          reason -> reason
+        end
       end
+    )
+  end
+
+  defp calculate_built_price(
+         %{
+           barebone_product_id: barebone_product_id,
+           processor: %{product_id: processor_product_id, quantity: processor_quantity},
+           memory: %{product_id: memory_product_id, quantity: memory_quantity}
+         } = params,
+         products_map
+       ) do
+    hard_drives = Map.get(params, :hard_drives, [])
+    psus = Map.get(params, :psus, [])
+    gpus = Map.get(params, :gpus, [])
+    %{sale_price: barebone_price} = products_map[barebone_product_id]
+    %{sale_price: processor_price} = products_map[processor_product_id]
+    %{sale_price: memory_price} = products_map[memory_product_id]
+    hard_drives_price = calculate_list_price(hard_drives, products_map)
+    psus_price = calculate_list_price(psus, products_map)
+    gpus_price = calculate_list_price(gpus, products_map)
+
+    total =
+      [
+        barebone_price,
+        processor_price * processor_quantity,
+        memory_price * memory_quantity,
+        hard_drives_price,
+        psus_price,
+        gpus_price
+      ]
+      |> Enum.sum()
+
+    %{
+      barebone_price: barebone_price,
+      total: total
+    }
+  end
+
+  defp calculate_list_price(list, products_map) do
+    list
+    |> Enum.map(fn %{product_id: product_id, quantity: quantity} ->
+      %{sale_price: price} = products_map[product_id]
+      price * quantity
     end)
+    |> Enum.sum()
   end
 
   def validate_chassis(

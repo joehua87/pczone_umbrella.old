@@ -1,5 +1,6 @@
 defmodule Xeon.BuiltsTest do
   use Xeon.DataCase
+  import Ecto.Query, only: [from: 2]
   alias Xeon.{Builts, Barebones, Processors, Memories, Products}
 
   describe "builts" do
@@ -34,8 +35,19 @@ defmodule Xeon.BuiltsTest do
 
       assert {
                :ok,
-               %Xeon.Built{slug: "my-built"}
+               %Xeon.Built{
+                 id: id,
+                 slug: "my-built",
+                 barebone_price: 2_000_000,
+                 total: 4_740_000
+               }
              } = Builts.create(params)
+
+      assert %{
+               built_memories: [%{price: 520_000, quantity: 2, total: 1_040_000}],
+               built_processors: [%{price: 1_700_000, quantity: 1, total: 1_700_000}]
+             } =
+               Xeon.Repo.get(from(Xeon.Built, preload: [:built_processors, :built_memories]), id)
     end
   end
 

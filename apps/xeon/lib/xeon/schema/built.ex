@@ -3,7 +3,18 @@ defmodule Xeon.Built do
   import Ecto.Changeset
 
   @required [:slug, :name]
-  @optional [:barebone_id, :motherboard_id, :chassis_id]
+  @optional [
+    :barebone_id,
+    :motherboard_id,
+    :chassis_id,
+    :barebone_product_id,
+    :motherboard_product_id,
+    :chassis_product_id,
+    :barebone_price,
+    :motherboard_price,
+    :chassis_price,
+    :total
+  ]
 
   schema "built" do
     field :slug, :string, null: false
@@ -13,6 +24,12 @@ defmodule Xeon.Built do
     belongs_to :chassis, Xeon.Chassis
     belongs_to :processor, Xeon.Processor
     belongs_to :barebone_product, Xeon.Product
+    belongs_to :motherboard_product, Xeon.Product
+    belongs_to :chassis_product, Xeon.Product
+    field :barebone_price, :integer
+    field :motherboard_price, :integer
+    field :chassis_price, :integer
+    field :total, :integer
     has_many :built_psus, Xeon.BuiltPsu
     has_many :built_extension_devices, Xeon.BuiltExtensionDevice
     has_many :built_processors, Xeon.BuiltProcessor
