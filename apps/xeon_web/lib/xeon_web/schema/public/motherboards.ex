@@ -4,26 +4,30 @@ defmodule XeonWeb.Schema.Motherboards do
   alias Xeon.Motherboards
 
   object :memory_slot do
-    field :processor, non_null(:integer)
-    field :types, non_null(list_of(non_null(:string)))
+    field :processor_index, non_null(:integer)
+    field :type, non_null(:string)
+    field :supported_types, non_null(list_of(non_null(:string)))
     field :quantity, non_null(:integer)
   end
 
   object :sata_slot do
-    field :processor, non_null(:integer)
-    field :types, list_of(non_null(:string))
+    field :processor_index, non_null(:integer)
+    field :type, non_null(:string)
+    field :supported_types, non_null(list_of(non_null(:string)))
     field :quantity, non_null(:integer)
   end
 
   object :m2_slot do
-    field :processor, non_null(:integer)
-    field :types, list_of(non_null(:string))
+    field :processor_index, non_null(:integer)
+    field :type, non_null(:string)
+    field :supported_types, non_null(list_of(non_null(:string)))
     field :quantity, non_null(:integer)
   end
 
   object :pci_slot do
-    field :processor, non_null(:integer)
-    field :types, list_of(non_null(:string))
+    field :processor_index, non_null(:integer)
+    field :type, non_null(:string)
+    field :supported_types, non_null(list_of(non_null(:string)))
     field :quantity, non_null(:integer)
   end
 

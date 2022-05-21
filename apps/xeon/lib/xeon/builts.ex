@@ -42,7 +42,8 @@ defmodule Xeon.Builts do
   end
 
   def get_memories(motherboard_id) do
-    %{memory_types: memory_types} = Repo.get(Motherboard, motherboard_id)
+    %{memory_slots: memory_slots} = Repo.get(Motherboard, motherboard_id)
+    memory_types = Enum.flat_map(memory_slots, & &1.supported_types)
     Repo.all(from(m in Memory, where: m.type in ^memory_types))
   end
 

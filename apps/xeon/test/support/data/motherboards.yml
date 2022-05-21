@@ -13,15 +13,19 @@
       processor_index: 1
       quantity: 4
       supported_types:
-        - DIMM DDR4-2133
-        - DIMM DDR4-2400
-      type: DIMM DDR4-2133
+        - dimm ddr4-2133
+        - dimm ddr4-2400
+      type: dimm ddr4-2133
   name: Dell OptiPlex 7040 SFF
   pci_slots:
     - processor_index: 1
-      quantity: 0
-      supported_types:
-      type:
+      quantity: 1
+      supported_types: []
+      type: pci express 3.0 x4
+    - processor_index: 1
+      quantity: 1
+      supported_types: []
+      type: pci express 3.0 x16
   processor_slots:
     - heatsink_type:
       quantity: 1
@@ -46,9 +50,9 @@
       processor_index: 1
       quantity: 2
       supported_types:
-        - SODIMM DDR4-2133
-        - SODIMM DDR4-2400
-      type: SODIMM DDR4-2133
+        - sodimm ddr4-2133
+        - sodimm ddr4-2400
+      type: sodimm ddr4-2133
   name: HP EliteDesk 800 G2 Mini
   pci_slots: []
   processor_slots:
@@ -82,9 +86,9 @@
       processor_index: 1
       quantity: 2
       supported_types:
-        - SODIMM DDR4-2133
-        - SODIMM DDR4-2400
-      type: SODIMM DDR4-2133
+        - sodimm ddr4-2133
+        - sodimm ddr4-2400
+      type: sodimm ddr4-2133
   name: HP EliteDesk 800 G2 Mini 65w
   pci_slots: []
   processor_slots:
