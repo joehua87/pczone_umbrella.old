@@ -1,6 +1,6 @@
 defmodule Xeon.Builts do
   import Ecto.Query, only: [from: 2]
-  alias Xeon.{Repo, Motherboard, Memory, Processor, ProcessorChipset}
+  alias Xeon.{Repo, Motherboard, Memory, Processor, ChipsetProcessor}
 
   defmodule CreateBuiltParams do
     defstruct name: nil,
@@ -27,7 +27,7 @@ defmodule Xeon.Builts do
     else
       %{chipset_id: chipset_id} = Repo.get(Motherboard, motherboard_id)
 
-      from(pc in ProcessorChipset,
+      from(pc in ChipsetProcessor,
         where: pc.chipset_id == ^chipset_id,
         select: pc.processor_id
       )

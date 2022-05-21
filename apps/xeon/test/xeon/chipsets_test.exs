@@ -13,5 +13,12 @@ defmodule Xeon.ChipsetsTest do
       assert {53, _} = Chipsets.upsert(entities, returning: true)
       assert {53, _} = Chipsets.upsert(entities, returning: true)
     end
+
+    test "upsert chipset processors" do
+      entities = Xeon.Fixtures.read_fixture("chipsets.yml")
+      assert {53, _} = Chipsets.upsert(entities, returning: true)
+      assert {_, _} = "processors.yml" |> Xeon.Fixtures.read_fixture() |> Xeon.Processors.upsert()
+      assert {8, _} = Chipsets.upsert_chipset_processors(entities, returning: true)
+    end
   end
 end

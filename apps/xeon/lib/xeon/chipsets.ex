@@ -19,6 +19,54 @@ defmodule Xeon.Chipsets do
     )
   end
 
+  def upsert_chipset_processors(entities, opts \\ []) do
+    chipset_codes =
+      Enum.map(entities, fn
+        %{"code" => code} -> code
+        %{code: code} -> code
+        _ -> nil
+      end)
+      |> Enum.filter(&(&1 != nil))
+
+    processor_codes =
+      Enum.flat_map(entities, fn
+        %{"processors" => processor_codes = [_ | _]} -> processor_codes
+        %{processors: processor_codes = [_ | _]} -> processor_codes
+        _ -> []
+      end)
+      |> Enum.filter(&(&1 != nil))
+
+    chipsets_map = get_map_by_code(chipset_codes)
+    processors_map = Xeon.Processors.get_map_by_code(processor_codes)
+
+    entities =
+      Enum.flat_map(entities, fn
+        %{code: code, processors: processors = [_ | _]} ->
+          Enum.map(
+            processors,
+            &%{
+              chipset_id: chipsets_map[code],
+              processor_id: processors_map[&1]
+            }
+          )
+
+        %{"code" => code, "processors" => processors = [_ | _]} ->
+          Enum.map(
+            processors,
+            &%{
+              chipset_id: chipsets_map[code],
+              processor_id: processors_map[&1]
+            }
+          )
+
+        _ ->
+          []
+      end)
+      |> Enum.filter(&(&1.chipset_id != nil && &1.processor_id != nil))
+
+    Repo.insert_all(Xeon.ChipsetProcessor, entities, opts)
+  end
+
   def import_chipsets() do
     {:ok, conn} = Mongo.start_link(url: "mongodb://172.16.43.5:27017/xeon")
 
@@ -33,7 +81,12 @@ defmodule Xeon.Chipsets do
   end
 
   def get_map_by_code() do
-    Repo.all(from c in Chipset, select: {c.code, c.id}) |> Enum.into(%{})
+    Repo.all(from(c in Chipset, select: {c.code, c.id})) |> Enum.into(%{})
+  end
+
+  def get_map_by_code(codes) when is_list(codes) do
+    Repo.all(from(c in Chipset, where: c.code in ^codes, select: {c.code, c.id}))
+    |> Enum.into(%{})
   end
 
   def parse(%{"title" => name, "attributes" => attributes}) do

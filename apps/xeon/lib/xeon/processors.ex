@@ -27,6 +27,15 @@ defmodule Xeon.Processors do
 
   def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
 
+  def get_map_by_code() do
+    Repo.all(from c in Processor, select: {c.code, c.id}) |> Enum.into(%{})
+  end
+
+  def get_map_by_code(codes) when is_list(codes) do
+    Repo.all(from p in Processor, where: p.code in ^codes, select: {p.code, p.id})
+    |> Enum.into(%{})
+  end
+
   def upsert(entities, opts \\ []) do
     entities = Enum.map(entities, &parse_entity_for_upsert/1)
 
@@ -57,7 +66,7 @@ defmodule Xeon.Processors do
     Repo.insert_all(Processor, entities, on_conflict: :replace_all, conflict_target: [:url])
   end
 
-  def import_processor_chipsets() do
+  def import_chipset_processors() do
     {:ok, conn} = Mongo.start_link(url: "mongodb://172.16.43.5:27017/xeon")
 
     cursor =
@@ -69,7 +78,7 @@ defmodule Xeon.Processors do
     chipsets_map = Repo.all(from c in Xeon.Chipset, select: {c.name, c.id}) |> Enum.into(%{})
     processors_map = Repo.all(from p in Processor, select: {p.url, p.id}) |> Enum.into(%{})
 
-    processor_chipsets =
+    chipset_processors =
       Enum.flat_map(
         cursor,
         &parse_chipset_processor(&1,
@@ -78,7 +87,7 @@ defmodule Xeon.Processors do
         )
       )
 
-    Repo.insert_all("processor_chipset", processor_chipsets)
+    Repo.insert_all("chipset_processor", chipset_processors)
   end
 
   defp parse_chipset_processor(%{"title" => chipset_name, "processors" => processors},
@@ -233,12 +242,12 @@ defmodule Xeon.Processors do
   end
 
   def parse_chipset_filter(acc, %{chipset_id: %{eq: chipset_id}}) do
-    processor_chipset_query =
-      from pc in Xeon.ProcessorChipset,
+    chipset_processor_query =
+      from pc in Xeon.ChipsetProcessor,
         where: pc.chipset_id == ^chipset_id,
         select: pc.processor_id
 
-    from p in acc, where: p.id in subquery(processor_chipset_query)
+    from p in acc, where: p.id in subquery(chipset_processor_query)
   end
 
   def parse_chipset_filter(acc, _) do

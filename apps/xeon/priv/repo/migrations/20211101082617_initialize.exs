@@ -147,12 +147,12 @@ defmodule Xeon.Repo.Migrations.Initialize do
     create unique_index(:processor, [:code])
     create unique_index(:processor, [:url])
 
-    create table(:processor_chipset) do
+    create table(:chipset_processor) do
       add :processor_id, references(:processor), null: false
       add :chipset_id, references(:chipset), null: false
     end
 
-    create unique_index(:processor_chipset, [:processor_id, :chipset_id])
+    create unique_index(:chipset_processor, [:chipset_id, :processor_id])
 
     create table(:processor_score) do
       add :processor_id, references(:processor), null: false

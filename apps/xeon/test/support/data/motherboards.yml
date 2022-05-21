@@ -66,11 +66,11 @@
       supported_types: ['sata 3']
       type: 'sata 3'
   processors:
-    - i3 6100T
-    - i5 6400T
-    - i5 6500T
-    - i5 6600T
-    - i7 6700T
+    - i3-6100T
+    - i5-6400T
+    - i5-6500T
+    - i5-6600T
+    - i7-6700T
 
 - chipset: Q170
   brand: hp
@@ -102,13 +102,13 @@
       supported_types: ['sata 3']
       type: 'sata 3'
   processors:
-    - i3 6100
-    - i5 6400
-    - i5 6500
-    - i5 6600
-    - i7 6700
-    - i3 6100T
-    - i5 6400T
-    - i5 6500T
-    - i5 6600T
-    - i7 6700T
+    - i3-6100
+    - i5-6400
+    - i5-6500
+    - i5-6600
+    - i7-6700
+    - i3-6100T
+    - i5-6400T
+    - i5-6500T
+    - i5-6600T
+    - i7-6700T

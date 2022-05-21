@@ -1,7 +1,7 @@
-defmodule Xeon.ProcessorChipset do
+defmodule Xeon.ChipsetProcessor do
   use Ecto.Schema
 
-  schema "processor_chipset" do
+  schema "chipset_processor" do
     belongs_to :processor, Xeon.Processor
     belongs_to :chipset, Xeon.Chipset
   end

@@ -115,7 +115,7 @@
   collection_name: Intel® Communications Chipsets
   launch_date: Q4'12
   name: Intel® Communications Chipset 8903
-  code: ' 8903'
+  code: '8903'
   status: Discontinued
   vertical_segment: Embedded
 - code_name: Rocket Lake
@@ -245,16 +245,16 @@
   status: Launched
   vertical_segment: Desktop
   processors:
-    - i3 6100
-    - i5 6400
-    - i5 6500
-    - i5 6600
-    - i7 6700
-    - i3 6100T
-    - i5 6400T
-    - i5 6500T
-    - i5 6600T
-    - i7 6700T
+    - i3-6100
+    - i5-6400
+    - i5-6500
+    - i5-6600
+    - i7-6700
+    - i3-6100T
+    - i5-6400T
+    - i5-6500T
+    - i5-6600T
+    - i7-6700T
 - code_name: Skylake
   collection_name: Intel® 100 Series Desktop Chipsets
   launch_date: Q3'15
@@ -315,7 +315,7 @@
   collection_name: Intel® Communications Chipsets
   launch_date: Q4'12
   name: Intel® Communications Chipset 8920
-  code: ' 8920'
+  code: '8920'
   status: Discontinued
   vertical_segment: Embedded
 - code_name: Skylake
@@ -343,7 +343,7 @@
   collection_name: Intel® Communications Chipsets
   launch_date: Q4'12
   name: Intel® Communications Chipset 8910
-  code: ' 8910'
+  code: '8910'
   status: Discontinued
   vertical_segment: Embedded
 - code_name: Lewisburg
@@ -357,7 +357,7 @@
   collection_name: Intel® Communications Chipsets
   launch_date: Q4'12
   name: Intel® Communications Chipset 8900
-  code: ' 8900'
+  code: '8900'
   status: Discontinued
   vertical_segment: Embedded
 - code_name: Lynx Point
