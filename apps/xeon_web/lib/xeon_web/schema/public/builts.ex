@@ -169,6 +169,50 @@ defmodule XeonWeb.Schema.Builts do
     field :paging, non_null(:paging)
   end
 
+  input_object :built_psu_input do
+    field :psu_id, non_null(:id)
+    field :product_id, non_null(:id)
+    field :quantity, non_null(:integer)
+  end
+
+  input_object :built_processor_input do
+    field :processor_id, non_null(:id)
+    field :product_id, non_null(:id)
+    field :quantity, non_null(:integer)
+  end
+
+  input_object :built_memory_input do
+    field :memory_id, non_null(:id)
+    field :product_id, non_null(:id)
+    field :slot_type, non_null(:string)
+    field :quantity, non_null(:integer)
+  end
+
+  input_object :built_hard_drive_input do
+    field :hard_drive_id, non_null(:id)
+    field :product_id, non_null(:id)
+    field :slot_type, non_null(:string)
+    field :quantity, non_null(:integer)
+  end
+
+  input_object :built_gpu_input do
+    field :gpu_id, non_null(:id)
+    field :product_id, non_null(:id)
+    field :slot_type, non_null(:string)
+    field :quantity, non_null(:integer)
+  end
+
+  input_object :create_built_input do
+    field :name, non_null(:string)
+    field :barebone_id, :id
+    field :chassis_id, :id
+    field :motherboard_id, :id
+    field :processors, non_null(list_of(non_null(:built_processor_input)))
+    field :memories, non_null(list_of(non_null(:built_memory_input)))
+    field :hard_drives, non_null(list_of(non_null(:built_hard_drive_input)))
+    field :gpus, non_null(list_of(non_null(:built_gpu_input)))
+  end
+
   object :built_queries do
     field :builts, non_null(:built_list_result) do
       arg :filter, :built_filter_input
@@ -187,7 +231,7 @@ defmodule XeonWeb.Schema.Builts do
       end)
     end
 
-    field :built_processors, non_null(list_of(non_null(:processor))) do
+    field :processors_for_built, non_null(list_of(non_null(:processor))) do
       arg :motherboard_id, non_null(:id)
 
       resolve fn %{motherboard_id: motherboard_id}, _info ->
@@ -197,7 +241,7 @@ defmodule XeonWeb.Schema.Builts do
       end
     end
 
-    field :built_memories, non_null(list_of(non_null(:memory))) do
+    field :memories_for_built, non_null(list_of(non_null(:memory))) do
       arg :motherboard_id, non_null(:id)
 
       resolve fn %{motherboard_id: motherboard_id}, _info ->
@@ -205,6 +249,16 @@ defmodule XeonWeb.Schema.Builts do
           {:ok, entities}
         end
       end
+    end
+  end
+
+  object :built_mutations do
+    field :create_built, non_null(:built) do
+      arg :data, non_null(:create_built_input)
+
+      resolve(fn %{data: data}, _info ->
+        Builts.create(data)
+      end)
     end
   end
 end

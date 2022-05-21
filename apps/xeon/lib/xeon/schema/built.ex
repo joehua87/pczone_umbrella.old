@@ -2,8 +2,8 @@ defmodule Xeon.Built do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @required [:slug, :name, :motherboard_id, :chassis_id]
-  @optional [:barebone_id]
+  @required [:slug, :name]
+  @optional [:barebone_id, :motherboard_id, :chassis_id]
 
   schema "built" do
     field :slug, :string, null: false
@@ -24,10 +24,10 @@ defmodule Xeon.Built do
   def changeset(entity, params) do
     entity
     |> cast(params, @required ++ @optional)
-    |> cast_embed(:processor_slots)
-    |> cast_embed(:memory_slots)
-    |> cast_embed(:sata_slots)
-    |> cast_embed(:m2_slots)
     |> validate_required(@required)
+  end
+
+  def new_changeset(params) do
+    changeset(%__MODULE__{}, params)
   end
 end

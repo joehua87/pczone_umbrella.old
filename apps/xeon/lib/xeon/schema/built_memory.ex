@@ -18,7 +18,7 @@ defmodule Xeon.BuiltMemory do
     belongs_to :product, Xeon.Product
     belongs_to :extension_device, Xeon.ExtensionDevice
     field :slot_type, :string
-    field :processor_index, :string
+    field :processor_index, :integer
     field :quantity, :integer
   end
 
@@ -26,5 +26,9 @@ defmodule Xeon.BuiltMemory do
     entity
     |> cast(params, @required ++ @optional)
     |> validate_required(@required)
+  end
+
+  def new_changeset(params) do
+    changeset(%__MODULE__{}, params)
   end
 end

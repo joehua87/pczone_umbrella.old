@@ -5,6 +5,10 @@ defmodule Xeon.Processors do
   import Xeon.Helpers
   alias Xeon.{Repo, Processor}
 
+  def get_by_code(code) do
+    Repo.one(from x in Processor, where: x.code == ^code, limit: 1)
+  end
+
   def get(id) do
     Repo.get(Processor, id)
   end

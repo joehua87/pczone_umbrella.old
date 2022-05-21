@@ -18,7 +18,7 @@ defmodule Xeon.BuiltHardDrive do
     belongs_to :product, Xeon.Product
     belongs_to :extension_device, Xeon.ExtensionDevice
     field :slot_type, :string
-    field :processor_index, :string
+    field :processor_index, :integer
     field :quantity, :integer
   end
 

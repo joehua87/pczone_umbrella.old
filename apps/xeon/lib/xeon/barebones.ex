@@ -1,8 +1,12 @@
 defmodule Xeon.Barebones do
   require Logger
-  import Ecto.Query, only: [where: 2]
+  import Ecto.Query, only: [where: 2, from: 2]
   import Dew.FilterParser
   alias Xeon.{Repo, Barebone}
+
+  def get_by_code(code) do
+    Repo.one(from x in Barebone, where: x.code == ^code, limit: 1)
+  end
 
   def get(id) do
     Repo.get(Barebone, id)

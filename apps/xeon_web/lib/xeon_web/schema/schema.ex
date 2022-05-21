@@ -37,6 +37,7 @@ defmodule XeonWeb.Schema do
     import_fields :motherboard_mutations
     import_fields :product_category_mutations
     import_fields :product_mutations
+    import_fields :built_mutations
   end
 
   def context(ctx) do

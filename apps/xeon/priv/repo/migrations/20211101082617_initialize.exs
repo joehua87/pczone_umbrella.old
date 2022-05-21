@@ -256,6 +256,7 @@ defmodule Xeon.Repo.Migrations.Initialize do
     create unique_index(:product, [:sku])
 
     create table(:built) do
+      add :slug, :string, null: false
       add :name, :string, null: false
       add :barebone_id, references(:barebone)
       add :motherboard_id, references(:motherboard)

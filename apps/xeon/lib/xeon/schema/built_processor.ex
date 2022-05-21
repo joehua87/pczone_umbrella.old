@@ -18,4 +18,8 @@ defmodule Xeon.BuiltProcessor do
     |> cast(params, @required ++ @optional)
     |> validate_required(@required)
   end
+
+  def new_changeset(params) do
+    changeset(%__MODULE__{}, params)
+  end
 end

@@ -47,15 +47,105 @@ defmodule Xeon.Builts do
     Repo.all(from(m in Memory, where: m.type in ^memory_types))
   end
 
-  def create(%{barebone_id: barebone_id}) when is_bitstring(barebone_id) do
+  def create(
+        %{
+          name: name,
+          barebone_id: barebone_id,
+          barebone_product_id: barebone_product_id,
+          processor: processor,
+          memory: memory
+        } = params
+      ) do
+    # gpus = Map.get(params, :gpus, [])
+    slug =
+      case params do
+        %{slug: slug = [_ | _]} -> slug
+        _ -> Slug.slugify(name)
+      end
+
+    hard_drives = Map.get(params, :hard_drives, [])
+
+    built_changeset =
+      Xeon.Built.new_changeset(%{
+        name: name,
+        slug: slug,
+        barebone_id: barebone_id,
+        barebone_product_id: barebone_product_id
+      })
+
+    case Ecto.Multi.new()
+         |> Ecto.Multi.insert(:built, built_changeset)
+         |> create_built_processor(processor)
+         |> create_built_memory(memory)
+         |> create_built_hard_drives(hard_drives)
+         |> Repo.transaction() do
+      {:ok, %{built: built}} -> {:ok, built}
+      {:error, _, changeset, _} -> {:error, changeset}
+      reason -> reason
+    end
   end
 
   def create(%{
         motherboard_id: motherboard_id,
-        processors: _,
-        memories: _
+        motherboard_product_id: motherboard_product_id,
+        chassis_id: chassis_id,
+        chassis_product_id: chassis_product_id,
+        psus: _psus,
+        processor: processor,
+        memory: memory,
+        hard_drives: hard_drives,
+        gpus: _gpus
+      }) do
+    built_changeset =
+      Xeon.Built.new_changeset(%{
+        motherboard_id: motherboard_id,
+        motherboard_product_id: motherboard_product_id,
+        chassis_id: chassis_id,
+        chassis_product_id: chassis_product_id
       })
-      when is_bitstring(motherboard_id) do
+
+    case Ecto.Multi.new()
+         |> Ecto.Multi.insert(:built, built_changeset)
+         |> create_built_processor(processor)
+         |> create_built_memory(memory)
+         |> create_built_hard_drives(hard_drives)
+         |> Repo.transaction() do
+      {:ok, %{built: built}} -> {:ok, built}
+      {:error, _, changeset, _} -> {:error, changeset}
+      reason -> reason
+    end
+  end
+
+  defp create_built_processor(multi, processor) do
+    multi
+    |> Ecto.Multi.run(:built_processor, fn _, %{built: %{id: built_id}} ->
+      processor
+      |> Map.put(:built_id, built_id)
+      |> Xeon.BuiltProcessor.new_changeset()
+      |> Repo.insert()
+    end)
+  end
+
+  defp create_built_memory(multi, memory) do
+    multi
+    |> Ecto.Multi.run(:built_memory, fn _, %{built: %{id: built_id}} ->
+      memory
+      |> Map.put(:built_id, built_id)
+      |> Xeon.BuiltMemory.new_changeset()
+      |> Repo.insert()
+    end)
+  end
+
+  defp create_built_hard_drives(multi, hard_drives) do
+    multi
+    |> Ecto.Multi.run(:built_hard_drives, fn _, %{built: %{id: built_id}} ->
+      hard_drives = Enum.map(hard_drives, &Map.put(&1, :built_id, built_id))
+
+      case Repo.insert_all(Xeon.HardDrive, hard_drives, returning: true) do
+        {_, list} -> {:ok, list}
+        reason -> reason
+      end
+    end)
   end
 
   def validate_chassis(
@@ -109,7 +199,7 @@ defmodule Xeon.Builts do
 
   def validate_memories(%Xeon.Motherboard{memory_slots: memory_slots}, memories) do
     memory_slots_map = get_slots_map(memory_slots)
-    memories_map = Repo.all(from m in Xeon.Memory, select: {m.id, m}) |> Enum.into(%{})
+    memories_map = Repo.all(from(m in Xeon.Memory, select: {m.id, m})) |> Enum.into(%{})
 
     errors =
       memories
@@ -164,7 +254,7 @@ defmodule Xeon.Builts do
     m2_slots_map = get_slots_map(m2_slots)
     sata_slots_map = get_slots_map(sata_slots)
     slots_map = Map.merge(m2_slots_map, sata_slots_map)
-    hard_drives_map = Repo.all(from m in Xeon.HardDrive, select: {m.id, m}) |> Enum.into(%{})
+    hard_drives_map = Repo.all(from(m in Xeon.HardDrive, select: {m.id, m})) |> Enum.into(%{})
 
     errors =
       hard_drives
@@ -207,7 +297,7 @@ defmodule Xeon.Builts do
 
   def validate_gpus(%Xeon.Motherboard{pci_slots: pci_slots}, gpus) do
     pci_slots_map = get_slots_map(pci_slots)
-    gpus_map = Repo.all(from m in Xeon.Gpu, select: {m.id, m}) |> Enum.into(%{})
+    gpus_map = Repo.all(from(m in Xeon.Gpu, select: {m.id, m})) |> Enum.into(%{})
 
     errors =
       gpus

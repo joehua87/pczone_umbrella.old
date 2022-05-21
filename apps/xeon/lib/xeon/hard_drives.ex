@@ -1,5 +1,10 @@
 defmodule Xeon.HardDrives do
+  import Ecto.Query, only: [from: 2]
   alias Xeon.Repo
+
+  def get_by_code(code) do
+    Repo.one(from x in Xeon.HardDrive, where: x.code == ^code, limit: 1)
+  end
 
   def upsert(entities, opts \\ []) do
     brands_map = Xeon.Brands.get_map_by_slug()

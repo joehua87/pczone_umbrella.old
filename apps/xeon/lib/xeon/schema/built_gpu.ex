@@ -17,7 +17,7 @@ defmodule Xeon.BuiltGpu do
     belongs_to :gpu, Xeon.Gpu
     belongs_to :product, Xeon.Product
     field :slot_type, :string
-    field :processor_index, :string
+    field :processor_index, :integer
     field :quantity, :integer
   end
 

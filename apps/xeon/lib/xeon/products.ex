@@ -4,6 +4,10 @@ defmodule Xeon.Products do
   import Dew.FilterParser
   alias Xeon.{Repo, Product}
 
+  def get_by_sku(sku) do
+    Repo.one(from x in Product, where: x.sku == ^sku, limit: 1)
+  end
+
   def get(id) do
     Repo.get(Product, id)
   end
