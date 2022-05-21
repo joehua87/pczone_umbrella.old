@@ -3,7 +3,7 @@ defmodule Xeon.SampleData do
 
   def get_chipsets(output \\ "chipsets.json") do
     fields = [
-      :shortname,
+      :code,
       :code_name,
       :name,
       :launch_date,
@@ -39,7 +39,7 @@ defmodule Xeon.SampleData do
       )
       |> Enum.map(
         &(&1
-          |> Map.put(:chipset, &1.chipset.shortname)
+          |> Map.put(:chipset, &1.chipset.code)
           |> Map.delete(:chipset_id)
           |> Map.take(fields ++ [:chipset])
           |> Map.drop([:chipset_id]))

@@ -30,7 +30,7 @@ defmodule Xeon.Motherboards do
 
   def upsert(entities, opts \\ []) do
     brands_map = Xeon.Brands.get_map_by_slug()
-    chipsets_map = Xeon.Chipsets.get_map_by_shortname()
+    chipsets_map = Xeon.Chipsets.get_map_by_code()
 
     entities =
       Enum.map(
@@ -47,11 +47,11 @@ defmodule Xeon.Motherboards do
 
   def parse_entity_for_upsert(params, brands_map: brands_map, chipsets_map: chipsets_map) do
     case params do
-      %{chipset: chipset_shortname} ->
-        Map.put(params, :chipset_id, chipsets_map[chipset_shortname])
+      %{chipset: chipset_code} ->
+        Map.put(params, :chipset_id, chipsets_map[chipset_code])
 
-      %{"chipset" => chipset_shortname} ->
-        Map.put(params, "chipset_id", chipsets_map[chipset_shortname])
+      %{"chipset" => chipset_code} ->
+        Map.put(params, "chipset_id", chipsets_map[chipset_code])
     end
     |> case do
       params = %{brand: brand} -> Map.put(params, :brand_id, brands_map[brand])
@@ -100,7 +100,7 @@ defmodule Xeon.Motherboards do
         "fieldValues.0" => %{"$exists" => true}
       })
 
-    chipsets_map = Xeon.Chipsets.get_map_by_shortname()
+    chipsets_map = Xeon.Chipsets.get_map_by_code()
 
     motherboards =
       Enum.map(cursor, &parse(&1, chipsets_map: chipsets_map))

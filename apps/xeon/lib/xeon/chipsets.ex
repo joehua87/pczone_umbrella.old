@@ -29,11 +29,11 @@ defmodule Xeon.Chipsets do
       })
 
     entities = Enum.map(cursor, &parse/1)
-    Repo.insert_all(Chipset, entities, on_conflict: :replace_all, conflict_target: [:shortname])
+    Repo.insert_all(Chipset, entities, on_conflict: :replace_all, conflict_target: [:code])
   end
 
-  def get_map_by_shortname() do
-    Repo.all(from c in Chipset, select: {c.shortname, c.id}) |> Enum.into(%{})
+  def get_map_by_code() do
+    Repo.all(from c in Chipset, select: {c.code, c.id}) |> Enum.into(%{})
   end
 
   def parse(%{"title" => name, "attributes" => attributes}) do
@@ -54,12 +54,12 @@ defmodule Xeon.Chipsets do
     result
     |> Map.merge(%{
       name: name,
-      shortname: parse_shortname(name),
+      code: parse_code(name),
       attributes: parse_attributes(attributes)
     })
   end
 
-  defp parse_shortname(name) do
+  defp parse_code(name) do
     name
     |> String.replace("Intel® Communications", "")
     |> String.replace("Intel® ", "")

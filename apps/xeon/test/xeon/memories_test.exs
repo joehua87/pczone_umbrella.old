@@ -11,14 +11,14 @@ defmodule Xeon.MemoriesTest do
                capacity: 4,
                description: "Samsung / Hynix / Micro",
                name: "4Gb SODIMM DDR4 2133",
-               type: "SODIMM DDR4-2133"
+               type: "sodimm ddr4-2133"
              } = Memories.parse_entity_for_upsert(params, brands_map: brands_map)
     end
 
     test "upsert" do
       entities = Xeon.Fixtures.read_fixture("memories.yml")
 
-      assert {9,
+      assert {18,
               [
                 %Xeon.Memory{
                   brand_id: _,
@@ -26,7 +26,7 @@ defmodule Xeon.MemoriesTest do
                   description: "Samsung / Hynix / Micro",
                   id: _,
                   name: "4Gb SODIMM DDR4 2133",
-                  type: "SODIMM DDR4-2133"
+                  type: "sodimm ddr4-2133"
                 }
                 | _
               ]} = Memories.upsert(entities, returning: true)

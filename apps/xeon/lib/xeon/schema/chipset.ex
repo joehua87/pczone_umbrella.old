@@ -6,7 +6,7 @@ defmodule Xeon.Chipset do
 
   @required [
     :slug,
-    :shortname,
+    :code,
     :code_name,
     :name,
     :launch_date,
@@ -18,7 +18,7 @@ defmodule Xeon.Chipset do
 
   schema "chipset" do
     field :slug, :string
-    field :shortname, :string
+    field :code, :string
     field :code_name, :string
     field :name, :string
     field :launch_date, :string

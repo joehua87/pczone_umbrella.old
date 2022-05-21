@@ -38,8 +38,8 @@ defmodule Xeon.MotherboardsTest do
                       max_capacity: nil,
                       processor_index: 1,
                       quantity: 4,
-                      supported_types: ["DIMM DDR4-2133" | _],
-                      type: "DIMM DDR4-2133"
+                      supported_types: ["dimm ddr4-2133" | _],
+                      type: "dimm ddr4-2133"
                     }
                   ],
                   memory_slots_count: nil,
@@ -48,9 +48,13 @@ defmodule Xeon.MotherboardsTest do
                   pci_slots: [
                     %Xeon.PciSlot{
                       processor_index: 1,
-                      quantity: 0,
-                      supported_types: nil,
-                      type: nil
+                      quantity: 1,
+                      type: "pci express 3.0 x4"
+                    },
+                    %Xeon.PciSlot{
+                      processor_index: 1,
+                      quantity: 1,
+                      type: "pci express 3.0 x16"
                     }
                   ],
                   pci_slots_count: nil,
@@ -107,6 +111,6 @@ defmodule Xeon.MotherboardsTest do
     "brands.yml" |> Xeon.Fixtures.read_fixture() |> Xeon.Brands.upsert()
 
     {:ok,
-     chipsets_map: Xeon.Chipsets.get_map_by_shortname(), brands_map: Xeon.Brands.get_map_by_slug()}
+     chipsets_map: Xeon.Chipsets.get_map_by_code(), brands_map: Xeon.Brands.get_map_by_slug()}
   end
 end

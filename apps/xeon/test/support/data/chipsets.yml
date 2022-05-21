@@ -3,370 +3,381 @@
   collection_name: Intel® 600 Series Desktop Chipsets
   launch_date: Q1'22
   name: Intel® H670 Chipset
-  shortname: H670
+  code: H670
   status: Launched
   vertical_segment: Desktop
 - code_name: Alder Lake
   collection_name: Intel® 600 Series Desktop Chipsets
   launch_date: Q1'22
   name: Intel® B660 Chipset
-  shortname: B660
+  code: B660
   status: Launched
   vertical_segment: Desktop
 - code_name: Alder Lake
   collection_name: Intel® 600 Series Desktop Chipsets
   launch_date: Q1'22
   name: Intel® H610 Chipset
-  shortname: H610
+  code: H610
   status: Launched
   vertical_segment: Desktop
 - code_name: Alder Lake
   collection_name: Intel® 600 Series Desktop Chipsets
   launch_date: Q1'22
   name: Intel® Q670E Chipset
-  shortname: Q670E
+  code: Q670E
   status: Launched
   vertical_segment: Embedded
 - code_name: Alder Lake
   collection_name: Intel® 600 Series Desktop Chipsets
   launch_date: Q1'22
   name: Intel® Q670 Chipset
-  shortname: Q670
+  code: Q670
   status: Launched
   vertical_segment: Desktop
 - code_name: Alder Lake
   collection_name: Intel® 600 Series Desktop Chipsets
   launch_date: Q1'22
   name: Intel® H610E Chipset
-  shortname: H610E
+  code: H610E
   status: Launched
   vertical_segment: Embedded
 - code_name: Alder Lake
   collection_name: Intel® 600 Series Desktop Chipsets
   launch_date: Q1'22
   name: Intel® R680E Chipset
-  shortname: R680E
+  code: R680E
   status: Launched
   vertical_segment: Embedded
 - code_name: Comet Lake
   collection_name: Intel® 400 Series Desktop Chipsets
   launch_date: Q2'20
   name: Intel® H410 Chipset
-  shortname: H410
+  code: H410
   status: Launched
   vertical_segment: Desktop
 - code_name: Comet Lake
   collection_name: Intel® 400 Series Desktop Chipsets
   launch_date: Q2'20
   name: Intel® B460 Chipset
-  shortname: B460
+  code: B460
   status: Launched
   vertical_segment: Desktop
 - code_name: Alder Lake
   collection_name: Intel® 600 Series Desktop Chipsets
   launch_date: Q4'21
   name: Intel® Z690 Chipset
-  shortname: Z690
+  code: Z690
   status: Launched
   vertical_segment: Desktop
 - code_name: Comet Lake
   collection_name: Intel® 400 Series Desktop Chipsets
   launch_date: Q2'20
   name: Intel® Q470 Chipset
-  shortname: Q470
+  code: Q470
   status: Launched
   vertical_segment: Desktop
 - code_name: Comet Lake
   collection_name: Intel® 400 Series Desktop Chipsets
   launch_date: Q2'20
   name: Intel® W480 Chipset
-  shortname: W480
+  code: W480
   status: Launched
   vertical_segment: Desktop
 - code_name: Comet Lake
   collection_name: Intel® 400 Series Desktop Chipsets
   launch_date: Q2'20
   name: Intel® H470 Chipset
-  shortname: H470
+  code: H470
   status: Launched
   vertical_segment: Desktop
 - code_name: Rocket Lake
   collection_name: Intel® 500 Series Desktop Chipsets
   launch_date: 02'21
   name: Intel® Q570 Chipset
-  shortname: Q570
+  code: Q570
   status: Launched
   vertical_segment: Desktop
 - code_name: Comet Lake
   collection_name: Intel® 400 Series Desktop Chipsets
   launch_date: Q2'20
   name: Intel® Z490 Chipset
-  shortname: Z490
+  code: Z490
   status: Launched
   vertical_segment: Desktop
 - code_name: Rocket Lake
   collection_name: Intel® 500 Series Desktop Chipsets
   launch_date: 01'21
   name: Intel® H510 Chipset
-  shortname: H510
+  code: H510
   status: Launched
   vertical_segment: Desktop
 - code_name: Cave Creek
   collection_name: Intel® Communications Chipsets
   launch_date: Q4'12
   name: Intel® Communications Chipset 8903
-  shortname: ' 8903'
+  code: ' 8903'
   status: Discontinued
   vertical_segment: Embedded
 - code_name: Rocket Lake
   collection_name: Intel® 500 Series Desktop Chipsets
   launch_date: 02'21
   name: Intel® W580 Chipset
-  shortname: W580
+  code: W580
   status: Launched
   vertical_segment: Desktop
 - code_name: Rocket Lake
   collection_name: Intel® 500 Series Desktop Chipsets
   launch_date: 01'21
   name: Intel® B560 Chipset
-  shortname: B560
+  code: B560
   status: Launched
   vertical_segment: Desktop
 - code_name: Rocket Lake
   collection_name: Intel® 500 Series Desktop Chipsets
   launch_date: 01'21
   name: Intel® Z590 Chipset
-  shortname: Z590
+  code: Z590
   status: Launched
   vertical_segment: Desktop
 - code_name: Coffee Lake
   collection_name: Intel® 300 Series Desktop Chipsets
   launch_date: Q4'18
   name: Intel® B365 Chipset
-  shortname: B365
+  code: B365
   status: Launched
   vertical_segment: Desktop
 - code_name: Coffee Lake
   collection_name: Intel® 300 Series Desktop Chipsets
   launch_date: Q2'18
   name: Intel® B360 Chipset
-  shortname: B360
+  code: B360
   status: Launched
   vertical_segment: Desktop
 - code_name: Coffee Lake
   collection_name: Intel® 300 Series Desktop Chipsets
   launch_date: Q4'18
   name: Intel® Z390 Chipset
-  shortname: Z390
+  code: Z390
   status: Launched
   vertical_segment: Desktop
 - code_name: Kaby Lake
   collection_name: Intel® 200 Series Desktop Chipsets
   launch_date: Q2'17
   name: Intel® X299 Chipset
-  shortname: X299
+  code: X299
   status: Launched
   vertical_segment: Desktop
 - code_name: Coffee Lake
   collection_name: Intel® 300 Series Desktop Chipsets
   launch_date: Q2'18
   name: Intel® Q370 Chipset
-  shortname: Q370
+  code: Q370
   status: Launched
   vertical_segment: Desktop
 - code_name: Coffee Lake
   collection_name: Intel® 300 Series Desktop Chipsets
   launch_date: Q2'18
   name: Intel® H370 Chipset
-  shortname: H370
+  code: H370
   status: Launched
   vertical_segment: Desktop
 - code_name: Rocket Lake
   collection_name: Intel® 500 Series Desktop Chipsets
   launch_date: 01'21
   name: Intel® H570 Chipset
-  shortname: H570
+  code: H570
   status: Launched
   vertical_segment: Desktop
 - code_name: Kaby Lake
   collection_name: Intel® 200 Series Desktop Chipsets
   launch_date: Q1'17
   name: Intel® B250 Chipset
-  shortname: B250
+  code: B250
   status: Launched
   vertical_segment: Desktop
 - code_name: Kaby Lake
   collection_name: Intel® 200 Series Desktop Chipsets
   launch_date: Q1'17
   name: Intel® Q270 Chipset
-  shortname: Q270
+  code: Q270
   status: Launched
   vertical_segment: Desktop
 - code_name: Kaby Lake
   collection_name: Intel® 200 Series Desktop Chipsets
   launch_date: Q1'17
   name: Intel® Q250 Chipset
-  shortname: Q250
+  code: Q250
   status: Launched
   vertical_segment: Desktop
 - code_name: Kaby Lake
   collection_name: Intel® 200 Series Desktop Chipsets
   launch_date: Q1'17
   name: Intel® Z270 Chipset
-  shortname: Z270
+  code: Z270
   status: Launched
   vertical_segment: Desktop
 - code_name: Skylake
   collection_name: Intel® 100 Series Desktop Chipsets
   launch_date: Q3'15
   name: Intel® H110 Chipset
-  shortname: H110
+  code: H110
   status: Launched
   vertical_segment: Desktop
 - code_name: Coffee Lake
   collection_name: Intel® 300 Series Desktop Chipsets
   launch_date: Q4'17
   name: Intel® Z370 Chipset
-  shortname: Z370
+  code: Z370
   status: Launched
   vertical_segment: Desktop
 - code_name: Kaby Lake
   collection_name: Intel® 200 Series Desktop Chipsets
   launch_date: Q1'17
   name: Intel® H270 Chipset
-  shortname: H270
+  code: H270
   status: Launched
   vertical_segment: Desktop
 - code_name: Skylake
   collection_name: Intel® 100 Series Desktop Chipsets
   launch_date: Q3'15
   name: Intel® Q170 Chipset
-  shortname: Q170
+  code: Q170
   status: Launched
   vertical_segment: Desktop
+  processors:
+    - i3 6100
+    - i5 6400
+    - i5 6500
+    - i5 6600
+    - i7 6700
+    - i3 6100T
+    - i5 6400T
+    - i5 6500T
+    - i5 6600T
+    - i7 6700T
 - code_name: Skylake
   collection_name: Intel® 100 Series Desktop Chipsets
   launch_date: Q3'15
   name: Intel® B150 Chipset
-  shortname: B150
+  code: B150
   status: Discontinued
   vertical_segment: Desktop
 - code_name: Tiger Lake
   collection_name: Intel® C250 Series Chipsets
   launch_date: Q3'21
   name: Intel® C256 Chipset
-  shortname: C256
+  code: C256
   status: Launched
   vertical_segment: Server
 - code_name: Coffee Lake
   collection_name: Intel® C240 Series Chipsets
   launch_date: Q4'18
   name: Intel® C242 Chipset
-  shortname: C242
+  code: C242
   status: Launched
   vertical_segment: Server
 - code_name: Lewisburg
   collection_name: Intel® C620 Series Chipsets
   launch_date: Q3'17
   name: Intel® C621 Chipset
-  shortname: C621
+  code: C621
   status: Launched
   vertical_segment: Server
 - code_name: Tiger Lake
   collection_name: Intel® C250 Series Chipsets
   launch_date: Q3'21
   name: Intel® C252 Chipset
-  shortname: C252
+  code: C252
   status: Launched
   vertical_segment: Server
 - code_name: Coffee Lake
   collection_name: Intel® C240 Series Chipsets
   launch_date: Q2'18
   name: Mobile Intel® CM246 Chipset
-  shortname: Mobile CM246
+  code: Mobile CM246
   status: Launched
   vertical_segment: Mobile
 - code_name: Kaby Lake
   collection_name: Intel® C400 Series Chipsets
   launch_date: Q3'17
   name: Intel® C422 Chipset
-  shortname: C422
+  code: C422
   status: Launched
   vertical_segment: Server
 - code_name: Coffee Lake
   collection_name: Intel® 300 Series Desktop Chipsets
   launch_date: Q2'18
   name: Intel® H310 Chipset
-  shortname: H310
+  code: H310
   status: Launched
   vertical_segment: Desktop
 - code_name: Cave Creek
   collection_name: Intel® Communications Chipsets
   launch_date: Q4'12
   name: Intel® Communications Chipset 8920
-  shortname: ' 8920'
+  code: ' 8920'
   status: Discontinued
   vertical_segment: Embedded
 - code_name: Skylake
   collection_name: Intel® 100 Series Desktop Chipsets
   launch_date: Q3'15
   name: Intel® Q150 Chipset
-  shortname: Q150
+  code: Q150
   status: Discontinued
   vertical_segment: Desktop
 - code_name: Lewisburg
   collection_name: Intel® C620 Series Chipsets
   launch_date: Q2'20
   name: Intel® C621A Chipset
-  shortname: C621A
+  code: C621A
   status: Launched
   vertical_segment: Server
 - code_name: Lewisburg
   collection_name: Intel® C620 Series Chipsets
   launch_date: Q2'20
   name: Intel® C627A Chipset
-  shortname: C627A
+  code: C627A
   status: Launched
   vertical_segment: Server
 - code_name: Cave Creek
   collection_name: Intel® Communications Chipsets
   launch_date: Q4'12
   name: Intel® Communications Chipset 8910
-  shortname: ' 8910'
+  code: ' 8910'
   status: Discontinued
   vertical_segment: Embedded
 - code_name: Lewisburg
   collection_name: Intel® C620 Series Chipsets
   launch_date: Q2'20
   name: Intel® C629A Chipset
-  shortname: C629A
+  code: C629A
   status: Launched
   vertical_segment: Server
 - code_name: Cave Creek
   collection_name: Intel® Communications Chipsets
   launch_date: Q4'12
   name: Intel® Communications Chipset 8900
-  shortname: ' 8900'
+  code: ' 8900'
   status: Discontinued
   vertical_segment: Embedded
 - code_name: Lynx Point
   collection_name: Intel® C220 Series Chipsets
   launch_date: Q2'13
   name: Intel® C226 Chipset
-  shortname: C226
+  code: C226
   status: Launched
   vertical_segment: Server
 - code_name: Skylake
   collection_name: Intel® 100 Series Desktop Chipsets
   launch_date: Q3'15
   name: Intel® Z170 Chipset
-  shortname: Z170
+  code: Z170
   status: Discontinued
   vertical_segment: Desktop
 - code_name: Coffee Lake
   collection_name: Intel® C240 Series Chipsets
   launch_date: Q3'18
   name: Intel® C246 Chipset
-  shortname: C246
+  code: C246
   status: Launched
   vertical_segment: Server

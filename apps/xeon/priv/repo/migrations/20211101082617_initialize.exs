@@ -21,7 +21,7 @@ defmodule Xeon.Repo.Migrations.Initialize do
 
     create table(:chipset) do
       add :slug, :string, null: false
-      add :shortname, :string, null: false
+      add :code, :string, null: false
       add :code_name, :string, null: false
       add :name, :string, null: false
       add :launch_date, :string, null: false
@@ -143,8 +143,8 @@ defmodule Xeon.Repo.Migrations.Initialize do
     end
 
     # Slug must be unique index
-    create index(:processor, [:slug])
-    create index(:processor, [:code])
+    create unique_index(:processor, [:slug])
+    create unique_index(:processor, [:code])
     create unique_index(:processor, [:url])
 
     create table(:processor_chipset) do
