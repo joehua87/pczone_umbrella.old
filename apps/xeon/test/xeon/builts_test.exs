@@ -1,7 +1,7 @@
 defmodule Xeon.BuiltsTest do
   use Xeon.DataCase
   import Ecto.Query, only: [from: 2]
-  alias Xeon.{Builts, Barebones, Processors, Memories, Products}
+  alias Xeon.{Builts, Barebones, Processors, Memories, Products, HardDrives}
 
   describe "builts" do
     test "create with barebone", %{
@@ -11,7 +11,13 @@ defmodule Xeon.BuiltsTest do
       processor_product_id: processor_product_id,
       memory_id: memory_id,
       memory_slot_type: memory_slot_type,
-      memory_product_id: memory_product_id
+      memory_product_id: memory_product_id,
+      m2_id: m2_id,
+      m2_slot_type: m2_slot_type,
+      m2_product_id: m2_product_id,
+      sata_id: sata_id,
+      sata_slot_type: sata_slot_type,
+      sata_product_id: sata_product_id
     } do
       params = %{
         name: "My built",
@@ -29,7 +35,22 @@ defmodule Xeon.BuiltsTest do
           processor_index: 1,
           quantity: 2
         },
-        hard_drives: [],
+        hard_drives: [
+          %{
+            hard_drive_id: m2_id,
+            product_id: m2_product_id,
+            slot_type: m2_slot_type,
+            processor_index: 1,
+            quantity: 1
+          },
+          %{
+            hard_drive_id: sata_id,
+            product_id: sata_product_id,
+            slot_type: sata_slot_type,
+            processor_index: 1,
+            quantity: 1
+          }
+        ],
         gpus: []
       }
 
@@ -39,15 +60,22 @@ defmodule Xeon.BuiltsTest do
                  id: id,
                  slug: "my-built",
                  barebone_price: 2_000_000,
-                 total: 4_740_000
+                 total: 7_540_000
                }
              } = Builts.create(params)
 
+      built_query =
+        from Xeon.Built,
+          preload: [:built_processors, :built_memories, :built_hard_drives]
+
       assert %{
                built_memories: [%{price: 520_000, quantity: 2, total: 1_040_000}],
-               built_processors: [%{price: 1_700_000, quantity: 1, total: 1_700_000}]
-             } =
-               Xeon.Repo.get(from(Xeon.Built, preload: [:built_processors, :built_memories]), id)
+               built_processors: [%{price: 1_700_000, quantity: 1, total: 1_700_000}],
+               built_hard_drives: [
+                 %{price: 800_000, quantity: 1, slot_type: "nvme pcie 3.0 x4", total: 800_000},
+                 %{price: 2_000_000, quantity: 1, slot_type: "sata 3", total: 2_000_000}
+               ]
+             } = Xeon.Repo.get(built_query, id)
     end
   end
 
@@ -61,6 +89,10 @@ defmodule Xeon.BuiltsTest do
     %{id: processor_product_id} = Products.get_by_sku("i5-6500/tray")
     %{id: memory_id, type: memory_slot_type} = Memories.get_by_code("8gb-sodimm-ddr4-2133-mixed")
     %{id: memory_product_id} = Products.get_by_sku("8gb-sodimm-ddr4-2133-mixed/used")
+    %{id: m2_id, type: m2_slot_type} = HardDrives.get_by_code("256gb-samsung-pm981")
+    %{id: m2_product_id} = Products.get_by_sku("256gb-samsung-pm981/like-new")
+    %{id: sata_id, type: sata_slot_type} = HardDrives.get_by_code("1tb-samsung-860-evo")
+    %{id: sata_product_id} = Products.get_by_sku("1tb-samsung-860-evo/like-new")
 
     {:ok,
      barebone_id: barebone_id,
@@ -69,6 +101,12 @@ defmodule Xeon.BuiltsTest do
      processor_product_id: processor_product_id,
      memory_id: memory_id,
      memory_slot_type: memory_slot_type,
-     memory_product_id: memory_product_id}
+     memory_product_id: memory_product_id,
+     m2_id: m2_id,
+     m2_slot_type: m2_slot_type,
+     m2_product_id: m2_product_id,
+     sata_id: sata_id,
+     sata_slot_type: sata_slot_type,
+     sata_product_id: sata_product_id}
   end
 end

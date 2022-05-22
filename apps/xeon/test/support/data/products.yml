@@ -154,21 +154,21 @@
   stock: 10
 - kind: hard_drive
   ref_code: 256gb-samsung-860-evo
-  sku: 256gb-samsung-860-evo/used
+  sku: 256gb-samsung-860-evo/like-new
   condition: Used
   warranty: 3m
   sale_price: 600_000
   stock: 10
 - kind: hard_drive
   ref_code: 512gb-samsung-860-evo
-  sku: 512gb-samsung-860-evo/used
+  sku: 512gb-samsung-860-evo/like-new
   condition: Used
   warranty: 3m
   sale_price: 1_100_000
   stock: 10
 - kind: hard_drive
   ref_code: 1tb-samsung-860-evo
-  sku: 1tb-samsung-860-evo/used
+  sku: 1tb-samsung-860-evo/like-new
   condition: Used
   warranty: 3m
   sale_price: 2_000_000

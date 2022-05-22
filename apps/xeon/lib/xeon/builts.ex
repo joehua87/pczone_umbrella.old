@@ -208,7 +208,7 @@ defmodule Xeon.Builts do
             })
           end)
 
-        case Repo.insert_all(Xeon.HardDrive, hard_drives, returning: true) do
+        case Repo.insert_all(Xeon.BuiltHardDrive, hard_drives, returning: true) do
           {inserted, list} when is_integer(inserted) -> {:ok, list}
           reason -> reason
         end
