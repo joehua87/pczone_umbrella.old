@@ -103,10 +103,12 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :slug, :string, null: false
       add :code, :string, null: false
       add :name, :string, null: false
-      add :processor_slots, :map
-      add :memory_slots, :map
-      add :sata_slots, :map
-      add :m2_slots, :map
+      add :type, :string, null: false
+      add :brand_id, references(:brand), null: false
+      add :processor_slots, :map, default: "[]"
+      add :memory_slots, :map, default: "[]"
+      add :sata_slots, :map, default: "[]"
+      add :m2_slots, :map, default: "[]"
     end
 
     create unique_index(:extension_device, [:slug])

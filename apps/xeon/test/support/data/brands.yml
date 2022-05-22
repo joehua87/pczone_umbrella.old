@@ -41,5 +41,8 @@
 - slug: amd
   name: AMD
 
+- slug: no-name
+  name: No name
+
 - slug: mixed
   name: Mixed
