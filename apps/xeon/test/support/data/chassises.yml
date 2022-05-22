@@ -1,20 +1,39 @@
 - code: dell-optiplex-7040-sff
   name: Dell OptiPlex 7040 SFF
   form_factor: sff
+  hard_drive_slots:
+    - form_factor: '3.5'
+      quantity: 1
   brand: dell
+
 - code: dell-optiplex-7050-sff
   name: Dell OptiPlex 7050 SFF
   form_factor: sff
+  hard_drive_slots:
+    - form_factor: '3.5'
+      quantity: 1
   brand: dell
+
 - code: dell-optiplex-7060-sff
   name: Dell OptiPlex 7060 SFF
   form_factor: sff
+  hard_drive_slots:
+    - form_factor: '3.5'
+      quantity: 1
   brand: dell
+
 - code: hp-elitedesk-800-g2-mini
   name: HP EliteDesk 800 G2 Mini
   form_factor: mini
+  hard_drive_slots:
+    - form_factor: '2.5'
+      quantity: 1
   brand: hp
+
 - code: hp-elitedesk-800-g2-mini-65w
   name: HP EliteDesk 800 G2 Mini 65w
   form_factor: mini
+  hard_drive_slots:
+    - form_factor: '2.5'
+      quantity: 1
   brand: hp

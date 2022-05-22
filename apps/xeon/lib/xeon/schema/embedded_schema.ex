@@ -126,3 +126,20 @@ defmodule Xeon.PciSlot do
     cast(entity, params, [:type, :processor_index, :supported_types, :quantity])
   end
 end
+
+defmodule Xeon.HardDriveSlot do
+  use Ecto.Schema
+  import Ecto.Changeset
+
+  @primary_key false
+  @derive Jason.Encoder
+
+  embedded_schema do
+    field :form_factor, :string, primary_key: true
+    field :quantity, :integer
+  end
+
+  def changeset(entity, params) do
+    cast(entity, params, [:form_factor, :quantity])
+  end
+end

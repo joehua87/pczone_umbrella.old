@@ -10,6 +10,7 @@ defmodule Xeon.Chassis do
     field :code, :string
     field :name, :string
     field :form_factor, :string
+    embeds_many :hard_drive_slots, Xeon.HardDriveSlot
     field :psu_form_factors, {:array, :string}, default: []
     belongs_to :brand, Xeon.Brand
     has_many :products, Xeon.Product
@@ -18,12 +19,11 @@ defmodule Xeon.Chassis do
   def changeset(entity, params) do
     entity
     |> cast(params, @required ++ @optional)
+    |> cast_embed(:hard_drive_slots)
     |> validate_required(@required)
   end
 
   def new_changeset(params) do
-    %__MODULE__{}
-    |> cast(params, @required ++ @optional)
-    |> validate_required(@required)
+    changeset(%__MODULE__{}, params)
   end
 end

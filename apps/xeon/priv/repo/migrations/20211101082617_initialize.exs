@@ -53,6 +53,7 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :code, :string, null: false
       add :name, :string, null: false
       add :form_factor, :string
+      add :hard_drive_slots, :map, default: "[]"
       add :psu_form_factors, {:array, :string}, default: []
       add :brand_id, references(:brand), null: false
     end
