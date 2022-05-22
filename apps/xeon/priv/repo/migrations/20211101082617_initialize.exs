@@ -264,7 +264,7 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :barebone_id, references(:barebone)
       add :motherboard_id, references(:motherboard)
       add :chassis_id, references(:chassis)
-      # Embedded processor
+      # For embedded processor
       add :processor_id, references(:processor)
       add :barebone_product_id, references(:product)
       add :motherboard_product_id, references(:product)
@@ -272,6 +272,7 @@ defmodule Xeon.Repo.Migrations.Initialize do
       add :barebone_price, :integer
       add :motherboard_price, :integer
       add :chassis_price, :integer
+      add :usable, :boolean, null: false
       add :total, :integer
     end
 

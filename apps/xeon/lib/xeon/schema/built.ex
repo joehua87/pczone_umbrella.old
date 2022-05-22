@@ -13,6 +13,7 @@ defmodule Xeon.Built do
     :barebone_price,
     :motherboard_price,
     :chassis_price,
+    :usable,
     :total
   ]
 
@@ -29,6 +30,7 @@ defmodule Xeon.Built do
     field :barebone_price, :integer
     field :motherboard_price, :integer
     field :chassis_price, :integer
+    field :usable, :boolean, default: false
     field :total, :integer
     has_many :built_psus, Xeon.BuiltPsu
     has_many :built_extension_devices, Xeon.BuiltExtensionDevice
