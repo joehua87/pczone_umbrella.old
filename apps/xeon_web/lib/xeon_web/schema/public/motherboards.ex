@@ -21,6 +21,7 @@ defmodule XeonWeb.Schema.Motherboards do
     field :processor_index, non_null(:integer)
     field :type, non_null(:string)
     field :supported_types, non_null(list_of(non_null(:string)))
+    field :form_factors, non_null(list_of(non_null(:string)))
     field :quantity, non_null(:integer)
   end
 

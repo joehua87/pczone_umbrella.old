@@ -17,6 +17,8 @@ defmodule XeonWeb.Schema.HardDrives do
 
   input_object :hard_drive_filter_input do
     field :name, :string_filter_input
+    field :type, :string_filter_input
+    field :form_factor, :string_filter_input
   end
 
   object :hard_drive_list_result do
