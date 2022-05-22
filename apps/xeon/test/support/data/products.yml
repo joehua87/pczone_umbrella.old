@@ -58,6 +58,13 @@
 
 # Barebone
 - kind: barebone
+  ref_code: dell-optiplex-7040-sff
+  sku: dell-optiplex-7040-sff/used
+  condition: Used
+  warranty: 3m
+  sale_price: 1_800_000
+  stock: 10
+- kind: barebone
   ref_code: hp-elitedesk-800-g2-mini
   sku: hp-elitedesk-800-g2-mini/used
   condition: Used
@@ -104,6 +111,41 @@
 - kind: memory
   ref_code: 16gb-sodimm-ddr4-2400-mixed
   sku: 16gb-sodimm-ddr4-2400-mixed/used
+  condition: Used
+  warranty: 3m
+  sale_price: 1_100_000
+  stock: 10
+- kind: memory
+  ref_code: 4gb-dimm-ddr4-2133-mixed
+  sku: 4gb-dimm-ddr4-2133-mixed/used
+  condition: Used
+  warranty: 3m
+  sale_price: 300_000
+  stock: 10
+- kind: memory
+  ref_code: 8gb-dimm-ddr4-2133-mixed
+  sku: 8gb-dimm-ddr4-2133-mixed/used
+  condition: Used
+  warranty: 3m
+  sale_price: 520_000
+  stock: 10
+- kind: memory
+  ref_code: 4gb-dimm-ddr4-2400-mixed
+  sku: 4gb-dimm-ddr4-2400-mixed/used
+  condition: Used
+  warranty: 3m
+  sale_price: 320_000
+  stock: 10
+- kind: memory
+  ref_code: 8gb-dimm-ddr4-2400-mixed
+  sku: 8gb-dimm-ddr4-2400-mixed/used
+  condition: Used
+  warranty: 3m
+  sale_price: 550_000
+  stock: 10
+- kind: memory
+  ref_code: 16gb-dimm-ddr4-2400-mixed
+  sku: 16gb-dimm-ddr4-2400-mixed/used
   condition: Used
   warranty: 3m
   sale_price: 1_100_000

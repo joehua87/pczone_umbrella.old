@@ -7,7 +7,7 @@ defmodule Xeon.ProductsTest do
       Xeon.Fixtures.get_fixtures_dir() |> Xeon.initial_data()
       products = Xeon.Fixtures.read_fixture("products.yml")
 
-      assert {22,
+      assert {27,
               [
                 %Xeon.Product{
                   barebone_id: _,
