@@ -12,6 +12,7 @@ defmodule Xeon.Application do
       Xeon.Repo,
       # Start the PubSub system
       {Phoenix.PubSub, name: Xeon.PubSub},
+      {Mongo, Xeon.MongoRepo.config()},
       {Finch, name: MyFinch}
       # Start a worker by calling: Xeon.Worker.start_link(arg)
       # {Xeon.Worker, arg}

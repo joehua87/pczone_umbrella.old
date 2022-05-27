@@ -20,6 +20,7 @@ defmodule XeonWeb.Schema do
   import_types XeonWeb.Schema.Builts
   import_types XeonWeb.Schema.ProductCategories
   import_types XeonWeb.Schema.Products
+  import_types XeonWeb.Schema.ScrapedEntries
 
   query do
     import_fields :processor_queries
@@ -31,6 +32,7 @@ defmodule XeonWeb.Schema do
     import_fields :product_queries
     import_fields :built_queries
     import_fields :barebone_queries
+    import_fields :scraped_entry_queries
   end
 
   mutation do

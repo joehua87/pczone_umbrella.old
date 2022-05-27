@@ -14,6 +14,12 @@ config :xeon,
   ecto_repos: [Xeon.Repo],
   sheet_id: "1gqCHoE7dVKAcRoKhMvJjlNaozDpQGGTN_YDfE4QBfb0"
 
+config :xeon, Xeon.MongoRepo,
+  url: "mongodb://172.16.43.5:27017/xeon",
+  timeout: 60_000,
+  idle_interval: 10_000,
+  queue_target: 5_000
+
 config :xeon, Xeon.Repo, types: Xeon.PostgresTypes
 # Configures the mailer
 #

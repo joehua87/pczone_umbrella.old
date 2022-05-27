@@ -78,6 +78,27 @@
   warranty: 3m
   sale_price: 2_000_000
   stock: 10
+- kind: barebone
+  ref_code: dell-optiplex-7040-sff
+  sku: dell-optiplex-7040-sff/like-new
+  condition: Like new
+  warranty: 3m
+  sale_price: 1_900_000
+  stock: 10
+- kind: barebone
+  ref_code: hp-elitedesk-800-g2-mini
+  sku: hp-elitedesk-800-g2-mini/like-new
+  condition: Like new
+  warranty: 3m
+  sale_price: 1_900_000
+  stock: 10
+- kind: barebone
+  ref_code: hp-elitedesk-800-g2-mini-65w
+  sku: hp-elitedesk-800-g2-mini-65w/like-new
+  condition: Like new
+  warranty: 3m
+  sale_price: 2_100_000
+  stock: 10
 
 # Memory
 - kind: memory

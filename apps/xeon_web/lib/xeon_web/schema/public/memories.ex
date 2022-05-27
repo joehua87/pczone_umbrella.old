@@ -27,7 +27,7 @@ defmodule XeonWeb.Schema.Memories do
   end
 
   object :memory_queries do
-    field :memorys, non_null(:memory_list_result) do
+    field :memories, non_null(:memory_list_result) do
       arg :filter, :memory_filter_input
       arg :order_by, list_of(non_null(:order_by_input))
       arg :paging, :paging_input
