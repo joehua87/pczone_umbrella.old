@@ -40,6 +40,7 @@ defmodule XeonWeb.Schema.Motherboards do
 
   object :motherboard do
     field :id, non_null(:id)
+    field :slug, non_null(:string)
     field :name, non_null(:string)
     field :max_memory_capacity, non_null(:string)
     field :memory_slots, non_null(list_of(non_null(:memory_slot)))

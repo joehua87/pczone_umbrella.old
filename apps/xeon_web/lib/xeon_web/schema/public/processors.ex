@@ -6,6 +6,7 @@ defmodule XeonWeb.Schema.Processors do
   object :processor do
     field :id, non_null(:id)
     field :code, non_null(:string)
+    field :slug, non_null(:string)
     field :name, non_null(:string)
     field :sub, non_null(:string)
     field :collection_name, non_null(:string)

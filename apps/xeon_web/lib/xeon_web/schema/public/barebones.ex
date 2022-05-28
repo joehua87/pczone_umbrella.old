@@ -5,6 +5,7 @@ defmodule XeonWeb.Schema.Barebones do
 
   object :barebone do
     field :id, non_null(:id)
+    field :slug, non_null(:string)
     field :name, non_null(:string)
     field :motherboard_id, non_null(:id)
     field :chassis_id, non_null(:id)

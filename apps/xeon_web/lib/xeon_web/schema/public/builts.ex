@@ -145,6 +145,7 @@ defmodule XeonWeb.Schema.Builts do
 
   object :built do
     field :id, non_null(:id)
+    field :slug, non_null(:string)
     field :name, non_null(:string)
     field :barebone_id, :id
     field :motherboard_id, :id

@@ -4,6 +4,7 @@ defmodule XeonWeb.Schema.Memories do
 
   object :memory do
     field :id, non_null(:id)
+    field :slug, non_null(:string)
     field :name, non_null(:string)
     field :type, non_null(:string)
     field :capacity, non_null(:integer)

@@ -4,6 +4,7 @@ defmodule XeonWeb.Schema.Psus do
 
   object :psu do
     field :id, non_null(:id)
+    field :slug, non_null(:string)
     field :name, non_null(:string)
 
     field :brand,

@@ -9,6 +9,7 @@ defmodule XeonWeb.Schema.Chassises do
 
   object :chassis do
     field :id, non_null(:id)
+    field :slug, non_null(:string)
     field :name, non_null(:string)
     field :hard_drive_slots, non_null(list_of(non_null(:hard_drive_slot)))
 
