@@ -58,29 +58,31 @@ defmodule Xeon.Processors do
   end
 
   def import_processors() do
-    {:ok, conn} = Mongo.start_link(url: "mongodb://172.16.43.5:27017/xeon")
-    cursor = Mongo.find(conn, "Processor", %{"attributes.0" => %{"$exists" => true}})
-    entities = Enum.map(cursor, &parse_processor/1)
+    cursor = Mongo.find(:mongo, "Processor", %{"attributes.0" => %{"$exists" => true}})
 
-    entities
-    |> Enum.group_by(& &1.name)
-    |> Enum.map(fn {k, v} -> {k, length(v)} end)
-    |> Enum.filter(fn {_, v} -> v > 1 end)
+    entities =
+      [entity | _] =
+      cursor
+      |> Enum.map(&parse_processor/1)
+      |> Enum.uniq_by(& &1.slug)
 
-    Repo.insert_all(Processor, entities, on_conflict: :replace_all, conflict_target: [:url])
+    Repo.insert_all(Processor, entities,
+      on_conflict: {:replace, Map.keys(entity)},
+      conflict_target: [:slug]
+    )
   end
 
   def import_chipset_processors() do
     {:ok, conn} = Mongo.start_link(url: "mongodb://172.16.43.5:27017/xeon")
 
     cursor =
-      Mongo.find(conn, "IntelChipset", %{
+      Mongo.find(:mongo, "IntelChipset", %{
         "attributes.0" => %{"$exists" => true},
         "processors.0" => %{"$exists" => true}
       })
 
-    chipsets_map = Repo.all(from c in Xeon.Chipset, select: {c.name, c.id}) |> Enum.into(%{})
-    processors_map = Repo.all(from p in Processor, select: {p.url, p.id}) |> Enum.into(%{})
+    chipsets_map = Repo.all(from(c in Xeon.Chipset, select: {c.name, c.id})) |> Enum.into(%{})
+    processors_map = Repo.all(from(p in Processor, select: {p.url, p.id})) |> Enum.into(%{})
 
     chipset_processors =
       Enum.flat_map(

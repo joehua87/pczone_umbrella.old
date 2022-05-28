@@ -148,7 +148,6 @@ defmodule Xeon.Repo.Migrations.Initialize do
 
     # Slug must be unique index
     create unique_index(:processor, [:slug])
-    create unique_index(:processor, [:code])
     create unique_index(:processor, [:url])
 
     create table(:chipset_processor) do
