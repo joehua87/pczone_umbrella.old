@@ -40,6 +40,7 @@ defmodule XeonWeb.Schema.Processors do
     field :id, :id_filter_input
     field :chipset_id, :id_filter_input
     field :code, :string_filter_input
+    field :slug, :string_filter_input
     field :name, :string_filter_input
   end
 

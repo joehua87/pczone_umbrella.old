@@ -9,6 +9,12 @@ defmodule Xeon.Processors do
     Repo.one(from x in Processor, where: x.code == ^code, limit: 1)
   end
 
+  def get(%Dew.Filter{filter: filter}) do
+    Repo.one(from Processor, where: ^parse_filter(filter), limit: 1)
+  end
+
+  def get(attrs = %{}) when is_map(attrs), do: get(struct(Dew.Filter, attrs))
+
   def get(id) do
     Repo.get(Processor, id)
   end
@@ -73,8 +79,6 @@ defmodule Xeon.Processors do
   end
 
   def import_chipset_processors() do
-    {:ok, conn} = Mongo.start_link(url: "mongodb://172.16.43.5:27017/xeon")
-
     cursor =
       Mongo.find(:mongo, "IntelChipset", %{
         "attributes.0" => %{"$exists" => true},
