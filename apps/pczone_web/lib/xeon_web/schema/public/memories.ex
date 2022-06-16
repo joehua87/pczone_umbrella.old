@@ -8,9 +8,10 @@ defmodule PcZoneWeb.Schema.Memories do
     field :name, non_null(:string)
     field :type, non_null(:string)
     field :capacity, non_null(:integer)
+    field :brand_id, non_null(:id)
 
     field :brand,
-          :brand,
+          non_null(:brand),
           resolve: Helpers.dataloader(PcZoneWeb.Dataloader)
 
     field :products,
@@ -20,6 +21,7 @@ defmodule PcZoneWeb.Schema.Memories do
 
   input_object :memory_filter_input do
     field :name, :string_filter_input
+    field :type, :string_filter_input
   end
 
   object :memory_list_result do

@@ -10,11 +10,11 @@ defmodule PcZoneWeb.Schema.Barebones do
     field :motherboard_id, non_null(:id)
     field :chassis_id, non_null(:id)
     field :psu_id, :id
-    field :brand_id, :id
+    field :brand_id, non_null(:id)
     field :motherboard, non_null(:motherboard), resolve: Helpers.dataloader(PcZoneWeb.Dataloader)
     field :chassis, non_null(:chassis), resolve: Helpers.dataloader(PcZoneWeb.Dataloader)
     field :psu, :psu, resolve: Helpers.dataloader(PcZoneWeb.Dataloader)
-    field :brand, :brand, resolve: Helpers.dataloader(PcZoneWeb.Dataloader)
+    field :brand, non_null(:brand), resolve: Helpers.dataloader(PcZoneWeb.Dataloader)
     field :launch_date, :string
     field :raw_data, :json
     field :source_website, :string

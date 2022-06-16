@@ -6,9 +6,18 @@ defmodule PcZoneWeb.Schema.HardDrives do
     field :id, non_null(:id)
     field :slug, non_null(:string)
     field :name, non_null(:string)
+    field :capacity, non_null(:integer)
+    field :type, non_null(:string)
+    field :form_factor, :string
+    field :sequential_read, :integer
+    field :sequential_write, :integer
+    field :random_read, :integer
+    field :random_write, :integer
+    field :tbw, :integer
+    field :brand_id, non_null(:id)
 
     field :brand,
-          :brand,
+          non_null(:brand),
           resolve: Helpers.dataloader(PcZoneWeb.Dataloader)
 
     field :products,

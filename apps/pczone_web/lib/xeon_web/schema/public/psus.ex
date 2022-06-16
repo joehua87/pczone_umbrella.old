@@ -6,9 +6,10 @@ defmodule PcZoneWeb.Schema.Psus do
     field :id, non_null(:id)
     field :slug, non_null(:string)
     field :name, non_null(:string)
+    field :brand_id, non_null(:id)
 
     field :brand,
-          :brand,
+          non_null(:brand),
           resolve: Helpers.dataloader(PcZoneWeb.Dataloader)
   end
 end

@@ -6,9 +6,10 @@ defmodule PcZoneWeb.Schema.Gpus do
     field :id, non_null(:id)
     field :slug, non_null(:string)
     field :name, non_null(:string)
+    field :brand_id, non_null(:id)
 
     field :brand,
-          :brand,
+          non_null(:brand),
           resolve: Helpers.dataloader(PcZoneWeb.Dataloader)
 
     field :products,
@@ -17,7 +18,9 @@ defmodule PcZoneWeb.Schema.Gpus do
   end
 
   input_object :gpu_filter_input do
+    field :code, :string_filter_input
     field :name, :string_filter_input
+    field :type, :string_filter_input
   end
 
   object :gpu_list_result do

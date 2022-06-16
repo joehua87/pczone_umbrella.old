@@ -12,9 +12,10 @@ defmodule PcZoneWeb.Schema.Chassises do
     field :slug, non_null(:string)
     field :name, non_null(:string)
     field :hard_drive_slots, non_null(list_of(non_null(:hard_drive_slot)))
+    field :brand_id, non_null(:id)
 
     field :brand,
-          :brand,
+          non_null(:brand),
           resolve: Helpers.dataloader(PcZoneWeb.Dataloader)
   end
 end
