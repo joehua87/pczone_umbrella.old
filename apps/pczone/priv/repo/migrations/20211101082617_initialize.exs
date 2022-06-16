@@ -339,6 +339,39 @@ defmodule PcZone.Repo.Migrations.Initialize do
       add :price, :integer, null: false
       add :total, :integer, null: false
     end
+
+    create table(:simple_build) do
+      add :code, :string, null: false
+      add :name, :string, null: false
+      add :barebone_id, references(:barebone), null: false
+      add :barebone_product_id, references(:product), null: false
+    end
+
+    create unique_index(:simple_build, [:code])
+
+    create table(:simple_build_processor) do
+      add :simple_build_id, references(:simple_build), null: false
+      add :processor_id, references(:processor), null: false
+      add :processor_product_id, references(:product), null: false
+      add :gpu_id, references(:gpu)
+      add :gpu_product_id, references(:product)
+      add :processor_quantity, :integer, null: false, default: 1
+      add :gpu_quantity, :integer, null: false, default: 1
+    end
+
+    create table(:simple_build_memory) do
+      add :simple_build_id, references(:simple_build), null: false
+      add :memory_id, references(:memory), null: false
+      add :memory_product_id, references(:product), null: false
+      add :quantity, :integer, null: false, default: 1
+    end
+
+    create table(:simple_build_hard_drive) do
+      add :simple_build_id, references(:simple_build), null: false
+      add :hard_drive_id, references(:hard_drive), null: false
+      add :hard_drive_product_id, references(:product), null: false
+      add :quantity, :integer, null: false, default: 1
+    end
   end
 
   defp create_extension(names) when is_list(names) do
