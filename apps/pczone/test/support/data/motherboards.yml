@@ -34,7 +34,6 @@
   sata_slots:
     - processor_index: 1
       quantity: 1
-      form_factors: ['2.5', '3.5']
       supported_types: ['sata 3']
       type: 'sata 3'
 - chipset: Q170
@@ -115,3 +114,47 @@
     - i5-6500T
     - i5-6600T
     - i7-6700T
+
+- chipset: Q370
+  brand: dell
+  m2_slots:
+    - processor_index: 1
+      quantity: 1
+      type: 'nvme pcie 3.0 x4'
+      form_factors: ['m2 2230', 'm2 2280']
+      supported_types: ['nvme pcie 3.0 x4']
+  max_memory_capacity: 64
+  memory_slots:
+    - max_capacity:
+      processor_index: 1
+      quantity: 4
+      supported_types:
+        - dimm ddr4-2666
+      type: dimm ddr4-2666
+  name: Dell OptiPlex 7060 SFF
+  code: dell-optiplex-7060-sff
+  pci_slots:
+    - processor_index: 1
+      quantity: 1
+      supported_types: []
+      type: pci express 3.0 x4
+    - processor_index: 1
+      quantity: 1
+      supported_types: []
+      type: pci express 3.0 x16
+  processor_slots:
+    - heatsink_type:
+      quantity: 1
+      socket:
+  sata_slots:
+    - processor_index: 1
+      quantity: 1
+      supported_types: ['sata 3']
+      type: 'sata 3'
+  processors:
+    - i3-9100
+    - i3-9100F
+    - i5-9400
+    - i5-9400F
+    - i7-9700
+    - i7-9700F

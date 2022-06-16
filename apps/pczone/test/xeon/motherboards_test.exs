@@ -17,7 +17,7 @@ defmodule PcZone.MotherboardsTest do
     test "upsert" do
       entities = PcZone.Fixtures.read_fixture("motherboards.yml")
 
-      assert {3,
+      assert {4,
               [
                 %PcZone.Motherboard{
                   chipset_id: _,

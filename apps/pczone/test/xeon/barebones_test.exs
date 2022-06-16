@@ -29,7 +29,7 @@ defmodule PcZone.BarebonesTest do
     test "upsert" do
       entities = PcZone.Fixtures.read_fixture("barebones.yml")
 
-      assert {3,
+      assert {4,
               [
                 %PcZone.Barebone{
                   brand_id: _,

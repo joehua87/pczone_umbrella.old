@@ -18,3 +18,10 @@
   motherboard: dell-optiplex-7040-sff
   chassis: dell-optiplex-7040-sff
   psu: dell-optiplex-7040-sff
+
+- code: dell-optiplex-7060-sff
+  name: Dell OptiPlex 7060 SFF
+  brand: dell
+  motherboard: dell-optiplex-7060-sff
+  chassis: dell-optiplex-7060-sff
+  psu: dell-optiplex-7060-sff
