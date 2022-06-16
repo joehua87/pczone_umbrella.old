@@ -40,11 +40,9 @@ defmodule PcZone.SampleData do
       |> Enum.map(
         &(&1
           |> Map.put(:chipset, &1.chipset.code)
-          |> Map.delete(:chipset_id)
           |> Map.take(fields ++ [:chipset])
           |> Map.drop([:chipset_id]))
       )
-      |> IO.inspect()
 
     File.write(output, Jason.encode!(entities))
   end
