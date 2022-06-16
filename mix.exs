@@ -1,4 +1,4 @@
-defmodule Xeon.Umbrella.MixProject do
+defmodule PcZone.Umbrella.MixProject do
   use Mix.Project
 
   def project do

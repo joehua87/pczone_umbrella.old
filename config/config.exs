@@ -10,17 +10,17 @@
 import Config
 
 # Configure Mix tasks and generators
-config :xeon,
-  ecto_repos: [Xeon.Repo],
+config :pczone,
+  ecto_repos: [PcZone.Repo],
   sheet_id: "1gqCHoE7dVKAcRoKhMvJjlNaozDpQGGTN_YDfE4QBfb0"
 
-config :xeon, Xeon.MongoRepo,
-  url: "mongodb://172.16.43.5:27017/xeon",
+config :pczone, PcZone.MongoRepo,
+  url: "mongodb://172.16.43.5:27017/pczone",
   timeout: 60_000,
   idle_interval: 10_000,
   queue_target: 5_000
 
-config :xeon, Xeon.Repo, types: Xeon.PostgresTypes
+config :pczone, PcZone.Repo, types: PcZone.PostgresTypes
 # Configures the mailer
 #
 # By default it uses the "Local" adapter which stores the emails
@@ -28,20 +28,20 @@ config :xeon, Xeon.Repo, types: Xeon.PostgresTypes
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-config :xeon, Xeon.Mailer, adapter: Swoosh.Adapters.Local
+config :pczone, PcZone.Mailer, adapter: Swoosh.Adapters.Local
 
 # Swoosh API client is needed for adapters other than SMTP.
 config :swoosh, :api_client, false
 
-config :xeon_web,
-  ecto_repos: [Xeon.Repo],
-  generators: [context_app: :xeon]
+config :pczone_web,
+  ecto_repos: [PcZone.Repo],
+  generators: [context_app: :pczone]
 
 # Configures the endpoint
-config :xeon_web, XeonWeb.Endpoint,
+config :pczone_web, PcZoneWeb.Endpoint,
   url: [host: "localhost"],
-  render_errors: [view: XeonWeb.ErrorView, accepts: ~w(html json), layout: false],
-  pubsub_server: Xeon.PubSub,
+  render_errors: [view: PcZoneWeb.ErrorView, accepts: ~w(html json), layout: false],
+  pubsub_server: PcZone.PubSub,
   live_view: [signing_salt: "FG3Ddexk"]
 
 # Configure esbuild (the version is required)
@@ -50,7 +50,7 @@ config :esbuild,
   default: [
     args:
       ~w(src/app.ts --bundle --target=es2016 --loader:.woff=file --loader:.woff2=file --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
-    cd: Path.expand("../apps/xeon_web/assets", __DIR__),
+    cd: Path.expand("../apps/pczone_web/assets", __DIR__),
     env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
   ]
 
