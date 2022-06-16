@@ -23,6 +23,7 @@ defmodule PcZoneWeb.Schema do
   import_types PcZoneWeb.Schema.ScrapedEntries
 
   query do
+    import_fields :chipset_queries
     import_fields :processor_queries
     import_fields :motherboard_queries
     import_fields :memory_queries

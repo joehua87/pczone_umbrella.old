@@ -15,7 +15,7 @@ defmodule PcZoneWeb.Schema.ProductCategories do
   end
 
   object :product_category_list_result do
-    field :entities, non_null(list_of(non_null(:product)))
+    field :entities, non_null(list_of(non_null(:product_category)))
     field :paging, non_null(:paging)
   end
 
