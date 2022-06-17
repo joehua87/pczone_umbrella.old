@@ -5,7 +5,7 @@ defmodule PcZone.SimpleBuildProcessor do
   @derive Jason.Encoder
 
   @required [:simple_build_id, :processor_id, :processor_product_id]
-  @optional [:gpu_id, :gpu_product_id]
+  @optional [:gpu_id, :gpu_product_id, :processor_quantity, :gpu_quantity]
 
   schema "simple_build_processor" do
     belongs_to :simple_build, PcZone.SimpleBuild
@@ -13,6 +13,8 @@ defmodule PcZone.SimpleBuildProcessor do
     belongs_to :processor_product, PcZone.Product
     belongs_to :gpu, PcZone.Gpu
     belongs_to :gpu_product, PcZone.Product
+    field :processor_quantity, :integer, default: 1
+    field :gpu_quantity, :integer, default: 1
   end
 
   def changeset(entity, params) do

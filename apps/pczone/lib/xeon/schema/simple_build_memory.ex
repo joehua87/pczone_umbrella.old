@@ -5,14 +5,13 @@ defmodule PcZone.SimpleBuildMemory do
   @derive Jason.Encoder
 
   @required [:simple_build_id, :memory_id, :memory_product_id]
-  @optional []
+  @optional [:quantity]
 
   schema "simple_build_memory" do
     belongs_to :simple_build, PcZone.SimpleBuild
     belongs_to :memory, PcZone.Memory
     belongs_to :memory_product, PcZone.Product
-    belongs_to :gpu, PcZone.Gpu
-    belongs_to :gpu_product, PcZone.Product
+    field :quantity, :integer, default: 1
   end
 
   def changeset(entity, params) do

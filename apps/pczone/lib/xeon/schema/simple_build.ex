@@ -12,6 +12,9 @@ defmodule PcZone.SimpleBuild do
     field :name, :string, null: false
     belongs_to :barebone, PcZone.Barebone
     belongs_to :barebone_product, PcZone.Product
+    has_many :processors, PcZone.SimpleBuildProcessor
+    has_many :memories, PcZone.SimpleBuildMemory
+    has_many :hard_drives, PcZone.SimpleBuildHardDrive
   end
 
   def changeset(entity, params) do

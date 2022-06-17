@@ -181,8 +181,8 @@
   sale_price: 800_000
   stock: 10
 - kind: hard_drive
-  ref_code: 512-samsung-pm981
-  sku: 512-samsung-pm981/like-new
+  ref_code: 512gb-samsung-pm981
+  sku: 512gb-samsung-pm981/like-new
   condition: Like new
   warranty: 3m
   sale_price: 1_300_000
@@ -202,8 +202,8 @@
   sale_price: 750_000
   stock: 10
 - kind: hard_drive
-  ref_code: 512-samsung-pm981
-  sku: 512-samsung-pm981/95%
+  ref_code: 512gb-samsung-pm981
+  sku: 512gb-samsung-pm981/95%
   condition: 95%
   warranty: 3m
   sale_price: 1_200_000

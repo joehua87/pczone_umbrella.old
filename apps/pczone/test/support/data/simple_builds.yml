@@ -1,4 +1,5 @@
 - code: hp-elitedesk-800-g2-mini
+  name: Hp Elitedesk 800 G2 Mini
   barebone: hp-elitedesk-800-g2-mini
   barebone_product: hp-elitedesk-800-g2-mini/used
   processors:
@@ -6,8 +7,8 @@
       processor_product: i5-6500T/tray
     - processor: i5-6600T
       processor_product: i5-6600T/tray
-    - processor: i5-6700T
-      processor_product: i5-6700T/tray
+    - processor: i7-6700T
+      processor_product: i7-6700T/tray
   memories:
     - memory: 8gb-sodimm-ddr4-2133-mixed
       memory_product: 8gb-sodimm-ddr4-2133-mixed/used
