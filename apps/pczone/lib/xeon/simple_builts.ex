@@ -195,4 +195,86 @@ defmodule PcZone.SimpleBuilts do
     end)
     |> Repo.transaction()
   end
+
+  def generate_variants(%PcZone.SimpleBuilt{
+        barebone_id: barebone_id,
+        barebone_product: barebone_product,
+        processors: processors,
+        memories: memories,
+        hard_drives: hard_drives
+      }) do
+    memories_and_hard_drives =
+      memories
+      |> Enum.flat_map(fn %PcZone.SimpleBuiltMemory{
+                            memory_id: memory_id,
+                            memory_product: memory_product,
+                            quantity: memory_quantity
+                          } ->
+        hard_drives
+        |> Enum.map(fn %PcZone.SimpleBuiltHardDrive{
+                         hard_drive_id: hard_drive_id,
+                         hard_drive_product: hard_drive_product,
+                         quantity: hard_drive_quantity
+                       } ->
+          memory_amount = memory_quantity * memory_product.sale_price
+          hard_drive_amount = hard_drive_quantity * hard_drive_product.sale_price
+
+          %{
+            memory_id: memory_id,
+            memory_product_id: memory_product.id,
+            memory_price: memory_product.sale_price,
+            memory_quantity: memory_quantity,
+            memory_amount: memory_amount,
+            hard_drive_id: hard_drive_id,
+            hard_drive_product_id: hard_drive_product.id,
+            hard_drive_price: hard_drive_product.sale_price,
+            hard_drive_quantity: hard_drive_quantity,
+            hard_drive_amount: hard_drive_amount
+          }
+        end)
+      end)
+
+    processors
+    |> Enum.flat_map(fn %PcZone.SimpleBuiltProcessor{
+                          processor_id: processor_id,
+                          processor_product: processor_product,
+                          processor_quantity: processor_quantity,
+                          gpu_product: gpu_product,
+                          gpu_quantity: gpu_quantity
+                        } ->
+      processor_amount = processor_quantity * processor_product.sale_price
+
+      gpu =
+        case gpu_product do
+          nil ->
+            %{gpu_product_id: nil, gpu_price: 0, gpu_quantity: 0, gpu_amount: 0}
+
+          %{id: gpu_product_id, sale_price: gpu_price} ->
+            %{
+              gpu_product_id: gpu_product_id,
+              gpu_price: gpu_price,
+              gpu_quantity: gpu_quantity,
+              gpu_amount: gpu_price * gpu_price
+            }
+        end
+
+      Enum.map(memories_and_hard_drives, fn memory_and_hard_drive ->
+        %{
+          barebone_id: barebone_id,
+          barebone_product_id: barebone_product.id,
+          barebone_price: barebone_product.sale_price,
+          processor_id: processor_id,
+          processor_product_id: processor_product.id,
+          processor_price: processor_product.sale_price,
+          processor_quantity: processor_quantity,
+          processor_amount: processor_amount
+        }
+        |> Map.merge(gpu)
+        |> Map.merge(memory_and_hard_drive)
+      end)
+    end)
+  end
+
+  def generate_products(code) when is_bitstring(code) do
+  end
 end
