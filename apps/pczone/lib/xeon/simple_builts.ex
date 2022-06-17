@@ -1,4 +1,4 @@
-defmodule PcZone.SimpleBuilds do
+defmodule PcZone.SimpleBuilts do
   import Ecto.Query, only: [from: 2]
   alias PcZone.Repo
 
@@ -68,7 +68,7 @@ defmodule PcZone.SimpleBuilds do
       )
       |> Enum.into(%{})
 
-    simple_builds =
+    simple_builts =
       Enum.map(
         list,
         fn %{"code" => code, "name" => name, "barebone_product" => barebone_product_sku} ->
@@ -87,8 +87,8 @@ defmodule PcZone.SimpleBuilds do
       )
 
     Ecto.Multi.new()
-    |> Ecto.Multi.run(:simple_builds_map, fn _, _ ->
-      {_, result} = Repo.insert_all(PcZone.SimpleBuild, simple_builds, returning: true)
+    |> Ecto.Multi.run(:simple_builts_map, fn _, _ ->
+      {_, result} = Repo.insert_all(PcZone.SimpleBuilt, simple_builts, returning: true)
 
       {:ok,
        Enum.map(result, fn %{id: id, code: code} ->
@@ -96,7 +96,7 @@ defmodule PcZone.SimpleBuilds do
        end)
        |> Enum.into(%{})}
     end)
-    |> Ecto.Multi.run(:simple_build_processors, fn _, %{simple_builds_map: simple_builds_map} ->
+    |> Ecto.Multi.run(:simple_built_processors, fn _, %{simple_builts_map: simple_builts_map} ->
       entities =
         Enum.flat_map(list, fn %{"code" => code, "processors" => processors} ->
           Enum.map(
@@ -133,7 +133,7 @@ defmodule PcZone.SimpleBuilds do
                 end
 
               %{
-                simple_build_id: Map.get(simple_builds_map, code),
+                simple_built_id: Map.get(simple_builts_map, code),
                 processor_id: processor_id,
                 processor_product_id: processor_product_id,
                 processor_quantity: Map.get(params, "processor_quantity", 1),
@@ -145,11 +145,11 @@ defmodule PcZone.SimpleBuilds do
           )
         end)
 
-      with {inserted, _} <- Repo.insert_all(PcZone.SimpleBuildProcessor, entities) do
+      with {inserted, _} <- Repo.insert_all(PcZone.SimpleBuiltProcessor, entities) do
         {:ok, inserted}
       end
     end)
-    |> Ecto.Multi.run(:simple_build_memories, fn _, %{simple_builds_map: simple_builds_map} ->
+    |> Ecto.Multi.run(:simple_built_memories, fn _, %{simple_builts_map: simple_builts_map} ->
       entities =
         Enum.flat_map(list, fn %{"code" => code, "memories" => memories} ->
           Enum.map(memories, fn %{"memory_product" => memory_product_sku} = params ->
@@ -159,7 +159,7 @@ defmodule PcZone.SimpleBuilds do
             } = Map.get(memory_products_map, memory_product_sku)
 
             %{
-              simple_build_id: Map.get(simple_builds_map, code),
+              simple_built_id: Map.get(simple_builts_map, code),
               memory_id: memory_id,
               memory_product_id: memory_product_id,
               quantity: Map.get(params, "quantity", 1)
@@ -167,11 +167,11 @@ defmodule PcZone.SimpleBuilds do
           end)
         end)
 
-      with {inserted, _} <- Repo.insert_all(PcZone.SimpleBuildMemory, entities) do
+      with {inserted, _} <- Repo.insert_all(PcZone.SimpleBuiltMemory, entities) do
         {:ok, inserted}
       end
     end)
-    |> Ecto.Multi.run(:simple_build_hard_drives, fn _, %{simple_builds_map: simple_builds_map} ->
+    |> Ecto.Multi.run(:simple_built_hard_drives, fn _, %{simple_builts_map: simple_builts_map} ->
       entities =
         Enum.flat_map(list, fn %{"code" => code, "hard_drives" => hard_drives} ->
           Enum.map(hard_drives, fn %{"hard_drive_product" => hard_drive_product_sku} = params ->
@@ -181,7 +181,7 @@ defmodule PcZone.SimpleBuilds do
             } = Map.get(hard_drive_products_map, hard_drive_product_sku)
 
             %{
-              simple_build_id: Map.get(simple_builds_map, code),
+              simple_built_id: Map.get(simple_builts_map, code),
               hard_drive_id: hard_drive_id,
               hard_drive_product_id: hard_drive_product_id,
               quantity: Map.get(params, "quantity", 1)
@@ -189,7 +189,7 @@ defmodule PcZone.SimpleBuilds do
           end)
         end)
 
-      with {inserted, _} <- Repo.insert_all(PcZone.SimpleBuildHardDrive, entities) do
+      with {inserted, _} <- Repo.insert_all(PcZone.SimpleBuiltHardDrive, entities) do
         {:ok, inserted}
       end
     end)

@@ -1,4 +1,4 @@
-defmodule PcZone.SimpleBuild do
+defmodule PcZone.SimpleBuilt do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -7,14 +7,14 @@ defmodule PcZone.SimpleBuild do
   @required [:code, :name]
   @optional []
 
-  schema "simple_build" do
+  schema "simple_built" do
     field :code, :string, null: false
     field :name, :string, null: false
     belongs_to :barebone, PcZone.Barebone
     belongs_to :barebone_product, PcZone.Product
-    has_many :processors, PcZone.SimpleBuildProcessor
-    has_many :memories, PcZone.SimpleBuildMemory
-    has_many :hard_drives, PcZone.SimpleBuildHardDrive
+    has_many :processors, PcZone.SimpleBuiltProcessor
+    has_many :memories, PcZone.SimpleBuiltMemory
+    has_many :hard_drives, PcZone.SimpleBuiltHardDrive
   end
 
   def changeset(entity, params) do

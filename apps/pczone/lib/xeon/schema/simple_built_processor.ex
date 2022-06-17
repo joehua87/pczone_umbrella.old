@@ -1,14 +1,14 @@
-defmodule PcZone.SimpleBuildProcessor do
+defmodule PcZone.SimpleBuiltProcessor do
   use Ecto.Schema
   import Ecto.Changeset
 
   @derive Jason.Encoder
 
-  @required [:simple_build_id, :processor_id, :processor_product_id]
+  @required [:simple_built_id, :processor_id, :processor_product_id]
   @optional [:gpu_id, :gpu_product_id, :processor_quantity, :gpu_quantity]
 
-  schema "simple_build_processor" do
-    belongs_to :simple_build, PcZone.SimpleBuild
+  schema "simple_built_processor" do
+    belongs_to :simple_built, PcZone.SimpleBuilt
     belongs_to :processor, PcZone.Processor
     belongs_to :processor_product, PcZone.Product
     belongs_to :gpu, PcZone.Gpu

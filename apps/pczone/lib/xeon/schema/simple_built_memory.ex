@@ -1,16 +1,16 @@
-defmodule PcZone.SimpleBuildHardDrive do
+defmodule PcZone.SimpleBuiltMemory do
   use Ecto.Schema
   import Ecto.Changeset
 
   @derive Jason.Encoder
 
-  @required [:simple_build_id, :hard_drive_id, :hard_drive_product_id]
+  @required [:simple_built_id, :memory_id, :memory_product_id]
   @optional [:quantity]
 
-  schema "simple_build_hard_drive" do
-    belongs_to :simple_build, PcZone.SimpleBuild
-    belongs_to :hard_drive, PcZone.HardDrive
-    belongs_to :hard_drive_product, PcZone.Product
+  schema "simple_built_memory" do
+    belongs_to :simple_built, PcZone.SimpleBuilt
+    belongs_to :memory, PcZone.Memory
+    belongs_to :memory_product, PcZone.Product
     field :quantity, :integer, default: 1
   end
 

@@ -7,11 +7,9 @@ defmodule PcZone.ProductsTest do
       PcZone.Fixtures.get_fixtures_dir() |> PcZone.initial_data()
       products = PcZone.Fixtures.read_fixture("products.yml")
 
-      assert {31,
+      assert {32,
               [
-                %PcZone.Product{
-
-                }
+                %PcZone.Product{}
                 | _
               ]} = Products.upsert(products, returning: true)
     end

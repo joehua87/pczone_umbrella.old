@@ -340,17 +340,17 @@ defmodule PcZone.Repo.Migrations.Initialize do
       add :total, :integer, null: false
     end
 
-    create table(:simple_build) do
+    create table(:simple_built) do
       add :code, :string, null: false
       add :name, :string, null: false
       add :barebone_id, references(:barebone), null: false
       add :barebone_product_id, references(:product), null: false
     end
 
-    create unique_index(:simple_build, [:code])
+    create unique_index(:simple_built, [:code])
 
-    create table(:simple_build_processor) do
-      add :simple_build_id, references(:simple_build), null: false
+    create table(:simple_built_processor) do
+      add :simple_built_id, references(:simple_built), null: false
       add :processor_id, references(:processor), null: false
       add :processor_product_id, references(:product), null: false
       add :gpu_id, references(:gpu)
@@ -359,15 +359,15 @@ defmodule PcZone.Repo.Migrations.Initialize do
       add :gpu_quantity, :integer, null: false, default: 1
     end
 
-    create table(:simple_build_memory) do
-      add :simple_build_id, references(:simple_build), null: false
+    create table(:simple_built_memory) do
+      add :simple_built_id, references(:simple_built), null: false
       add :memory_id, references(:memory), null: false
       add :memory_product_id, references(:product), null: false
       add :quantity, :integer, null: false, default: 1
     end
 
-    create table(:simple_build_hard_drive) do
-      add :simple_build_id, references(:simple_build), null: false
+    create table(:simple_built_hard_drive) do
+      add :simple_built_id, references(:simple_built), null: false
       add :hard_drive_id, references(:hard_drive), null: false
       add :hard_drive_product_id, references(:product), null: false
       add :quantity, :integer, null: false, default: 1
