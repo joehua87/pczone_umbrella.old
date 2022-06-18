@@ -29,13 +29,19 @@ defmodule PcZone.SimpleBuiltsTest do
               ]} = create_simple_built()
     end
 
+    @tag :wip
     test "generate simple built products" do
       {:ok, [simple_built]} = create_simple_built()
-      simple_built_variants = SimpleBuilts.generate_variants(simple_built)
+
+      [simple_built_variant | _] =
+        simple_built_variants = SimpleBuilts.generate_variants(simple_built)
 
       assert length(simple_built_variants) ==
-               length(simple_built.processors) * length(simple_built.memories) *
+               length(simple_built.processors) *
+                 length(simple_built.memories) *
                  length(simple_built.hard_drives)
+
+      IO.inspect(simple_built_variant)
     end
   end
 

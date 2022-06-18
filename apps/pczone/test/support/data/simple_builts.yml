@@ -4,22 +4,30 @@
   barebone_product: hp-elitedesk-800-g2-mini/used
   processors:
     - processor: i5-6500T
+      processor_label: i5-6500T
       processor_product: i5-6500T/tray
     - processor: i5-6600T
+      processor_label: i5-6600T
       processor_product: i5-6600T/tray
     - processor: i7-6700T
+      processor_label: i7-6700T
       processor_product: i7-6700T/tray
   memories:
     - memory: 8gb-sodimm-ddr4-2133-mixed
       memory_product: 8gb-sodimm-ddr4-2133-mixed/used
       quantity: 1
+      label: 8GB
     - memory: 8gb-sodimm-ddr4-2133-mixed
       memory_product: 8gb-sodimm-ddr4-2133-mixed/used
       quantity: 2
+      label: 16GB
   hard_drives:
     - hard_drive: 256gb-samsung-pm981
       hard_drive_product: 256gb-samsung-pm981/95%
+      label: 256GB NVMe 95%
     - hard_drive: 256gb-samsung-pm981
       hard_drive_product: 256gb-samsung-pm981/like-new
+      label: 256GB NVMe
     - hard_drive: 512gb-samsung-pm981
       hard_drive_product: 512gb-samsung-pm981/like-new
+      label: 512GB NVMe

@@ -101,7 +101,10 @@ defmodule PcZone.SimpleBuilts do
         Enum.flat_map(list, fn %{"code" => code, "processors" => processors} ->
           Enum.map(
             processors,
-            fn %{"processor_product" => processor_product_sku} = params ->
+            fn %{
+                 "processor_product" => processor_product_sku,
+                 "processor_label" => processor_label
+               } = params ->
               %{
                 id: processor_id,
                 product_id: processor_product_id
@@ -137,9 +140,11 @@ defmodule PcZone.SimpleBuilts do
                 processor_id: processor_id,
                 processor_product_id: processor_product_id,
                 processor_quantity: Map.get(params, "processor_quantity", 1),
+                processor_label: processor_label,
                 gpu_id: gpu_id,
                 gpu_product_id: gpu_product_id,
-                gpu_quantity: gpu_quantity
+                gpu_quantity: gpu_quantity,
+                gpu_label: Map.get(params, "gpu_label")
               }
             end
           )
@@ -152,19 +157,23 @@ defmodule PcZone.SimpleBuilts do
     |> Ecto.Multi.run(:simple_built_memories, fn _, %{simple_builts_map: simple_builts_map} ->
       entities =
         Enum.flat_map(list, fn %{"code" => code, "memories" => memories} ->
-          Enum.map(memories, fn %{"memory_product" => memory_product_sku} = params ->
-            %{
-              id: memory_id,
-              product_id: memory_product_id
-            } = Map.get(memory_products_map, memory_product_sku)
+          Enum.map(
+            memories,
+            fn %{"memory_product" => memory_product_sku, "label" => label} = params ->
+              %{
+                id: memory_id,
+                product_id: memory_product_id
+              } = Map.get(memory_products_map, memory_product_sku)
 
-            %{
-              simple_built_id: Map.get(simple_builts_map, code),
-              memory_id: memory_id,
-              memory_product_id: memory_product_id,
-              quantity: Map.get(params, "quantity", 1)
-            }
-          end)
+              %{
+                simple_built_id: Map.get(simple_builts_map, code),
+                memory_id: memory_id,
+                memory_product_id: memory_product_id,
+                quantity: Map.get(params, "quantity", 1),
+                label: label
+              }
+            end
+          )
         end)
 
       with {inserted, _} <- Repo.insert_all(PcZone.SimpleBuiltMemory, entities) do
@@ -174,19 +183,23 @@ defmodule PcZone.SimpleBuilts do
     |> Ecto.Multi.run(:simple_built_hard_drives, fn _, %{simple_builts_map: simple_builts_map} ->
       entities =
         Enum.flat_map(list, fn %{"code" => code, "hard_drives" => hard_drives} ->
-          Enum.map(hard_drives, fn %{"hard_drive_product" => hard_drive_product_sku} = params ->
-            %{
-              id: hard_drive_id,
-              product_id: hard_drive_product_id
-            } = Map.get(hard_drive_products_map, hard_drive_product_sku)
+          Enum.map(
+            hard_drives,
+            fn %{"hard_drive_product" => hard_drive_product_sku, "label" => label} = params ->
+              %{
+                id: hard_drive_id,
+                product_id: hard_drive_product_id
+              } = Map.get(hard_drive_products_map, hard_drive_product_sku)
 
-            %{
-              simple_built_id: Map.get(simple_builts_map, code),
-              hard_drive_id: hard_drive_id,
-              hard_drive_product_id: hard_drive_product_id,
-              quantity: Map.get(params, "quantity", 1)
-            }
-          end)
+              %{
+                simple_built_id: Map.get(simple_builts_map, code),
+                hard_drive_id: hard_drive_id,
+                hard_drive_product_id: hard_drive_product_id,
+                quantity: Map.get(params, "quantity", 1),
+                label: label
+              }
+            end
+          )
         end)
 
       with {inserted, _} <- Repo.insert_all(PcZone.SimpleBuiltHardDrive, entities) do
@@ -208,16 +221,19 @@ defmodule PcZone.SimpleBuilts do
       |> Enum.flat_map(fn %PcZone.SimpleBuiltMemory{
                             memory_id: memory_id,
                             memory_product: memory_product,
-                            quantity: memory_quantity
+                            quantity: memory_quantity,
+                            label: memory_label
                           } ->
         hard_drives
         |> Enum.map(fn %PcZone.SimpleBuiltHardDrive{
                          hard_drive_id: hard_drive_id,
                          hard_drive_product: hard_drive_product,
-                         quantity: hard_drive_quantity
+                         quantity: hard_drive_quantity,
+                         label: hard_drive_label
                        } ->
           memory_amount = memory_quantity * memory_product.sale_price
           hard_drive_amount = hard_drive_quantity * hard_drive_product.sale_price
+          option_value_2 = Enum.join([memory_label, hard_drive_label], " - ")
 
           %{
             memory_id: memory_id,
@@ -229,7 +245,8 @@ defmodule PcZone.SimpleBuilts do
             hard_drive_product_id: hard_drive_product.id,
             hard_drive_price: hard_drive_product.sale_price,
             hard_drive_quantity: hard_drive_quantity,
-            hard_drive_amount: hard_drive_amount
+            hard_drive_amount: hard_drive_amount,
+            option_value_2: option_value_2
           }
         end)
       end)
@@ -239,8 +256,10 @@ defmodule PcZone.SimpleBuilts do
                           processor_id: processor_id,
                           processor_product: processor_product,
                           processor_quantity: processor_quantity,
+                          processor_label: processor_label,
                           gpu_product: gpu_product,
-                          gpu_quantity: gpu_quantity
+                          gpu_quantity: gpu_quantity,
+                          gpu_label: gpu_label
                         } ->
       processor_amount = processor_quantity * processor_product.sale_price
 
@@ -258,6 +277,11 @@ defmodule PcZone.SimpleBuilts do
             }
         end
 
+      gpu_label = if gpu_product != nil, do: gpu_label, else: nil
+
+      option_value_1 =
+        [processor_label, gpu_label] |> Enum.filter(&(&1 != nil)) |> Enum.join(" - ")
+
       Enum.map(memories_and_hard_drives, fn memory_and_hard_drive ->
         %{
           barebone_id: barebone_id,
@@ -267,7 +291,8 @@ defmodule PcZone.SimpleBuilts do
           processor_product_id: processor_product.id,
           processor_price: processor_product.sale_price,
           processor_quantity: processor_quantity,
-          processor_amount: processor_amount
+          processor_amount: processor_amount,
+          option_value_1: option_value_1
         }
         |> Map.merge(gpu)
         |> Map.merge(memory_and_hard_drive)
@@ -276,5 +301,17 @@ defmodule PcZone.SimpleBuilts do
   end
 
   def generate_products(code) when is_bitstring(code) do
+    Repo.one(
+      from b in PcZone.SimpleBuilt,
+        where: b.code == ^code,
+        preload: [
+          :barebone,
+          :barebone_product,
+          {:processors, [:processor_product, :gpu_product]},
+          {:memories, :memory_product},
+          {:hard_drives, :hard_drive_product}
+        ],
+        limit: 1
+    )
   end
 end

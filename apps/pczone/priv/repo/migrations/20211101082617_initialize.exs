@@ -353,10 +353,12 @@ defmodule PcZone.Repo.Migrations.Initialize do
       add :simple_built_id, references(:simple_built), null: false
       add :processor_id, references(:processor), null: false
       add :processor_product_id, references(:product), null: false
+      add :processor_quantity, :integer, null: false, default: 1
+      add :processor_label, :string
       add :gpu_id, references(:gpu)
       add :gpu_product_id, references(:product)
-      add :processor_quantity, :integer, null: false, default: 1
       add :gpu_quantity, :integer, null: false, default: 1
+      add :gpu_label, :string
     end
 
     create table(:simple_built_memory) do
@@ -364,6 +366,7 @@ defmodule PcZone.Repo.Migrations.Initialize do
       add :memory_id, references(:memory), null: false
       add :memory_product_id, references(:product), null: false
       add :quantity, :integer, null: false, default: 1
+      add :label, :string
     end
 
     create table(:simple_built_hard_drive) do
@@ -371,6 +374,7 @@ defmodule PcZone.Repo.Migrations.Initialize do
       add :hard_drive_id, references(:hard_drive), null: false
       add :hard_drive_product_id, references(:product), null: false
       add :quantity, :integer, null: false, default: 1
+      add :label, :string
     end
   end
 
