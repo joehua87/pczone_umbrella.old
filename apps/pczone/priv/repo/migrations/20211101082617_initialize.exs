@@ -343,8 +343,12 @@ defmodule PcZone.Repo.Migrations.Initialize do
     create table(:simple_built) do
       add :code, :string, null: false
       add :name, :string, null: false
+      add :images, :map, null: false, default: "[]"
+      add :body_template, :string, null: false
       add :barebone_id, references(:barebone), null: false
       add :barebone_product_id, references(:product), null: false
+      add :option_value_seperator, :string, null: false, default: " + "
+      add :option_types, {:array, :string}, null: false
     end
 
     create unique_index(:simple_built, [:code])

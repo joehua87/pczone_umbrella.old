@@ -71,7 +71,13 @@ defmodule PcZone.SimpleBuilts do
     simple_builts =
       Enum.map(
         list,
-        fn %{"code" => code, "name" => name, "barebone_product" => barebone_product_sku} ->
+        fn %{
+             "code" => code,
+             "name" => name,
+             "barebone_product" => barebone_product_sku,
+             "option_types" => option_types,
+             "option_value_seperator" => option_value_seperator
+           } ->
           %{
             id: barebone_id,
             product_id: barebone_product_id
@@ -81,7 +87,9 @@ defmodule PcZone.SimpleBuilts do
             code: code,
             name: name,
             barebone_id: barebone_id,
-            barebone_product_id: barebone_product_id
+            barebone_product_id: barebone_product_id,
+            option_types: option_types,
+            option_value_seperator: option_value_seperator
           }
         end
       )
@@ -214,7 +222,8 @@ defmodule PcZone.SimpleBuilts do
         barebone_product: barebone_product,
         processors: processors,
         memories: memories,
-        hard_drives: hard_drives
+        hard_drives: hard_drives,
+        option_value_seperator: seperator
       }) do
     memories_and_hard_drives =
       memories
@@ -233,7 +242,7 @@ defmodule PcZone.SimpleBuilts do
                        } ->
           memory_amount = memory_quantity * memory_product.sale_price
           hard_drive_amount = hard_drive_quantity * hard_drive_product.sale_price
-          option_value_2 = Enum.join([memory_label, hard_drive_label], " - ")
+          option_value_2 = Enum.join([memory_label, hard_drive_label], seperator)
 
           %{
             memory_id: memory_id,
@@ -280,22 +289,37 @@ defmodule PcZone.SimpleBuilts do
       gpu_label = if gpu_product != nil, do: gpu_label, else: nil
 
       option_value_1 =
-        [processor_label, gpu_label] |> Enum.filter(&(&1 != nil)) |> Enum.join(" - ")
+        [processor_label, gpu_label] |> Enum.filter(&(&1 != nil)) |> Enum.join(seperator)
 
       Enum.map(memories_and_hard_drives, fn memory_and_hard_drive ->
-        %{
-          barebone_id: barebone_id,
-          barebone_product_id: barebone_product.id,
-          barebone_price: barebone_product.sale_price,
-          processor_id: processor_id,
-          processor_product_id: processor_product.id,
-          processor_price: processor_product.sale_price,
-          processor_quantity: processor_quantity,
-          processor_amount: processor_amount,
-          option_value_1: option_value_1
-        }
-        |> Map.merge(gpu)
-        |> Map.merge(memory_and_hard_drive)
+        result =
+          %{
+            barebone_id: barebone_id,
+            barebone_product_id: barebone_product.id,
+            barebone_price: barebone_product.sale_price,
+            processor_id: processor_id,
+            processor_product_id: processor_product.id,
+            processor_price: processor_product.sale_price,
+            processor_quantity: processor_quantity,
+            processor_amount: processor_amount,
+            option_value_1: option_value_1
+          }
+          |> Map.merge(gpu)
+          |> Map.merge(memory_and_hard_drive)
+
+        total =
+          result
+          |> Map.take([
+            :barebone_price,
+            :gpu_amount,
+            :hard_drive_amount,
+            :memory_amount,
+            :processor_amount
+          ])
+          |> Map.values()
+          |> Enum.sum()
+
+        Map.put(result, :total, total)
       end)
     end)
   end
