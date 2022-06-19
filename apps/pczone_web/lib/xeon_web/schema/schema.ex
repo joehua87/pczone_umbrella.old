@@ -21,6 +21,7 @@ defmodule PcZoneWeb.Schema do
   import_types PcZoneWeb.Schema.ProductCategories
   import_types PcZoneWeb.Schema.Products
   import_types PcZoneWeb.Schema.ScrapedEntries
+  import_types PcZoneWeb.Schema.SimpleBuilts
 
   query do
     import_fields :chipset_queries
@@ -34,6 +35,7 @@ defmodule PcZoneWeb.Schema do
     import_fields :built_queries
     import_fields :barebone_queries
     import_fields :scraped_entry_queries
+    import_fields :simple_built_queries
   end
 
   mutation do
@@ -41,6 +43,7 @@ defmodule PcZoneWeb.Schema do
     import_fields :product_category_mutations
     import_fields :product_mutations
     import_fields :built_mutations
+    import_fields :simple_built_mutations
   end
 
   def context(ctx) do

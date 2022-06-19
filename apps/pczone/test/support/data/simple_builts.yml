@@ -33,3 +33,5 @@
     - hard_drive: 512gb-samsung-pm981
       hard_drive_product: 512gb-samsung-pm981/like-new
       label: 512GB NVMe
+  body_template: |
+    Mustache template for Hp EliteDesk 800

@@ -4,12 +4,13 @@ defmodule PcZone.SimpleBuilt do
 
   @derive Jason.Encoder
 
-  @required [:code, :name, :option_types]
-  @optional [:option_value_seperator]
+  @required [:code, :name, :option_types, :barebone_id, :barebone_product_id]
+  @optional [:option_value_seperator, :body_template]
 
   schema "simple_built" do
     field :code, :string, null: false
     field :name, :string, null: false
+    field :body_template, :string, null: false
     field :option_types, {:array, :string}, null: false
     field :option_value_seperator, :string, null: false, default: " + "
     belongs_to :barebone, PcZone.Barebone

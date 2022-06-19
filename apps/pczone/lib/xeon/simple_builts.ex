@@ -1,6 +1,32 @@
 defmodule PcZone.SimpleBuilts do
-  import Ecto.Query, only: [from: 2]
+  import Ecto.Query, only: [where: 2, from: 2]
+  import Dew.FilterParser
   alias PcZone.Repo
+
+  def get(id) do
+    Repo.get(PcZone.SimpleBuilt, id)
+  end
+
+  def get_by_code(code) do
+    Repo.one(from PcZone.SimpleBuilt, where: [code: ^code], limit: 1)
+  end
+
+  def list(attrs \\ %{})
+
+  def list(%Dew.Filter{
+        filter: filter,
+        paging: paging,
+        selection: selection,
+        order_by: order_by
+      }) do
+    PcZone.SimpleBuilt
+    |> where(^parse_filter(filter))
+    |> select_fields(selection, [])
+    |> sort_by(order_by, [])
+    |> Repo.paginate(paging)
+  end
+
+  def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
 
   def upsert(list) do
     barebone_product_skus =
@@ -74,6 +100,7 @@ defmodule PcZone.SimpleBuilts do
         fn %{
              "code" => code,
              "name" => name,
+             "body_template" => body_template,
              "barebone_product" => barebone_product_sku,
              "option_types" => option_types,
              "option_value_seperator" => option_value_seperator
@@ -86,6 +113,7 @@ defmodule PcZone.SimpleBuilts do
           %{
             code: code,
             name: name,
+            body_template: body_template,
             barebone_id: barebone_id,
             barebone_product_id: barebone_product_id,
             option_types: option_types,
@@ -94,127 +122,133 @@ defmodule PcZone.SimpleBuilts do
         end
       )
 
-    Ecto.Multi.new()
-    |> Ecto.Multi.run(:simple_builts_map, fn _, _ ->
-      {_, result} = Repo.insert_all(PcZone.SimpleBuilt, simple_builts, returning: true)
+    multi =
+      Ecto.Multi.new()
+      |> Ecto.Multi.run(:simple_builts_map, fn _, _ ->
+        {_, result} = Repo.insert_all(PcZone.SimpleBuilt, simple_builts, returning: true)
 
-      {:ok,
-       Enum.map(result, fn %{id: id, code: code} ->
-         {code, id}
-       end)
-       |> Enum.into(%{})}
-    end)
-    |> Ecto.Multi.run(:simple_built_processors, fn _, %{simple_builts_map: simple_builts_map} ->
-      entities =
-        Enum.flat_map(list, fn %{"code" => code, "processors" => processors} ->
-          Enum.map(
-            processors,
-            fn %{
-                 "processor_product" => processor_product_sku,
-                 "processor_label" => processor_label
-               } = params ->
-              %{
-                id: processor_id,
-                product_id: processor_product_id
-              } = Map.get(processor_products_map, processor_product_sku)
+        {:ok,
+         Enum.map(result, fn %{id: id, code: code} ->
+           {code, id}
+         end)
+         |> Enum.into(%{})}
+      end)
+      |> Ecto.Multi.run(:simple_built_processors, fn _, %{simple_builts_map: simple_builts_map} ->
+        entities =
+          Enum.flat_map(list, fn %{"code" => code, "processors" => processors} ->
+            Enum.map(
+              processors,
+              fn %{
+                   "processor_product" => processor_product_sku,
+                   "processor_label" => processor_label
+                 } = params ->
+                %{
+                  id: processor_id,
+                  product_id: processor_product_id
+                } = Map.get(processor_products_map, processor_product_sku)
 
-              %{
-                gpu_id: gpu_id,
-                gpu_product_id: gpu_product_id,
-                gpu_quantity: gpu_quantity
-              } =
-                with "" <> gpu_product_sku <- Map.get(params, "gpu_product_sku") do
-                  %{
-                    id: gpu_id,
-                    product_id: gpu_product_id
-                  } = Map.get(gpu_products_map, gpu_product_sku)
-
-                  %{
-                    gpu_id: gpu_id,
-                    gpu_product_id: gpu_product_id,
-                    gpu_quantity: Map.get(params, "gpu_quantity", 1)
-                  }
-                else
-                  _ ->
+                %{
+                  gpu_id: gpu_id,
+                  gpu_product_id: gpu_product_id,
+                  gpu_quantity: gpu_quantity
+                } =
+                  with "" <> gpu_product_sku <- Map.get(params, "gpu_product_sku") do
                     %{
-                      gpu_id: nil,
-                      gpu_product_id: nil,
-                      gpu_quantity: 0
+                      id: gpu_id,
+                      product_id: gpu_product_id
+                    } = Map.get(gpu_products_map, gpu_product_sku)
+
+                    %{
+                      gpu_id: gpu_id,
+                      gpu_product_id: gpu_product_id,
+                      gpu_quantity: Map.get(params, "gpu_quantity", 1)
                     }
-                end
+                  else
+                    _ ->
+                      %{
+                        gpu_id: nil,
+                        gpu_product_id: nil,
+                        gpu_quantity: 0
+                      }
+                  end
 
-              %{
-                simple_built_id: Map.get(simple_builts_map, code),
-                processor_id: processor_id,
-                processor_product_id: processor_product_id,
-                processor_quantity: Map.get(params, "processor_quantity", 1),
-                processor_label: processor_label,
-                gpu_id: gpu_id,
-                gpu_product_id: gpu_product_id,
-                gpu_quantity: gpu_quantity,
-                gpu_label: Map.get(params, "gpu_label")
-              }
-            end
-          )
-        end)
+                %{
+                  simple_built_id: Map.get(simple_builts_map, code),
+                  processor_id: processor_id,
+                  processor_product_id: processor_product_id,
+                  processor_quantity: Map.get(params, "processor_quantity", 1),
+                  processor_label: processor_label,
+                  gpu_id: gpu_id,
+                  gpu_product_id: gpu_product_id,
+                  gpu_quantity: gpu_quantity,
+                  gpu_label: Map.get(params, "gpu_label")
+                }
+              end
+            )
+          end)
 
-      with {inserted, _} <- Repo.insert_all(PcZone.SimpleBuiltProcessor, entities) do
-        {:ok, inserted}
-      end
-    end)
-    |> Ecto.Multi.run(:simple_built_memories, fn _, %{simple_builts_map: simple_builts_map} ->
-      entities =
-        Enum.flat_map(list, fn %{"code" => code, "memories" => memories} ->
-          Enum.map(
-            memories,
-            fn %{"memory_product" => memory_product_sku, "label" => label} = params ->
-              %{
-                id: memory_id,
-                product_id: memory_product_id
-              } = Map.get(memory_products_map, memory_product_sku)
+        with {inserted, _} <- Repo.insert_all(PcZone.SimpleBuiltProcessor, entities) do
+          {:ok, inserted}
+        end
+      end)
+      |> Ecto.Multi.run(:simple_built_memories, fn _, %{simple_builts_map: simple_builts_map} ->
+        entities =
+          Enum.flat_map(list, fn %{"code" => code, "memories" => memories} ->
+            Enum.map(
+              memories,
+              fn %{"memory_product" => memory_product_sku, "label" => label} = params ->
+                %{
+                  id: memory_id,
+                  product_id: memory_product_id
+                } = Map.get(memory_products_map, memory_product_sku)
 
-              %{
-                simple_built_id: Map.get(simple_builts_map, code),
-                memory_id: memory_id,
-                memory_product_id: memory_product_id,
-                quantity: Map.get(params, "quantity", 1),
-                label: label
-              }
-            end
-          )
-        end)
+                %{
+                  simple_built_id: Map.get(simple_builts_map, code),
+                  memory_id: memory_id,
+                  memory_product_id: memory_product_id,
+                  quantity: Map.get(params, "quantity", 1),
+                  label: label
+                }
+              end
+            )
+          end)
 
-      with {inserted, _} <- Repo.insert_all(PcZone.SimpleBuiltMemory, entities) do
-        {:ok, inserted}
-      end
-    end)
-    |> Ecto.Multi.run(:simple_built_hard_drives, fn _, %{simple_builts_map: simple_builts_map} ->
-      entities =
-        Enum.flat_map(list, fn %{"code" => code, "hard_drives" => hard_drives} ->
-          Enum.map(
-            hard_drives,
-            fn %{"hard_drive_product" => hard_drive_product_sku, "label" => label} = params ->
-              %{
-                id: hard_drive_id,
-                product_id: hard_drive_product_id
-              } = Map.get(hard_drive_products_map, hard_drive_product_sku)
+        with {inserted, _} <- Repo.insert_all(PcZone.SimpleBuiltMemory, entities) do
+          {:ok, inserted}
+        end
+      end)
+      |> Ecto.Multi.run(:simple_built_hard_drives, fn _,
+                                                      %{simple_builts_map: simple_builts_map} ->
+        entities =
+          Enum.flat_map(list, fn %{"code" => code, "hard_drives" => hard_drives} ->
+            Enum.map(
+              hard_drives,
+              fn %{"hard_drive_product" => hard_drive_product_sku, "label" => label} = params ->
+                %{
+                  id: hard_drive_id,
+                  product_id: hard_drive_product_id
+                } = Map.get(hard_drive_products_map, hard_drive_product_sku)
 
-              %{
-                simple_built_id: Map.get(simple_builts_map, code),
-                hard_drive_id: hard_drive_id,
-                hard_drive_product_id: hard_drive_product_id,
-                quantity: Map.get(params, "quantity", 1),
-                label: label
-              }
-            end
-          )
-        end)
+                %{
+                  simple_built_id: Map.get(simple_builts_map, code),
+                  hard_drive_id: hard_drive_id,
+                  hard_drive_product_id: hard_drive_product_id,
+                  quantity: Map.get(params, "quantity", 1),
+                  label: label
+                }
+              end
+            )
+          end)
 
-      with {inserted, _} <- Repo.insert_all(PcZone.SimpleBuiltHardDrive, entities) do
-        {:ok, inserted}
-      end
-    end)
-    |> Repo.transaction()
+        with {inserted, _} <- Repo.insert_all(PcZone.SimpleBuiltHardDrive, entities) do
+          {:ok, inserted}
+        end
+      end)
+
+    with {:ok, _} <- Repo.transaction(multi) do
+      codes = Enum.map(list, & &1["code"])
+      {:ok, Repo.all(from b in PcZone.SimpleBuilt, where: b.code in ^codes)}
+    end
   end
 
   def generate_variants(%PcZone.SimpleBuilt{
@@ -324,7 +358,7 @@ defmodule PcZone.SimpleBuilts do
     end)
   end
 
-  def generate_products(code) when is_bitstring(code) do
+  def generate_variants(code) when is_bitstring(code) do
     Repo.one(
       from b in PcZone.SimpleBuilt,
         where: b.code == ^code,
@@ -337,5 +371,16 @@ defmodule PcZone.SimpleBuilts do
         ],
         limit: 1
     )
+    |> generate_variants()
+  end
+
+  def parse_filter(filter) do
+    filter
+    |> Enum.reduce(nil, fn {field, value}, acc ->
+      case field do
+        :name -> parse_string_filter(acc, field, value)
+        _ -> acc
+      end
+    end) || true
   end
 end
