@@ -43,6 +43,8 @@ defmodule PcZoneWeb.Schema do
 
   mutation do
     import_fields :brand_mutations
+    import_fields :chassis_mutations
+    import_fields :psu_mutations
     import_fields :motherboard_mutations
     import_fields :product_category_mutations
     import_fields :product_mutations

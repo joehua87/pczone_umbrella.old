@@ -50,4 +50,16 @@ defmodule PcZoneWeb.Schema.Chassises do
       end)
     end
   end
+
+  object :chassis_mutations do
+    field :upsert_chassises, non_null(list_of(non_null(:chassis))) do
+      arg :data, non_null(:json)
+
+      resolve(fn %{data: data}, _info ->
+        with {_, result} <- PcZone.Chassises.upsert(data, returning: true) do
+          {:ok, result}
+        end
+      end)
+    end
+  end
 end

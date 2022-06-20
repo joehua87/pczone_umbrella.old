@@ -38,7 +38,7 @@ defmodule PcZone.Psus do
       PcZone.Psu,
       entities,
       Keyword.merge(opts,
-        on_conflict: :replace_all,
+        on_conflict: {:replace, [:slug, :code, :name, :wattage, :form_factor, :brand_id]},
         conflict_target: [:slug]
       )
     )

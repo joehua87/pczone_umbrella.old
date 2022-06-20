@@ -43,4 +43,16 @@ defmodule PcZoneWeb.Schema.Psus do
       end)
     end
   end
+
+  object :psu_mutations do
+    field :upsert_psus, non_null(list_of(non_null(:psu))) do
+      arg :data, non_null(:json)
+
+      resolve(fn %{data: data}, _info ->
+        with {_, result} <- PcZone.Psus.upsert(data, returning: true) do
+          {:ok, result}
+        end
+      end)
+    end
+  end
 end
