@@ -24,6 +24,7 @@ defmodule PcZone.ChassisesTest do
                   form_factor: "sff",
                   id: _,
                   name: "Dell OptiPlex 7040 SFF",
+                  hard_drive_slots: [%{form_factor: "3.5", quantity: 1}],
                   psu_form_factors: []
                 }
                 | _

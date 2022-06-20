@@ -29,7 +29,6 @@ defmodule PcZone.SimpleBuiltsTest do
               ]} = create_simple_built()
     end
 
-    @tag :wip
     test "generate simple built products" do
       {:ok, [simple_built]} = create_simple_built()
 

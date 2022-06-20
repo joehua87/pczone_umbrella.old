@@ -26,6 +26,8 @@ defmodule PcZoneWeb.Schema do
   query do
     import_fields :chipset_queries
     import_fields :processor_queries
+    import_fields :chassis_queries
+    import_fields :psu_queries
     import_fields :motherboard_queries
     import_fields :memory_queries
     import_fields :hard_drive_queries
