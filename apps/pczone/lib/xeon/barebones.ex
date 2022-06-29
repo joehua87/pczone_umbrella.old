@@ -49,7 +49,25 @@ defmodule PcZone.Barebones do
     Repo.insert_all(
       Barebone,
       entities,
-      Keyword.merge(opts, on_conflict: :replace_all, conflict_target: [:slug])
+      Keyword.merge(opts,
+        on_conflict:
+          {:replace,
+           [
+             :slug,
+             :code,
+             :name,
+             :motherboard_id,
+             :chassis_id,
+             :brand_id,
+             :processor_id,
+             :launch_date,
+             :psu_id,
+             :raw_data,
+             :source_website,
+             :source_url
+           ]},
+        conflict_target: [:slug]
+      )
     )
   end
 

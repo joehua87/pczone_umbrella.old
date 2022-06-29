@@ -68,4 +68,16 @@ defmodule PcZoneWeb.Schema.Barebones do
       end)
     end
   end
+
+  object :barebone_mutations do
+    field :upsert_barebones, non_null(list_of(non_null(:barebone))) do
+      arg :data, non_null(:json)
+
+      resolve(fn %{data: data}, _info ->
+        with {_, result} <- PcZone.Barebones.upsert(data, returning: true) do
+          {:ok, result}
+        end
+      end)
+    end
+  end
 end

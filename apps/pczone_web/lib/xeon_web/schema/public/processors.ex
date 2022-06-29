@@ -83,4 +83,16 @@ defmodule PcZoneWeb.Schema.Processors do
       end)
     end
   end
+
+  object :processor_mutations do
+    field :upsert_processors, non_null(list_of(non_null(:processor))) do
+      arg :data, non_null(:json)
+
+      resolve(fn %{data: data}, _info ->
+        with {_, result} <- PcZone.Processors.upsert(data, returning: true) do
+          {:ok, result}
+        end
+      end)
+    end
+  end
 end

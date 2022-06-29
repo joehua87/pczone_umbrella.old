@@ -52,7 +52,42 @@ defmodule PcZone.Processors do
     Repo.insert_all(
       Processor,
       entities,
-      Keyword.merge(opts, on_conflict: :replace_all, conflict_target: [:url])
+      Keyword.merge(opts,
+        on_conflict:
+          {:replace,
+           [
+             :code,
+             :slug,
+             :name,
+             :sub,
+             :code_name,
+             :collection_name,
+             :launch_date,
+             :status,
+             :vertical_segment,
+             :cache_size,
+             :cores,
+             :url,
+             :memory_types,
+             :socket,
+             :case_temperature,
+             :lithography,
+             :base_frequency,
+             :tdp_up_base_frequency,
+             :tdp_down_base_frequency,
+             :max_turbo_frequency,
+             :tdp,
+             :tdp_up,
+             :tdp_down,
+             :threads,
+             :processor_graphics,
+             :gpu_id,
+             :memory_types,
+             :ecc_memory_supported,
+             :attributes
+           ]},
+        conflict_target: [:url]
+      )
     )
   end
 

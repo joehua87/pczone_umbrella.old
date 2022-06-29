@@ -119,6 +119,16 @@ defmodule PcZoneWeb.Schema.Motherboards do
   end
 
   object :motherboard_mutations do
+    field :upsert_motherboards, non_null(list_of(non_null(:motherboard))) do
+      arg :data, non_null(:json)
+
+      resolve(fn %{data: data}, _info ->
+        with {_, result} <- PcZone.Motherboards.upsert(data, returning: true) do
+          {:ok, result}
+        end
+      end)
+    end
+
     field :add_motherboard_processor, non_null(:integer) do
       arg :data, non_null(:motherboard_processor_input)
 

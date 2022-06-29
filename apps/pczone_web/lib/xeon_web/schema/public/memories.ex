@@ -47,4 +47,16 @@ defmodule PcZoneWeb.Schema.Memories do
       end)
     end
   end
+
+  object :memory_mutations do
+    field :upsert_memories, non_null(list_of(non_null(:memory))) do
+      arg :data, non_null(:json)
+
+      resolve(fn %{data: data}, _info ->
+        with {_, result} <- PcZone.Memories.upsert(data, returning: true) do
+          {:ok, result}
+        end
+      end)
+    end
+  end
 end

@@ -50,7 +50,32 @@ defmodule PcZone.Motherboards do
     Repo.insert_all(
       Motherboard,
       entities,
-      Keyword.merge(opts, on_conflict: :replace_all, conflict_target: [:slug])
+      Keyword.merge(opts,
+        on_conflict:
+          {:replace,
+           [
+             :slug,
+             :code,
+             :name,
+             :max_memory_capacity,
+             :chipset_id,
+             :brand_id,
+             :note,
+             :chassis_form_factors,
+             :memory_slots_count,
+             :processor_slots_count,
+             :sata_slots_count,
+             :m2_slots_count,
+             :pci_slots_count,
+             :memory_slots,
+             :processor_slots,
+             :sata_slots,
+             :m2_slots,
+             :pci_slots,
+             :attributes
+           ]},
+        conflict_target: [:slug]
+      )
     )
   end
 

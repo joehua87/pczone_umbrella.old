@@ -38,7 +38,7 @@ defmodule PcZone.Memories do
       PcZone.Memory,
       entities,
       Keyword.merge(opts,
-        on_conflict: :replace_all,
+        on_conflict: {:replace, [:slug, :code, :name, :capacity, :type, :brand_id, :description]},
         conflict_target: [:slug]
       )
     )
