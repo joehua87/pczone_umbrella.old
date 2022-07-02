@@ -15,7 +15,7 @@ config :pczone,
   sheet_id: "1gqCHoE7dVKAcRoKhMvJjlNaozDpQGGTN_YDfE4QBfb0"
 
 config :pczone, PcZone.MongoRepo,
-  url: "mongodb://172.16.43.5:27017/pczone",
+  url: "mongodb://localhost:27017/pczone",
   timeout: 60_000,
   idle_interval: 10_000,
   queue_target: 5_000

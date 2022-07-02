@@ -9,7 +9,7 @@ config :pczone, PcZone.Repo,
   username: "postgres",
   password: "postgres",
   database: "pczone_test#{System.get_env("MIX_TEST_PARTITION")}",
-  hostname: "dev.local",
+  hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: 10
 

@@ -5,7 +5,7 @@ config :pczone, PcZone.Repo,
   username: "postgres",
   password: "postgres",
   database: "pczone_dev",
-  hostname: "dev.local",
+  hostname: "localhost",
   port: 5432,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
