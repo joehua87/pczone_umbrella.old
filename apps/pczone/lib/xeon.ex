@@ -18,6 +18,7 @@ defmodule PcZone do
     motherboards = dir |> Path.join("motherboards.yml") |> YamlElixir.read_from_file!()
     processors = dir |> Path.join("processors.yml") |> YamlElixir.read_from_file!()
     psus = dir |> Path.join("psus.yml") |> YamlElixir.read_from_file!()
+    heatsinks = dir |> Path.join("heatsinks.yml") |> YamlElixir.read_from_file!()
     products = dir |> Path.join("products.yml") |> YamlElixir.read_from_file!()
 
     PcZone.Brands.upsert(brands)
@@ -29,6 +30,7 @@ defmodule PcZone do
     PcZone.Gpus.upsert(gpus)
     PcZone.Chassises.upsert(chassises)
     PcZone.Psus.upsert(psus)
+    PcZone.Heatsinks.upsert(heatsinks)
     PcZone.Barebones.upsert(barebones)
     PcZone.Chipsets.upsert_chipset_processors(chipsets)
     PcZone.Motherboards.upsert_motherboard_processors(motherboards)

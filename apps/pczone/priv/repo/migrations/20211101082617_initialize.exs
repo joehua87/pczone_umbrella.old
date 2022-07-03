@@ -73,6 +73,17 @@ defmodule PcZone.Repo.Migrations.Initialize do
     create unique_index(:psu, [:slug])
     create unique_index(:psu, [:code])
 
+    create table(:heatsink) do
+      add :slug, :string, null: false
+      add :code, :string, null: false
+      add :name, :string, null: false
+      add :supported_types, {:array, :string}, null: false
+      add :brand_id, references(:brand), null: false
+    end
+
+    create unique_index(:heatsink, [:slug])
+    create unique_index(:heatsink, [:code])
+
     create table(:motherboard) do
       add :slug, :string, null: false
       add :code, :string, null: false
@@ -253,6 +264,7 @@ defmodule PcZone.Repo.Migrations.Initialize do
       add :gpu_id, references(:gpu)
       add :chassis_id, references(:chassis)
       add :psu_id, references(:psu)
+      add :heatsink_id, references(:heatsink)
     end
 
     create unique_index(:product, [:sku])
@@ -278,6 +290,15 @@ defmodule PcZone.Repo.Migrations.Initialize do
     create table(:built_psu) do
       add :built_id, references(:built), null: false
       add :psu_id, references(:psu), null: false
+      add :product_id, references(:product), null: false
+      add :quantity, :integer, null: false
+      add :price, :integer, null: false
+      add :total, :integer, null: false
+    end
+
+    create table(:built_heatsink) do
+      add :built_id, references(:built), null: false
+      add :heatsink_id, references(:heatsink), null: false
       add :product_id, references(:product), null: false
       add :quantity, :integer, null: false
       add :price, :integer, null: false

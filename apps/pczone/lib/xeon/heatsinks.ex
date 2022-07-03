@@ -1,4 +1,4 @@
-defmodule PcZone.Psus do
+defmodule PcZone.Heatsinks do
   import Ecto.Query, only: [from: 2, where: 2]
   import Dew.FilterParser
   alias PcZone.Repo
@@ -6,7 +6,7 @@ defmodule PcZone.Psus do
   def get(attrs = %{}) when is_map(attrs), do: get(struct(Dew.Filter, attrs))
 
   def get(id) do
-    Repo.get(PcZone.Psu, id)
+    Repo.get(PcZone.Heatsink, id)
   end
 
   def list(attrs \\ %{})
@@ -17,7 +17,7 @@ defmodule PcZone.Psus do
         selection: selection,
         order_by: order_by
       }) do
-    PcZone.Psu
+    PcZone.Heatsink
     |> where(^parse_filter(filter))
     |> select_fields(selection, [])
     |> sort_by(order_by, [])
@@ -27,7 +27,7 @@ defmodule PcZone.Psus do
   def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
 
   def get_map_by_slug() do
-    Repo.all(from c in PcZone.Psu, select: {c.slug, c.id}) |> Enum.into(%{})
+    Repo.all(from c in PcZone.Heatsink, select: {c.slug, c.id}) |> Enum.into(%{})
   end
 
   def upsert(entities, opts \\ []) do
@@ -35,10 +35,10 @@ defmodule PcZone.Psus do
     entities = Enum.map(entities, &parse_entity_for_upsert(&1, brands_map: brands_map))
 
     Repo.insert_all(
-      PcZone.Psu,
+      PcZone.Heatsink,
       entities,
       Keyword.merge(opts,
-        on_conflict: {:replace, [:code, :name, :wattage, :form_factor, :brand_id]},
+        on_conflict: {:replace, [:code, :name, :supported_types, :brand_id]},
         conflict_target: [:slug]
       )
     )
@@ -53,7 +53,7 @@ defmodule PcZone.Psus do
         Map.put(params, "brand_id", brands_map[brand])
     end
     |> PcZone.Helpers.ensure_slug()
-    |> PcZone.Psu.new_changeset()
+    |> PcZone.Heatsink.new_changeset()
     |> PcZone.Helpers.get_changeset_changes()
   end
 

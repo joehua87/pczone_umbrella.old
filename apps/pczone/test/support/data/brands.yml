@@ -41,8 +41,14 @@
 - slug: amd
   name: AMD
 
+- slug: noctua
+  name: Noctua
+
 - slug: no-name
   name: No name
 
 - slug: mixed
   name: Mixed
+
+- slug: oem
+  name: OEM

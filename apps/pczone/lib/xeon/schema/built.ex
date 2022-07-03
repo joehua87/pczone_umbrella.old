@@ -33,6 +33,7 @@ defmodule PcZone.Built do
     field :usable, :boolean, default: false
     field :total, :integer
     has_many :built_psus, PcZone.BuiltPsu
+    has_many :built_heatsinks, PcZone.BuiltHeatsink
     has_many :built_extension_devices, PcZone.BuiltExtensionDevice
     has_many :built_processors, PcZone.BuiltProcessor
     has_many :built_memories, PcZone.BuiltMemory

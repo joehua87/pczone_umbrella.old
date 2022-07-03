@@ -82,7 +82,6 @@ defmodule PcZone.Processors do
              :threads,
              :processor_graphics,
              :gpu_id,
-             :memory_types,
              :ecc_memory_supported,
              :attributes
            ]},

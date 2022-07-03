@@ -17,7 +17,8 @@ defmodule PcZone.Product do
     :gpu_id,
     :hard_drive_id,
     :psu_id,
-    :chassis_id
+    :chassis_id,
+    :heatsink_id
   ]
 
   schema "product" do
@@ -39,6 +40,7 @@ defmodule PcZone.Product do
     belongs_to :hard_drive, PcZone.HardDrive
     belongs_to :psu, PcZone.Psu
     belongs_to :chassis, PcZone.Chassis
+    belongs_to :heatsink, PcZone.Heatsink
   end
 
   def changeset(entity, params) do

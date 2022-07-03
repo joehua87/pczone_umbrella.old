@@ -1,0 +1,5 @@
+- name: Cooler Master T400i
+  code: cooler-master-t400i
+  supported_types:
+    - 'LGA2066'
+  brand: oem
