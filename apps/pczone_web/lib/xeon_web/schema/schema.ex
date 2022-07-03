@@ -14,6 +14,7 @@ defmodule PcZoneWeb.Schema do
   import_types PcZoneWeb.Schema.Processors
   import_types PcZoneWeb.Schema.Memories
   import_types PcZoneWeb.Schema.Psus
+  import_types PcZoneWeb.Schema.Heatsinks
   import_types PcZoneWeb.Schema.Chassises
   import_types PcZoneWeb.Schema.HardDrives
   import_types PcZoneWeb.Schema.Gpus
@@ -29,6 +30,7 @@ defmodule PcZoneWeb.Schema do
     import_fields :processor_queries
     import_fields :chassis_queries
     import_fields :psu_queries
+    import_fields :heatsink_queries
     import_fields :motherboard_queries
     import_fields :memory_queries
     import_fields :hard_drive_queries
@@ -45,6 +47,7 @@ defmodule PcZoneWeb.Schema do
     import_fields :brand_mutations
     import_fields :chassis_mutations
     import_fields :psu_mutations
+    import_fields :heatsink_mutations
     import_fields :motherboard_mutations
     import_fields :barebone_mutations
     import_fields :memory_mutations
