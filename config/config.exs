@@ -44,16 +44,6 @@ config :pc_zone_web, PcZoneWeb.Endpoint,
   pubsub_server: PcZone.PubSub,
   live_view: [signing_salt: "FG3Ddexk"]
 
-# Configure esbuild (the version is required)
-config :esbuild,
-  version: "0.12.18",
-  default: [
-    args:
-      ~w(src/app.ts --bundle --target=es2016 --loader:.woff=file --loader:.woff2=file --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
-    cd: Path.expand("../apps/pc_zone_web/assets", __DIR__),
-    env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
-  ]
-
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
