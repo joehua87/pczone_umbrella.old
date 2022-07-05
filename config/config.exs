@@ -10,17 +10,17 @@
 import Config
 
 # Configure Mix tasks and generators
-config :pczone,
+config :pc_zone,
   ecto_repos: [PcZone.Repo],
   sheet_id: "1gqCHoE7dVKAcRoKhMvJjlNaozDpQGGTN_YDfE4QBfb0"
 
-config :pczone, PcZone.MongoRepo,
-  url: "mongodb://localhost:27017/pczone",
+config :pc_zone, PcZone.MongoRepo,
+  url: "mongodb://localhost:27017/pc_zone",
   timeout: 60_000,
   idle_interval: 10_000,
   queue_target: 5_000
 
-config :pczone, PcZone.Repo, types: PcZone.PostgresTypes
+config :pc_zone, PcZone.Repo, types: PcZone.PostgresTypes
 # Configures the mailer
 #
 # By default it uses the "Local" adapter which stores the emails
@@ -28,17 +28,17 @@ config :pczone, PcZone.Repo, types: PcZone.PostgresTypes
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-config :pczone, PcZone.Mailer, adapter: Swoosh.Adapters.Local
+config :pc_zone, PcZone.Mailer, adapter: Swoosh.Adapters.Local
 
 # Swoosh API client is needed for adapters other than SMTP.
 config :swoosh, :api_client, false
 
-config :pczone_web,
+config :pc_zone_web,
   ecto_repos: [PcZone.Repo],
-  generators: [context_app: :pczone]
+  generators: [context_app: :pc_zone]
 
 # Configures the endpoint
-config :pczone_web, PcZoneWeb.Endpoint,
+config :pc_zone_web, PcZoneWeb.Endpoint,
   url: [host: "localhost"],
   render_errors: [view: PcZoneWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: PcZone.PubSub,
@@ -50,7 +50,7 @@ config :esbuild,
   default: [
     args:
       ~w(src/app.ts --bundle --target=es2016 --loader:.woff=file --loader:.woff2=file --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
-    cd: Path.expand("../apps/pczone_web/assets", __DIR__),
+    cd: Path.expand("../apps/pc_zone_web/assets", __DIR__),
     env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
   ]
 

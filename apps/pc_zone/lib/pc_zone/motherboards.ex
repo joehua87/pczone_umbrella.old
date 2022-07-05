@@ -179,7 +179,7 @@ defmodule PcZone.Motherboards do
   end
 
   def import_barebone_motherboards() do
-    {:ok, conn} = Mongo.start_link(url: "mongodb://172.16.43.5:27017/pczone")
+    {:ok, conn} = Mongo.start_link(url: "mongodb://172.16.43.5:27017/pc_zone")
 
     cursor =
       Mongo.find(conn, "Product", %{

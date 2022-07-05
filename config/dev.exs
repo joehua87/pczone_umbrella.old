@@ -1,10 +1,10 @@
 import Config
 
 # Configure your database
-config :pczone, PcZone.Repo,
+config :pc_zone, PcZone.Repo,
   username: "postgres",
   password: "postgres",
-  database: "pczone_dev",
+  database: "pc_zone_dev",
   hostname: "localhost",
   port: 5432,
   show_sensitive_data_on_connection_error: true,
@@ -16,7 +16,7 @@ config :pczone, PcZone.Repo,
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we use it
 # with esbuild to bundle .js and .css sources.
-config :pczone_web, PcZoneWeb.Endpoint,
+config :pc_zone_web, PcZoneWeb.Endpoint,
   # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
   http: [ip: {127, 0, 0, 1}, port: 4000],
@@ -30,7 +30,7 @@ config :pczone_web, PcZoneWeb.Endpoint,
     npm: [
       "run",
       "dev:css",
-      cd: Path.expand("../apps/pczone_web/assets", __DIR__)
+      cd: Path.expand("../apps/pc_zone_web/assets", __DIR__)
     ]
   ]
 
@@ -59,13 +59,13 @@ config :pczone_web, PcZoneWeb.Endpoint,
 # different ports.
 
 # Watch static and templates for browser reloading.
-config :pczone_web, PcZoneWeb.Endpoint,
+config :pc_zone_web, PcZoneWeb.Endpoint,
   live_reload: [
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/pczone_web/(live|views)/.*(ex)$",
-      ~r"lib/pczone_web/templates/.*(eex)$"
+      ~r"lib/pc_zone_web/(live|views)/.*(ex)$",
+      ~r"lib/pc_zone_web/templates/.*(eex)$"
     ]
   ]
 

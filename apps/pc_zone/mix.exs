@@ -1,9 +1,9 @@
-defmodule PcZoneWeb.MixProject do
+defmodule PcZone.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :pczone_web,
+      app: :pc_zone,
       version: "0.1.0",
       build_path: "../../_build",
       config_path: "../../config/config.exs",
@@ -11,7 +11,6 @@ defmodule PcZoneWeb.MixProject do
       lockfile: "../../mix.lock",
       elixir: "~> 1.12",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps()
@@ -23,7 +22,7 @@ defmodule PcZoneWeb.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {PcZoneWeb.Application, []},
+      mod: {PcZone.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end
@@ -37,25 +36,25 @@ defmodule PcZoneWeb.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:absinthe, "~> 1.7"},
-      {:absinthe_plug, "~> 1.5"},
-      {:cors_plug, "~> 2.0"},
-      {:dataloader, "~> 1.0"},
+      {:dew_util, "~> 0.2"},
+      {:ecto_ltree, "~> 0.4.0"},
+      {:nimble_csv, "~> 1.1"},
+      {:finch, "~> 0.9.0"},
+      {:floki, "~> 0.32.0"},
+      {:mongodb_driver, "~> 0.9.0"},
       {:mime, "~> 2.0", override: true},
-      {:phoenix, "~> 1.6.2"},
-      {:phoenix_ecto, "~> 4.4"},
-      {:phoenix_html, "~> 3.0"},
-      {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_view, "~> 0.16.0"},
-      {:floki, ">= 0.30.0"},
-      {:phoenix_live_dashboard, "~> 0.5"},
-      {:esbuild, "~> 0.2", runtime: Mix.env() == :dev},
-      {:telemetry_metrics, "~> 0.6"},
-      {:telemetry_poller, "~> 1.0"},
-      {:gettext, "~> 0.18"},
-      {:pczone, in_umbrella: true},
+      {:recase, "~> 0.7"},
+      {:slugify, "~> 1.3"},
+      {:scrivener_ecto, "~> 2.7"},
+      {:tesla, "~> 1.4"},
+      {:yaml_elixir, "~> 2.9"},
+      {:google_api_sheets, "~> 0.29"},
+      {:goth, "~> 1.2.0"},
+      {:phoenix_pubsub, "~> 2.0"},
+      {:ecto_sql, "~> 3.7"},
+      {:postgrex, ">= 0.0.0"},
       {:jason, "~> 1.2"},
-      {:plug_cowboy, "~> 2.5"}
+      {:swoosh, "~> 1.3"}
     ]
   end
 
@@ -64,9 +63,10 @@ defmodule PcZoneWeb.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get"],
-      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      "assets.deploy": ["esbuild default --minify", "phx.digest"]
+      setup: ["deps.get", "ecto.setup"],
+      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
+      "ecto.reset": ["ecto.drop", "ecto.setup"],
+      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"]
     ]
   end
 end

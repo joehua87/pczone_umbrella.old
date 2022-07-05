@@ -28,7 +28,7 @@ defmodule PcZone.Helpers.GoogleSheets do
   end
 
   defp sheet_id() do
-    Application.get_env(:pczone, :sheet_id)
+    Application.get_env(:pc_zone, :sheet_id)
   end
 
   defp normalize_cell(nil), do: nil

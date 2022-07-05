@@ -30,7 +30,7 @@ defmodule PcZoneWeb do
   def view do
     quote do
       use Phoenix.View,
-        root: "lib/pczone_web/templates",
+        root: "lib/pc_zone_web/templates",
         namespace: PcZoneWeb
 
       # Import convenience functions from controllers

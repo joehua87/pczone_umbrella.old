@@ -10,7 +10,7 @@ defmodule PcZone.Umbrella.MixProject do
       aliases: aliases(),
       releases: [
         web: [
-          applications: [pczone_web: :permanent]
+          applications: [pc_zone_web: :permanent]
         ]
       ]
     ]

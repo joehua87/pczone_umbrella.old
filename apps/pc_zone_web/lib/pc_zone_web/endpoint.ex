@@ -1,12 +1,12 @@
 defmodule PcZoneWeb.Endpoint do
-  use Phoenix.Endpoint, otp_app: :pczone_web
+  use Phoenix.Endpoint, otp_app: :pc_zone_web
 
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.
   # Set :encryption_salt if you would also like to encrypt it.
   @session_options [
     store: :cookie,
-    key: "_pczone_web_key",
+    key: "_pc_zone_web_key",
     signing_salt: "LkFypcyn"
   ]
 
@@ -18,7 +18,7 @@ defmodule PcZoneWeb.Endpoint do
   # when deploying your static files in production.
   plug Plug.Static,
     at: "/",
-    from: :pczone_web,
+    from: :pc_zone_web,
     gzip: false,
     only: ~w(assets fonts images favicon.ico robots.txt)
 
@@ -28,7 +28,7 @@ defmodule PcZoneWeb.Endpoint do
     socket "/phoenix/live_reload/socket", Phoenix.LiveReloader.Socket
     plug Phoenix.LiveReloader
     plug Phoenix.CodeReloader
-    plug Phoenix.Ecto.CheckRepoStatus, otp_app: :pczone_web
+    plug Phoenix.Ecto.CheckRepoStatus, otp_app: :pc_zone_web
   end
 
   plug Phoenix.LiveDashboard.RequestLogger,

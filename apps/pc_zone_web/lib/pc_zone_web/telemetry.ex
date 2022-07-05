@@ -31,23 +31,23 @@ defmodule PcZoneWeb.Telemetry do
       ),
 
       # Database Metrics
-      summary("pczone.repo.query.total_time",
+      summary("pc_zone.repo.query.total_time",
         unit: {:native, :millisecond},
         description: "The sum of the other measurements"
       ),
-      summary("pczone.repo.query.decode_time",
+      summary("pc_zone.repo.query.decode_time",
         unit: {:native, :millisecond},
         description: "The time spent decoding the data received from the database"
       ),
-      summary("pczone.repo.query.query_time",
+      summary("pc_zone.repo.query.query_time",
         unit: {:native, :millisecond},
         description: "The time spent executing the query"
       ),
-      summary("pczone.repo.query.queue_time",
+      summary("pc_zone.repo.query.queue_time",
         unit: {:native, :millisecond},
         description: "The time spent waiting for a database connection"
       ),
-      summary("pczone.repo.query.idle_time",
+      summary("pc_zone.repo.query.idle_time",
         unit: {:native, :millisecond},
         description:
           "The time the connection spent waiting before being checked out for the query"

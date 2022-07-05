@@ -1,6 +1,6 @@
 defmodule PcZone.Repo do
   use Ecto.Repo,
-    otp_app: :pczone,
+    otp_app: :pc_zone,
     adapter: Ecto.Adapters.Postgres
 
   @scrivener_defaults [page_size: 24]
