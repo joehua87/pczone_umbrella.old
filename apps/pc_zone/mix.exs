@@ -36,6 +36,7 @@ defmodule PcZone.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:bcrypt_elixir, "~> 2.0"},
       {:dew_util, "~> 0.2"},
       {:ecto_ltree, "~> 0.4.0"},
       {:nimble_csv, "~> 1.1"},
