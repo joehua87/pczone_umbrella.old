@@ -16,6 +16,12 @@ config :pc_zone, PcZone.Repo,
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: 10
 
+config :pc_zone, PcZone.MongoRepo,
+  url: "mongodb://localhost:27017/pc_zone",
+  timeout: 60_000,
+  idle_interval: 10_000,
+  queue_target: 5_000
+
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
 config :pc_zone_web, PcZoneWeb.Endpoint,

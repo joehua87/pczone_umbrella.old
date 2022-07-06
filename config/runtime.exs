@@ -14,11 +14,24 @@ if config_env() == :prod do
       For example: ecto://USER:PASS@HOST/DATABASE
       """
 
+  mongo_url =
+    System.get_env("MONGO_URL") ||
+      raise """
+      environment variable MONGO_URL is missing.
+      For example: mongo://USER:PASS@HOST/MONGO
+      """
+
   config :pc_zone, PcZone.Repo,
     # ssl: true,
     # socket_options: [:inet6],
     url: database_url,
     pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
+
+  config :pc_zone, PcZone.MongoRepo,
+    url: mongo_url,
+    timeout: 60_000,
+    idle_interval: 10_000,
+    queue_target: 5_000
 
   # The secret key base is used to sign/encrypt cookies and other secrets.
   # A default value is used in config/dev.exs and config/test.exs but you

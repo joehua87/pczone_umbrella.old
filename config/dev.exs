@@ -10,6 +10,12 @@ config :pc_zone, PcZone.Repo,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
+config :pc_zone, PcZone.MongoRepo,
+  url: "mongodb://localhost:27017/pc_zone",
+  timeout: 60_000,
+  idle_interval: 10_000,
+  queue_target: 5_000
+
 # For development, we disable any cache and enable
 # debugging and code reloading.
 config :pc_zone_web, PcZoneWeb.Endpoint,

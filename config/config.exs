@@ -14,12 +14,6 @@ config :pc_zone,
   ecto_repos: [PcZone.Repo],
   sheet_id: "1gqCHoE7dVKAcRoKhMvJjlNaozDpQGGTN_YDfE4QBfb0"
 
-config :pc_zone, PcZone.MongoRepo,
-  url: "mongodb://localhost:27017/pc_zone",
-  timeout: 60_000,
-  idle_interval: 10_000,
-  queue_target: 5_000
-
 config :pc_zone, PcZone.Repo, types: PcZone.PostgresTypes
 # Configures the mailer
 #
