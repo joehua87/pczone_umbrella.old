@@ -77,4 +77,4 @@ COPY --from=builder --chown=nobody:root /app/_build/prod/rel/web ./
 
 USER nobody
 
-CMD ["web", "start"]
+CMD ["bin/web", "start"]
