@@ -6,6 +6,7 @@ defmodule PcZoneWeb.Schema do
   import_types PcZoneWeb.Schema.Types.JSON
 
   import_types PcZoneWeb.Schema.Common
+  import_types PcZoneWeb.Schema.Users
   import_types PcZoneWeb.Schema.Brands
   import_types PcZoneWeb.Schema.Chipsets
   import_types PcZoneWeb.Schema.Motherboards
@@ -25,6 +26,7 @@ defmodule PcZoneWeb.Schema do
   import_types PcZoneWeb.Schema.SimpleBuilts
 
   query do
+    import_fields :user_queries
     import_fields :brand_queries
     import_fields :chipset_queries
     import_fields :processor_queries
@@ -44,6 +46,7 @@ defmodule PcZoneWeb.Schema do
   end
 
   mutation do
+    import_fields :user_mutations
     import_fields :brand_mutations
     import_fields :chassis_mutations
     import_fields :psu_mutations
@@ -56,6 +59,10 @@ defmodule PcZoneWeb.Schema do
     import_fields :product_mutations
     import_fields :built_mutations
     import_fields :simple_built_mutations
+
+    def middleware(middleware, _field, %{}) do
+      middleware ++ [PcZoneWeb.Middlewares.ErrorsHandle]
+    end
   end
 
   def context(ctx) do

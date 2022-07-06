@@ -15,6 +15,7 @@ defmodule PcZoneWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+
     forward "/graphql", Absinthe.Plug, schema: PcZoneWeb.Schema
     forward "/graphiql", Absinthe.Plug.GraphiQL, schema: PcZoneWeb.Schema, interface: :playground
   end
