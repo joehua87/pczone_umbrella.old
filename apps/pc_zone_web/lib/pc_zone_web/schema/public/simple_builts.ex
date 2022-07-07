@@ -178,7 +178,7 @@ defmodule PcZoneWeb.Schema.SimpleBuilts do
       arg :code, non_null(:string)
 
       resolve(fn %{code: code}, _info ->
-        {:ok, PcZone.SimpleBuilts.generate_variants(code) |> IO.inspect()}
+        {:ok, PcZone.SimpleBuilts.generate_variants(code)}
       end)
     end
   end

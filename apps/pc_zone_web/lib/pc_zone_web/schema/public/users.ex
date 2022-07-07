@@ -18,6 +18,20 @@ defmodule PcZoneWeb.Schema.Users do
   end
 
   object :user_queries do
+    field :user_token, non_null(:string) do
+      arg :email, non_null(:string)
+      arg :password, non_null(:string)
+
+      resolve(fn %{email: email, password: password}, _info ->
+        if user = Users.get_user_by_email_and_password(email, password) do
+          token = Users.generate_user_session_token(user) |> Base.encode64()
+          {:ok, token}
+        else
+          {:error, "Invalid email or password"}
+        end
+      end)
+    end
+
     field :user_by_email_and_password, :user do
       arg :email, non_null(:string)
       arg :password, non_null(:string)
@@ -27,11 +41,12 @@ defmodule PcZoneWeb.Schema.Users do
       end)
     end
 
-    field :user_by_id, :user do
-      arg :id, non_null(:id)
+    field :user_by_token, :user do
+      arg :token, non_null(:string)
 
-      resolve(fn %{id: id}, _info ->
-        {:ok, Users.get_user!(id)}
+      resolve(fn %{token: token}, _info ->
+        token = Base.decode64!(token)
+        {:ok, Users.get_user_by_session_token(token)}
       end)
     end
   end

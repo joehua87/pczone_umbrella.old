@@ -23,7 +23,6 @@ defmodule PcZoneWeb.Middlewares.ErrorsHandle do
           end)
       }
     end)
-    |> IO.inspect()
   end
 
   defp handle_error(errors) when is_map(errors) do
