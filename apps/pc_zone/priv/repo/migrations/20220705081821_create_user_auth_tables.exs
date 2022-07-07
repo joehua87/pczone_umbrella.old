@@ -5,6 +5,7 @@ defmodule PcZone.Repo.Migrations.CreateUserAuthTables do
     create table(:user) do
       add :email, :citext, null: false
       add :hashed_password, :string, null: false
+      add :role, :string
       add :confirmed_at, :naive_datetime
       timestamps()
     end

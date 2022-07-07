@@ -6,6 +6,7 @@ defmodule PcZone.Users.User do
     field :email, :string
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
+    field :role, Ecto.Enum, values: [:user, :admin], default: :user
     field :confirmed_at, :naive_datetime
 
     timestamps()
@@ -67,6 +68,10 @@ defmodule PcZone.Users.User do
     else
       changeset
     end
+  end
+
+  def role_changeset(user, role) do
+    cast(user, %{role: role}, [:role])
   end
 
   @doc """
