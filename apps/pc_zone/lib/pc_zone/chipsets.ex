@@ -40,7 +40,20 @@ defmodule PcZone.Chipsets do
     Repo.insert_all(
       Chipset,
       entities,
-      Keyword.merge(opts, on_conflict: :replace_all, conflict_target: [:slug])
+      Keyword.merge(opts,
+        on_conflict:
+          {:replace,
+           [
+             :code,
+             :code_name,
+             :name,
+             :launch_date,
+             :collection_name,
+             :vertical_segment,
+             :status
+           ]},
+        conflict_target: [:slug]
+      )
     )
   end
 
