@@ -164,7 +164,7 @@ defmodule PcZoneWeb.Schema.SimpleBuilts do
   end
 
   object :simple_built_mutations do
-    field :create_simple_built, non_null(:simple_built) do
+    field :create_simple_built, non_null(list_of(non_null(:simple_built))) do
       # arg :data, non_null(:create_simple_built_input)
       arg :data, non_null(:json)
 

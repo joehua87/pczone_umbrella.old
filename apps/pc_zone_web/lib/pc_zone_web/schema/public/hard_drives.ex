@@ -54,4 +54,16 @@ defmodule PcZoneWeb.Schema.HardDrives do
       end)
     end
   end
+
+  object :hard_drive_mutations do
+    field :upsert_hard_drives, non_null(list_of(non_null(:hard_drive))) do
+      arg :data, non_null(:json)
+
+      resolve(fn %{data: data}, _info ->
+        with {_, result} <- PcZone.HardDrives.upsert(data, returning: true) do
+          {:ok, result}
+        end
+      end)
+    end
+  end
 end

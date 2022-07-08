@@ -55,6 +55,7 @@ defmodule PcZoneWeb.Schema do
     import_fields :barebone_mutations
     import_fields :memory_mutations
     import_fields :processor_mutations
+    import_fields :hard_drive_mutations
     import_fields :product_category_mutations
     import_fields :product_mutations
     import_fields :built_mutations

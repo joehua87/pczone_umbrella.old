@@ -36,8 +36,21 @@ defmodule PcZone.HardDrives do
       PcZone.HardDrive,
       entities,
       Keyword.merge(opts,
-        on_conflict: :replace_all,
-        conflict_target: [:slug]
+        on_conflict:
+          {:replace,
+           [
+             :slug,
+             :code,
+             :name,
+             :type,
+             :form_factor,
+             :sequential_read,
+             :sequential_write,
+             :random_read,
+             :random_write,
+             :tbw
+           ]},
+        conflict_target: [:collection, :capacity, :brand_id]
       )
     )
   end

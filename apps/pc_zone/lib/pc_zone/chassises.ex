@@ -40,8 +40,8 @@ defmodule PcZone.Chassises do
       Keyword.merge(opts,
         on_conflict:
           {:replace,
-           [:slug, :code, :name, :form_factor, :hard_drive_slots, :psu_form_factors, :brand_id]},
-        conflict_target: [:slug]
+           [:slug, :name, :form_factor, :hard_drive_slots, :psu_form_factors, :brand_id]},
+        conflict_target: [:code]
       )
     )
   end
