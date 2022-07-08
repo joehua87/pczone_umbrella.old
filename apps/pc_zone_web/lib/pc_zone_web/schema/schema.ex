@@ -24,6 +24,7 @@ defmodule PcZoneWeb.Schema do
   import_types PcZoneWeb.Schema.Products
   import_types PcZoneWeb.Schema.ScrapedEntries
   import_types PcZoneWeb.Schema.SimpleBuilts
+  import_types PcZoneWeb.Schema.SimpleBuiltVariants
 
   query do
     import_fields :user_queries
@@ -43,12 +44,14 @@ defmodule PcZoneWeb.Schema do
     import_fields :barebone_queries
     import_fields :scraped_entry_queries
     import_fields :simple_built_queries
+    import_fields :simple_built_variant_queries
   end
 
   mutation do
     import_fields :user_mutations
     import_fields :brand_mutations
     import_fields :chassis_mutations
+    import_fields :chipset_mutations
     import_fields :psu_mutations
     import_fields :heatsink_mutations
     import_fields :motherboard_mutations

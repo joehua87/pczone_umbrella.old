@@ -164,8 +164,7 @@ defmodule PcZoneWeb.Schema.SimpleBuilts do
   end
 
   object :simple_built_mutations do
-    field :create_simple_built, non_null(list_of(non_null(:simple_built))) do
-      # arg :data, non_null(:create_simple_built_input)
+    field :upsert_simple_builts, non_null(list_of(non_null(:simple_built))) do
       arg :data, non_null(:json)
 
       resolve(fn %{data: data}, _info ->
@@ -174,11 +173,15 @@ defmodule PcZoneWeb.Schema.SimpleBuilts do
     end
 
     field :generate_simple_built_variants, non_null(:json) do
-      # arg :data, non_null(:create_simple_built_input)
       arg :code, non_null(:string)
 
       resolve(fn %{code: code}, _info ->
-        {:ok, PcZone.SimpleBuilts.generate_variants(code)}
+        with {_, result} <-
+               code
+               |> PcZone.SimpleBuilts.generate_variants()
+               |> PcZone.SimpleBuilts.upsert_variants(returning: true) do
+          {:ok, result}
+        end
       end)
     end
   end

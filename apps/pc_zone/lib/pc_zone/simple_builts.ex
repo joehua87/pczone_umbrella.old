@@ -261,7 +261,19 @@ defmodule PcZone.SimpleBuilts do
 
     with {:ok, _} <- Repo.transaction(multi) do
       codes = Enum.map(list, & &1["code"])
-      {:ok, Repo.all(from b in PcZone.SimpleBuilt, where: b.code in ^codes)}
+
+      {:ok,
+       Repo.all(
+         from b in PcZone.SimpleBuilt,
+           where: b.code in ^codes,
+           preload: [
+             :barebone,
+             :barebone_product,
+             {:processors, [:processor, :processor_product, :gpu, :gpu_product]},
+             {:memories, [:memory, :memory_product]},
+             {:hard_drives, [:hard_drive, :hard_drive_product]}
+           ]
+       )}
     end
   end
 
@@ -340,37 +352,40 @@ defmodule PcZone.SimpleBuilts do
       option_value_1 =
         [processor_label, gpu_label] |> Enum.filter(&(&1 != nil)) |> Enum.join(seperator)
 
-      Enum.map(memories_and_hard_drives, fn memory_and_hard_drive ->
-        result =
-          %{
-            simple_built_id: simple_built_id,
-            barebone_id: barebone_id,
-            barebone_product_id: barebone_product.id,
-            barebone_price: barebone_product.sale_price,
-            processor_id: processor_id,
-            processor_product_id: processor_product.id,
-            processor_price: processor_product.sale_price,
-            processor_quantity: processor_quantity,
-            processor_amount: processor_amount,
-            option_value_1: option_value_1
-          }
-          |> Map.merge(gpu)
-          |> Map.merge(memory_and_hard_drive)
+      Enum.map(
+        memories_and_hard_drives,
+        fn memory_and_hard_drive = %{option_value_2: option_value_2} ->
+          result =
+            %{
+              simple_built_id: simple_built_id,
+              barebone_id: barebone_id,
+              barebone_product_id: barebone_product.id,
+              barebone_price: barebone_product.sale_price,
+              processor_id: processor_id,
+              processor_product_id: processor_product.id,
+              processor_price: processor_product.sale_price,
+              processor_quantity: processor_quantity,
+              processor_amount: processor_amount,
+              option_values: [option_value_1, option_value_2]
+            }
+            |> Map.merge(gpu)
+            |> Map.merge(Map.delete(memory_and_hard_drive, :option_value_2))
 
-        total =
-          result
-          |> Map.take([
-            :barebone_price,
-            :gpu_amount,
-            :hard_drive_amount,
-            :memory_amount,
-            :processor_amount
-          ])
-          |> Map.values()
-          |> Enum.sum()
+          total =
+            result
+            |> Map.take([
+              :barebone_price,
+              :gpu_amount,
+              :hard_drive_amount,
+              :memory_amount,
+              :processor_amount
+            ])
+            |> Map.values()
+            |> Enum.sum()
 
-        Map.put(result, :total, total)
-      end)
+          Map.put(result, :total, total)
+        end
+      )
     end)
   end
 
@@ -419,7 +434,7 @@ defmodule PcZone.SimpleBuilts do
              :gpu_price,
              :gpu_quantity
            ]},
-        conflict_target: [:simple_built_id, :option_value_1, :option_value_2]
+        conflict_target: [:simple_built_id, :option_values]
       ] ++ opts
     )
   end

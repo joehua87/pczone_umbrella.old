@@ -428,17 +428,12 @@ defmodule PcZone.Repo.Migrations.Initialize do
       add :hard_drive_price, :integer, null: false
       add :hard_drive_quantity, :integer, null: false
       add :hard_drive_amount, :integer, null: false
-      add :option_value_1, :string, null: false
-      add :option_value_2, :string, null: false
+      add :option_values, {:array, :string}, null: false
       add :total, :integer, null: false
       add :config, :map, null: false, default: %{}
     end
 
-    create unique_index(:simple_built_variant, [
-             :simple_built_id,
-             :option_value_1,
-             :option_value_2
-           ])
+    create unique_index(:simple_built_variant, [:simple_built_id, :option_values])
   end
 
   defp create_extension(names) when is_list(names) do

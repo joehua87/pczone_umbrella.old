@@ -24,8 +24,7 @@ defmodule PcZone.SimpleBuiltVariant do
     :hard_drive_price,
     :hard_drive_quantity,
     :hard_drive_amount,
-    :option_value_1,
-    :option_value_2,
+    :option_values,
     :total,
     :config
   ]
@@ -63,8 +62,7 @@ defmodule PcZone.SimpleBuiltVariant do
     field :hard_drive_price, :integer
     field :hard_drive_quantity, :integer
     field :hard_drive_amount, :integer
-    field :option_value_1, :string
-    field :option_value_2, :string
+    field :option_values, {:array, :string}
     field :total, :integer
     field :config, :map
   end
