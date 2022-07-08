@@ -370,6 +370,7 @@ defmodule PcZone.Repo.Migrations.Initialize do
       add :barebone_product_id, references(:product), null: false
       add :option_value_seperator, :string, null: false, default: " + "
       add :option_types, {:array, :string}, null: false
+      add :config, :map, null: false, default: %{}
     end
 
     create unique_index(:simple_built, [:code])
@@ -401,6 +402,43 @@ defmodule PcZone.Repo.Migrations.Initialize do
       add :quantity, :integer, null: false, default: 1
       add :label, :string
     end
+
+    create table(:simple_built_variant) do
+      add :simple_built_id, references(:simple_built), null: false
+      add :barebone_id, references(:barebone), null: false
+      add :barebone_product_id, references(:product), null: false
+      add :barebone_price, :integer, null: false
+      add :processor_id, references(:processor), null: false
+      add :processor_product_id, references(:product), null: false
+      add :processor_price, :integer, null: false
+      add :processor_quantity, :integer, null: false
+      add :processor_amount, :integer, null: false
+      add :gpu_id, references(:gpu)
+      add :gpu_product_id, references(:product)
+      add :gpu_price, :integer
+      add :gpu_quantity, :integer
+      add :gpu_amount, :integer
+      add :memory_id, references(:memory), null: false
+      add :memory_product_id, references(:product), null: false
+      add :memory_price, :integer, null: false
+      add :memory_quantity, :integer, null: false
+      add :memory_amount, :integer, null: false
+      add :hard_drive_id, references(:hard_drive), null: false
+      add :hard_drive_product_id, references(:product), null: false
+      add :hard_drive_price, :integer, null: false
+      add :hard_drive_quantity, :integer, null: false
+      add :hard_drive_amount, :integer, null: false
+      add :option_value_1, :string, null: false
+      add :option_value_2, :string, null: false
+      add :total, :integer, null: false
+      add :config, :map, null: false, default: %{}
+    end
+
+    create unique_index(:simple_built_variant, [
+             :simple_built_id,
+             :option_value_1,
+             :option_value_2
+           ])
   end
 
   defp create_extension(names) when is_list(names) do

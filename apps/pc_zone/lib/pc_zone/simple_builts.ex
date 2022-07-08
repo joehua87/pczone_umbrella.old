@@ -125,7 +125,21 @@ defmodule PcZone.SimpleBuilts do
     multi =
       Ecto.Multi.new()
       |> Ecto.Multi.run(:simple_builts_map, fn _, _ ->
-        {_, result} = Repo.insert_all(PcZone.SimpleBuilt, simple_builts, returning: true)
+        {_, result} =
+          Repo.insert_all(PcZone.SimpleBuilt, simple_builts,
+            returning: true,
+            on_conflict:
+              {:replace,
+               [
+                 :name,
+                 :body_template,
+                 :barebone_id,
+                 :barebone_product_id,
+                 :option_types,
+                 :option_value_seperator
+               ]},
+            conflict_target: [:code]
+          )
 
         {:ok,
          Enum.map(result, fn %{id: id, code: code} ->
@@ -252,6 +266,7 @@ defmodule PcZone.SimpleBuilts do
   end
 
   def generate_variants(%PcZone.SimpleBuilt{
+        id: simple_built_id,
         barebone_id: barebone_id,
         barebone_product: barebone_product,
         processors: processors,
@@ -328,6 +343,7 @@ defmodule PcZone.SimpleBuilts do
       Enum.map(memories_and_hard_drives, fn memory_and_hard_drive ->
         result =
           %{
+            simple_built_id: simple_built_id,
             barebone_id: barebone_id,
             barebone_product_id: barebone_product.id,
             barebone_price: barebone_product.sale_price,
@@ -372,6 +388,40 @@ defmodule PcZone.SimpleBuilts do
         limit: 1
     )
     |> generate_variants()
+  end
+
+  def upsert_variants(list, opts \\ []) do
+    Repo.insert_all(
+      PcZone.SimpleBuiltVariant,
+      list,
+      [
+        on_conflict:
+          {:replace,
+           [
+             :barebone_id,
+             :barebone_product_id,
+             :barebone_price,
+             :processor_id,
+             :processor_product_id,
+             :processor_price,
+             :processor_quantity,
+             :memory_id,
+             :memory_product_id,
+             :memory_price,
+             :memory_quantity,
+             :hard_drive_id,
+             :hard_drive_product_id,
+             :hard_drive_price,
+             :hard_drive_quantity,
+             :total,
+             :gpu_id,
+             :gpu_product_id,
+             :gpu_price,
+             :gpu_quantity
+           ]},
+        conflict_target: [:simple_built_id, :option_value_1, :option_value_2]
+      ] ++ opts
+    )
   end
 
   def parse_filter(filter) do
