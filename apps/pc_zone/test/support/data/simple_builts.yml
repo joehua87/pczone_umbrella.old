@@ -22,7 +22,7 @@
     - memory: 8gb-sodimm-ddr4-2133-mixed
       memory_product: 8gb-sodimm-ddr4-2133-mixed/used
       quantity: 2
-      label: 16GB
+      label: 2 x 8GB
   hard_drives:
     - hard_drive: 256gb-samsung-pm981
       hard_drive_product: 256gb-samsung-pm981/95%
@@ -35,3 +35,41 @@
       label: 512GB NVMe
   body_template: |
     Mustache template for Hp EliteDesk 800
+
+- code: hp-elitedesk-800-g2-mini-65w
+  name: Hp Elitedesk 800 G2 Mini 65w
+  barebone: hp-elitedesk-800-g2-mini-65w
+  barebone_product: hp-elitedesk-800-g2-mini-65w/used
+  option_types: []
+  option_value_seperator: ' + '
+  processors:
+    - processor: i5-6500
+      processor_label: i5-6500
+      processor_product: i5-6500/tray
+    - processor: i5-6600
+      processor_label: i5-6600
+      processor_product: i5-6600/tray
+    - processor: i7-6700
+      processor_label: i7-6700
+      processor_product: i7-6700/tray
+  memories:
+    - memory: 8gb-sodimm-ddr4-2133-mixed
+      memory_product: 8gb-sodimm-ddr4-2133-mixed/used
+      quantity: 1
+      label: 8GB
+    - memory: 8gb-sodimm-ddr4-2133-mixed
+      memory_product: 8gb-sodimm-ddr4-2133-mixed/used
+      quantity: 2
+      label: 2 x 8GB
+  hard_drives:
+    - hard_drive: 256gb-samsung-pm981
+      hard_drive_product: 256gb-samsung-pm981/95%
+      label: 256GB NVMe 95%
+    - hard_drive: 256gb-samsung-pm981
+      hard_drive_product: 256gb-samsung-pm981/like-new
+      label: 256GB NVMe
+    - hard_drive: 512gb-samsung-pm981
+      hard_drive_product: 512gb-samsung-pm981/like-new
+      label: 512GB NVMe
+  body_template: |
+    Mustache template for Hp EliteDesk 800 65W

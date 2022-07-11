@@ -376,6 +376,7 @@ defmodule PcZone.Repo.Migrations.Initialize do
     create unique_index(:simple_built, [:code])
 
     create table(:simple_built_processor) do
+      add :key, :string, null: false
       add :simple_built_id, references(:simple_built), null: false
       add :processor_id, references(:processor), null: false
       add :processor_product_id, references(:product), null: false
@@ -383,11 +384,14 @@ defmodule PcZone.Repo.Migrations.Initialize do
       add :processor_label, :string
       add :gpu_id, references(:gpu)
       add :gpu_product_id, references(:product)
-      add :gpu_quantity, :integer, null: false, default: 1
+      add :gpu_quantity, :integer, null: false, default: 0
       add :gpu_label, :string
     end
 
+    create unique_index(:simple_built_processor, [:key])
+
     create table(:simple_built_memory) do
+      add :key, :string, null: false
       add :simple_built_id, references(:simple_built), null: false
       add :memory_id, references(:memory), null: false
       add :memory_product_id, references(:product), null: false
@@ -395,13 +399,18 @@ defmodule PcZone.Repo.Migrations.Initialize do
       add :label, :string
     end
 
+    create unique_index(:simple_built_memory, [:key])
+
     create table(:simple_built_hard_drive) do
+      add :key, :string, null: false
       add :simple_built_id, references(:simple_built), null: false
       add :hard_drive_id, references(:hard_drive), null: false
       add :hard_drive_product_id, references(:product), null: false
       add :quantity, :integer, null: false, default: 1
       add :label, :string
     end
+
+    create unique_index(:simple_built_hard_drive, [:key])
 
     create table(:simple_built_variant) do
       add :simple_built_id, references(:simple_built), null: false

@@ -4,7 +4,7 @@ defmodule PcZone.SimpleBuiltProcessor do
 
   @derive Jason.Encoder
 
-  @required [:simple_built_id, :processor_id, :processor_product_id]
+  @required [:key, :simple_built_id, :processor_id, :processor_product_id]
   @optional [
     :processor_quantity,
     :processor_label,
@@ -15,6 +15,7 @@ defmodule PcZone.SimpleBuiltProcessor do
   ]
 
   schema "simple_built_processor" do
+    field :key, :string
     belongs_to :simple_built, PcZone.SimpleBuilt
     belongs_to :processor, PcZone.Processor
     belongs_to :processor_product, PcZone.Product

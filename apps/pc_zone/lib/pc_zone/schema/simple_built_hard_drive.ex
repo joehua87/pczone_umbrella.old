@@ -4,10 +4,11 @@ defmodule PcZone.SimpleBuiltHardDrive do
 
   @derive Jason.Encoder
 
-  @required [:simple_built_id, :hard_drive_id, :hard_drive_product_id]
+  @required [:key, :simple_built_id, :hard_drive_id, :hard_drive_product_id]
   @optional [:quantity, :label]
 
   schema "simple_built_hard_drive" do
+    field :key, :string
     belongs_to :simple_built, PcZone.SimpleBuilt
     belongs_to :hard_drive, PcZone.HardDrive
     belongs_to :hard_drive_product, PcZone.Product

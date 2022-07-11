@@ -172,7 +172,7 @@ defmodule PcZoneWeb.Schema.SimpleBuilts do
       end)
     end
 
-    field :generate_simple_built_variants, non_null(:json) do
+    field :generate_simple_built_variants, non_null(list_of(non_null(:simple_built_variant))) do
       arg :code, non_null(:string)
 
       resolve(fn %{code: code}, _info ->

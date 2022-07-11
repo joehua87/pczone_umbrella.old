@@ -186,11 +186,23 @@ defmodule PcZone.SimpleBuilts do
                       }
                   end
 
+                simple_built_id = Map.get(simple_builts_map, code)
+                processor_quantity = Map.get(params, "processor_quantity", 1)
+
                 %{
-                  simple_built_id: Map.get(simple_builts_map, code),
+                  key:
+                    [
+                      simple_built_id,
+                      processor_product_id,
+                      processor_quantity,
+                      gpu_product_id || 0,
+                      gpu_quantity
+                    ]
+                    |> Enum.join(":"),
+                  simple_built_id: simple_built_id,
                   processor_id: processor_id,
                   processor_product_id: processor_product_id,
-                  processor_quantity: Map.get(params, "processor_quantity", 1),
+                  processor_quantity: processor_quantity,
                   processor_label: processor_label,
                   gpu_id: gpu_id,
                   gpu_product_id: gpu_product_id,
@@ -201,7 +213,11 @@ defmodule PcZone.SimpleBuilts do
             )
           end)
 
-        with {inserted, _} <- Repo.insert_all(PcZone.SimpleBuiltProcessor, entities) do
+        with {inserted, _} <-
+               Repo.insert_all(PcZone.SimpleBuiltProcessor, entities,
+                 on_conflict: :replace_all,
+                 conflict_target: [:key]
+               ) do
           {:ok, inserted}
         end
       end)
@@ -216,18 +232,26 @@ defmodule PcZone.SimpleBuilts do
                   product_id: memory_product_id
                 } = Map.get(memory_products_map, memory_product_sku)
 
+                simple_built_id = Map.get(simple_builts_map, code)
+                quantity = Map.get(params, "quantity", 1)
+
                 %{
-                  simple_built_id: Map.get(simple_builts_map, code),
+                  key: [simple_built_id, memory_product_id, quantity] |> Enum.join(":"),
+                  simple_built_id: simple_built_id,
                   memory_id: memory_id,
                   memory_product_id: memory_product_id,
-                  quantity: Map.get(params, "quantity", 1),
+                  quantity: quantity,
                   label: label
                 }
               end
             )
           end)
 
-        with {inserted, _} <- Repo.insert_all(PcZone.SimpleBuiltMemory, entities) do
+        with {inserted, _} <-
+               Repo.insert_all(PcZone.SimpleBuiltMemory, entities,
+                 on_conflict: :replace_all,
+                 conflict_target: [:key]
+               ) do
           {:ok, inserted}
         end
       end)
@@ -243,18 +267,26 @@ defmodule PcZone.SimpleBuilts do
                   product_id: hard_drive_product_id
                 } = Map.get(hard_drive_products_map, hard_drive_product_sku)
 
+                simple_built_id = Map.get(simple_builts_map, code)
+                quantity = Map.get(params, "quantity", 1)
+
                 %{
-                  simple_built_id: Map.get(simple_builts_map, code),
+                  key: [simple_built_id, hard_drive_product_id, quantity] |> Enum.join(":"),
+                  simple_built_id: simple_built_id,
                   hard_drive_id: hard_drive_id,
                   hard_drive_product_id: hard_drive_product_id,
-                  quantity: Map.get(params, "quantity", 1),
+                  quantity: quantity,
                   label: label
                 }
               end
             )
           end)
 
-        with {inserted, _} <- Repo.insert_all(PcZone.SimpleBuiltHardDrive, entities) do
+        with {inserted, _} <-
+               Repo.insert_all(PcZone.SimpleBuiltHardDrive, entities,
+                 on_conflict: :replace_all,
+                 conflict_target: [:key]
+               ) do
           {:ok, inserted}
         end
       end)

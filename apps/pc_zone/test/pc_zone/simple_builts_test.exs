@@ -6,7 +6,7 @@ defmodule PcZone.SimpleBuiltsTest do
   describe "simple builds" do
     test "upsert" do
       list = PcZone.Fixtures.read_fixture("simple_builts.yml")
-      {:ok, [%PcZone.SimpleBuilt{}]} = PcZone.SimpleBuilts.upsert(list)
+      {:ok, [%PcZone.SimpleBuilt{} | _]} = PcZone.SimpleBuilts.upsert(list)
     end
 
     test "generate simple built variants" do
@@ -35,20 +35,22 @@ defmodule PcZone.SimpleBuiltsTest do
           gpu_amount: 0,
           gpu_price: 0,
           gpu_quantity: 0,
-          hard_drive_amount: 750_000,
-          hard_drive_price: 750_000,
-          hard_drive_quantity: 1,
+          hard_drive_amount: 0,
+          hard_drive_price: 0,
+          hard_drive_quantity: 0,
           memory_amount: 0,
           memory_price: 0,
           memory_quantity: 0,
-          option_values: ["i5-6500T", "Không RAM + 256GB NVMe 95%"],
-          processor_amount: 1_700_000,
-          processor_price: 1_700_000,
+          option_values: ["i5-6600T", "Không RAM + Không ổ cứng"],
+          processor_amount: 1_800_000,
+          processor_price: 1_800_000,
           processor_quantity: 1,
-          total: 4_250_000
+          total: 3_600_000
         }
         | _
-      ] = simple_built_variants = SimpleBuilts.generate_variants(simple_built)
+      ] =
+        simple_built_variants =
+        SimpleBuilts.generate_variants(simple_built) |> Enum.sort(&(&1.total < &2.total))
 
       assert length(simple_built_variants) ==
                length(simple_built.processors) *
