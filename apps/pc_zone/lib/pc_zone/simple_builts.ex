@@ -287,37 +287,65 @@ defmodule PcZone.SimpleBuilts do
         option_value_seperator: seperator
       }) do
     memories_and_hard_drives =
-      memories
+      [%PcZone.SimpleBuiltMemory{quantity: 0, memory_product: nil} | memories]
       |> Enum.flat_map(fn %PcZone.SimpleBuiltMemory{
                             memory_id: memory_id,
                             memory_product: memory_product,
                             quantity: memory_quantity,
                             label: memory_label
                           } ->
-        hard_drives
+        [%PcZone.SimpleBuiltHardDrive{quantity: 0, hard_drive_product: nil} | hard_drives]
         |> Enum.map(fn %PcZone.SimpleBuiltHardDrive{
                          hard_drive_id: hard_drive_id,
                          hard_drive_product: hard_drive_product,
                          quantity: hard_drive_quantity,
                          label: hard_drive_label
                        } ->
-          memory_amount = memory_quantity * memory_product.sale_price
-          hard_drive_amount = hard_drive_quantity * hard_drive_product.sale_price
-          option_value_2 = Enum.join([memory_label, hard_drive_label], seperator)
+          memory_data =
+            if(memory_product,
+              do: %{
+                memory_id: memory_id,
+                memory_product_id: memory_product.id,
+                memory_price: memory_product.sale_price,
+                memory_quantity: memory_quantity,
+                memory_amount: memory_quantity * memory_product.sale_price
+              },
+              else: %{
+                memory_id: nil,
+                memory_product_id: nil,
+                memory_price: 0,
+                memory_quantity: 0,
+                memory_amount: 0
+              }
+            )
+
+          hard_drive_data =
+            if(hard_drive_product,
+              do: %{
+                hard_drive_id: hard_drive_id,
+                hard_drive_product_id: hard_drive_product.id,
+                hard_drive_price: hard_drive_product.sale_price,
+                hard_drive_quantity: hard_drive_quantity,
+                hard_drive_amount: hard_drive_quantity * hard_drive_product.sale_price
+              },
+              else: %{
+                hard_drive_id: nil,
+                hard_drive_product_id: nil,
+                hard_drive_price: 0,
+                hard_drive_quantity: 0,
+                hard_drive_amount: 0
+              }
+            )
 
           %{
-            memory_id: memory_id,
-            memory_product_id: memory_product.id,
-            memory_price: memory_product.sale_price,
-            memory_quantity: memory_quantity,
-            memory_amount: memory_amount,
-            hard_drive_id: hard_drive_id,
-            hard_drive_product_id: hard_drive_product.id,
-            hard_drive_price: hard_drive_product.sale_price,
-            hard_drive_quantity: hard_drive_quantity,
-            hard_drive_amount: hard_drive_amount,
-            option_value_2: option_value_2
+            option_value_2:
+              Enum.join(
+                [memory_label || "Không RAM", hard_drive_label || "Không ổ cứng"],
+                seperator
+              )
           }
+          |> Map.merge(memory_data)
+          |> Map.merge(hard_drive_data)
         end)
       end)
 

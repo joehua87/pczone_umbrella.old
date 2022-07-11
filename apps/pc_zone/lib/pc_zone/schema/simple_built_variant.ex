@@ -14,6 +14,12 @@ defmodule PcZone.SimpleBuiltVariant do
     :processor_price,
     :processor_quantity,
     :processor_amount,
+    :option_values,
+    :total,
+    :config
+  ]
+
+  @optional [
     :memory_id,
     :memory_product_id,
     :memory_price,
@@ -24,12 +30,6 @@ defmodule PcZone.SimpleBuiltVariant do
     :hard_drive_price,
     :hard_drive_quantity,
     :hard_drive_amount,
-    :option_values,
-    :total,
-    :config
-  ]
-
-  @optional [
     :gpu_id,
     :gpu_product_id,
     :gpu_price,

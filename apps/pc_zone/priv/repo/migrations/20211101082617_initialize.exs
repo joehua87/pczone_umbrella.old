@@ -418,13 +418,13 @@ defmodule PcZone.Repo.Migrations.Initialize do
       add :gpu_price, :integer
       add :gpu_quantity, :integer
       add :gpu_amount, :integer
-      add :memory_id, references(:memory), null: false
-      add :memory_product_id, references(:product), null: false
+      add :memory_id, references(:memory)
+      add :memory_product_id, references(:product)
       add :memory_price, :integer, null: false
       add :memory_quantity, :integer, null: false
       add :memory_amount, :integer, null: false
-      add :hard_drive_id, references(:hard_drive), null: false
-      add :hard_drive_product_id, references(:product), null: false
+      add :hard_drive_id, references(:hard_drive)
+      add :hard_drive_product_id, references(:product)
       add :hard_drive_price, :integer, null: false
       add :hard_drive_quantity, :integer, null: false
       add :hard_drive_amount, :integer, null: false

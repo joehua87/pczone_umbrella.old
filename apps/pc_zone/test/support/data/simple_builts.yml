@@ -3,7 +3,7 @@
   barebone: hp-elitedesk-800-g2-mini
   barebone_product: hp-elitedesk-800-g2-mini/used
   option_types: []
-  option_value_seperator: ' - '
+  option_value_seperator: ' + '
   processors:
     - processor: i5-6500T
       processor_label: i5-6500T
