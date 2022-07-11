@@ -39,6 +39,7 @@ defmodule PcZone.MixProject do
       {:bcrypt_elixir, "~> 2.0"},
       {:dew_util, "~> 0.2"},
       {:ecto_ltree, "~> 0.4.0"},
+      {:elixlsx, "~> 0.3.1"},
       {:nimble_csv, "~> 1.1"},
       {:finch, "~> 0.9.0"},
       {:floki, "~> 0.32.0"},

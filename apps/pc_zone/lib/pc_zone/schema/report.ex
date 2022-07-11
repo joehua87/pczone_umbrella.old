@@ -1,15 +1,19 @@
-defmodule PcZone.Brand do
+defmodule PcZone.Report do
   use Ecto.Schema
   import Ecto.Changeset
 
   @derive Jason.Encoder
 
-  @required [:slug, :name]
+  @required [:name, :type, :path, :category, :size]
   @optional []
 
-  schema "brand" do
-    field :slug, :string
+  schema "report" do
     field :name, :string
+    field :type, :string
+    field :path, :string
+    field :category, :string
+    field :size, :integer
+    timestamps()
   end
 
   def changeset(entity, params) do

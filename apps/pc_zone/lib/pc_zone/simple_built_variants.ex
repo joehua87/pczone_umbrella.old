@@ -1,6 +1,7 @@
 defmodule PcZone.SimpleBuiltVariants do
   import Ecto.Query, only: [where: 2, from: 2]
   import Dew.FilterParser
+  alias Elixlsx.{Sheet, Workbook}
   alias PcZone.Repo
 
   def get(id) do
@@ -28,6 +29,69 @@ defmodule PcZone.SimpleBuiltVariants do
 
   def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
 
+  def export_csv(filter \\ %{}) do
+    date = Date.utc_today() |> Calendar.strftime("%Y-%m-%d")
+    now = DateTime.utc_now() |> DateTime.to_unix()
+    name = "simple-built-variants-#{now}"
+    type = "xlsx"
+    path = "#{date}/#{name}-#{now}.#{type}"
+    absolute_path = Path.join(get_report_dir(), path)
+
+    with {:ok, _} <- generate_report(filter) |> Elixlsx.write_to(absolute_path) do
+      %{size: size} = File.stat!(absolute_path)
+
+      %{
+        name: name,
+        type: type,
+        category: "simple-built-variant",
+        path: path,
+        size: size
+      }
+      |> PcZone.Report.new_changeset()
+      |> Repo.insert()
+    end
+  end
+
+  def generate_report(filter \\ %{}) do
+    rows =
+      Repo.all(
+        from v in PcZone.SimpleBuiltVariant,
+          join: sb in PcZone.SimpleBuilt,
+          on: sb.id == v.simple_built_id,
+          where: ^parse_filter(filter),
+          # preload: [:simple_built],
+          select: %{
+            id: v.id,
+            name: sb.name,
+            option_values: v.option_values,
+            total: v.total
+          }
+      )
+      |> Enum.map(fn %{id: id, name: name, total: total, option_values: option_values} ->
+        [id, name, "", "", Enum.join(option_values, ", "), total, 99]
+      end)
+
+    %Workbook{
+      sheets: [
+        %Sheet{
+          name: "Products",
+          rows:
+            [
+              [
+                "Id",
+                "Tên Sản phẩm",
+                "Mã Sản phẩm",
+                "Mã Phân loại",
+                "Tên phân loại",
+                "Giá",
+                "Số lượng"
+              ]
+            ] ++ rows
+        }
+      ]
+    }
+  end
+
   def parse_filter(filter) do
     filter
     |> Enum.reduce(nil, fn {field, value}, acc ->
@@ -36,5 +100,13 @@ defmodule PcZone.SimpleBuiltVariants do
         _ -> acc
       end
     end) || true
+  end
+
+  def get_report_absolute_path(%PcZone.Report{path: path}) do
+    Path.join(get_report_dir(), path)
+  end
+
+  defp get_report_dir() do
+    "/Users/achilles/reports"
   end
 end
