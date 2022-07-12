@@ -9,9 +9,12 @@ defmodule PcZone.Umbrella.MixProject do
       deps: deps(),
       aliases: aliases(),
       releases: [
-        web: [
-          applications: [pc_zone_web: :permanent]
-        ]
+        web: fn ->
+          [
+            version: File.read!(".version"),
+            applications: [pc_zone_web: :permanent]
+          ]
+        end
       ]
     ]
   end
