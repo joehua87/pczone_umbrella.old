@@ -11,7 +11,7 @@ defmodule PcZone.Umbrella.MixProject do
       releases: [
         web: fn ->
           [
-            version: File.read!(".version"),
+            version: File.read!(".version") |> String.trim(),
             applications: [pc_zone_web: :permanent]
           ]
         end
