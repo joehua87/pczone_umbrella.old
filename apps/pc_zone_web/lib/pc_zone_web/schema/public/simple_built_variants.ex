@@ -71,4 +71,14 @@ defmodule PcZoneWeb.Schema.SimpleBuiltVariants do
       end)
     end
   end
+
+  object :simple_built_variant_mutations do
+    field :generate_simple_built_variants_report, non_null(:report) do
+      arg :filter, :simple_built_variant_filter_input
+
+      resolve fn args, _info ->
+        PcZone.SimpleBuiltVariants.export_csv(%{})
+      end
+    end
+  end
 end

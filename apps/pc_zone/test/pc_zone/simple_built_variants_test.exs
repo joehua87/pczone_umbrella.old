@@ -68,7 +68,7 @@ defmodule PcZone.SimpleBuiltVariantsTest do
              } = SimpleBuiltVariants.export_csv()
 
       report
-      |> SimpleBuiltVariants.get_report_absolute_path()
+      |> PcZone.Reports.get_report_absolute_path()
       |> File.rm!()
     end
   end

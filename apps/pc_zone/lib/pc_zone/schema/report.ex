@@ -3,6 +3,7 @@ defmodule PcZone.Report do
   import Ecto.Changeset
 
   @derive Jason.Encoder
+  @timestamps_opts [type: :utc_datetime]
 
   @required [:name, :type, :path, :category, :size]
   @optional []

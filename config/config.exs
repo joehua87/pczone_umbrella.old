@@ -12,9 +12,14 @@ import Config
 # Configure Mix tasks and generators
 config :pc_zone,
   ecto_repos: [PcZone.Repo],
+  report_dir: "/Users/achilles/pczone/reports",
+  media_dir: "/Users/achilles/pczone/media",
   sheet_id: "1gqCHoE7dVKAcRoKhMvJjlNaozDpQGGTN_YDfE4QBfb0"
 
-config :pc_zone, PcZone.Repo, types: PcZone.PostgresTypes
+config :pc_zone, PcZone.Repo,
+  types: PcZone.PostgresTypes,
+  migration_timestamps: [type: :utc_datetime]
+
 # Configures the mailer
 #
 # By default it uses the "Local" adapter which stores the emails

@@ -25,6 +25,7 @@ defmodule PcZoneWeb.Schema do
   import_types PcZoneWeb.Schema.ScrapedEntries
   import_types PcZoneWeb.Schema.SimpleBuilts
   import_types PcZoneWeb.Schema.SimpleBuiltVariants
+  import_types PcZoneWeb.Schema.Reports
 
   query do
     import_fields :user_queries
@@ -45,6 +46,7 @@ defmodule PcZoneWeb.Schema do
     import_fields :scraped_entry_queries
     import_fields :simple_built_queries
     import_fields :simple_built_variant_queries
+    import_fields :report_queries
   end
 
   mutation do
@@ -63,6 +65,7 @@ defmodule PcZoneWeb.Schema do
     import_fields :product_mutations
     import_fields :built_mutations
     import_fields :simple_built_mutations
+    import_fields :simple_built_variant_mutations
 
     def middleware(middleware, _field, %{}) do
       middleware ++ [PcZoneWeb.Middlewares.ErrorsHandle]

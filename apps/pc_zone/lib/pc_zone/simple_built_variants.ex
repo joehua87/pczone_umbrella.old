@@ -30,12 +30,12 @@ defmodule PcZone.SimpleBuiltVariants do
   def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
 
   def export_csv(filter \\ %{}) do
-    date = Date.utc_today() |> Calendar.strftime("%Y-%m-%d")
+    date = Date.utc_today() |> Calendar.strftime("%Y-%m")
     now = DateTime.utc_now() |> DateTime.to_unix()
     name = "simple-built-variants-#{now}"
     type = "xlsx"
     path = "#{date}/#{name}-#{now}.#{type}"
-    absolute_path = Path.join(get_report_dir(), path)
+    absolute_path = Path.join(PcZone.Reports.get_report_dir(), path)
 
     with {:ok, _} <- generate_report(filter) |> Elixlsx.write_to(absolute_path) do
       %{size: size} = File.stat!(absolute_path)
@@ -100,13 +100,5 @@ defmodule PcZone.SimpleBuiltVariants do
         _ -> acc
       end
     end) || true
-  end
-
-  def get_report_absolute_path(%PcZone.Report{path: path}) do
-    Path.join(get_report_dir(), path)
-  end
-
-  defp get_report_dir() do
-    "/Users/achilles/reports"
   end
 end
