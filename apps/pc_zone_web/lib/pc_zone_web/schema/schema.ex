@@ -26,6 +26,7 @@ defmodule PcZoneWeb.Schema do
   import_types PcZoneWeb.Schema.SimpleBuilts
   import_types PcZoneWeb.Schema.SimpleBuiltVariants
   import_types PcZoneWeb.Schema.Reports
+  import_types PcZoneWeb.Schema.Media
 
   query do
     import_fields :user_queries
@@ -47,6 +48,7 @@ defmodule PcZoneWeb.Schema do
     import_fields :simple_built_queries
     import_fields :simple_built_variant_queries
     import_fields :report_queries
+    import_fields :medium_queries
   end
 
   mutation do

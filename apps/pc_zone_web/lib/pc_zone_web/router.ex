@@ -87,8 +87,10 @@ defmodule PcZoneWeb.Router do
   end
 
   scope "/files", PcZoneWeb do
-    pipe_through [:browser]
+    pipe_through [:api]
 
+    post "/media", FileController, :new_media
     get "/reports/*path", FileController, :report_file
+    get "/media/*path", FileController, :media_file
   end
 end
