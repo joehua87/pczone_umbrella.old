@@ -4,6 +4,7 @@ defmodule PcZoneWeb.Schema.Heatsinks do
 
   object :heatsink do
     field :id, non_null(:id)
+    field :code, non_null(:string)
     field :slug, non_null(:string)
     field :name, non_null(:string)
     field :supported_types, non_null(list_of(non_null(:string)))

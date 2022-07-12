@@ -4,6 +4,7 @@ defmodule PcZoneWeb.Schema.HardDrives do
 
   object :hard_drive do
     field :id, non_null(:id)
+    field :code, non_null(:string)
     field :slug, non_null(:string)
     field :name, non_null(:string)
     field :capacity, non_null(:integer)

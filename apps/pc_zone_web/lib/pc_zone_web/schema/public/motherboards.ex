@@ -40,6 +40,7 @@ defmodule PcZoneWeb.Schema.Motherboards do
 
   object :motherboard do
     field :id, non_null(:id)
+    field :code, non_null(:string)
     field :slug, non_null(:string)
     field :name, non_null(:string)
     field :max_memory_capacity, non_null(:string)

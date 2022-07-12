@@ -9,6 +9,7 @@ defmodule PcZoneWeb.Schema.Chassises do
 
   object :chassis do
     field :id, non_null(:id)
+    field :code, non_null(:string)
     field :slug, non_null(:string)
     field :name, non_null(:string)
     field :form_factor, non_null(:string)

@@ -4,6 +4,7 @@ defmodule PcZoneWeb.Schema.Psus do
 
   object :psu do
     field :id, non_null(:id)
+    field :code, non_null(:string)
     field :slug, non_null(:string)
     field :name, non_null(:string)
     field :wattage, non_null(:integer)

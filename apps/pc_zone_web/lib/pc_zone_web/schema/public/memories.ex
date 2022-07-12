@@ -4,6 +4,7 @@ defmodule PcZoneWeb.Schema.Memories do
 
   object :memory do
     field :id, non_null(:id)
+    field :code, non_null(:string)
     field :slug, non_null(:string)
     field :name, non_null(:string)
     field :type, non_null(:string)
