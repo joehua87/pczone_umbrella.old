@@ -85,4 +85,10 @@ defmodule PcZoneWeb.Router do
     get "/user/confirm/:token", UserConfirmationController, :edit
     post "/user/confirm/:token", UserConfirmationController, :update
   end
+
+  scope "/files", PcZoneWeb do
+    pipe_through [:browser]
+
+    get "/reports/*path", FileController, :report_file
+  end
 end

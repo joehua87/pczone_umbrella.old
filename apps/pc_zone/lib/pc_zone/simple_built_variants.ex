@@ -34,7 +34,7 @@ defmodule PcZone.SimpleBuiltVariants do
     now = DateTime.utc_now() |> DateTime.to_unix()
     name = "simple-built-variants-#{now}"
     type = "xlsx"
-    path = "#{date}/#{name}-#{now}.#{type}"
+    path = "#{date}/#{name}.#{type}"
     absolute_path = Path.join(PcZone.Reports.get_report_dir(), path)
 
     with {:ok, _} <- generate_report(filter) |> Elixlsx.write_to(absolute_path) do
