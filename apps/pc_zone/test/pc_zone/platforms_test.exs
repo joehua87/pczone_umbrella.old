@@ -51,6 +51,87 @@ defmodule PcZone.PlatformsTest do
 
       assert {4, _} = Platforms.upsert_simple_built_variants(platform.id, list)
     end
+
+    test "make product pricing workbook", %{platform: platform} do
+      make_simple_built_variant_platforms(platform)
+
+      assert %Elixlsx.Workbook{
+               datetime: nil,
+               sheets: [
+                 %Elixlsx.Sheet{
+                   col_widths: %{},
+                   merge_cells: [],
+                   name: "Sheet1",
+                   pane_freeze: nil,
+                   row_heights: %{},
+                   rows: [
+                     [
+                       "Mã Sản phẩm",
+                       "Tên Sản phẩm",
+                       "Mã Phân loại",
+                       "Tên phân loại",
+                       "SKU Sản phẩm",
+                       "SKU",
+                       "Giá",
+                       "Số lượng"
+                     ],
+                     [
+                       "a",
+                       "Hp Elitedesk 800 G2 Mini",
+                       "x-0",
+                       "i5-6500T, Không RAM + Không ổ cứng",
+                       "",
+                       "",
+                       3_675_000,
+                       999
+                     ]
+                     | _
+                   ]
+                 }
+               ]
+             } = Platforms.make_platform_pricing_workbook(platform.id)
+    end
+
+    @tag :wip
+    test "generate product pricing report", %{platform: platform} do
+      make_simple_built_variant_platforms(platform)
+
+      assert {:ok,
+              report = %PcZone.Report{
+                category: "platform-product-pricing",
+                inserted_at: _,
+                name: "shopee-product-pricing-" <> _,
+                path: _,
+                size: 3770,
+                type: "xlsx"
+              }} = Platforms.generate_platform_pricing_report(platform.id)
+
+      report
+      |> PcZone.Reports.get_report_absolute_path()
+      |> File.rm!()
+    end
+  end
+
+  def make_simple_built_variant_platforms(platform) do
+    [simple_built | _] = simple_builts_fixture()
+
+    assert {_, simple_built_variants} =
+             simple_built
+             |> SimpleBuilts.generate_variants()
+             |> SimpleBuilts.upsert_variants(returning: true)
+
+    list =
+      simple_built_variants
+      |> Enum.take(4)
+      |> Enum.with_index(fn %{id: id}, index ->
+        %{
+          "id" => id,
+          "product_code" => "a",
+          "variant_code" => "x-#{index}"
+        }
+      end)
+
+    assert {4, _} = Platforms.upsert_simple_built_variants(platform.id, list)
   end
 
   setup do
