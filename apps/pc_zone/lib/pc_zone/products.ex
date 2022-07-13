@@ -32,7 +32,6 @@ defmodule PcZone.Products do
   def read_xlsx(path) do
     [{:ok, sheet_1} | _] = Xlsxir.multi_extract(path)
     [headers | rows] = Xlsxir.get_list(sheet_1)
-    IO.inspect(headers)
 
     rows
     |> Enum.map(fn row ->
@@ -57,7 +56,33 @@ defmodule PcZone.Products do
     Repo.insert_all(
       Product,
       entities,
-      [on_conflict: :replace_all, conflict_target: [:sku]] ++ opts
+      [
+        on_conflict:
+          {:replace,
+           [
+             :sku,
+             :slug,
+             :title,
+             :condition,
+             :sale_price,
+             :percentage_off,
+             :type,
+             :stock,
+             :list_price,
+             :cost,
+             :category_id,
+             :barebone_id,
+             :motherboard_id,
+             :processor_id,
+             :memory_id,
+             :gpu_id,
+             :hard_drive_id,
+             :psu_id,
+             :chassis_id,
+             :heatsink_id
+           ]},
+        conflict_target: [:sku]
+      ] ++ opts
     )
   end
 
