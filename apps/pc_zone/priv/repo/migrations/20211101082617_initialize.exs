@@ -252,6 +252,7 @@ defmodule PcZone.Repo.Migrations.Initialize do
       add :list_price, :integer
       add :sale_price, :integer, null: false
       add :percentage_off, :decimal, null: false
+      add :cost, :integer
       add :stock, :integer, null: false, default: 0
       add :type, :string
       add :category_id, references(:product_category)

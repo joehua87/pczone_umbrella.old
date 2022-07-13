@@ -9,6 +9,7 @@ defmodule PcZone.Product do
     :type,
     :stock,
     :list_price,
+    :cost,
     :category_id,
     :barebone_id,
     :motherboard_id,
@@ -29,6 +30,7 @@ defmodule PcZone.Product do
     field :list_price, :integer
     field :sale_price, :integer
     field :percentage_off, :decimal
+    field :cost, :integer
     field :stock, :integer, default: 0
     field :type, Ecto.Enum, values: @product_types
     belongs_to :category, PcZone.ProductCategory

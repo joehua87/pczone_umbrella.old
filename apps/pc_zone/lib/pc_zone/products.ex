@@ -29,6 +29,22 @@ defmodule PcZone.Products do
 
   def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
 
+  def read_xlsx(path) do
+    [{:ok, sheet_1} | _] = Xlsxir.multi_extract(path)
+    [headers | rows] = Xlsxir.get_list(sheet_1)
+    IO.inspect(headers)
+
+    rows
+    |> Enum.map(fn row ->
+      row
+      |> Enum.with_index(fn cell, index ->
+        {Enum.at(headers, index), cell}
+      end)
+      |> Enum.filter(&(elem(&1, 0) != nil))
+      |> Enum.into(%{})
+    end)
+  end
+
   def upsert(entities, opts \\ []) when is_list(entities) do
     entities =
       ensure_products("motherboard", entities) ++
@@ -81,6 +97,12 @@ defmodule PcZone.Products do
             _ -> nil
           end
 
+        cost =
+          case params do
+            %{"cost" => cost} -> ensure_price(cost)
+            _ -> nil
+          end
+
         percentage_off =
           case list_price do
             nil -> 0
@@ -96,8 +118,10 @@ defmodule PcZone.Products do
             |> Map.merge(%{
               "slug" => get_slug(params) || Slug.slugify("#{slug} #{condition}"),
               "title" => get_title(params) || "#{title} (#{condition})",
+              "list_price" => list_price,
               "sale_price" => sale_price,
-              "percentage_off" => percentage_off
+              "percentage_off" => percentage_off,
+              "cost" => cost
             })
             |> Map.put("#{kind}_id", id)
             |> PcZone.Product.new_changeset()
@@ -115,6 +139,10 @@ defmodule PcZone.Products do
 
   def get_slug(%{"slug" => slug}), do: slug
   def get_slug(_), do: nil
+
+  def ensure_price(price) when is_number(price), do: price
+  def ensure_price(""), do: nil
+  def ensure_price(nil), do: nil
 
   def ensure_price(price) do
     price |> String.replace("_", "") |> String.to_integer()
