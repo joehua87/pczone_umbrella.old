@@ -78,13 +78,20 @@ defmodule PcZone.SimpleBuiltVariants do
           rows:
             [
               [
-                "Id",
-                "Tên Sản phẩm",
-                "Mã Sản phẩm",
-                "Mã Phân loại",
-                "Tên phân loại",
-                "Giá",
-                "Số lượng"
+                # "Id",
+                # "Tên Sản phẩm",
+                # "Mã Sản phẩm",
+                # "Mã Phân loại",
+                # "Tên phân loại",
+                # "Giá",
+                # "Số lượng"
+                "id",
+                "product_name",
+                "product_code",
+                "variant_code",
+                "option_values",
+                "price",
+                "stock"
               ]
             ] ++ rows
         }

@@ -89,7 +89,7 @@ defmodule PcZone.Media do
       }
     ]
 
-    args = ["default", id, "-p", Jason.encode!(presets)] |> IO.inspect()
+    args = ["default", id, "-p", Jason.encode!(presets)]
 
     case System.cmd(
            "dew-media",
@@ -99,7 +99,6 @@ defmodule PcZone.Media do
       {_, 0} -> :ok
       _ -> {:error, "Cannot transform"}
     end
-    |> IO.inspect()
   end
 
   def bulk_upload(plug_uploads) do

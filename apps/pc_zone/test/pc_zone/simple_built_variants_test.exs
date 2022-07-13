@@ -23,14 +23,23 @@ defmodule PcZone.SimpleBuiltVariantsTest do
                    row_heights: %{},
                    rows: [
                      [
-                       "Id",
-                       "Tên Sản phẩm",
-                       "Mã Sản phẩm",
-                       "Mã Phân loại",
-                       "Tên phân loại",
-                       "Giá",
-                       "Số lượng"
+                       "id",
+                       "product_name",
+                       "product_code",
+                       "variant_code",
+                       "option_values",
+                       "price",
+                       "stock"
                      ],
+                     #  [
+                     #    "Id",
+                     #    "Tên Sản phẩm",
+                     #    "Mã Sản phẩm",
+                     #    "Mã Phân loại",
+                     #    "Tên phân loại",
+                     #    "Giá",
+                     #    "Số lượng"
+                     #  ],
                      [
                        _,
                        "Hp Elitedesk 800 G2 Mini",
@@ -74,9 +83,7 @@ defmodule PcZone.SimpleBuiltVariantsTest do
   end
 
   setup do
-    get_fixtures_dir()
-    |> PcZone.initial_data()
-
+    get_fixtures_dir() |> PcZone.initial_data()
     :ok
   end
 end
