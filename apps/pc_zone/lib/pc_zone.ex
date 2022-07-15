@@ -7,6 +7,32 @@ defmodule PcZone do
   if it comes from the database, an external API or others.
   """
 
+  def get_upsert_files_from_google_drive(folder_id \\ "1-wKKakuaLX34unJm5WTOwj3wL7mHEeF9") do
+    {:ok, token} = Goth.Token.for_scope("https://www.googleapis.com/auth/drive")
+    conn = GoogleApi.Drive.V3.Connection.new(token.token)
+
+    {:ok, %GoogleApi.Drive.V3.Model.FileList{files: files}} =
+      GoogleApi.Drive.V3.Api.Files.drive_files_list(conn, q: "'#{folder_id}' in parents")
+
+    {:ok, dir} = Temp.mkdir("pczone-data")
+
+    files
+    |> Task.async_stream(
+      fn %GoogleApi.Drive.V3.Model.File{id: id, name: name} ->
+        path = Path.join(dir, name)
+
+        with {:ok, %{body: body}} <-
+               GoogleApi.Drive.V3.Api.Files.drive_files_get(conn, id, alt: "media") do
+          File.write!(path, body)
+          path
+        end
+      end,
+      max_concurrency: 4,
+      timeout: 30_000
+    )
+    |> Enum.map(fn {:ok, path} -> path end)
+  end
+
   def initial_data(dir) when is_bitstring(dir) do
     dir
     |> Path.join("*")
