@@ -102,7 +102,7 @@ defmodule PcZone.Chipsets do
       end)
       |> Enum.filter(&(&1.chipset_id != nil && &1.processor_id != nil))
 
-    Repo.insert_all(PcZone.ChipsetProcessor, entities, opts)
+    Repo.insert_all(PcZone.ChipsetProcessor, entities, [on_conflict: :nothing] ++ opts)
   end
 
   def import_chipsets() do

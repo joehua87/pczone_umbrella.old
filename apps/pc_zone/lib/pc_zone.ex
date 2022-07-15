@@ -7,19 +7,26 @@ defmodule PcZone do
   if it comes from the database, an external API or others.
   """
 
-  def initial_data(dir) do
-    barebones = dir |> Path.join("barebones.yml") |> YamlElixir.read_from_file!()
-    brands = dir |> Path.join("brands.yml") |> YamlElixir.read_from_file!()
-    chassises = dir |> Path.join("chassises.yml") |> YamlElixir.read_from_file!()
-    chipsets = dir |> Path.join("chipsets.yml") |> YamlElixir.read_from_file!()
-    gpus = dir |> Path.join("gpus.yml") |> YamlElixir.read_from_file!()
-    hard_drives = dir |> Path.join("hard_drives.yml") |> YamlElixir.read_from_file!()
-    memories = dir |> Path.join("memories.yml") |> YamlElixir.read_from_file!()
-    motherboards = dir |> Path.join("motherboards.yml") |> YamlElixir.read_from_file!()
-    processors = dir |> Path.join("processors.yml") |> YamlElixir.read_from_file!()
-    psus = dir |> Path.join("psus.yml") |> YamlElixir.read_from_file!()
-    heatsinks = dir |> Path.join("heatsinks.yml") |> YamlElixir.read_from_file!()
-    products = dir |> Path.join("products.yml") |> YamlElixir.read_from_file!()
+  def initial_data(dir) when is_bitstring(dir) do
+    dir
+    |> Path.join("*")
+    |> Path.wildcard()
+    |> initial_data()
+  end
+
+  def initial_data(files) when is_list(files) do
+    barebones = read_from_files!(files, ~r/barebones.*?\.ya?ml/)
+    brands = read_from_files!(files, ~r/brands.*?\.ya?ml/)
+    chassises = read_from_files!(files, ~r/chassises.*?\.ya?ml/)
+    chipsets = read_from_files!(files, ~r/chipsets.*?\.ya?ml/)
+    gpus = read_from_files!(files, ~r/gpus.*?\.ya?ml/)
+    hard_drives = read_from_files!(files, ~r/hard_drives.*?\.ya?ml/)
+    memories = read_from_files!(files, ~r/memories.*?\.ya?ml/)
+    motherboards = read_from_files!(files, ~r/motherboards.*?\.ya?ml/)
+    processors = read_from_files!(files, ~r/processors.*?\.ya?ml/)
+    psus = read_from_files!(files, ~r/psus.*?\.ya?ml/)
+    heatsinks = read_from_files!(files, ~r/heatsinks.*?\.ya?ml/)
+    products = read_from_files!(files, ~r/products.*?\.ya?ml/)
 
     PcZone.Brands.upsert(brands)
     PcZone.Chipsets.upsert(chipsets)
@@ -35,5 +42,12 @@ defmodule PcZone do
     PcZone.Chipsets.upsert_chipset_processors(chipsets)
     PcZone.Motherboards.upsert_motherboard_processors(motherboards)
     PcZone.Products.upsert(products)
+  end
+
+  def read_from_files!(files, name_pattern) do
+    files
+    |> Enum.filter(&(&1 |> Path.basename() |> String.match?(name_pattern)))
+    |> Enum.map(&YamlElixir.read_all_from_file!/1)
+    |> List.flatten()
   end
 end
