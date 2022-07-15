@@ -69,8 +69,6 @@ defmodule PcZoneWeb.Router do
   end
 
   scope "/", PcZoneWeb do
-    pipe_through [:browser, :require_authenticated_user]
-
     get "/user/settings", UserSettingsController, :edit
     put "/user/settings", UserSettingsController, :update
     get "/user/settings/confirm_email/:token", UserSettingsController, :confirm_email
@@ -84,6 +82,11 @@ defmodule PcZoneWeb.Router do
     post "/user/confirm", UserConfirmationController, :create
     get "/user/confirm/:token", UserConfirmationController, :edit
     post "/user/confirm/:token", UserConfirmationController, :update
+  end
+
+  scope "/", PcZoneWeb do
+    pipe_through [:api]
+    post "/upsert/products", UpsertController, :products
   end
 
   scope "/files", PcZoneWeb do
