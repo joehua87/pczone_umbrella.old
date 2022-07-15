@@ -3,7 +3,7 @@ defmodule PcZoneWeb.UpsertController do
 
   def products(conn, %{"file" => %Plug.Upload{path: path}}) do
     path
-    |> PcZone.Products.read_xlsx()
+    |> PcZone.Xlsx.read_spreadsheet()
     |> PcZone.Products.upsert()
     |> IO.inspect()
 

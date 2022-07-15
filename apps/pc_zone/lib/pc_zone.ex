@@ -15,18 +15,18 @@ defmodule PcZone do
   end
 
   def initial_data(files) when is_list(files) do
-    barebones = read_from_files!(files, ~r/barebones.*?\.ya?ml/)
-    brands = read_from_files!(files, ~r/brands.*?\.ya?ml/)
-    chassises = read_from_files!(files, ~r/chassises.*?\.ya?ml/)
-    chipsets = read_from_files!(files, ~r/chipsets.*?\.ya?ml/)
-    gpus = read_from_files!(files, ~r/gpus.*?\.ya?ml/)
-    hard_drives = read_from_files!(files, ~r/hard_drives.*?\.ya?ml/)
-    memories = read_from_files!(files, ~r/memories.*?\.ya?ml/)
-    motherboards = read_from_files!(files, ~r/motherboards.*?\.ya?ml/)
-    processors = read_from_files!(files, ~r/processors.*?\.ya?ml/)
-    psus = read_from_files!(files, ~r/psus.*?\.ya?ml/)
-    heatsinks = read_from_files!(files, ~r/heatsinks.*?\.ya?ml/)
-    products = read_from_files!(files, ~r/products.*?\.ya?ml/)
+    barebones = read_from_files!(files, ~r/barebones.*?\.(ya?ml|xlsx)/)
+    brands = read_from_files!(files, ~r/brands.*?\.(ya?ml|xlsx)/)
+    chassises = read_from_files!(files, ~r/chassises.*?\.(ya?ml|xlsx)/)
+    chipsets = read_from_files!(files, ~r/chipsets.*?\.(ya?ml|xlsx)/)
+    gpus = read_from_files!(files, ~r/gpus.*?\.(ya?ml|xlsx)/)
+    hard_drives = read_from_files!(files, ~r/hard_drives.*?\.(ya?ml|xlsx)/)
+    memories = read_from_files!(files, ~r/memories.*?\.(ya?ml|xlsx)/)
+    motherboards = read_from_files!(files, ~r/motherboards.*?\.(ya?ml|xlsx)/)
+    processors = read_from_files!(files, ~r/processors.*?\.(ya?ml|xlsx)/)
+    psus = read_from_files!(files, ~r/psus.*?\.(ya?ml|xlsx)/)
+    heatsinks = read_from_files!(files, ~r/heatsinks.*?\.(ya?ml|xlsx)/)
+    products = read_from_files!(files, ~r/products.*?\.(ya?ml|xlsx)/)
 
     PcZone.Brands.upsert(brands)
     PcZone.Chipsets.upsert(chipsets)
@@ -47,7 +47,18 @@ defmodule PcZone do
   def read_from_files!(files, name_pattern) do
     files
     |> Enum.filter(&(&1 |> Path.basename() |> String.match?(name_pattern)))
-    |> Enum.map(&YamlElixir.read_all_from_file!/1)
+    |> Enum.map(fn file ->
+      cond do
+        String.match?(file, ~r/\.ya?ml/) ->
+          YamlElixir.read_all_from_file!(file)
+
+        String.match?(file, ~r/\.xlsx/) ->
+          PcZone.Xlsx.read_spreadsheet(file)
+
+        true ->
+          []
+      end
+    end)
     |> List.flatten()
   end
 end

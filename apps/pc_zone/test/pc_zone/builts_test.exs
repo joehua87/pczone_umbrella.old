@@ -81,7 +81,7 @@ defmodule PcZone.BuiltsTest do
 
   setup do
     PcZone.Fixtures.get_fixtures_dir() |> PcZone.initial_data()
-    PcZone.Fixtures.read_fixture("products.yml")
+    PcZone.Fixtures.read_fixture("products.xlsx")
 
     %{id: barebone_id} = Barebones.get_by_code("hp-elitedesk-800-g2-mini-65w")
     %{id: barebone_product_id} = Products.get_by_sku("hp-elitedesk-800-g2-mini-65w/used")

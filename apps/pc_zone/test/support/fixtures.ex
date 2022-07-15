@@ -11,7 +11,8 @@ defmodule PcZone.Fixtures do
 
     case ext do
       ".json" -> path |> File.read!() |> Jason.decode!()
-      ".yml" -> path |> YamlElixir.read_from_file!()
+      ".yml" -> YamlElixir.read_from_file!(path)
+      ".xlsx" -> PcZone.Xlsx.read_spreadsheet(path)
       _ -> {:error, "File not found"}
     end
   end

@@ -29,21 +29,6 @@ defmodule PcZone.Products do
 
   def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
 
-  def read_xlsx(path) do
-    [{:ok, sheet_1} | _] = Xlsxir.multi_extract(path)
-    [headers | rows] = Xlsxir.get_list(sheet_1)
-
-    rows
-    |> Enum.map(fn row ->
-      row
-      |> Enum.with_index(fn cell, index ->
-        {Enum.at(headers, index), cell}
-      end)
-      |> Enum.filter(&(elem(&1, 0) != nil))
-      |> Enum.into(%{})
-    end)
-  end
-
   def upsert(entities, opts \\ []) when is_list(entities) do
     entities =
       ensure_products("motherboard", entities) ++

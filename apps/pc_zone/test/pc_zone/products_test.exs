@@ -5,7 +5,7 @@ defmodule PcZone.ProductsTest do
   describe "products" do
     test "upsert" do
       PcZone.Fixtures.get_fixtures_dir() |> PcZone.initial_data()
-      products = PcZone.Fixtures.read_fixture("products.yml")
+      products = PcZone.Fixtures.read_fixture("products.xlsx")
 
       assert {32,
               [
@@ -14,10 +14,10 @@ defmodule PcZone.ProductsTest do
               ]} = Products.upsert(products, returning: true)
     end
 
-    test "upsert from csv" do
+    test "upsert from xlsx" do
       PcZone.Fixtures.get_fixtures_dir() |> PcZone.initial_data()
 
-      assert {52,
+      assert {32,
               [
                 %PcZone.Product{
                   barebone_id: _,
@@ -45,7 +45,7 @@ defmodule PcZone.ProductsTest do
               ]} =
                PcZone.Fixtures.get_fixtures_dir()
                |> Path.join("products.xlsx")
-               |> Products.read_xlsx()
+               |> PcZone.Xlsx.read_spreadsheet()
                |> Products.upsert(returning: true)
     end
   end
