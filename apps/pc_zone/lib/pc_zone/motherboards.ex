@@ -41,42 +41,42 @@ defmodule PcZone.Motherboards do
     brands_map = PcZone.Brands.get_map_by_slug()
     chipsets_map = PcZone.Chipsets.get_map_by_code()
 
-    entities =
-      Enum.map(
-        entities,
-        &parse_entity_for_upsert(&1, brands_map: brands_map, chipsets_map: chipsets_map)
+    with list = [_ | _] <-
+           PcZone.Helpers.get_list_changset_changes(
+             entities,
+             &parse_entity_for_upsert(&1, brands_map: brands_map, chipsets_map: chipsets_map)
+           ) do
+      Repo.insert_all_2(
+        Motherboard,
+        list,
+        Keyword.merge(opts,
+          on_conflict:
+            {:replace,
+             [
+               :slug,
+               :code,
+               :name,
+               :max_memory_capacity,
+               :chipset_id,
+               :brand_id,
+               :note,
+               :chassis_form_factors,
+               :memory_slots_count,
+               :processor_slots_count,
+               :sata_slots_count,
+               :m2_slots_count,
+               :pci_slots_count,
+               :memory_slots,
+               :processor_slots,
+               :sata_slots,
+               :m2_slots,
+               :pci_slots,
+               :attributes
+             ]},
+          conflict_target: [:slug]
+        )
       )
-
-    Repo.insert_all_2(
-      Motherboard,
-      entities,
-      Keyword.merge(opts,
-        on_conflict:
-          {:replace,
-           [
-             :slug,
-             :code,
-             :name,
-             :max_memory_capacity,
-             :chipset_id,
-             :brand_id,
-             :note,
-             :chassis_form_factors,
-             :memory_slots_count,
-             :processor_slots_count,
-             :sata_slots_count,
-             :m2_slots_count,
-             :pci_slots_count,
-             :memory_slots,
-             :processor_slots,
-             :sata_slots,
-             :m2_slots,
-             :pci_slots,
-             :attributes
-           ]},
-        conflict_target: [:slug]
-      )
-    )
+    end
   end
 
   def upsert_motherboard_processors(entities, opts \\ []) do

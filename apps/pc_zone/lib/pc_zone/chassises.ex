@@ -32,18 +32,23 @@ defmodule PcZone.Chassises do
 
   def upsert(entities, opts \\ []) do
     brands_map = PcZone.Brands.get_map_by_slug()
-    entities = Enum.map(entities, &parse_entity_for_upsert(&1, brands_map: brands_map))
 
-    Repo.insert_all_2(
-      PcZone.Chassis,
-      entities,
-      Keyword.merge(opts,
-        on_conflict:
-          {:replace,
-           [:slug, :name, :form_factor, :hard_drive_slots, :psu_form_factors, :brand_id]},
-        conflict_target: [:code]
+    with list = [_ | _] <-
+           PcZone.Helpers.get_list_changset_changes(
+             entities,
+             &parse_entity_for_upsert(&1, brands_map: brands_map)
+           ) do
+      Repo.insert_all_2(
+        PcZone.Chassis,
+        list,
+        Keyword.merge(opts,
+          on_conflict:
+            {:replace,
+             [:slug, :name, :form_factor, :hard_drive_slots, :psu_form_factors, :brand_id]},
+          conflict_target: [:code]
+        )
       )
-    )
+    end
   end
 
   def parse_entity_for_upsert(params, brands_map: brands_map) do

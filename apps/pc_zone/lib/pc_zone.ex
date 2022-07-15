@@ -59,20 +59,21 @@ defmodule PcZone do
     heatsinks = read_from_files!(files, ~r/heatsinks.*?\.(ya?ml|xlsx)/)
     products = read_from_files!(files, ~r/products.*?\.(ya?ml|xlsx)/)
 
-    with {_, _} <- PcZone.Brands.upsert(brands),
-         {_, _} <- PcZone.Chipsets.upsert(chipsets),
-         {_, _} <- PcZone.Motherboards.upsert(motherboards),
-         {_, _} <- PcZone.Processors.upsert(processors),
-         {_, _} <- PcZone.Memories.upsert(memories),
-         {_, _} <- PcZone.HardDrives.upsert(hard_drives),
-         {_, _} <- PcZone.Gpus.upsert(gpus),
-         {_, _} <- PcZone.Chassises.upsert(chassises),
-         {_, _} <- PcZone.Psus.upsert(psus),
-         {_, _} <- PcZone.Heatsinks.upsert(heatsinks),
-         {_, _} <- PcZone.Barebones.upsert(barebones),
-         {_, _} <- PcZone.Chipsets.upsert_chipset_processors(chipsets),
-         {_, _} <- PcZone.Motherboards.upsert_motherboard_processors(motherboards),
-         {_, _} <- PcZone.Products.upsert(products) do
+    with {:ok, _} <- PcZone.Brands.upsert(brands),
+         {:ok, _} <- PcZone.Chipsets.upsert(chipsets),
+         {:ok, _} <- PcZone.Motherboards.upsert(motherboards),
+         {:ok, _} <- PcZone.Processors.upsert(processors),
+         {:ok, _} <- PcZone.Memories.upsert(memories),
+         {:ok, _} <- PcZone.HardDrives.upsert(hard_drives),
+         {:ok, _} <- PcZone.Gpus.upsert(gpus),
+         {:ok, _} <- PcZone.Chassises.upsert(chassises),
+         {:ok, _} <- PcZone.Psus.upsert(psus),
+         {:ok, _} <- PcZone.Heatsinks.upsert(heatsinks),
+         {:ok, _} <- PcZone.Barebones.upsert(barebones),
+         {:ok, _} <- PcZone.Chipsets.upsert_chipset_processors(chipsets),
+         {:ok, _} <- PcZone.Motherboards.upsert_motherboard_processors(motherboards),
+         {:ok, _} <- PcZone.Products.upsert(products) do
+      true
     end
   end
 

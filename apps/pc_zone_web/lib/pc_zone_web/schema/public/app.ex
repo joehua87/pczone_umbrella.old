@@ -9,8 +9,6 @@ defmodule PcZoneWeb.Schema.App do
         Map.get(args, :google_drive_file_id)
         |> PcZone.get_upsert_files_from_google_drive()
         |> PcZone.initial_data()
-
-        {:ok, true}
       end)
     end
   end

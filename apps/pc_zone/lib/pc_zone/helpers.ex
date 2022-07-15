@@ -4,6 +4,15 @@ defmodule PcZone.Helpers do
   def ensure_slug(%{name: name} = params), do: Map.put(params, :slug, Slug.slugify(name))
   def ensure_slug(%{"name" => name} = params), do: Map.put(params, "slug", Slug.slugify(name))
 
+  def get_list_changset_changes(list, func) do
+    Enum.reduce(list, [], fn entity, list ->
+      case func.(entity) do
+        {:error, changeset} -> {:error, changeset}
+        entity -> list ++ [entity]
+      end
+    end)
+  end
+
   def get_changeset_changes(%Ecto.Changeset{changes: changes, valid?: true}) do
     for {key, value} <- changes, into: %{} do
       case value do

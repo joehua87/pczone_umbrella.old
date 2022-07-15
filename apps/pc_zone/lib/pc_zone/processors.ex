@@ -47,47 +47,48 @@ defmodule PcZone.Processors do
   end
 
   def upsert(entities, opts \\ []) do
-    entities = Enum.map(entities, &parse_entity_for_upsert/1)
-
-    Repo.insert_all_2(
-      Processor,
-      entities,
-      Keyword.merge(opts,
-        on_conflict:
-          {:replace,
-           [
-             :code,
-             :slug,
-             :name,
-             :sub,
-             :code_name,
-             :collection_name,
-             :launch_date,
-             :status,
-             :vertical_segment,
-             :cache_size,
-             :cores,
-             :url,
-             :memory_types,
-             :socket,
-             :case_temperature,
-             :lithography,
-             :base_frequency,
-             :tdp_up_base_frequency,
-             :tdp_down_base_frequency,
-             :max_turbo_frequency,
-             :tdp,
-             :tdp_up,
-             :tdp_down,
-             :threads,
-             :processor_graphics,
-             :gpu_id,
-             :ecc_memory_supported,
-             :attributes
-           ]},
-        conflict_target: [:url]
+    with list = [_ | _] <-
+           PcZone.Helpers.get_list_changset_changes(entities, &parse_entity_for_upsert/1) do
+      Repo.insert_all_2(
+        Processor,
+        list,
+        Keyword.merge(opts,
+          on_conflict:
+            {:replace,
+             [
+               :code,
+               :slug,
+               :name,
+               :sub,
+               :code_name,
+               :collection_name,
+               :launch_date,
+               :status,
+               :vertical_segment,
+               :cache_size,
+               :cores,
+               :url,
+               :memory_types,
+               :socket,
+               :case_temperature,
+               :lithography,
+               :base_frequency,
+               :tdp_up_base_frequency,
+               :tdp_down_base_frequency,
+               :max_turbo_frequency,
+               :tdp,
+               :tdp_up,
+               :tdp_down,
+               :threads,
+               :processor_graphics,
+               :gpu_id,
+               :ecc_memory_supported,
+               :attributes
+             ]},
+          conflict_target: [:url]
+        )
       )
-    )
+    end
   end
 
   def parse_entity_for_upsert(params) do

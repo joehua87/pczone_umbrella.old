@@ -35,40 +35,40 @@ defmodule PcZone.Barebones do
     psus_map = PcZone.Psus.get_map_by_slug()
     chassises_map = PcZone.Chassises.get_map_by_slug()
 
-    entities =
-      Enum.map(
-        entities,
-        &parse_entity_for_upsert(&1,
-          brands_map: brands_map,
-          motherboards_map: motherboards_map,
-          psus_map: psus_map,
-          chassises_map: chassises_map
+    with list = [_ | _] <-
+           PcZone.Helpers.get_list_changset_changes(
+             entities,
+             &parse_entity_for_upsert(&1,
+               brands_map: brands_map,
+               motherboards_map: motherboards_map,
+               psus_map: psus_map,
+               chassises_map: chassises_map
+             )
+           ) do
+      Repo.insert_all_2(
+        Barebone,
+        list,
+        Keyword.merge(opts,
+          on_conflict:
+            {:replace,
+             [
+               :slug,
+               :code,
+               :name,
+               :motherboard_id,
+               :chassis_id,
+               :brand_id,
+               :processor_id,
+               :launch_date,
+               :psu_id,
+               :raw_data,
+               :source_website,
+               :source_url
+             ]},
+          conflict_target: [:slug]
         )
       )
-
-    Repo.insert_all_2(
-      Barebone,
-      entities,
-      Keyword.merge(opts,
-        on_conflict:
-          {:replace,
-           [
-             :slug,
-             :code,
-             :name,
-             :motherboard_id,
-             :chassis_id,
-             :brand_id,
-             :processor_id,
-             :launch_date,
-             :psu_id,
-             :raw_data,
-             :source_website,
-             :source_url
-           ]},
-        conflict_target: [:slug]
-      )
-    )
+    end
   end
 
   def parse_entity_for_upsert(params,

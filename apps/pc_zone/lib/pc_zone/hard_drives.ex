@@ -30,29 +30,34 @@ defmodule PcZone.HardDrives do
 
   def upsert(entities, opts \\ []) do
     brands_map = PcZone.Brands.get_map_by_slug()
-    entities = Enum.map(entities, &parse_entity_for_upsert(&1, brands_map: brands_map))
 
-    Repo.insert_all_2(
-      PcZone.HardDrive,
-      entities,
-      Keyword.merge(opts,
-        on_conflict:
-          {:replace,
-           [
-             :slug,
-             :code,
-             :name,
-             :type,
-             :form_factor,
-             :sequential_read,
-             :sequential_write,
-             :random_read,
-             :random_write,
-             :tbw
-           ]},
-        conflict_target: [:collection, :capacity, :brand_id]
+    with list = [_ | _] <-
+           PcZone.Helpers.get_list_changset_changes(
+             entities,
+             &parse_entity_for_upsert(&1, brands_map: brands_map)
+           ) do
+      Repo.insert_all_2(
+        PcZone.HardDrive,
+        list,
+        Keyword.merge(opts,
+          on_conflict:
+            {:replace,
+             [
+               :slug,
+               :code,
+               :name,
+               :type,
+               :form_factor,
+               :sequential_read,
+               :sequential_write,
+               :random_read,
+               :random_write,
+               :tbw
+             ]},
+          conflict_target: [:collection, :capacity, :brand_id]
+        )
       )
-    )
+    end
   end
 
   def parse_entity_for_upsert(params, brands_map: brands_map) do

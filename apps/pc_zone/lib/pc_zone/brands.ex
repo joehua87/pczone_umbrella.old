@@ -27,16 +27,16 @@ defmodule PcZone.Brands do
   def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
 
   def upsert(entities, opts \\ []) do
-    entities =
-      Enum.map(entities, fn entity ->
-        PcZone.Brand.new_changeset(entity) |> PcZone.Helpers.get_changeset_changes()
-      end)
-
-    Repo.insert_all_2(
-      PcZone.Brand,
-      entities,
-      Keyword.merge(opts, on_conflict: {:replace, [:name]}, conflict_target: [:slug])
-    )
+    with list = [_ | _] <-
+           PcZone.Helpers.get_list_changset_changes(entities, fn entity ->
+             PcZone.Brand.new_changeset(entity) |> PcZone.Helpers.get_changeset_changes()
+           end) do
+      Repo.insert_all_2(
+        PcZone.Brand,
+        list,
+        Keyword.merge(opts, on_conflict: {:replace, [:name]}, conflict_target: [:slug])
+      )
+    end
   end
 
   def get_map_by_slug() do

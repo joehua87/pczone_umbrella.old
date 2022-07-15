@@ -5,7 +5,6 @@ defmodule PcZoneWeb.UpsertController do
     path
     |> PcZone.Xlsx.read_spreadsheet()
     |> PcZone.Products.upsert()
-    |> IO.inspect()
 
     json(conn, %{})
   end
