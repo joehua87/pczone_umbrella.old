@@ -46,7 +46,7 @@ defmodule PcZone.Barebones do
         )
       )
 
-    Repo.insert_all(
+    Repo.insert_all_2(
       Barebone,
       entities,
       Keyword.merge(opts,

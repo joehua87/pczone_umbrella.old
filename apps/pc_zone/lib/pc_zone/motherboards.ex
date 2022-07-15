@@ -47,7 +47,7 @@ defmodule PcZone.Motherboards do
         &parse_entity_for_upsert(&1, brands_map: brands_map, chipsets_map: chipsets_map)
       )
 
-    Repo.insert_all(
+    Repo.insert_all_2(
       Motherboard,
       entities,
       Keyword.merge(opts,
@@ -128,7 +128,7 @@ defmodule PcZone.Motherboards do
       end)
       |> Enum.filter(&(&1.motherboard_id != nil && &1.processor_id != nil))
 
-    Repo.insert_all(PcZone.MotherboardProcessor, entities, opts)
+    Repo.insert_all_2(PcZone.MotherboardProcessor, entities, opts)
   end
 
   def parse_entity_for_upsert(params, brands_map: brands_map, chipsets_map: chipsets_map) do
@@ -193,7 +193,7 @@ defmodule PcZone.Motherboards do
       |> Enum.filter(&(&1.chipset_id != nil))
       |> Enum.map(&Map.delete(&1, :chipset))
 
-    Repo.insert_all(PcZone.Motherboard, motherboards)
+    Repo.insert_all_2(PcZone.Motherboard, motherboards)
   end
 
   defp parse(%{"title" => name, "fieldValues" => field_values}, chipsets_map: chipsets_map) do

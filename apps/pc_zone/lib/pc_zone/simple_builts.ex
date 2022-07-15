@@ -466,7 +466,7 @@ defmodule PcZone.SimpleBuilts do
   end
 
   def upsert_variants(list, opts \\ []) do
-    Repo.insert_all(
+    Repo.insert_all_2(
       PcZone.SimpleBuiltVariant,
       list,
       [

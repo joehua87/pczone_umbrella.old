@@ -34,7 +34,7 @@ defmodule PcZone.Psus do
     brands_map = PcZone.Brands.get_map_by_slug()
     entities = Enum.map(entities, &parse_entity_for_upsert(&1, brands_map: brands_map))
 
-    Repo.insert_all(
+    Repo.insert_all_2(
       PcZone.Psu,
       entities,
       Keyword.merge(opts,

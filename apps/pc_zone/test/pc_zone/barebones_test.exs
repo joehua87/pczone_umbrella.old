@@ -29,20 +29,21 @@ defmodule PcZone.BarebonesTest do
     test "upsert" do
       entities = PcZone.Fixtures.read_fixture("barebones.yml")
 
-      assert {4,
-              [
-                %PcZone.Barebone{
-                  brand_id: _,
-                  chassis_id: _,
-                  id: _,
-                  launch_date: nil,
-                  motherboard_id: _,
-                  name: "HP EliteDesk 800 G2 Mini",
-                  psu_id: _,
-                  slug: "hp-elitedesk-800-g2-mini"
-                }
-                | _
-              ]} = PcZone.Barebones.upsert(entities, returning: true)
+      assert {:ok,
+              {4,
+               [
+                 %PcZone.Barebone{
+                   brand_id: _,
+                   chassis_id: _,
+                   id: _,
+                   launch_date: nil,
+                   motherboard_id: _,
+                   name: "HP EliteDesk 800 G2 Mini",
+                   psu_id: _,
+                   slug: "hp-elitedesk-800-g2-mini"
+                 }
+                 | _
+               ]}} = PcZone.Barebones.upsert(entities, returning: true)
     end
   end
 

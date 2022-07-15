@@ -33,7 +33,7 @@ defmodule PcZone.PlatformsTest do
     test "upsert simple built variants", %{platform: platform} do
       [simple_built | _] = simple_builts_fixture()
 
-      assert {_, simple_built_variants} =
+      assert {:ok, {_, simple_built_variants}} =
                simple_built
                |> SimpleBuilts.generate_variants()
                |> SimpleBuilts.upsert_variants(returning: true)
@@ -49,7 +49,7 @@ defmodule PcZone.PlatformsTest do
           }
         end)
 
-      assert {4, _} = Platforms.upsert_simple_built_variants(platform.id, list)
+      assert {:ok, {4, _}} = Platforms.upsert_simple_built_variants(platform.id, list)
     end
 
     test "make product pricing workbook", %{platform: platform} do
@@ -92,7 +92,6 @@ defmodule PcZone.PlatformsTest do
              } = Platforms.make_platform_pricing_workbook(platform.id)
     end
 
-    @tag :wip
     test "generate product pricing report", %{platform: platform} do
       make_simple_built_variant_platforms(platform)
 
@@ -115,7 +114,7 @@ defmodule PcZone.PlatformsTest do
   def make_simple_built_variant_platforms(platform) do
     [simple_built | _] = simple_builts_fixture()
 
-    assert {_, simple_built_variants} =
+    assert {:ok, {_, simple_built_variants}} =
              simple_built
              |> SimpleBuilts.generate_variants()
              |> SimpleBuilts.upsert_variants(returning: true)
@@ -131,7 +130,7 @@ defmodule PcZone.PlatformsTest do
         }
       end)
 
-    assert {4, _} = Platforms.upsert_simple_built_variants(platform.id, list)
+    assert {:ok, {4, _}} = Platforms.upsert_simple_built_variants(platform.id, list)
   end
 
   setup do

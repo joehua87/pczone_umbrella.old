@@ -19,20 +19,21 @@ defmodule PcZone.GpusTest do
     test "upsert" do
       entities = PcZone.Fixtures.read_fixture("gpus.yml")
 
-      assert {5,
-              [
-                %PcZone.Gpu{
-                  brand_id: _,
-                  form_factors: ["low", "high"],
-                  id: _,
-                  memory_capacity: 1024,
-                  memory_type: "DDR3",
-                  name: "Nvidia Quandro K600",
-                  tdp: nil,
-                  type: "pcie 2.0 x16"
-                }
-                | _
-              ]} = Gpus.upsert(entities, returning: true)
+      assert {:ok,
+              {5,
+               [
+                 %PcZone.Gpu{
+                   brand_id: _,
+                   form_factors: ["low", "high"],
+                   id: _,
+                   memory_capacity: 1024,
+                   memory_type: "DDR3",
+                   name: "Nvidia Quandro K600",
+                   tdp: nil,
+                   type: "pcie 2.0 x16"
+                 }
+                 | _
+               ]}} = Gpus.upsert(entities, returning: true)
     end
   end
 

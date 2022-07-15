@@ -17,73 +17,75 @@ defmodule PcZone.MotherboardsTest do
     test "upsert" do
       entities = PcZone.Fixtures.read_fixture("motherboards.yml")
 
-      assert {4,
-              [
-                %PcZone.Motherboard{
-                  chipset_id: _,
-                  id: _,
-                  m2_slots: [
-                    %PcZone.M2Slot{
-                      processor_index: 1,
-                      quantity: 1,
-                      type: "nvme pcie 3.0 x4",
-                      supported_types: ["nvme pcie 3.0 x4"],
-                      form_factors: ["m2 2230", "m2 2280"]
-                    }
-                  ],
-                  m2_slots_count: nil,
-                  max_memory_capacity: 64,
-                  memory_slots: [
-                    %PcZone.MemorySlot{
-                      max_capacity: nil,
-                      processor_index: 1,
-                      quantity: 4,
-                      supported_types: ["dimm ddr4-2133" | _],
-                      type: "dimm ddr4-2133"
-                    }
-                  ],
-                  memory_slots_count: nil,
-                  name: "Dell OptiPlex 7040 SFF",
-                  note: nil,
-                  pci_slots: [
-                    %PcZone.PciSlot{
-                      processor_index: 1,
-                      quantity: 1,
-                      type: "pci express 3.0 x4"
-                    },
-                    %PcZone.PciSlot{
-                      processor_index: 1,
-                      quantity: 1,
-                      type: "pci express 3.0 x16"
-                    }
-                  ],
-                  pci_slots_count: nil,
-                  processor_slots: [
-                    %PcZone.ProcessorSlot{heatsink_type: nil, quantity: 1, socket: nil}
-                  ],
-                  processor_slots_count: nil,
-                  sata_slots: [
-                    %PcZone.SataSlot{
-                      processor_index: 1,
-                      quantity: 1,
-                      supported_types: ["sata 3"],
-                      type: "sata 3"
-                    }
-                  ],
-                  sata_slots_count: nil
-                }
-                | _
-              ]} = Motherboards.upsert(entities, returning: true)
+      assert {:ok,
+              {4,
+               [
+                 %PcZone.Motherboard{
+                   chipset_id: _,
+                   id: _,
+                   m2_slots: [
+                     %PcZone.M2Slot{
+                       processor_index: 1,
+                       quantity: 1,
+                       type: "nvme pcie 3.0 x4",
+                       supported_types: ["nvme pcie 3.0 x4"],
+                       form_factors: ["m2 2230", "m2 2280"]
+                     }
+                   ],
+                   m2_slots_count: nil,
+                   max_memory_capacity: 64,
+                   memory_slots: [
+                     %PcZone.MemorySlot{
+                       max_capacity: nil,
+                       processor_index: 1,
+                       quantity: 4,
+                       supported_types: ["dimm ddr4-2133" | _],
+                       type: "dimm ddr4-2133"
+                     }
+                   ],
+                   memory_slots_count: nil,
+                   name: "Dell OptiPlex 7040 SFF",
+                   note: nil,
+                   pci_slots: [
+                     %PcZone.PciSlot{
+                       processor_index: 1,
+                       quantity: 1,
+                       type: "pci express 3.0 x4"
+                     },
+                     %PcZone.PciSlot{
+                       processor_index: 1,
+                       quantity: 1,
+                       type: "pci express 3.0 x16"
+                     }
+                   ],
+                   pci_slots_count: nil,
+                   processor_slots: [
+                     %PcZone.ProcessorSlot{heatsink_type: nil, quantity: 1, socket: nil}
+                   ],
+                   processor_slots_count: nil,
+                   sata_slots: [
+                     %PcZone.SataSlot{
+                       processor_index: 1,
+                       quantity: 1,
+                       supported_types: ["sata 3"],
+                       type: "sata 3"
+                     }
+                   ],
+                   sata_slots_count: nil
+                 }
+                 | _
+               ]}} = Motherboards.upsert(entities, returning: true)
     end
 
     test "upsert motherboard processors" do
       entities = "motherboards.yml" |> PcZone.Fixtures.read_fixture()
-      assert {_, _} = Motherboards.upsert(entities)
+      assert {:ok, {_, _}} = Motherboards.upsert(entities)
 
-      assert {_, _} =
+      assert {:ok, {_, _}} =
                "processors.yml" |> PcZone.Fixtures.read_fixture() |> PcZone.Processors.upsert()
 
-      assert {13, _} = Motherboards.upsert_motherboard_processors(entities, returning: true)
+      assert {:ok, {13, _}} =
+               Motherboards.upsert_motherboard_processors(entities, returning: true)
     end
 
     @tag :skip

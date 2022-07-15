@@ -24,14 +24,14 @@ defmodule PcZone.ProcessorsTest do
 
     test "upsert" do
       entities = PcZone.Fixtures.read_fixture("processors.yml")
-      assert {13, [%Processor{} | _]} = Processors.upsert(entities, returning: true)
+      assert {:ok, {13, [%Processor{} | _]}} = Processors.upsert(entities, returning: true)
     end
 
     @tag :skip
     test "import processor chipsets" do
-      assert {_, _} = PcZone.Processors.import_processors()
-      assert {_, _} = PcZone.Chipsets.import_chipsets()
-      assert {1709, nil} = PcZone.Processors.import_chipset_processors()
+      assert {:ok, {_, _}} = PcZone.Processors.import_processors()
+      assert {:ok, {_, _}} = PcZone.Chipsets.import_chipsets()
+      assert {:ok, {1709, nil}} = PcZone.Processors.import_chipset_processors()
     end
   end
 end

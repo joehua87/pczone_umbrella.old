@@ -15,7 +15,7 @@ defmodule PcZone.Platforms do
   def upsert_simple_built_variants(platform_id, list) do
     list = list |> Enum.map(&parse_item(platform_id, &1))
 
-    Repo.insert_all(SimpleBuiltVariantPlatform, list,
+    Repo.insert_all_2(SimpleBuiltVariantPlatform, list,
       conflict_target: [:platform_id, :simple_built_variant_id],
       on_conflict: {:replace, [:product_code, :variant_code]}
     )

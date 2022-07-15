@@ -32,7 +32,7 @@ defmodule PcZone.Brands do
         PcZone.Brand.new_changeset(entity) |> PcZone.Helpers.get_changeset_changes()
       end)
 
-    Repo.insert_all(
+    Repo.insert_all_2(
       PcZone.Brand,
       entities,
       Keyword.merge(opts, on_conflict: {:replace, [:name]}, conflict_target: [:slug])

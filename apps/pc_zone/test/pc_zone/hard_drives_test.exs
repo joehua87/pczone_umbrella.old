@@ -24,19 +24,20 @@ defmodule PcZone.HardDrivesTest do
     test "upsert" do
       entities = PcZone.Fixtures.read_fixture("hard_drives.yml")
 
-      assert {12,
-              [
-                %PcZone.HardDrive{
-                  brand_id: _,
-                  capacity: 256,
-                  collection: "PM981",
-                  form_factor: "m2 2280",
-                  id: _,
-                  name: "256Gb Samsung PM981 NVMe PCIe 3.0 x4",
-                  type: "nvme pcie 3.0 x4"
-                }
-                | _
-              ]} = HardDrives.upsert(entities, returning: true)
+      assert {:ok,
+              {12,
+               [
+                 %PcZone.HardDrive{
+                   brand_id: _,
+                   capacity: 256,
+                   collection: "PM981",
+                   form_factor: "m2 2280",
+                   id: _,
+                   name: "256Gb Samsung PM981 NVMe PCIe 3.0 x4",
+                   type: "nvme pcie 3.0 x4"
+                 }
+                 | _
+               ]}} = HardDrives.upsert(entities, returning: true)
     end
   end
 

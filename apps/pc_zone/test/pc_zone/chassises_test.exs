@@ -17,18 +17,19 @@ defmodule PcZone.ChassisesTest do
     test "upsert" do
       entities = PcZone.Fixtures.read_fixture("chassises.yml")
 
-      assert {5,
-              [
-                %PcZone.Chassis{
-                  brand_id: _,
-                  form_factor: "sff",
-                  id: _,
-                  name: "Dell OptiPlex 7040 SFF",
-                  hard_drive_slots: [%{form_factor: "3.5", quantity: 1}],
-                  psu_form_factors: []
-                }
-                | _
-              ]} = Chassises.upsert(entities, returning: true)
+      assert {:ok,
+              {5,
+               [
+                 %PcZone.Chassis{
+                   brand_id: _,
+                   form_factor: "sff",
+                   id: _,
+                   name: "Dell OptiPlex 7040 SFF",
+                   hard_drive_slots: [%{form_factor: "3.5", quantity: 1}],
+                   psu_form_factors: []
+                 }
+                 | _
+               ]}} = Chassises.upsert(entities, returning: true)
     end
   end
 

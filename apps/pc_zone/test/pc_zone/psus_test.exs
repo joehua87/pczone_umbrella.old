@@ -16,17 +16,18 @@ defmodule PcZone.PsusTest do
     test "upsert" do
       entities = PcZone.Fixtures.read_fixture("psus.yml")
 
-      assert {5,
-              [
-                %PcZone.Psu{
-                  brand_id: _,
-                  form_factor: "sff",
-                  id: _,
-                  name: "Dell OptiPlex 7040 SFF",
-                  wattage: 180
-                }
-                | _
-              ]} = Psus.upsert(entities, returning: true)
+      assert {:ok,
+              {5,
+               [
+                 %PcZone.Psu{
+                   brand_id: _,
+                   form_factor: "sff",
+                   id: _,
+                   name: "Dell OptiPlex 7040 SFF",
+                   wattage: 180
+                 }
+                 | _
+               ]}} = Psus.upsert(entities, returning: true)
     end
   end
 

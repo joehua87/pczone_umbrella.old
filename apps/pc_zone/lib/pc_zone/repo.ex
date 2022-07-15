@@ -13,6 +13,13 @@ defmodule PcZone.Repo do
     |> parse_list_result()
   end
 
+  def insert_all_2(schema, list, opts \\ []) do
+    case insert_all(schema, list, opts) do
+      {:error, reason} -> {:error, reason}
+      {inserted, list} -> {:ok, {inserted, list}}
+    end
+  end
+
   defp parse_list_result(%{
          entries: entries,
          page_number: page_number,

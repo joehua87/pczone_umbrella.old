@@ -26,25 +26,26 @@ defmodule PcZone.ExtensionDevicesTest do
     test "upsert" do
       entities = PcZone.Fixtures.read_fixture("extension_devices.yml")
 
-      assert {1,
-              [
-                %{
-                  brand_id: _,
-                  code: "pcie-to-m2",
-                  m2_slots: [
-                    %PcZone.M2Slot{
-                      form_factors: ["m2 2280"],
-                      quantity: 1,
-                      supported_types: ["nvme pcie 3.0 x4"],
-                      type: "nvme pcie 3.0 x4"
-                    }
-                  ],
-                  name: "PCI-e to M2",
-                  slug: "pci-e-to-m2",
-                  type: "pcie 3.0 x4"
-                }
-                | _
-              ]} = ExtensionDevices.upsert(entities, returning: true)
+      assert {:ok,
+              {1,
+               [
+                 %{
+                   brand_id: _,
+                   code: "pcie-to-m2",
+                   m2_slots: [
+                     %PcZone.M2Slot{
+                       form_factors: ["m2 2280"],
+                       quantity: 1,
+                       supported_types: ["nvme pcie 3.0 x4"],
+                       type: "nvme pcie 3.0 x4"
+                     }
+                   ],
+                   name: "PCI-e to M2",
+                   slug: "pci-e-to-m2",
+                   type: "pcie 3.0 x4"
+                 }
+                 | _
+               ]}} = ExtensionDevices.upsert(entities, returning: true)
 
       # assert {5,
       #         [

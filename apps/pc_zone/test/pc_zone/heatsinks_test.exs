@@ -16,16 +16,17 @@ defmodule PcZone.HeatsinksTest do
     test "upsert" do
       entities = PcZone.Fixtures.read_fixture("heatsinks.yml")
 
-      assert {1,
-              [
-                %PcZone.Heatsink{
-                  brand_id: _,
-                  id: _,
-                  name: "Cooler Master T400i",
-                  supported_types: ["LGA2066"]
-                }
-                | _
-              ]} = Heatsinks.upsert(entities, returning: true)
+      assert {:ok,
+              {1,
+               [
+                 %PcZone.Heatsink{
+                   brand_id: _,
+                   id: _,
+                   name: "Cooler Master T400i",
+                   supported_types: ["LGA2066"]
+                 }
+                 | _
+               ]}} = Heatsinks.upsert(entities, returning: true)
     end
   end
 

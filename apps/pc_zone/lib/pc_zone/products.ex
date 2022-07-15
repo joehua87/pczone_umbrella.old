@@ -38,7 +38,7 @@ defmodule PcZone.Products do
         ensure_products("hard_drive", entities) ++
         ensure_products("gpu", entities)
 
-    Repo.insert_all(
+    Repo.insert_all_2(
       Product,
       entities,
       [

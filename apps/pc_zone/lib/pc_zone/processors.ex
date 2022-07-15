@@ -49,7 +49,7 @@ defmodule PcZone.Processors do
   def upsert(entities, opts \\ []) do
     entities = Enum.map(entities, &parse_entity_for_upsert/1)
 
-    Repo.insert_all(
+    Repo.insert_all_2(
       Processor,
       entities,
       Keyword.merge(opts,
@@ -106,7 +106,7 @@ defmodule PcZone.Processors do
       |> Enum.map(&parse_processor/1)
       |> Enum.uniq_by(& &1.slug)
 
-    Repo.insert_all(Processor, entities,
+    Repo.insert_all_2(Processor, entities,
       on_conflict: {:replace, Map.keys(entity)},
       conflict_target: [:slug]
     )
@@ -131,7 +131,7 @@ defmodule PcZone.Processors do
         )
       )
 
-    Repo.insert_all("chipset_processor", chipset_processors)
+    Repo.insert_all_2("chipset_processor", chipset_processors)
   end
 
   defp parse_chipset_processor(%{"title" => chipset_name, "processors" => processors},

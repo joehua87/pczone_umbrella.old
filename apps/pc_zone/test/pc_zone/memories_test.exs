@@ -18,18 +18,19 @@ defmodule PcZone.MemoriesTest do
     test "upsert" do
       entities = PcZone.Fixtures.read_fixture("memories.yml")
 
-      assert {18,
-              [
-                %PcZone.Memory{
-                  brand_id: _,
-                  capacity: 4,
-                  description: "Samsung / Hynix / Micro",
-                  id: _,
-                  name: "4Gb SODIMM DDR4 2133 Mixed",
-                  type: "sodimm ddr4-2133"
-                }
-                | _
-              ]} = Memories.upsert(entities, returning: true)
+      assert {:ok,
+              {18,
+               [
+                 %PcZone.Memory{
+                   brand_id: _,
+                   capacity: 4,
+                   description: "Samsung / Hynix / Micro",
+                   id: _,
+                   name: "4Gb SODIMM DDR4 2133 Mixed",
+                   type: "sodimm ddr4-2133"
+                 }
+                 | _
+               ]}} = Memories.upsert(entities, returning: true)
     end
   end
 

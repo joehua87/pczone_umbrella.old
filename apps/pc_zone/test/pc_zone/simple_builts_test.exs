@@ -61,27 +61,28 @@ defmodule PcZone.SimpleBuiltsTest do
     test "upsert generated simple built variants" do
       [simple_built | _] = simple_builts_fixture()
 
-      assert {_,
-              [
-                %{
-                  barebone_price: 1_800_000,
-                  gpu_amount: 0,
-                  gpu_price: 0,
-                  gpu_quantity: 0,
-                  hard_drive_amount: 0,
-                  hard_drive_price: 0,
-                  hard_drive_quantity: 0,
-                  memory_amount: 0,
-                  memory_price: 0,
-                  memory_quantity: 0,
-                  option_values: ["i5-6500T", "Không RAM + Không ổ cứng"],
-                  processor_amount: 1_700_000,
-                  processor_price: 1_700_000,
-                  processor_quantity: 1,
-                  total: 3_500_000
-                }
-                | _
-              ]} =
+      assert {:ok,
+              {_,
+               [
+                 %{
+                   barebone_price: 1_800_000,
+                   gpu_amount: 0,
+                   gpu_price: 0,
+                   gpu_quantity: 0,
+                   hard_drive_amount: 0,
+                   hard_drive_price: 0,
+                   hard_drive_quantity: 0,
+                   memory_amount: 0,
+                   memory_price: 0,
+                   memory_quantity: 0,
+                   option_values: ["i5-6500T", "Không RAM + Không ổ cứng"],
+                   processor_amount: 1_700_000,
+                   processor_price: 1_700_000,
+                   processor_quantity: 1,
+                   total: 3_500_000
+                 }
+                 | _
+               ]}} =
                simple_built
                |> SimpleBuilts.generate_variants()
                |> SimpleBuilts.upsert_variants(returning: true)

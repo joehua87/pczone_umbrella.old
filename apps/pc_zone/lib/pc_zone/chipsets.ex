@@ -37,24 +37,15 @@ defmodule PcZone.Chipsets do
         |> PcZone.Helpers.get_changeset_changes()
       end)
 
-    Repo.insert_all(
-      Chipset,
-      entities,
-      Keyword.merge(opts,
+    opts =
+      [
         on_conflict:
           {:replace,
-           [
-             :code,
-             :code_name,
-             :name,
-             :launch_date,
-             :collection_name,
-             :vertical_segment,
-             :status
-           ]},
+           [:code, :code_name, :name, :launch_date, :collection_name, :vertical_segment, :status]},
         conflict_target: [:slug]
-      )
-    )
+      ] ++ opts
+
+    Repo.insert_all_2(Chipset, entities, opts)
   end
 
   def upsert_chipset_processors(entities, opts \\ []) do
@@ -102,7 +93,7 @@ defmodule PcZone.Chipsets do
       end)
       |> Enum.filter(&(&1.chipset_id != nil && &1.processor_id != nil))
 
-    Repo.insert_all(PcZone.ChipsetProcessor, entities, [on_conflict: :nothing] ++ opts)
+    Repo.insert_all_2(PcZone.ChipsetProcessor, entities, [on_conflict: :nothing] ++ opts)
   end
 
   def import_chipsets() do
@@ -115,7 +106,7 @@ defmodule PcZone.Chipsets do
       })
 
     entities = Enum.map(cursor, &parse/1)
-    Repo.insert_all(Chipset, entities, on_conflict: :replace_all, conflict_target: [:code])
+    Repo.insert_all_2(Chipset, entities, on_conflict: :replace_all, conflict_target: [:code])
   end
 
   def get_map_by_code() do
