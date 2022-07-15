@@ -27,6 +27,7 @@ defmodule PcZoneWeb.Schema do
   import_types PcZoneWeb.Schema.SimpleBuiltVariants
   import_types PcZoneWeb.Schema.Reports
   import_types PcZoneWeb.Schema.Media
+  import_types PcZoneWeb.Schema.App
 
   query do
     import_fields :user_queries
@@ -68,6 +69,7 @@ defmodule PcZoneWeb.Schema do
     import_fields :built_mutations
     import_fields :simple_built_mutations
     import_fields :simple_built_variant_mutations
+    import_fields :app_mutations
 
     def middleware(middleware, _field, %{}) do
       middleware ++ [PcZoneWeb.Middlewares.ErrorsHandle]
