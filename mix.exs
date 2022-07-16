@@ -1,7 +1,7 @@
 defmodule PcZone.Umbrella.MixProject do
   use Mix.Project
 
-  @version "0.3.2"
+  @version "0.3.4"
 
   def project do
     [
