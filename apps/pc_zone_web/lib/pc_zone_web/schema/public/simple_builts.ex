@@ -9,7 +9,7 @@ defmodule PcZoneWeb.Schema.SimpleBuilts do
     field :processor_quantity, non_null(:integer)
     field :gpu_id, :id
     field :gpu_product_id, :id
-    field :gpu_label, non_null(:string)
+    field :gpu_label, :string
     field :gpu_quantity, :integer
 
     field :processor,
@@ -20,13 +20,8 @@ defmodule PcZoneWeb.Schema.SimpleBuilts do
           non_null(:product),
           resolve: Helpers.dataloader(PcZoneWeb.Dataloader)
 
-    field :gpu,
-          non_null(:gpu),
-          resolve: Helpers.dataloader(PcZoneWeb.Dataloader)
-
-    field :gpu_product,
-          non_null(:product),
-          resolve: Helpers.dataloader(PcZoneWeb.Dataloader)
+    field :gpu, :gpu, resolve: Helpers.dataloader(PcZoneWeb.Dataloader)
+    field :gpu_product, :product, resolve: Helpers.dataloader(PcZoneWeb.Dataloader)
   end
 
   object :simple_built_memory do
@@ -145,6 +140,14 @@ defmodule PcZoneWeb.Schema.SimpleBuilts do
   end
 
   object :simple_built_queries do
+    field :simple_built, :simple_built do
+      arg :id, non_null(:id)
+
+      resolve(fn %{id: id}, _info ->
+        {:ok, PcZone.SimpleBuilts.get(id)}
+      end)
+    end
+
     field :simple_builts, non_null(:simple_built_list_result) do
       arg :filter, :simple_built_filter_input
       arg :order_by, list_of(non_null(:order_by_input))
