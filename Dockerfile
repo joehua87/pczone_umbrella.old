@@ -37,7 +37,7 @@ COPY apps/pc_zone_web/mix.exs ./apps/pc_zone_web/mix.exs
 COPY mix.exs.docker ./mix.exs
 COPY mix.lock ./
 RUN mix deps.get --only $MIX_ENV
-# RUN mkdir config
+RUN mix deps.compile
 
 # copy compile-time config files before we compile dependencies
 # to ensure any relevant config change will trigger the dependencies
@@ -48,7 +48,6 @@ COPY apps/pc_zone/priv ./apps/pc_zone/priv
 COPY apps/pc_zone_web/lib ./apps/pc_zone_web/lib
 COPY apps/pc_zone_web/priv ./apps/pc_zone_web/priv
 
-RUN mix deps.compile
 
 COPY mix.exs ./
 RUN mix compile
