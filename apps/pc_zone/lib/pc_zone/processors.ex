@@ -56,7 +56,6 @@ defmodule PcZone.Processors do
           on_conflict:
             {:replace,
              [
-               :code,
                :slug,
                :name,
                :sub,
@@ -85,7 +84,7 @@ defmodule PcZone.Processors do
                :ecc_memory_supported,
                :attributes
              ]},
-          conflict_target: [:url]
+          conflict_target: [:code]
         )
       )
     end

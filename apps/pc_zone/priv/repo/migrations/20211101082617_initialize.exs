@@ -159,7 +159,7 @@ defmodule PcZone.Repo.Migrations.Initialize do
 
     # Slug must be unique index
     create unique_index(:processor, [:slug])
-    create unique_index(:processor, [:url])
+    create unique_index(:processor, [:code])
 
     create table(:chipset_processor) do
       add :processor_id, references(:processor), null: false
