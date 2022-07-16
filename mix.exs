@@ -1,20 +1,20 @@
 defmodule PcZone.Umbrella.MixProject do
   use Mix.Project
 
+  @version "0.3.0"
+
   def project do
     [
       apps_path: "apps",
-      version: "0.1.0",
+      version: @version,
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       aliases: aliases(),
       releases: [
-        web: fn ->
-          [
-            version: File.read!(".version") |> String.trim(),
-            applications: [pc_zone_web: :permanent]
-          ]
-        end
+        pc_zone_api: [
+          version: @version,
+          applications: [pc_zone_web: :permanent]
+        ]
       ]
     ]
   end

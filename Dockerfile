@@ -34,7 +34,8 @@ ENV MIX_ENV="prod"
 # install mix dependencies
 COPY apps/pc_zone/mix.exs ./apps/pc_zone/mix.exs
 COPY apps/pc_zone_web/mix.exs ./apps/pc_zone_web/mix.exs
-COPY mix.exs mix.lock ./
+COPY mix.exs.docker ./mix.exs
+COPY mix.lock ./
 RUN mix deps.get --only $MIX_ENV
 # RUN mkdir config
 
@@ -48,12 +49,13 @@ COPY apps/pc_zone_web/lib ./apps/pc_zone_web/lib
 COPY apps/pc_zone_web/priv ./apps/pc_zone_web/priv
 
 RUN mix deps.compile
+
+COPY mix.exs ./
 RUN mix compile
 
 # Changes to config/runtime.exs don't require recompiling the code
 COPY config/runtime.exs config/
 COPY rel ./
-COPY .version ./
 RUN mix release
 
 # start a new build stage so that the final image will only contain
@@ -74,8 +76,8 @@ WORKDIR "/app"
 RUN chown nobody /app
 
 # Only copy the final release from the build stage
-COPY --from=builder --chown=nobody:root /app/_build/prod/rel/web ./
+COPY --from=builder --chown=nobody:root /app/_build/prod/rel/pc_zone_api ./
 
 USER nobody
 
-CMD ["bin/web", "start"]
+CMD ["bin/pc_zone_api", "start"]

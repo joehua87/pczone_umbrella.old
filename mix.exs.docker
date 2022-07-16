@@ -1,0 +1,13 @@
+defmodule PcZone.Umbrella.MixProject do
+  @moduledoc """
+  For docker
+  """
+  use Mix.Project
+
+  def project do
+    [
+      apps_path: "apps",
+      start_permanent: Mix.env() == :prod
+    ]
+  end
+end
