@@ -55,7 +55,7 @@ defmodule PcZoneWeb.Schema.Chipsets do
       arg :data, non_null(:json)
 
       resolve(fn %{data: data}, _info ->
-        with {_, result} <- PcZone.Chipsets.upsert(data, returning: true) do
+        with {:ok, {_, result}} <- PcZone.Chipsets.upsert(data, returning: true) do
           {:ok, result}
         end
       end)

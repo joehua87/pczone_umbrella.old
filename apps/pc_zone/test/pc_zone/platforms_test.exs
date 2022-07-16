@@ -101,7 +101,7 @@ defmodule PcZone.PlatformsTest do
                 inserted_at: _,
                 name: "shopee-product-pricing-" <> _,
                 path: _,
-                size: 3770,
+                size: _,
                 type: "xlsx"
               }} = Platforms.generate_platform_pricing_report(platform.id)
 

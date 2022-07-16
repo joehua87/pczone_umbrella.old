@@ -90,9 +90,9 @@ defmodule PcZone.BuiltsTest do
     %{id: memory_id, type: memory_slot_type} = Memories.get_by_code("8gb-sodimm-ddr4-2133-mixed")
     %{id: memory_product_id} = Products.get_by_sku("8gb-sodimm-ddr4-2133-mixed/used")
     %{id: m2_id, type: m2_slot_type} = HardDrives.get_by_code("256gb-samsung-pm981")
-    %{id: m2_product_id} = Products.get_by_sku("256gb-samsung-pm981/like-new")
+    %{id: m2_product_id} = Products.get_by_sku("256gb-samsung-pm981/100%")
     %{id: sata_id, type: sata_slot_type} = HardDrives.get_by_code("1tb-samsung-860-evo")
-    %{id: sata_product_id} = Products.get_by_sku("1tb-samsung-860-evo/like-new")
+    %{id: sata_product_id} = Products.get_by_sku("1tb-samsung-860-evo/100%")
 
     {:ok,
      barebone_id: barebone_id,

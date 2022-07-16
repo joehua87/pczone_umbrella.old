@@ -74,7 +74,7 @@ defmodule PcZoneWeb.Schema.Barebones do
       arg :data, non_null(:json)
 
       resolve(fn %{data: data}, _info ->
-        with {_, result} <- PcZone.Barebones.upsert(data, returning: true) do
+        with {:ok, {_, result}} <- PcZone.Barebones.upsert(data, returning: true) do
           {:ok, result}
         end
       end)

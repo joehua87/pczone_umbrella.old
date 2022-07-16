@@ -28,10 +28,10 @@
       hard_drive_product: 256gb-samsung-pm981/95%
       label: 256GB NVMe 95%
     - hard_drive: 256gb-samsung-pm981
-      hard_drive_product: 256gb-samsung-pm981/like-new
+      hard_drive_product: 256gb-samsung-pm981/100%
       label: 256GB NVMe
     - hard_drive: 512gb-samsung-pm981
-      hard_drive_product: 512gb-samsung-pm981/like-new
+      hard_drive_product: 512gb-samsung-pm981/100%
       label: 512GB NVMe
   body_template: |
     Mustache template for Hp EliteDesk 800
@@ -66,10 +66,10 @@
       hard_drive_product: 256gb-samsung-pm981/95%
       label: 256GB NVMe 95%
     - hard_drive: 256gb-samsung-pm981
-      hard_drive_product: 256gb-samsung-pm981/like-new
+      hard_drive_product: 256gb-samsung-pm981/100%
       label: 256GB NVMe
     - hard_drive: 512gb-samsung-pm981
-      hard_drive_product: 512gb-samsung-pm981/like-new
+      hard_drive_product: 512gb-samsung-pm981/100%
       label: 512GB NVMe
   body_template: |
     Mustache template for Hp EliteDesk 800 65W

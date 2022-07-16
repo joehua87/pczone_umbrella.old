@@ -176,7 +176,7 @@ defmodule PcZoneWeb.Schema.SimpleBuilts do
       arg :code, non_null(:string)
 
       resolve(fn %{code: code}, _info ->
-        with {_, result} <-
+        with {:ok, {_, result}} <-
                code
                |> PcZone.SimpleBuilts.generate_variants()
                |> PcZone.SimpleBuilts.upsert_variants(returning: true) do

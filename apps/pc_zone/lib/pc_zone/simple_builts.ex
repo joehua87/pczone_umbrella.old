@@ -33,26 +33,31 @@ defmodule PcZone.SimpleBuilts do
       Enum.map(list, fn %{"barebone_product" => barebone_product} ->
         barebone_product
       end)
+      |> Enum.uniq()
 
     processor_product_skus =
       Enum.flat_map(list, fn %{"processors" => processors} ->
         Enum.map(processors, & &1["processor_product"])
       end)
+      |> Enum.uniq()
 
     gpu_product_skus =
       Enum.flat_map(list, fn %{"processors" => processors} ->
         Enum.map(processors, & &1["gpu_product"]) |> Enum.filter(&(&1 != nil))
       end)
+      |> Enum.uniq()
 
     memory_product_skus =
       Enum.flat_map(list, fn %{"memories" => memories} ->
         Enum.map(memories, & &1["memory_product"])
       end)
+      |> Enum.uniq()
 
     hard_drive_product_skus =
       Enum.flat_map(list, fn %{"hard_drives" => hard_drives} ->
         Enum.map(hard_drives, & &1["hard_drive_product"])
       end)
+      |> Enum.uniq()
 
     barebone_products_map =
       Repo.all(
@@ -94,6 +99,39 @@ defmodule PcZone.SimpleBuilts do
       )
       |> Enum.into(%{})
 
+    with [] <- barebone_product_skus -- Map.keys(barebone_products_map),
+         [] <- gpu_product_skus -- Map.keys(gpu_products_map),
+         [] <- memory_product_skus -- Map.keys(memory_products_map),
+         [] <- hard_drive_product_skus -- Map.keys(hard_drive_products_map),
+         [] <- processor_product_skus -- Map.keys(processor_products_map),
+         {:ok, _} <-
+           Ecto.Multi.new()
+           |> upsert_simple_builts_multi(list, barebone_products_map)
+           |> upsert_simple_built_processors_multi(list, processor_products_map, gpu_products_map)
+           |> upsert_simple_built_memories_multi(list, memory_products_map)
+           |> upsert_simple_built_hard_drives_multi(list, hard_drive_products_map)
+           |> Repo.transaction() do
+      codes = Enum.map(list, & &1["code"])
+
+      {:ok,
+       Repo.all(
+         from b in PcZone.SimpleBuilt,
+           where: b.code in ^codes,
+           preload: [
+             :barebone,
+             :barebone_product,
+             {:processors, [:processor, :processor_product, :gpu, :gpu_product]},
+             {:memories, [:memory, :memory_product]},
+             {:hard_drives, [:hard_drive, :hard_drive_product]}
+           ]
+       )}
+    else
+      [_ | _] = list -> {:error, [message: "Missing products", products: Enum.uniq(list)]}
+      reason -> reason
+    end
+  end
+
+  defp upsert_simple_builts_multi(multi, list, barebone_products_map) do
     simple_builts =
       Enum.map(
         list,
@@ -122,9 +160,10 @@ defmodule PcZone.SimpleBuilts do
         end
       )
 
-    multi =
-      Ecto.Multi.new()
-      |> Ecto.Multi.run(:simple_builts_map, fn _, _ ->
+    Ecto.Multi.run(
+      multi,
+      :simple_builts_map,
+      fn _, _ ->
         {_, result} =
           Repo.insert_all(PcZone.SimpleBuilt, simple_builts,
             returning: true,
@@ -146,8 +185,20 @@ defmodule PcZone.SimpleBuilts do
            {code, id}
          end)
          |> Enum.into(%{})}
-      end)
-      |> Ecto.Multi.run(:simple_built_processors, fn _, %{simple_builts_map: simple_builts_map} ->
+      end
+    )
+  end
+
+  defp upsert_simple_built_processors_multi(
+         multi,
+         list,
+         processor_products_map,
+         gpu_products_map
+       ) do
+    Ecto.Multi.run(
+      multi,
+      :simple_built_processors,
+      fn _, %{simple_builts_map: simple_builts_map} ->
         entities =
           Enum.flat_map(list, fn %{"code" => code, "processors" => processors} ->
             Enum.map(
@@ -220,43 +271,52 @@ defmodule PcZone.SimpleBuilts do
                ) do
           {:ok, inserted}
         end
-      end)
-      |> Ecto.Multi.run(:simple_built_memories, fn _, %{simple_builts_map: simple_builts_map} ->
-        entities =
-          Enum.flat_map(list, fn %{"code" => code, "memories" => memories} ->
-            Enum.map(
-              memories,
-              fn %{"memory_product" => memory_product_sku, "label" => label} = params ->
-                %{
-                  id: memory_id,
-                  product_id: memory_product_id
-                } = Map.get(memory_products_map, memory_product_sku)
+      end
+    )
+  end
 
-                simple_built_id = Map.get(simple_builts_map, code)
-                quantity = Map.get(params, "quantity", 1)
+  defp upsert_simple_built_memories_multi(multi, list, memory_products_map) do
+    Ecto.Multi.run(multi, :simple_built_memories, fn _, %{simple_builts_map: simple_builts_map} ->
+      entities =
+        Enum.flat_map(list, fn %{"code" => code, "memories" => memories} ->
+          Enum.map(
+            memories,
+            fn %{"memory_product" => memory_product_sku, "label" => label} = params ->
+              %{
+                id: memory_id,
+                product_id: memory_product_id
+              } = Map.get(memory_products_map, memory_product_sku)
 
-                %{
-                  key: [simple_built_id, memory_product_id, quantity] |> Enum.join(":"),
-                  simple_built_id: simple_built_id,
-                  memory_id: memory_id,
-                  memory_product_id: memory_product_id,
-                  quantity: quantity,
-                  label: label
-                }
-              end
-            )
-          end)
+              simple_built_id = Map.get(simple_builts_map, code)
+              quantity = Map.get(params, "quantity", 1)
 
-        with {inserted, _} <-
-               Repo.insert_all(PcZone.SimpleBuiltMemory, entities,
-                 on_conflict: :replace_all,
-                 conflict_target: [:key]
-               ) do
-          {:ok, inserted}
-        end
-      end)
-      |> Ecto.Multi.run(:simple_built_hard_drives, fn _,
-                                                      %{simple_builts_map: simple_builts_map} ->
+              %{
+                key: [simple_built_id, memory_product_id, quantity] |> Enum.join(":"),
+                simple_built_id: simple_built_id,
+                memory_id: memory_id,
+                memory_product_id: memory_product_id,
+                quantity: quantity,
+                label: label
+              }
+            end
+          )
+        end)
+
+      with {inserted, _} <-
+             Repo.insert_all(PcZone.SimpleBuiltMemory, entities,
+               on_conflict: :replace_all,
+               conflict_target: [:key]
+             ) do
+        {:ok, inserted}
+      end
+    end)
+  end
+
+  defp upsert_simple_built_hard_drives_multi(multi, list, hard_drive_products_map) do
+    Ecto.Multi.run(
+      multi,
+      :simple_built_hard_drives,
+      fn _, %{simple_builts_map: simple_builts_map} ->
         entities =
           Enum.flat_map(list, fn %{"code" => code, "hard_drives" => hard_drives} ->
             Enum.map(
@@ -289,24 +349,8 @@ defmodule PcZone.SimpleBuilts do
                ) do
           {:ok, inserted}
         end
-      end)
-
-    with {:ok, _} <- Repo.transaction(multi) do
-      codes = Enum.map(list, & &1["code"])
-
-      {:ok,
-       Repo.all(
-         from b in PcZone.SimpleBuilt,
-           where: b.code in ^codes,
-           preload: [
-             :barebone,
-             :barebone_product,
-             {:processors, [:processor, :processor_product, :gpu, :gpu_product]},
-             {:memories, [:memory, :memory_product]},
-             {:hard_drives, [:hard_drive, :hard_drive_product]}
-           ]
-       )}
-    end
+      end
+    )
   end
 
   def generate_variants(%PcZone.SimpleBuilt{
