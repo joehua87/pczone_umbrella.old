@@ -416,7 +416,7 @@ defmodule Pczone.SimpleBuilts do
           %{
             option_value_2:
               Enum.join(
-                [memory_label || "Không RAM", hard_drive_label || "Không SSD"],
+                [memory_label || "Ko RAM", hard_drive_label || "Ko SSD"],
                 seperator
               )
           }

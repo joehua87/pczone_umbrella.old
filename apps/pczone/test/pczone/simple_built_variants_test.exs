@@ -45,7 +45,7 @@ defmodule Pczone.SimpleBuiltVariantsTest do
                        "Hp Elitedesk 800 G2 Mini",
                        "",
                        "",
-                       "i5-6500T; Không RAM, Không SSD",
+                       "i5-6500T; Ko RAM, Ko SSD",
                        3_500_000,
                        99
                      ]

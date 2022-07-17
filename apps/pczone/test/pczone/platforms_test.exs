@@ -10,7 +10,7 @@ defmodule Pczone.PlatformsTest do
       assert [
                %{
                  "id" => 829,
-                 "option_values" => "i5-6500T; Không RAM, Không SSD",
+                 "option_values" => "i5-6500T; Ko RAM, Ko SSD",
                  "price" => 3_500_000,
                  "product_code" => "aaa",
                  "product_name" => "Hp Elitedesk 800 G2 Mini",
@@ -19,7 +19,7 @@ defmodule Pczone.PlatformsTest do
                },
                %{
                  "id" => 830,
-                 "option_values" => "i5-6500T; Không RAM, 256GB NVMe 95%",
+                 "option_values" => "i5-6500T; Ko RAM, 256GB NVMe 95%",
                  "price" => 4_250_000,
                  "product_code" => "aaa",
                  "product_name" => "Hp Elitedesk 800 G2 Mini",
@@ -79,7 +79,7 @@ defmodule Pczone.PlatformsTest do
                        "a",
                        "Hp Elitedesk 800 G2 Mini",
                        "x-0",
-                       "i5-6500T; Không RAM, Không SSD",
+                       "i5-6500T; Ko RAM, Ko SSD",
                        "",
                        "",
                        3_675_000,
