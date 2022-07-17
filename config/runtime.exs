@@ -1,6 +1,6 @@
 import Config
 
-def get_env(name, example) do
+get_env = fn name, example ->
   System.get_env(name) ||
     raise """
     environment variable #{name} is missing.
@@ -16,17 +16,17 @@ end
 # The block below contains prod specific runtime configuration.
 if config_env() == :prod do
   config :pczone,
-    report_dir: get_env("REPORTS_DIR", "/mnt/reports"),
-    media_dir: get_env("MEDIA_DIR", "/mnt/media")
+    report_dir: get_env.("REPORTS_DIR", "/mnt/reports"),
+    media_dir: get_env.("MEDIA_DIR", "/mnt/media")
 
   config :pczone, Pczone.Repo,
     # ssl: true,
     # socket_options: [:inet6],
-    url: get_env("DATABASE_URL", "ecto://USER:PASS@HOST/DATABASE"),
+    url: get_env.("DATABASE_URL", "ecto://USER:PASS@HOST/DATABASE"),
     pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
 
   config :pczone, Pczone.MongoRepo,
-    url: get_env("MONGO_URL", "mongodb://USER:PASS@HOST/MONGO"),
+    url: get_env.("MONGO_URL", "mongodb://USER:PASS@HOST/MONGO"),
     timeout: 60_000,
     idle_interval: 10_000,
     queue_target: 5_000
