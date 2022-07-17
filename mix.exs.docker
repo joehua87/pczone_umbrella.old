@@ -1,4 +1,4 @@
-defmodule PcZone.Umbrella.MixProject do
+defmodule Pczone.Umbrella.MixProject do
   @moduledoc """
   For docker
   """

@@ -32,8 +32,8 @@ RUN mix local.hex --force && \
 ENV MIX_ENV="prod"
 
 # install mix dependencies
-COPY apps/pc_zone/mix.exs ./apps/pc_zone/mix.exs
-COPY apps/pc_zone_web/mix.exs ./apps/pc_zone_web/mix.exs
+COPY apps/pczone/mix.exs ./apps/pczone/mix.exs
+COPY apps/pczone_web/mix.exs ./apps/pczone_web/mix.exs
 COPY mix.exs.docker ./mix.exs
 COPY mix.lock ./
 RUN mix deps.get --only $MIX_ENV
@@ -43,10 +43,10 @@ RUN mix deps.compile
 # to ensure any relevant config change will trigger the dependencies
 # to be re-compiled.
 COPY config/config.exs config/${MIX_ENV}.exs config/
-COPY apps/pc_zone/lib ./apps/pc_zone/lib
-COPY apps/pc_zone/priv ./apps/pc_zone/priv
-COPY apps/pc_zone_web/lib ./apps/pc_zone_web/lib
-COPY apps/pc_zone_web/priv ./apps/pc_zone_web/priv
+COPY apps/pczone/lib ./apps/pczone/lib
+COPY apps/pczone/priv ./apps/pczone/priv
+COPY apps/pczone_web/lib ./apps/pczone_web/lib
+COPY apps/pczone_web/priv ./apps/pczone_web/priv
 
 
 COPY mix.exs ./
@@ -75,8 +75,8 @@ WORKDIR "/app"
 RUN chown nobody /app
 
 # Only copy the final release from the build stage
-COPY --from=builder --chown=nobody:root /app/_build/prod/rel/pc_zone_api ./
+COPY --from=builder --chown=nobody:root /app/_build/prod/rel/pczone_api ./
 
 USER nobody
 
-CMD ["bin/pc_zone_api", "start"]
+CMD ["bin/pczone_api", "start"]

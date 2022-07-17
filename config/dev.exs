@@ -1,24 +1,24 @@
 import Config
 
 # Configure your database
-config :pc_zone, PcZone.Repo,
+config :pczone, Pczone.Repo,
   username: "postgres",
   password: "postgres",
-  database: "pc_zone_dev",
+  database: "pczone_dev",
   hostname: "localhost",
   port: 5432,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
-config :pc_zone, PcZone.MongoRepo,
-  url: "mongodb://localhost:27017/pc_zone",
+config :pczone, Pczone.MongoRepo,
+  url: "mongodb://localhost:27017/pczone",
   timeout: 60_000,
   idle_interval: 10_000,
   queue_target: 5_000
 
 # For development, we disable any cache and enable
 # debugging and code reloading.
-config :pc_zone_web, PcZoneWeb.Endpoint,
+config :pczone_web, PczoneWeb.Endpoint,
   # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
   http: [ip: {127, 0, 0, 1}, port: 4000],
@@ -53,13 +53,13 @@ config :pc_zone_web, PcZoneWeb.Endpoint,
 # different ports.
 
 # Watch static and templates for browser reloading.
-config :pc_zone_web, PcZoneWeb.Endpoint,
+config :pczone_web, PczoneWeb.Endpoint,
   live_reload: [
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/pc_zone_web/(live|views)/.*(ex)$",
-      ~r"lib/pc_zone_web/templates/.*(eex)$"
+      ~r"lib/pczone_web/(live|views)/.*(ex)$",
+      ~r"lib/pczone_web/templates/.*(eex)$"
     ]
   ]
 

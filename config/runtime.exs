@@ -21,13 +21,13 @@ if config_env() == :prod do
       For example: mongo://USER:PASS@HOST/MONGO
       """
 
-  config :pc_zone, PcZone.Repo,
+  config :pczone, Pczone.Repo,
     # ssl: true,
     # socket_options: [:inet6],
     url: database_url,
     pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
 
-  config :pc_zone, PcZone.MongoRepo,
+  config :pczone, Pczone.MongoRepo,
     url: mongo_url,
     timeout: 60_000,
     idle_interval: 10_000,
@@ -45,7 +45,7 @@ if config_env() == :prod do
       You can generate one by calling: mix phx.gen.secret
       """
 
-  config :pc_zone_web, PcZoneWeb.Endpoint,
+  config :pczone_web, PczoneWeb.Endpoint,
     http: [
       # Enable IPv6 and bind on all interfaces.
       # Set it to  {0, 0, 0, 0, 0, 0, 0, 1} for local network only access.
@@ -59,7 +59,7 @@ if config_env() == :prod do
   # If you are doing OTP releases, you need to instruct Phoenix
   # to start each relevant endpoint:
   #
-  config :pc_zone_web, PcZoneWeb.Endpoint, server: true
+  config :pczone_web, PczoneWeb.Endpoint, server: true
 
   #
   # Then you can assemble a release by calling `mix release`.
@@ -71,7 +71,7 @@ if config_env() == :prod do
   # Also, you may need to configure the Swoosh API client of your choice if you
   # are not using SMTP. Here is an example of the configuration:
   #
-  #     config :pc_zone, PcZone.Mailer,
+  #     config :pczone, Pczone.Mailer,
   #       adapter: Swoosh.Adapters.Mailgun,
   #       api_key: System.get_env("MAILGUN_API_KEY"),
   #       domain: System.get_env("MAILGUN_DOMAIN")

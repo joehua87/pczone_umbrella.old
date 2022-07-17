@@ -1,3 +1,0 @@
-# PcZone
-
-**TODO: Add description**

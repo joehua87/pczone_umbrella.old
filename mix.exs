@@ -1,4 +1,4 @@
-defmodule PcZone.Umbrella.MixProject do
+defmodule Pczone.Umbrella.MixProject do
   use Mix.Project
 
   @version "0.3.6"
@@ -11,9 +11,9 @@ defmodule PcZone.Umbrella.MixProject do
       deps: deps(),
       aliases: aliases(),
       releases: [
-        pc_zone_api: [
+        pczone_api: [
           version: @version,
-          applications: [pc_zone_web: :permanent]
+          applications: [pczone_web: :permanent]
         ]
       ]
     ]

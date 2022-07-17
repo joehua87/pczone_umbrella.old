@@ -10,14 +10,14 @@
 import Config
 
 # Configure Mix tasks and generators
-config :pc_zone,
-  ecto_repos: [PcZone.Repo],
+config :pczone,
+  ecto_repos: [Pczone.Repo],
   report_dir: "/Users/achilles/pczone/reports",
   media_dir: "/Users/achilles/pczone/media",
   sheet_id: "1gqCHoE7dVKAcRoKhMvJjlNaozDpQGGTN_YDfE4QBfb0"
 
-config :pc_zone, PcZone.Repo,
-  types: PcZone.PostgresTypes,
+config :pczone, Pczone.Repo,
+  types: Pczone.PostgresTypes,
   migration_timestamps: [type: :utc_datetime]
 
 # Configures the mailer
@@ -27,20 +27,20 @@ config :pc_zone, PcZone.Repo,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-config :pc_zone, PcZone.Mailer, adapter: Swoosh.Adapters.Local
+config :pczone, Pczone.Mailer, adapter: Swoosh.Adapters.Local
 
 # Swoosh API client is needed for adapters other than SMTP.
 config :swoosh, :api_client, false
 
-config :pc_zone_web,
-  ecto_repos: [PcZone.Repo],
-  generators: [context_app: :pc_zone]
+config :pczone_web,
+  ecto_repos: [Pczone.Repo],
+  generators: [context_app: :pczone]
 
 # Configures the endpoint
-config :pc_zone_web, PcZoneWeb.Endpoint,
+config :pczone_web, PczoneWeb.Endpoint,
   url: [host: "localhost"],
-  render_errors: [view: PcZoneWeb.ErrorView, accepts: ~w(html json), layout: false],
-  pubsub_server: PcZone.PubSub,
+  render_errors: [view: PczoneWeb.ErrorView, accepts: ~w(html json), layout: false],
+  pubsub_server: Pczone.PubSub,
   live_view: [signing_salt: "FG3Ddexk"]
 
 # Configures Elixir's Logger
