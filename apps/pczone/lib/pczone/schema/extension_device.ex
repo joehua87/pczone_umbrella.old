@@ -6,10 +6,10 @@ defmodule Pczone.ExtensionDevice do
   @optional []
 
   schema "extension_device" do
-    field :slug, :string, null: false
-    field :code, :string, null: false
-    field :name, :string, null: false
-    field :type, :string, null: false
+    field :slug, :string
+    field :code, :string
+    field :name, :string
+    field :type, :string
     belongs_to :brand, Pczone.Brand
     embeds_many :processor_slots, Pczone.ProcessorSlot
     embeds_many :memory_slots, Pczone.MemorySlot

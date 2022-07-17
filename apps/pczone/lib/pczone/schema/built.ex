@@ -18,8 +18,8 @@ defmodule Pczone.Built do
   ]
 
   schema "built" do
-    field :slug, :string, null: false
-    field :name, :string, null: false
+    field :slug, :string
+    field :name, :string
     belongs_to :barebone, Pczone.Barebone
     belongs_to :motherboard, Pczone.Motherboard
     belongs_to :chassis, Pczone.Chassis

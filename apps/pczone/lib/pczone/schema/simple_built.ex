@@ -8,17 +8,18 @@ defmodule Pczone.SimpleBuilt do
   @optional [:option_value_seperator, :body_template]
 
   schema "simple_built" do
-    field :code, :string, null: false
-    field :name, :string, null: false
+    field :code, :string
+    field :name, :string
     embeds_many :media, Pczone.EmbeddedMedium
-    field :body_template, :string, null: false
-    field :option_types, {:array, :string}, null: false
-    field :option_value_seperator, :string, null: false, default: ", "
+    field :body_template, :string
+    field :option_types, {:array, :string}
+    field :option_value_seperator, :string, default: ", "
     belongs_to :barebone, Pczone.Barebone
     belongs_to :barebone_product, Pczone.Product
     has_many :processors, Pczone.SimpleBuiltProcessor
     has_many :memories, Pczone.SimpleBuiltMemory
     has_many :hard_drives, Pczone.SimpleBuiltHardDrive
+    has_many :variants, Pczone.SimpleBuiltVariant
   end
 
   def changeset(entity, params) do
