@@ -109,10 +109,8 @@ defmodule Pczone.Chipsets do
   end
 
   def import_chipsets() do
-    {:ok, conn} = Mongo.start_link(url: "mongodb://172.16.43.5:27017/pczone")
-
     cursor =
-      Mongo.find(conn, "IntelChipset", %{
+      Mongo.find(:mongo, "IntelChipset", %{
         "attributes.0" => %{"$exists" => true},
         "processors.0" => %{"$exists" => true}
       })

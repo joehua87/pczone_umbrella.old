@@ -179,10 +179,8 @@ defmodule Pczone.Motherboards do
   end
 
   def import_barebone_motherboards() do
-    {:ok, conn} = Mongo.start_link(url: "mongodb://172.16.43.5:27017/pczone")
-
     cursor =
-      Mongo.find(conn, "Product", %{
+      Mongo.find(:mongo, "Product", %{
         "fieldValues.0" => %{"$exists" => true}
       })
 
