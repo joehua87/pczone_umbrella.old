@@ -12,8 +12,6 @@ import Config
 # Configure Mix tasks and generators
 config :pczone,
   ecto_repos: [Pczone.Repo],
-  report_dir: "/Users/achilles/pczone/reports",
-  media_dir: "/Users/achilles/pczone/media",
   sheet_id: "1gqCHoE7dVKAcRoKhMvJjlNaozDpQGGTN_YDfE4QBfb0"
 
 config :pczone, Pczone.Repo,

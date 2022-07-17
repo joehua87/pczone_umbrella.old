@@ -1,5 +1,13 @@
 import Config
 
+def get_env(name, example) do
+  System.get_env(name) ||
+    raise """
+    environment variable #{name} is missing.
+    For example: #{example}
+    """
+end
+
 # config/runtime.exs is executed for all environments, including
 # during releases. It is executed after compilation and before the
 # system starts, so it is typically used to load production configuration
@@ -7,28 +15,18 @@ import Config
 # any compile-time configuration in here, as it won't be applied.
 # The block below contains prod specific runtime configuration.
 if config_env() == :prod do
-  database_url =
-    System.get_env("DATABASE_URL") ||
-      raise """
-      environment variable DATABASE_URL is missing.
-      For example: ecto://USER:PASS@HOST/DATABASE
-      """
-
-  mongo_url =
-    System.get_env("MONGO_URL") ||
-      raise """
-      environment variable MONGO_URL is missing.
-      For example: mongo://USER:PASS@HOST/MONGO
-      """
+  config :pczone,
+    report_dir: get_env("REPORTS_DIR", "/mnt/reports"),
+    media_dir: get_env("MEDIA_DIR", "/mnt/media")
 
   config :pczone, Pczone.Repo,
     # ssl: true,
     # socket_options: [:inet6],
-    url: database_url,
+    url: get_env("DATABASE_URL", "ecto://USER:PASS@HOST/DATABASE"),
     pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
 
   config :pczone, Pczone.MongoRepo,
-    url: mongo_url,
+    url: get_env("MONGO_URL", "mongodb://USER:PASS@HOST/MONGO"),
     timeout: 60_000,
     idle_interval: 10_000,
     queue_target: 5_000

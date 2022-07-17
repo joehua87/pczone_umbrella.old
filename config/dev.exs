@@ -1,5 +1,9 @@
 import Config
 
+config :pczone,
+  report_dir: "/Users/achilles/pczone/reports",
+  media_dir: "/Users/achilles/pczone/media"
+
 # Configure your database
 config :pczone, Pczone.Repo,
   username: "postgres",
