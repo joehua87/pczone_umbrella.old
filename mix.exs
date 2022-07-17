@@ -1,7 +1,7 @@
 defmodule Pczone.Umbrella.MixProject do
   use Mix.Project
 
-  @version "0.3.6"
+  @version "0.4.0"
 
   def project do
     [
