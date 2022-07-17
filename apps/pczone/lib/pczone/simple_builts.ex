@@ -171,6 +171,7 @@ defmodule Pczone.SimpleBuilts do
               {:replace,
                [
                  :name,
+                 :product_label,
                  :body_template,
                  :barebone_id,
                  :barebone_product_id,

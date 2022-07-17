@@ -5,11 +5,12 @@ defmodule Pczone.SimpleBuilt do
   @derive Jason.Encoder
 
   @required [:code, :name, :option_types, :barebone_id, :barebone_product_id]
-  @optional [:option_value_seperator, :body_template]
+  @optional [:product_label, :option_value_seperator, :body_template]
 
   schema "simple_built" do
     field :code, :string
     field :name, :string
+    field :product_label, :string
     embeds_many :media, Pczone.EmbeddedMedium
     field :body_template, :string
     field :option_types, {:array, :string}

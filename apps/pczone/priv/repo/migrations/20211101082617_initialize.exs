@@ -365,6 +365,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
     create table(:simple_built) do
       add :code, :string, null: false
       add :name, :string, null: false
+      add :product_label, :string
       add :media, :map, null: false, default: "[]"
       add :body_template, :string, null: false
       add :barebone_id, references(:barebone), null: false
