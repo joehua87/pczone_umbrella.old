@@ -34,7 +34,8 @@ defmodule PcZone.SimpleBuiltVariant do
     :gpu_product_id,
     :gpu_price,
     :gpu_quantity,
-    :gpu_amount
+    :gpu_amount,
+    :image_id
   ]
 
   schema "simple_built_variant" do
@@ -62,6 +63,7 @@ defmodule PcZone.SimpleBuiltVariant do
     field :hard_drive_price, :integer
     field :hard_drive_quantity, :integer
     field :hard_drive_amount, :integer
+    field :image_id, :string
     field :option_values, {:array, :string}
     field :total, :integer
     field :config, :map

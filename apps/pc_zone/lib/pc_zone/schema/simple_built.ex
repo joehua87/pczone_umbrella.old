@@ -10,6 +10,7 @@ defmodule PcZone.SimpleBuilt do
   schema "simple_built" do
     field :code, :string, null: false
     field :name, :string, null: false
+    embeds_many :media, PcZone.EmbeddedMedium
     field :body_template, :string, null: false
     field :option_types, {:array, :string}, null: false
     field :option_value_seperator, :string, null: false, default: ", "
@@ -24,6 +25,7 @@ defmodule PcZone.SimpleBuilt do
     entity
     |> cast(params, @required ++ @optional)
     |> validate_required(@required)
+    |> cast_embed(:media)
   end
 
   def new_changeset(params) do

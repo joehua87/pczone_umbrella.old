@@ -365,7 +365,7 @@ defmodule PcZone.Repo.Migrations.Initialize do
     create table(:simple_built) do
       add :code, :string, null: false
       add :name, :string, null: false
-      add :images, :map, null: false, default: "[]"
+      add :media, :map, null: false, default: "[]"
       add :body_template, :string, null: false
       add :barebone_id, references(:barebone), null: false
       add :barebone_product_id, references(:product), null: false
@@ -442,6 +442,7 @@ defmodule PcZone.Repo.Migrations.Initialize do
       add :hard_drive_price, :integer, null: false
       add :hard_drive_quantity, :integer, null: false
       add :hard_drive_amount, :integer, null: false
+      add :image_id, :string
       add :option_values, {:array, :string}, null: false
       add :total, :integer, null: false
       add :config, :map, null: false, default: %{}

@@ -77,7 +77,8 @@ defmodule PcZoneWeb.Schema.SimpleBuiltVariants do
       arg :filter, :simple_built_variant_filter_input
 
       resolve fn args, _info ->
-        PcZone.SimpleBuiltVariants.export_csv(%{})
+        filter = Map.get(args, :filter, %{})
+        PcZone.SimpleBuiltVariants.export_csv(filter)
       end
     end
   end

@@ -31,6 +31,25 @@ defmodule PcZone.AttributeGroup do
   end
 end
 
+defmodule PcZone.EmbeddedMedium do
+  use Ecto.Schema
+  import Ecto.Changeset
+
+  @primary_key false
+  @derive Jason.Encoder
+
+  embedded_schema do
+    field :id, :string
+    field :caption, :string
+  end
+
+  def changeset(entity, params) do
+    entity
+    |> cast(params, [:id, :caption])
+    |> validate_required([:id])
+  end
+end
+
 defmodule PcZone.ProcessorSlot do
   use Ecto.Schema
   import Ecto.Changeset
