@@ -46,18 +46,18 @@ defmodule Pczone do
   end
 
   def initial_data(files) when is_list(files) do
-    barebones = read_from_files!(files, ~r/barebones.*?\.(ya?ml|xlsx)/)
-    brands = read_from_files!(files, ~r/brands.*?\.(ya?ml|xlsx)/)
-    chassises = read_from_files!(files, ~r/chassises.*?\.(ya?ml|xlsx)/)
-    chipsets = read_from_files!(files, ~r/chipsets.*?\.(ya?ml|xlsx)/)
-    gpus = read_from_files!(files, ~r/gpus.*?\.(ya?ml|xlsx)/)
-    hard_drives = read_from_files!(files, ~r/hard_drives.*?\.(ya?ml|xlsx)/)
-    memories = read_from_files!(files, ~r/memories.*?\.(ya?ml|xlsx)/)
-    motherboards = read_from_files!(files, ~r/motherboards.*?\.(ya?ml|xlsx)/)
-    processors = read_from_files!(files, ~r/processors.*?\.(ya?ml|xlsx)/)
-    psus = read_from_files!(files, ~r/psus.*?\.(ya?ml|xlsx)/)
-    heatsinks = read_from_files!(files, ~r/heatsinks.*?\.(ya?ml|xlsx)/)
-    products = read_from_files!(files, ~r/products.*?\.(ya?ml|xlsx)/)
+    barebones = read_from_files!(files, ~r/^barebones.*?\.(ya?ml|xlsx)/)
+    brands = read_from_files!(files, ~r/^brands.*?\.(ya?ml|xlsx)/)
+    chassises = read_from_files!(files, ~r/^chassises.*?\.(ya?ml|xlsx)/)
+    chipsets = read_from_files!(files, ~r/^chipsets.*?\.(ya?ml|xlsx)/)
+    gpus = read_from_files!(files, ~r/^gpus.*?\.(ya?ml|xlsx)/)
+    hard_drives = read_from_files!(files, ~r/^hard_drives.*?\.(ya?ml|xlsx)/)
+    memories = read_from_files!(files, ~r/^memories.*?\.(ya?ml|xlsx)/)
+    motherboards = read_from_files!(files, ~r/^motherboards.*?\.(ya?ml|xlsx)/)
+    processors = read_from_files!(files, ~r/^processors.*?\.(ya?ml|xlsx)/)
+    psus = read_from_files!(files, ~r/^psus.*?\.(ya?ml|xlsx)/)
+    heatsinks = read_from_files!(files, ~r/^heatsinks.*?\.(ya?ml|xlsx)/)
+    products = read_from_files!(files, ~r/^products.*?\.(ya?ml|xlsx)/)
 
     with {:ok, _} <- Pczone.Brands.upsert(brands),
          {:ok, _} <- Pczone.Chipsets.upsert(chipsets),
