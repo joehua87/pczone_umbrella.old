@@ -68,7 +68,7 @@ defmodule PcZone.SimpleBuiltVariants do
           }
       )
       |> Enum.map(fn %{id: id, name: name, total: total, option_values: option_values} ->
-        [id, name, "", "", Enum.join(option_values, ", "), total, 99]
+        [id, name, "", "", Enum.join(option_values, "; "), total, 99]
       end)
 
     %Workbook{

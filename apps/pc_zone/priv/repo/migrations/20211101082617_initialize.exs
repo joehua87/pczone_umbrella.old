@@ -369,7 +369,7 @@ defmodule PcZone.Repo.Migrations.Initialize do
       add :body_template, :string, null: false
       add :barebone_id, references(:barebone), null: false
       add :barebone_product_id, references(:product), null: false
-      add :option_value_seperator, :string, null: false, default: " + "
+      add :option_value_seperator, :string, null: false, default: ", "
       add :option_types, {:array, :string}, null: false
       add :config, :map, null: false, default: %{}
     end

@@ -416,7 +416,7 @@ defmodule PcZone.SimpleBuilts do
           %{
             option_value_2:
               Enum.join(
-                [memory_label || "Không RAM", hard_drive_label || "Không ổ cứng"],
+                [memory_label || "Không RAM", hard_drive_label || "Không SSD"],
                 seperator
               )
           }

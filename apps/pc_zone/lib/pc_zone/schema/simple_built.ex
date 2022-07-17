@@ -12,7 +12,7 @@ defmodule PcZone.SimpleBuilt do
     field :name, :string, null: false
     field :body_template, :string, null: false
     field :option_types, {:array, :string}, null: false
-    field :option_value_seperator, :string, null: false, default: " + "
+    field :option_value_seperator, :string, null: false, default: ", "
     belongs_to :barebone, PcZone.Barebone
     belongs_to :barebone_product, PcZone.Product
     has_many :processors, PcZone.SimpleBuiltProcessor

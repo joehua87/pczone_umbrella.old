@@ -84,7 +84,7 @@ defmodule PcZone.Platforms do
           # Mã Phân loại
           variant_code,
           # Tên phân loại
-          Enum.join(option_values, ", "),
+          Enum.join(option_values, "; "),
           # SKU Sản phẩm
           "",
           # SKU
