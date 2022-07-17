@@ -164,6 +164,15 @@ defmodule PczoneWeb.Schema.SimpleBuilts do
         {:ok, list}
       end)
     end
+
+    field :simple_built_content, non_null(:string) do
+      arg :simple_built_id, non_null(:id)
+      arg :template, non_null(:string)
+
+      resolve(fn %{simple_built_id: simple_built_id, template: template}, _info ->
+        {:ok, Pczone.SimpleBuilts.generate_content(simple_built_id, template)}
+      end)
+    end
   end
 
   object :simple_built_mutations do

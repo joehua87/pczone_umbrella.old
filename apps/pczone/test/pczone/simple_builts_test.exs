@@ -87,6 +87,62 @@ defmodule Pczone.SimpleBuiltsTest do
                |> SimpleBuilts.generate_variants()
                |> SimpleBuilts.upsert_variants(returning: true)
     end
+
+    test "generate content" do
+      [simple_built | _] = simple_builts_fixture()
+
+      assert {:ok, {_, _}} =
+               simple_built
+               |> SimpleBuilts.generate_variants()
+               |> SimpleBuilts.upsert_variants()
+
+      template = """
+      {{name}}
+      {{#variants}}
+      * {{option_values}}: {{total}}
+      {{/variants}}
+      """
+
+      assert """
+             Hp Elitedesk 800 G2 Mini
+             * i5-6500T, Không RAM, Không SSD: 3.500.000
+             * i5-6500T, Không RAM, 256GB NVMe 95%: 4.250.000
+             * i5-6500T, Không RAM, 256GB NVMe: 4.300.000
+             * i5-6500T, Không RAM, 512GB NVMe: 4.800.000
+             * i5-6500T, 8GB, Không SSD: 4.020.000
+             * i5-6500T, 8GB, 256GB NVMe 95%: 4.770.000
+             * i5-6500T, 8GB, 256GB NVMe: 4.820.000
+             * i5-6500T, 8GB, 512GB NVMe: 5.320.000
+             * i5-6500T, 2 x 8GB, Không SSD: 4.540.000
+             * i5-6500T, 2 x 8GB, 256GB NVMe 95%: 5.290.000
+             * i5-6500T, 2 x 8GB, 256GB NVMe: 5.340.000
+             * i5-6500T, 2 x 8GB, 512GB NVMe: 5.840.000
+             * i5-6600T, Không RAM, Không SSD: 3.600.000
+             * i5-6600T, Không RAM, 256GB NVMe 95%: 4.350.000
+             * i5-6600T, Không RAM, 256GB NVMe: 4.400.000
+             * i5-6600T, Không RAM, 512GB NVMe: 4.900.000
+             * i5-6600T, 8GB, Không SSD: 4.120.000
+             * i5-6600T, 8GB, 256GB NVMe 95%: 4.870.000
+             * i5-6600T, 8GB, 256GB NVMe: 4.920.000
+             * i5-6600T, 8GB, 512GB NVMe: 5.420.000
+             * i5-6600T, 2 x 8GB, Không SSD: 4.640.000
+             * i5-6600T, 2 x 8GB, 256GB NVMe 95%: 5.390.000
+             * i5-6600T, 2 x 8GB, 256GB NVMe: 5.440.000
+             * i5-6600T, 2 x 8GB, 512GB NVMe: 5.940.000
+             * i7-6700T, Không RAM, Không SSD: 4.500.000
+             * i7-6700T, Không RAM, 256GB NVMe 95%: 5.250.000
+             * i7-6700T, Không RAM, 256GB NVMe: 5.300.000
+             * i7-6700T, Không RAM, 512GB NVMe: 5.800.000
+             * i7-6700T, 8GB, Không SSD: 5.020.000
+             * i7-6700T, 8GB, 256GB NVMe 95%: 5.770.000
+             * i7-6700T, 8GB, 256GB NVMe: 5.820.000
+             * i7-6700T, 8GB, 512GB NVMe: 6.320.000
+             * i7-6700T, 2 x 8GB, Không SSD: 5.540.000
+             * i7-6700T, 2 x 8GB, 256GB NVMe 95%: 6.290.000
+             * i7-6700T, 2 x 8GB, 256GB NVMe: 6.340.000
+             * i7-6700T, 2 x 8GB, 512GB NVMe: 6.840.000
+             """ = SimpleBuilts.generate_content(simple_built.id, template)
+    end
   end
 
   setup do

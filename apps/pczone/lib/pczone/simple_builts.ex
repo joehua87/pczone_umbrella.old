@@ -543,6 +543,25 @@ defmodule Pczone.SimpleBuilts do
     )
   end
 
+  def generate_content(simple_built_id, template) do
+    simple_built =
+      Pczone.Repo.get(from(Pczone.SimpleBuilt, preload: [:variants]), simple_built_id)
+
+    :bbmustache.render(template, simple_built,
+      key_type: :atom,
+      value_serializer: fn
+        ["" <> _ | _] = list ->
+          Enum.join(list, ", ")
+
+        x when is_integer(x) ->
+          Number.Delimit.number_to_delimited(x, delimiter: ".", separator: ",", precision: 0)
+
+        x ->
+          x
+      end
+    )
+  end
+
   def parse_filter(filter) do
     filter
     |> Enum.reduce(nil, fn {field, value}, acc ->

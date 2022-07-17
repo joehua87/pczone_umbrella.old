@@ -37,6 +37,7 @@ defmodule Pczone.MixProject do
   defp deps do
     [
       {:bcrypt_elixir, "~> 2.0"},
+      {:bbmustache, "~> 1.12"},
       {:dew_util, "~> 0.2"},
       {:ecto_ltree, "~> 0.4.0"},
       {:elixlsx, "~> 0.3.1"},
@@ -44,7 +45,7 @@ defmodule Pczone.MixProject do
       {:finch, "~> 0.9.0"},
       {:floki, "~> 0.32.0"},
       {:mongodb_driver, "~> 0.9.0"},
-      {:mime, "~> 2.0", override: true},
+      {:number, "~> 1.0"},
       {:recase, "~> 0.7"},
       {:slugify, "~> 1.3"},
       {:scrivener_ecto, "~> 2.7"},
