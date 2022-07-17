@@ -13,7 +13,7 @@
 #   - Ex: hexpm/elixir:1.13.3-erlang-25.0-debian-bullseye-20210902-slim
 #
 ARG BUILDER_IMAGE="hexpm/elixir:1.13.3-erlang-25.0-debian-bullseye-20210902-slim"
-ARG RUNNER_IMAGE="debian:bullseye-20210902-slim"
+ARG RUNNER_IMAGE="node:18.5.0-bullseye-slim"
 
 FROM ${BUILDER_IMAGE} as builder
 
@@ -63,6 +63,8 @@ FROM ${RUNNER_IMAGE}
 
 RUN apt-get update -y && apt-get install -y libstdc++6 openssl libncurses5 locales \
   && apt-get clean && rm -f /var/lib/apt/lists/*_*
+
+RUN npm i -g dew-media-cli
 
 # Set the locale
 RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && locale-gen
