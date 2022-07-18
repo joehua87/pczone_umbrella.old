@@ -1,12 +1,53 @@
 defmodule Pczone.Platforms do
   import Ecto.Query, only: [from: 2]
   alias Elixlsx.{Sheet, Workbook}
-  alias Pczone.{Repo, Platform, SimpleBuiltVariant, SimpleBuiltVariantPlatform}
+  alias Pczone.{Repo, Platform, SimpleBuilt, SimpleBuiltVariant, SimpleBuiltVariantPlatform, Xlsx}
 
   def create(params) do
     params
     |> Pczone.Platform.new_changeset()
     |> Pczone.Repo.insert()
+  end
+
+  def upsert_simple_built_platforms(platform_id, path, opts \\ []) do
+    list =
+      path
+      |> Xlsx.read_spreadsheet()
+      |> Enum.reduce(
+        [],
+        fn
+          %{"product_code" => product_code, "simple_built" => simple_built_code}, acc ->
+            acc ++ [%{product_code: product_code, simple_built_code: simple_built_code}]
+
+          _, acc ->
+            acc
+        end
+      )
+
+    simple_built_codes = Enum.map(list, & &1.simple_built_code)
+
+    simple_builts_map =
+      from(b in SimpleBuilt, where: b.code in ^simple_built_codes, select: {b.code, b.id})
+      |> Repo.all()
+      |> Enum.into(%{})
+
+    list =
+      Enum.map(list, fn %{product_code: product_code, simple_built_code: simple_built_code} ->
+        %{
+          platform_id: platform_id,
+          simple_built_id: simple_builts_map[simple_built_code],
+          product_code: product_code
+        }
+      end)
+
+    Repo.insert_all_2(
+      Pczone.SimpleBuiltPlatform,
+      list,
+      [
+        on_conflict: {:replace, [:product_code]},
+        conflict_target: [:simple_built_id, :platform_id]
+      ] ++ opts
+    )
   end
 
   @doc """

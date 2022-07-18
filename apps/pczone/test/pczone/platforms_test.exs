@@ -4,6 +4,28 @@ defmodule Pczone.PlatformsTest do
   alias Pczone.{SimpleBuilts, Platforms}
 
   describe "platforms" do
+    test "upsert simple built platforms", %{platform: platform} do
+      simple_builts_fixture()
+      path = get_fixtures_dir() |> Path.join("simple_built_platforms_shopee.xlsx")
+
+      assert {:ok,
+              {2,
+               [
+                 %Pczone.SimpleBuiltPlatform{
+                   id: _,
+                   platform_id: _,
+                   product_code: "19301333605",
+                   simple_built_id: _
+                 },
+                 %Pczone.SimpleBuiltPlatform{
+                   id: _,
+                   platform_id: _,
+                   product_code: "15618662714",
+                   simple_built_id: _
+                 }
+               ]}} = Platforms.upsert_simple_built_platforms(platform.id, path, returning: true)
+    end
+
     test "read simple built variants from xlsx" do
       path = get_fixtures_dir() |> Path.join("shopee-simple-built-variants.xlsx")
 
