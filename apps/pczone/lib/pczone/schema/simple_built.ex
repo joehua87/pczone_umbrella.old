@@ -20,6 +20,7 @@ defmodule Pczone.SimpleBuilt do
     has_many :memories, Pczone.SimpleBuiltMemory
     has_many :hard_drives, Pczone.SimpleBuiltHardDrive
     has_many :variants, Pczone.SimpleBuiltVariant
+    has_many :simple_built_platforms, Pczone.SimpleBuiltPlatform
   end
 
   def changeset(entity, params) do

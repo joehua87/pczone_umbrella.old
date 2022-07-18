@@ -1,11 +1,29 @@
 defmodule Pczone.Platforms do
-  import Ecto.Query, only: [from: 2]
+  import Ecto.Query, only: [from: 2, where: 2]
+  import Dew.FilterParser
   alias Elixlsx.{Sheet, Workbook}
   alias Pczone.{Repo, Platform, SimpleBuilt, SimpleBuiltVariant, SimpleBuiltVariantPlatform, Xlsx}
 
   def get_by_code(code) do
-    Repo.one(from Platform, where: [code: ^code], limit: 1)
+    Repo.one(from(Platform, where: [code: ^code], limit: 1))
   end
+
+  def list(attrs \\ %{})
+
+  def list(%Dew.Filter{
+        filter: filter,
+        paging: paging,
+        selection: selection,
+        order_by: order_by
+      }) do
+    Pczone.Platform
+    |> where(^parse_filter(filter))
+    |> select_fields(selection, [])
+    |> sort_by(order_by, [])
+    |> Repo.paginate(paging)
+  end
+
+  def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
 
   def create(params) do
     params
@@ -121,9 +139,10 @@ defmodule Pczone.Platforms do
   def make_platform_pricing_workbook(%Platform{rate: rate}) do
     rows =
       Repo.all(
-        from vp in SimpleBuiltVariantPlatform,
+        from(vp in SimpleBuiltVariantPlatform,
           preload: [simple_built_variant: [:simple_built]],
           where: not is_nil(vp.variant_code)
+        )
       )
       |> Enum.map(fn %SimpleBuiltVariantPlatform{
                        product_code: product_code,
@@ -191,5 +210,15 @@ defmodule Pczone.Platforms do
       product_code: product_code,
       variant_code: variant_code
     }
+  end
+
+  def parse_filter(filter) do
+    filter
+    |> Enum.reduce(nil, fn {field, value}, acc ->
+      case field do
+        :name -> parse_string_filter(acc, field, value)
+        _ -> acc
+      end
+    end) || true
   end
 end

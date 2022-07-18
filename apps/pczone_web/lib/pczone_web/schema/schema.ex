@@ -8,6 +8,7 @@ defmodule PczoneWeb.Schema do
   import_types PczoneWeb.Schema.Common
   import_types PczoneWeb.Schema.Users
   import_types PczoneWeb.Schema.Brands
+  import_types PczoneWeb.Schema.Platforms
   import_types PczoneWeb.Schema.Chipsets
   import_types PczoneWeb.Schema.Motherboards
   import_types PczoneWeb.Schema.Barebones
@@ -32,6 +33,7 @@ defmodule PczoneWeb.Schema do
   query do
     import_fields :user_queries
     import_fields :brand_queries
+    import_fields :platform_queries
     import_fields :chipset_queries
     import_fields :processor_queries
     import_fields :chassis_queries
