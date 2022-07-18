@@ -3,10 +3,27 @@ defmodule Pczone.Platforms do
   alias Elixlsx.{Sheet, Workbook}
   alias Pczone.{Repo, Platform, SimpleBuilt, SimpleBuiltVariant, SimpleBuiltVariantPlatform, Xlsx}
 
+  def get_by_code(code) do
+    Repo.one(from Platform, where: [code: ^code], limit: 1)
+  end
+
   def create(params) do
     params
     |> Pczone.Platform.new_changeset()
     |> Pczone.Repo.insert()
+  end
+
+  def upsert(entities, opts \\ []) do
+    with list = [_ | _] <-
+           Pczone.Helpers.get_list_changset_changes(entities, fn entity ->
+             Pczone.Platform.new_changeset(entity) |> Pczone.Helpers.get_changeset_changes()
+           end) do
+      Repo.insert_all_2(
+        Pczone.Platform,
+        list,
+        Keyword.merge(opts, on_conflict: {:replace, [:name]}, conflict_target: [:code])
+      )
+    end
   end
 
   def upsert_simple_built_platforms(platform_id, path, opts \\ []) do

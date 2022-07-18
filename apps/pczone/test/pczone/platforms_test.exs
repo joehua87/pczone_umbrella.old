@@ -157,7 +157,6 @@ defmodule Pczone.PlatformsTest do
 
   setup do
     get_fixtures_dir() |> Pczone.initial_data()
-    {:ok, platform} = Pczone.Platforms.create(%{code: "shopee", name: "Shopee", rate: 1.05})
-    {:ok, platform: platform}
+    {:ok, platform: Pczone.Platforms.get_by_code("shopee")}
   end
 end
