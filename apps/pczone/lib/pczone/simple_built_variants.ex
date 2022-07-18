@@ -60,6 +60,7 @@ defmodule Pczone.SimpleBuiltVariants do
           on: sb.id == v.simple_built_id,
           where: ^parse_filter(filter),
           # preload: [:simple_built],
+          order_by: [asc: v.position],
           select: %{
             id: v.id,
             name: sb.name,

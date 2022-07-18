@@ -29,49 +29,8 @@ defmodule Pczone.SimpleBuiltsTest do
           processor_amount: 1_700_000,
           processor_price: 1_700_000,
           processor_quantity: 1,
-          product_name: "Máy tính Mini HP EliteDesk 800 G2 mini / Core i5",
           total: 3_500_000,
-          variant_name: "i5-6500T,Ko RAM + Ko SSD"
-        },
-        %{
-          barebone_price: 1_800_000,
-          gpu_amount: 0,
-          gpu_price: 0,
-          gpu_quantity: 0,
-          hard_drive_amount: 750_000,
-          hard_drive_price: 750_000,
-          hard_drive_quantity: 1,
-          memory_amount: 0,
-          memory_price: 0,
-          memory_quantity: 0,
-          option_values: ["i5-6500T", "Ko RAM + 256GB NVMe 95%"],
-          position: 1,
-          processor_amount: 1_700_000,
-          processor_price: 1_700_000,
-          processor_quantity: 1,
-          product_name: "Máy tính Mini HP EliteDesk 800 G2 mini / Core i5",
-          total: 4_250_000,
-          variant_name: "i5-6500T,Ko RAM + 256GB NVMe 95%"
-        },
-        %{
-          barebone_price: 1_800_000,
-          gpu_amount: 0,
-          gpu_price: 0,
-          gpu_quantity: 0,
-          hard_drive_amount: 800_000,
-          hard_drive_price: 800_000,
-          hard_drive_quantity: 1,
-          memory_amount: 0,
-          memory_price: 0,
-          memory_quantity: 0,
-          option_values: ["i5-6500T", "Ko RAM + 256GB NVMe"],
-          position: 2,
-          processor_amount: 1_700_000,
-          processor_price: 1_700_000,
-          processor_quantity: 1,
-          product_name: "Máy tính Mini HP EliteDesk 800 G2 mini / Core i5",
-          total: 4_300_000,
-          variant_name: "i5-6500T,Ko RAM + 256GB NVMe"
+          name: "i5-6500T,Ko RAM + Ko SSD"
         }
         | _
       ] =
@@ -124,14 +83,14 @@ defmodule Pczone.SimpleBuiltsTest do
                |> SimpleBuilts.upsert_variants()
 
       template = """
-      {{product_name}}
+      {{name}}
       {{#variants}}
       * {{option_values}}: {{total}}
       {{/variants}}
       """
 
       assert """
-             Máy tính Mini HP EliteDesk 800 G2 mini / Core i5
+             Hp Elitedesk 800 G2 Mini
              * i5-6500T, Ko RAM + Ko SSD: 3.500.000
              * i5-6500T, Ko RAM + 256GB NVMe 95%: 4.250.000
              * i5-6500T, Ko RAM + 256GB NVMe: 4.300.000

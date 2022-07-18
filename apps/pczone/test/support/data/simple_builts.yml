@@ -1,6 +1,5 @@
 - code: hp-elitedesk-800-g2-mini
   name: Hp Elitedesk 800 G2 Mini
-  product_name: Máy tính Mini HP EliteDesk 800 G2 mini / Core i5
   barebone: hp-elitedesk-800-g2-mini
   barebone_product: hp-elitedesk-800-g2-mini/used
   option_types: []
@@ -38,7 +37,6 @@
 
 - code: hp-elitedesk-800-g2-mini-65w
   name: Hp Elitedesk 800 G2 Mini 65w
-  product_name: Máy tính mini PC HP EliteDesk 800 G2 65W core i5 6500
   barebone: hp-elitedesk-800-g2-mini-65w
   barebone_product: hp-elitedesk-800-g2-mini-65w/used
   option_types: []

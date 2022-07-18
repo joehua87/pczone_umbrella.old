@@ -5,8 +5,7 @@ defmodule Pczone.SimpleBuiltVariant do
   @derive Jason.Encoder
 
   @required [
-    :product_name,
-    :variant_name,
+    :name,
     :simple_built_id,
     :barebone_id,
     :barebone_product_id,
@@ -42,8 +41,7 @@ defmodule Pczone.SimpleBuiltVariant do
   ]
 
   schema "simple_built_variant" do
-    field :product_name, :string
-    field :variant_name, :string
+    field :name, :string
     belongs_to :simple_built, Pczone.SimpleBuilt
     belongs_to :barebone, Pczone.Barebone
     belongs_to :barebone_product, Pczone.Product
