@@ -47,4 +47,16 @@ defmodule PczoneWeb.Schema.Gpus do
       end)
     end
   end
+
+  object :gpu_mutations do
+    field :upsert_gpus, non_null(list_of(non_null(:gpu))) do
+      arg :data, non_null(:json)
+
+      resolve(fn %{data: data}, _info ->
+        with {:ok, {_, result}} <- Pczone.Gpus.upsert(data, returning: true) do
+          {:ok, result}
+        end
+      end)
+    end
+  end
 end

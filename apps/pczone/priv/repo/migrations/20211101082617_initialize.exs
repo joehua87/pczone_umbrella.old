@@ -386,12 +386,11 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :gpu_id, references(:gpu)
       add :gpu_product_id, references(:product)
       add :gpu_quantity, :integer, null: false, default: 0
-      add :gpu_label, :string
+      add :gpu_label, :string, default: ""
     end
 
     create unique_index(:simple_built_processor, [:key])
-    create unique_index(:simple_built_processor, [:simple_built_id, :gpu_label])
-    create unique_index(:simple_built_processor, [:simple_built_id, :processor_label])
+    create unique_index(:simple_built_processor, [:simple_built_id, :processor_label, :gpu_label])
 
     create table(:simple_built_memory) do
       add :key, :string, null: false

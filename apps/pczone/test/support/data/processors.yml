@@ -193,3 +193,33 @@
   sub: 8M Cache, up to 4.20 GHz
   url: https://ark.intel.com/content/www/us/en/ark/products/88195/intel-core-i76700k-processor-8m-cache-up-to-4-20-ghz.html
   vertical_segment: Desktop
+
+- cache_size: '6'
+  code: i3-9100
+  code_name: Coffee Lake
+  collection_name: 9th Generation Intel® Core™ i3 Processors
+  cores: 4
+  threads: 4
+  launch_date: 2019-Q2
+  memory_types:
+    - DDR4-2666
+  name: Intel® Core™ i3-9100 Processor
+  status: Launched
+  sub: 6MB Cache, up to 4.20 GHz
+  url: https://ark.intel.com/content/www/vn/vi/ark/products/134870/intel-core-i39100-processor-6m-cache-up-to-4-20-ghz.html
+  vertical_segment: Desktop
+
+- cache_size: '6'
+  code: i3-9100F
+  code_name: Coffee Lake
+  collection_name: 9th Generation Intel® Core™ i3 Processors
+  cores: 4
+  threads: 4
+  launch_date: 2019-Q1
+  memory_types:
+    - DDR4-2666
+  name: Intel® Core™ i3-9100F Processor
+  status: Launched
+  sub: 6MB Cache, up to 4.20 GHz
+  url: https://ark.intel.com/content/www/vn/vi/ark/products/190886/intel-core-i39100f-processor-6m-cache-up-to-4-20-ghz.html
+  vertical_segment: Desktop

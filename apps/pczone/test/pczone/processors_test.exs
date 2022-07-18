@@ -24,7 +24,7 @@ defmodule Pczone.ProcessorsTest do
 
     test "upsert" do
       entities = Pczone.Fixtures.read_fixture("processors.yml")
-      assert {:ok, {13, [%Processor{} | _]}} = Processors.upsert(entities, returning: true)
+      assert {:ok, {15, [%Processor{} | _]}} = Processors.upsert(entities, returning: true)
     end
 
     @tag :skip

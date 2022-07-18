@@ -84,7 +84,7 @@ defmodule Pczone.MotherboardsTest do
       assert {:ok, {_, _}} =
                "processors.yml" |> Pczone.Fixtures.read_fixture() |> Pczone.Processors.upsert()
 
-      assert {:ok, {13, _}} =
+      assert {:ok, {15, _}} =
                Motherboards.upsert_motherboard_processors(entities, returning: true)
     end
 

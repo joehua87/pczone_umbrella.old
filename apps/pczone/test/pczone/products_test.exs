@@ -8,7 +8,7 @@ defmodule Pczone.ProductsTest do
       products = Pczone.Fixtures.read_fixture("products.xlsx")
 
       assert {:ok,
-              {32,
+              {38,
                [
                  %Pczone.Product{}
                  | _
@@ -19,7 +19,7 @@ defmodule Pczone.ProductsTest do
       Pczone.Fixtures.get_fixtures_dir() |> Pczone.initial_data()
 
       assert {:ok,
-              {32,
+              {38,
                [
                  %Pczone.Product{
                    barebone_id: _,

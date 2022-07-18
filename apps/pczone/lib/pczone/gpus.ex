@@ -35,7 +35,9 @@ defmodule Pczone.Gpus do
         Pczone.Gpu,
         list,
         Keyword.merge(opts,
-          on_conflict: :replace_all,
+          on_conflict:
+            {:replace,
+             [:code, :name, :type, :memory_capacity, :memory_type, :form_factors, :brand_id, :tdp]},
           conflict_target: [:slug]
         )
       )

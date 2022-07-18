@@ -1,5 +1,5 @@
-- name: Nvidia Quandro K600
-  code: nvidia-quandro-k600
+- name: Nvidia Quadro K600
+  code: nvidia-quadro-k600
   memory_capacity: 1024
   memory_type: DDR3
   brand: nvidia
@@ -8,8 +8,8 @@
     - 'low'
     - 'high'
 
-- name: Nvidia Quandro K420
-  code: nvidia-quandro-k420
+- name: Nvidia Quadro K420
+  code: nvidia-quadro-k420
   memory_capacity: 1024
   memory_type: DDR3
   brand: nvidia
@@ -18,8 +18,8 @@
     - 'low'
     - 'high'
 
-- name: Nvidia Quandro K420 2Gb
-  code: nvidia-quandro-k420-2gb
+- name: Nvidia Quadro K420 2Gb
+  code: nvidia-quadro-k420-2gb
   memory_capacity: 2048
   memory_type: DDR3
   brand: nvidia
@@ -28,8 +28,8 @@
     - 'low'
     - 'high'
 
-- name: Nvidia Quandro K620
-  code: nvidia-quandro-k620
+- name: Nvidia Quadro K620
+  code: nvidia-quadro-k620
   memory_capacity: 2048
   memory_type: DDR3
   brand: nvidia
@@ -38,8 +38,8 @@
     - 'low'
     - 'high'
 
-- name: Nvidia Quandro K2000
-  code: nvidia-quandro-k2000
+- name: Nvidia Quadro K2000
+  code: nvidia-quadro-k2000
   memory_capacity: 2048
   memory_type: DDR5
   brand: nvidia

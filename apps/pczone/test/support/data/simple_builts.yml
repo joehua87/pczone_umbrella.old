@@ -71,3 +71,38 @@
       label: 512GB NVMe
   body_template: |
     Mustache template for Hp EliteDesk 800 65W
+
+- code: dell-optiplex-7060-sff
+  name: Dell OptiPlex 7060 SFF
+  barebone: dell-optiplex-7060-sff
+  barebone_product: dell-optiplex-7060-sff/used
+  option_types: []
+  option_value_seperator: ', '
+  processors:
+    - processor: i3-9100
+      processor_label: i3-9100
+      processor_product: i3-9100/tray
+    - processor: i3-9100F
+      processor_label: i3-9100F
+      processor_product: i3-9100f/tray
+      gpu: nvidia-quadro-k600
+      gpu_label: K600
+      gpu_product: nvidia-quadro-k600/used
+  memories:
+    - memory: 4gb-dimm-ddr4-2666-mixed
+      memory_product: 4gb-dimm-ddr4-2666-mixed/used
+      quantity: 2
+      label: 2x4GB
+    - memory: 8gb-dimm-ddr4-2666-mixed
+      memory_product: 8gb-dimm-ddr4-2666-mixed/used
+      quantity: 2
+      label: 16GB
+  hard_drives:
+    - hard_drive: 256gb-samsung-pm981
+      hard_drive_product: 256gb-samsung-pm981/100%
+      label: 256GB NVMe
+    - hard_drive: 512gb-samsung-pm981
+      hard_drive_product: 512gb-samsung-pm981/100%
+      label: 512GB NVMe
+  body_template: |
+    Mustache template for Dell OptiPlex 7060 SFF

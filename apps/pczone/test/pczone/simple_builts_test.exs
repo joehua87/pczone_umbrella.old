@@ -1,12 +1,25 @@
 defmodule Pczone.SimpleBuiltsTest do
   use Pczone.DataCase
+  import Ecto.Query, only: [from: 2]
   import Pczone.Fixtures
-  alias Pczone.SimpleBuilts
+  alias Pczone.{Repo, SimpleBuilts}
 
   describe "simple builts" do
     test "upsert" do
       list = Pczone.Fixtures.read_fixture("simple_builts.yml")
       {:ok, [%Pczone.SimpleBuilt{} | _]} = Pczone.SimpleBuilts.upsert(list)
+
+      assert %{
+               processors: [
+                 %{processor_label: "i3-9100", gpu_label: ""},
+                 %{processor_label: "i3-9100F", gpu_label: "K600", gpu: %{}, gpu_product: %{}}
+               ]
+             } =
+               Repo.one(
+                 from Pczone.SimpleBuilt,
+                   preload: [:processors],
+                   where: [code: "dell-optiplex-7060-sff"]
+               )
     end
 
     test "generate simple built variants" do

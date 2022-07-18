@@ -216,7 +216,7 @@ defmodule Pczone.SimpleBuilts do
                   gpu_product_id: gpu_product_id,
                   gpu_quantity: gpu_quantity
                 } =
-                  with "" <> gpu_product_sku <- Map.get(params, "gpu_product_sku") do
+                  with "" <> gpu_product_sku <- Map.get(params, "gpu_product") do
                     %{
                       id: gpu_id,
                       product_id: gpu_product_id
@@ -257,7 +257,7 @@ defmodule Pczone.SimpleBuilts do
                   gpu_id: gpu_id,
                   gpu_product_id: gpu_product_id,
                   gpu_quantity: gpu_quantity,
-                  gpu_label: Map.get(params, "gpu_label")
+                  gpu_label: Map.get(params, "gpu_label", "")
                 }
               end
             )
@@ -450,10 +450,8 @@ defmodule Pczone.SimpleBuilts do
             }
         end
 
-      gpu_label = if gpu_product != nil, do: gpu_label, else: nil
-
       option_value_1 =
-        [processor_label, gpu_label] |> Enum.filter(&(&1 != nil)) |> Enum.join(seperator)
+        [processor_label, gpu_label] |> Enum.filter(&(&1 != "")) |> Enum.join(seperator)
 
       Enum.map(
         memories_and_hard_drives,
