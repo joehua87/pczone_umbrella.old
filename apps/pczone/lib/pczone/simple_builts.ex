@@ -138,10 +138,10 @@ defmodule Pczone.SimpleBuilts do
         fn %{
              "code" => code,
              "name" => name,
+             "product_name" => product_name,
              "body_template" => body_template,
              "barebone_product" => barebone_product_sku,
-             "option_types" => option_types,
-             "option_value_seperator" => option_value_seperator
+             "option_types" => option_types
            } ->
           %{
             id: barebone_id,
@@ -151,11 +151,12 @@ defmodule Pczone.SimpleBuilts do
           %{
             code: code,
             name: name,
+            product_name: product_name,
             body_template: body_template,
             barebone_id: barebone_id,
             barebone_product_id: barebone_product_id,
             option_types: option_types,
-            option_value_seperator: option_value_seperator
+            option_value_seperator: " + "
           }
         end
       )
@@ -171,7 +172,7 @@ defmodule Pczone.SimpleBuilts do
               {:replace,
                [
                  :name,
-                 :product_label,
+                 :product_name,
                  :body_template,
                  :barebone_id,
                  :barebone_product_id,
@@ -356,6 +357,7 @@ defmodule Pczone.SimpleBuilts do
 
   def generate_variants(%Pczone.SimpleBuilt{
         id: simple_built_id,
+        product_name: product_name,
         barebone_id: barebone_id,
         barebone_product: barebone_product,
         processors: processors,
@@ -462,6 +464,8 @@ defmodule Pczone.SimpleBuilts do
         fn memory_and_hard_drive = %{option_value_2: option_value_2} ->
           result =
             %{
+              product_name: product_name,
+              variant_name: Enum.join([option_value_1, option_value_2], ","),
               simple_built_id: simple_built_id,
               barebone_id: barebone_id,
               barebone_product_id: barebone_product.id,
@@ -491,6 +495,9 @@ defmodule Pczone.SimpleBuilts do
           Map.put(result, :total, total)
         end
       )
+    end)
+    |> Enum.with_index(fn item, position ->
+      Map.put(item, :position, position)
     end)
   end
 
@@ -533,6 +540,7 @@ defmodule Pczone.SimpleBuilts do
              :hard_drive_product_id,
              :hard_drive_price,
              :hard_drive_quantity,
+             :position,
              :total,
              :gpu_id,
              :gpu_product_id,
@@ -546,7 +554,12 @@ defmodule Pczone.SimpleBuilts do
 
   def generate_content(simple_built_id, template) do
     simple_built =
-      Pczone.Repo.get(from(Pczone.SimpleBuilt, preload: [:variants]), simple_built_id)
+      Pczone.Repo.get(
+        from(Pczone.SimpleBuilt,
+          preload: [variants: ^from(Pczone.SimpleBuiltVariant, order_by: [asc: :position])]
+        ),
+        simple_built_id
+      )
 
     :bbmustache.render(template, simple_built,
       key_type: :atom,

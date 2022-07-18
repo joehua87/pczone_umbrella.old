@@ -365,12 +365,12 @@ defmodule Pczone.Repo.Migrations.Initialize do
     create table(:simple_built) do
       add :code, :string, null: false
       add :name, :string, null: false
-      add :product_label, :string
+      add :product_name, :string, null: false
       add :media, :map, null: false, default: "[]"
       add :body_template, :string, null: false
       add :barebone_id, references(:barebone), null: false
       add :barebone_product_id, references(:product), null: false
-      add :option_value_seperator, :string, null: false, default: ", "
+      add :option_value_seperator, :string, null: false
       add :option_types, {:array, :string}, null: false
       add :config, :map, null: false, default: %{}
     end
@@ -419,6 +419,8 @@ defmodule Pczone.Repo.Migrations.Initialize do
     create unique_index(:simple_built_hard_drive, [:simple_built_id, :label])
 
     create table(:simple_built_variant) do
+      add :product_name, :string, null: false
+      add :variant_name, :string, null: false
       add :simple_built_id, references(:simple_built), null: false
       add :barebone_id, references(:barebone), null: false
       add :barebone_product_id, references(:product), null: false
@@ -445,6 +447,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :hard_drive_amount, :integer, null: false
       add :image_id, :string
       add :option_values, {:array, :string}, null: false
+      add :position, :integer, null: false
       add :total, :integer, null: false
       add :config, :map, null: false, default: %{}
     end

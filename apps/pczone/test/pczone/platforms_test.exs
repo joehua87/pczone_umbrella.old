@@ -79,7 +79,7 @@ defmodule Pczone.PlatformsTest do
                        "a",
                        "Hp Elitedesk 800 G2 Mini",
                        "x-0",
-                       "i5-6500T; Ko RAM, Ko SSD",
+                       "i5-6500T; Ko RAM + Ko SSD",
                        "",
                        "",
                        3_675_000,
