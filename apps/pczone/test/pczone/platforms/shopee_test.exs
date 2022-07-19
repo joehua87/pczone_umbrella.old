@@ -38,6 +38,7 @@ defmodule Pczone.Platforms.ShopeeTest do
     test "make pricing workbook" do
       upsert_simple_built_variant_platforms()
       platform = Pczone.Repo.one(from Pczone.Platform, where: [code: "shopee"])
+      workbook = Pczone.Platforms.make_pricing_workbook(platform)
 
       assert %Elixlsx.Workbook{
                datetime: nil,
@@ -91,7 +92,7 @@ defmodule Pczone.Platforms.ShopeeTest do
                    show_grid_lines: true
                  }
                ]
-             } = Pczone.Platforms.make_pricing_workbook(platform)
+             } = workbook
     end
   end
 

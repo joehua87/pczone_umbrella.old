@@ -210,7 +210,7 @@ defmodule Pczone.Platforms do
     end)
   end
 
-  def make_pricing_workbook(platform = %{rate: _rate}) do
+  def make_pricing_workbook(platform = %{rate: rate}) do
     headers = [
       [
         "et_title_product_id",
@@ -263,7 +263,8 @@ defmodule Pczone.Platforms do
             v.name,
             "",
             "",
-            v.total
+            fragment("(?::decimal * ?)::integer", v.total, ^rate),
+            99
           ]
       )
 

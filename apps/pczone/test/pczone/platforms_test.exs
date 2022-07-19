@@ -75,6 +75,7 @@ defmodule Pczone.PlatformsTest do
 
     test "make product pricing workbook", %{platform: platform} do
       make_simple_built_variant_platforms(platform)
+      workbook = Platforms.make_platform_pricing_workbook(platform.id)
 
       assert %Elixlsx.Workbook{
                datetime: nil,
@@ -110,7 +111,7 @@ defmodule Pczone.PlatformsTest do
                    ]
                  }
                ]
-             } = Platforms.make_platform_pricing_workbook(platform.id)
+             } = workbook
     end
 
     test "generate product pricing report", %{platform: platform} do
