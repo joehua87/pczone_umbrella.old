@@ -17,6 +17,11 @@ defmodule Pczone.Fixtures do
     end
   end
 
+  def platform_fixture() do
+    {:ok, platform} = Pczone.Platforms.create(%{code: "shopee", name: "Shopee", rate: 1.05})
+    platform
+  end
+
   def simple_builts_fixture() do
     list = Pczone.Fixtures.read_fixture("simple_builts.yml")
     codes = Enum.map(list, & &1["code"])
@@ -31,8 +36,7 @@ defmodule Pczone.Fixtures do
           {:processors, [:processor_product, :gpu_product]},
           {:memories, :memory_product},
           {:hard_drives, :hard_drive_product}
-        ],
-        limit: 1
+        ]
     )
   end
 end

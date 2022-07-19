@@ -53,7 +53,7 @@ defmodule Pczone.SimpleBuiltVariantsTest do
     end
 
     test "export csv" do
-      [simple_built] = simple_builts_fixture()
+      [simple_built | _] = simple_builts_fixture()
       assert {_, _} = SimpleBuilts.generate_variants(simple_built)
 
       assert {

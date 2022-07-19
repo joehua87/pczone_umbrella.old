@@ -2,7 +2,16 @@ defmodule Pczone.Platforms do
   import Ecto.Query, only: [from: 2, where: 2]
   import Dew.FilterParser
   alias Elixlsx.{Sheet, Workbook}
-  alias Pczone.{Repo, Platform, SimpleBuilt, SimpleBuiltVariant, SimpleBuiltVariantPlatform, Xlsx}
+
+  alias Pczone.{
+    Repo,
+    Platform,
+    SimpleBuilt,
+    SimpleBuiltPlatform,
+    SimpleBuiltVariant,
+    SimpleBuiltVariantPlatform,
+    Xlsx
+  }
 
   def get_by_code(code) do
     Repo.one(from(Platform, where: [code: ^code], limit: 1))
@@ -29,6 +38,92 @@ defmodule Pczone.Platforms do
     params
     |> Pczone.Platform.new_changeset()
     |> Pczone.Repo.insert()
+  end
+
+  @doc """
+  Use full to get product code, variant code
+  """
+  def read_product_variants("shopee", path) do
+    with [{:ok, sheet} | _] <- Xlsxir.multi_extract(path),
+         list <- Xlsxir.get_list(sheet) |> Enum.slice(3..-1) |> Xlsx.spreadsheet_to_list() do
+      Enum.map(list, fn %{
+                          "Giá" => _,
+                          "Mã Phân loại" => variant_code,
+                          "Mã Sản phẩm" => product_code,
+                          "SKU" => _,
+                          "SKU Sản phẩm" => _,
+                          "Số lượng" => _,
+                          "Tên Sản phẩm" => _,
+                          "Tên phân loại" => variant_name
+                        } ->
+        %{
+          product_code: product_code,
+          variant_code: variant_code,
+          variant_name: variant_name
+        }
+      end)
+      |> Enum.filter(&(&1.product_code != nil))
+    end
+  end
+
+  @doc """
+  Read an xlsx file exported from platform.
+  Extract variant_code by product_code & variant_name.
+  Then upsert all to simple_built_variant_platform.
+  """
+  def upsert_simple_built_variant_platforms(
+        %Platform{id: platform_id, code: platform_code},
+        path,
+        opts \\ []
+      ) do
+    list = read_product_variants(platform_code, path)
+    product_codes = list |> Enum.map(& &1.product_code) |> Enum.uniq()
+
+    product_codes_map_by_simple_built_id =
+      Repo.all(
+        from p in SimpleBuiltPlatform,
+          where: p.product_code in ^product_codes,
+          select: {p.simple_built_id, p.product_code}
+      )
+      |> Enum.into(%{})
+
+    simple_built_ids = Map.keys(product_codes_map_by_simple_built_id)
+
+    variants =
+      Repo.all(from v in SimpleBuiltVariant, where: v.simple_built_id in ^simple_built_ids)
+
+    variant_platforms =
+      variants
+      |> Enum.map(fn %SimpleBuiltVariant{
+                       id: simple_built_variant_id,
+                       name: name,
+                       simple_built_id: simple_built_id
+                     } ->
+        product_code = product_codes_map_by_simple_built_id[simple_built_id]
+
+        variant_code =
+          case Enum.find(list, &(&1.product_code == product_code && &1.variant_name == name)) do
+            %{variant_code: variant_code} -> variant_code
+            _ -> nil
+          end
+
+        %{
+          platform_id: platform_id,
+          simple_built_variant_id: simple_built_variant_id,
+          product_code: product_code,
+          variant_code: variant_code
+        }
+      end)
+      |> Enum.filter(&(&1.variant_code != nil))
+
+    Repo.insert_all_2(
+      Pczone.SimpleBuiltVariantPlatform,
+      variant_platforms,
+      Keyword.merge(opts,
+        on_conflict: {:replace, [:product_code, :variant_code]},
+        conflict_target: [:simple_built_variant_id, :platform_id]
+      )
+    )
   end
 
   def upsert(entities, opts \\ []) do
