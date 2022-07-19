@@ -45,7 +45,10 @@ defmodule Pczone.Platforms do
   """
   def read_product_variants("shopee", path) do
     with [{:ok, sheet} | _] <- Xlsxir.multi_extract(path),
-         list <- Xlsxir.get_list(sheet) |> Enum.slice(3..-1) |> Xlsx.spreadsheet_to_list() do
+         list <-
+           Xlsxir.get_list(sheet)
+           |> Enum.slice(3..-1)
+           |> Xlsx.spreadsheet_to_list() do
       Enum.map(list, fn %{
                           "Giá" => _,
                           "Mã Phân loại" => variant_code,
@@ -205,6 +208,73 @@ defmodule Pczone.Platforms do
       |> Enum.filter(&(elem(&1, 0) != nil))
       |> Enum.into(%{})
     end)
+  end
+
+  def make_pricing_workbook(platform = %{rate: _rate}) do
+    headers = [
+      [
+        "et_title_product_id",
+        "et_title_product_name",
+        "et_title_variation_id",
+        "et_title_variation_name",
+        "et_title_parent_sku",
+        "et_title_variation_sku",
+        "et_title_variation_price",
+        "et_title_variation_stock",
+        "et_title_reason"
+      ],
+      ["sales_info", "220408_floatingstock"],
+      [
+        nil,
+        nil,
+        nil,
+        nil,
+        nil,
+        nil,
+        "Giá của sản phẩm đắt nhất chia cho giá của giới hạn sản phẩm rẻ nhất: 5",
+        nil
+      ],
+      [
+        "Mã Sản phẩm",
+        "Tên Sản phẩm",
+        "Mã Phân loại",
+        "Tên phân loại",
+        "SKU Sản phẩm",
+        "SKU",
+        "Giá",
+        "Số lượng"
+      ]
+    ]
+
+    rows =
+      Repo.all(
+        from v in Pczone.SimpleBuiltVariant,
+          join: b in Pczone.SimpleBuilt,
+          on: v.simple_built_id == b.id,
+          join: bp in Pczone.SimpleBuiltPlatform,
+          on: bp.simple_built_id == b.id,
+          join: vp in Pczone.SimpleBuiltVariantPlatform,
+          on: v.id == vp.simple_built_variant_id,
+          where: vp.platform_id == ^platform.id,
+          select: [
+            bp.product_code,
+            b.name,
+            vp.variant_code,
+            v.name,
+            "",
+            "",
+            v.total
+          ]
+      )
+
+    %Workbook{
+      sheets: [
+        %Sheet{
+          name: "Sheet1",
+          rows: headers ++ rows
+        }
+      ]
+    }
   end
 
   def generate_platform_pricing_report(platform_id) do
