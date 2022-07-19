@@ -131,6 +131,27 @@ defmodule Pczone.SimpleBuilts do
     end
   end
 
+  @doc """
+  Remove all simple built processors
+  """
+  def remove_simple_built_processors(simple_built_id) do
+    Repo.delete_all(from Pczone.SimpleBuiltProcessor, where: [simple_built_id: ^simple_built_id])
+  end
+
+  @doc """
+  Remove all simple built memories
+  """
+  def remove_simple_built_memories(simple_built_id) do
+    Repo.delete_all(from Pczone.SimpleBuiltMemory, where: [simple_built_id: ^simple_built_id])
+  end
+
+  @doc """
+  Remove all simple built hard drives
+  """
+  def remove_simple_built_hard_drives(simple_built_id) do
+    Repo.delete_all(from Pczone.SimpleBuiltHardDrive, where: [simple_built_id: ^simple_built_id])
+  end
+
   defp upsert_simple_builts_multi(multi, list, barebone_products_map) do
     simple_builts =
       Enum.map(
@@ -194,8 +215,8 @@ defmodule Pczone.SimpleBuilts do
          processor_products_map,
          gpu_products_map
        ) do
-    Ecto.Multi.run(
-      multi,
+    multi
+    |> Ecto.Multi.run(
       :simple_built_processors,
       fn _, %{simple_builts_map: simple_builts_map} ->
         entities =

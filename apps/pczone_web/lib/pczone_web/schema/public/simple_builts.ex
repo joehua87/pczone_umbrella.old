@@ -135,7 +135,7 @@ defmodule PczoneWeb.Schema.SimpleBuilts do
 
   object :simple_built_queries do
     field :simple_built, :simple_built do
-      arg(:id, non_null(:id))
+      arg :id, non_null(:id)
 
       resolve(fn %{id: id}, _info ->
         {:ok, Pczone.SimpleBuilts.get(id)}
@@ -143,9 +143,9 @@ defmodule PczoneWeb.Schema.SimpleBuilts do
     end
 
     field :simple_builts, non_null(:simple_built_list_result) do
-      arg(:filter, :simple_built_filter_input)
-      arg(:order_by, list_of(non_null(:order_by_input)))
-      arg(:paging, :paging_input)
+      arg :filter, :simple_built_filter_input
+      arg :order_by, list_of(non_null(:order_by_input))
+      arg :paging, :paging_input
 
       resolve(fn args, info ->
         list =
@@ -160,8 +160,8 @@ defmodule PczoneWeb.Schema.SimpleBuilts do
     end
 
     field :simple_built_content, non_null(:string) do
-      arg(:simple_built_id, non_null(:id))
-      arg(:template, non_null(:string))
+      arg :simple_built_id, non_null(:id)
+      arg :template, non_null(:string)
 
       resolve(fn %{simple_built_id: simple_built_id, template: template}, _info ->
         {:ok, Pczone.SimpleBuilts.generate_content(simple_built_id, template)}
@@ -171,15 +171,45 @@ defmodule PczoneWeb.Schema.SimpleBuilts do
 
   object :simple_built_mutations do
     field :upsert_simple_builts, non_null(list_of(non_null(:simple_built))) do
-      arg(:data, non_null(:json))
+      arg :data, non_null(:json)
 
       resolve(fn %{data: data}, _info ->
         Pczone.SimpleBuilts.upsert(data)
       end)
     end
 
+    field :remove_simple_built_processors, non_null(:id) do
+      arg :simple_built_id, non_null(:id)
+
+      resolve(fn %{simple_built_id: simple_built_id}, _info ->
+        with {_, nil} <- Pczone.SimpleBuilts.remove_simple_built_processors(simple_built_id) do
+          {:ok, simple_built_id}
+        end
+      end)
+    end
+
+    field :remove_simple_built_memories, non_null(:id) do
+      arg :simple_built_id, non_null(:id)
+
+      resolve(fn %{simple_built_id: simple_built_id}, _info ->
+        with {_, nil} <- Pczone.SimpleBuilts.remove_simple_built_memories(simple_built_id) do
+          {:ok, simple_built_id}
+        end
+      end)
+    end
+
+    field :remove_simple_built_hard_drives, non_null(:id) do
+      arg :simple_built_id, non_null(:id)
+
+      resolve(fn %{simple_built_id: simple_built_id}, _info ->
+        with {_, nil} <- Pczone.SimpleBuilts.remove_simple_built_hard_drives(simple_built_id) do
+          {:ok, simple_built_id}
+        end
+      end)
+    end
+
     field :generate_simple_built_variants, non_null(list_of(non_null(:simple_built_variant))) do
-      arg(:code, non_null(:string))
+      arg :code, non_null(:string)
 
       resolve(fn %{code: code}, _info ->
         with {:ok, {_, result}} <-

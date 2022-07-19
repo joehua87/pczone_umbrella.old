@@ -22,6 +22,33 @@ defmodule Pczone.SimpleBuiltsTest do
                )
     end
 
+    test "remove simple built processors" do
+      list = Pczone.Fixtures.read_fixture("simple_builts.yml")
+      {:ok, [%Pczone.SimpleBuilt{id: simple_built_id} | _]} = Pczone.SimpleBuilts.upsert(list)
+      Pczone.SimpleBuilts.remove_simple_built_processors(simple_built_id)
+
+      assert %{processors: []} =
+               Repo.get(from(Pczone.SimpleBuilt, preload: [:processors]), simple_built_id)
+    end
+
+    test "remove simple built memories" do
+      list = Pczone.Fixtures.read_fixture("simple_builts.yml")
+      {:ok, [%Pczone.SimpleBuilt{id: simple_built_id} | _]} = Pczone.SimpleBuilts.upsert(list)
+      Pczone.SimpleBuilts.remove_simple_built_memories(simple_built_id)
+
+      assert %{memories: []} =
+               Repo.get(from(Pczone.SimpleBuilt, preload: [:memories]), simple_built_id)
+    end
+
+    test "remove simple built hard_drives" do
+      list = Pczone.Fixtures.read_fixture("simple_builts.yml")
+      {:ok, [%Pczone.SimpleBuilt{id: simple_built_id} | _]} = Pczone.SimpleBuilts.upsert(list)
+      Pczone.SimpleBuilts.remove_simple_built_hard_drives(simple_built_id)
+
+      assert %{hard_drives: []} =
+               Repo.get(from(Pczone.SimpleBuilt, preload: [:hard_drives]), simple_built_id)
+    end
+
     test "generate simple built variants" do
       [simple_built | _] = simple_builts_fixture()
 
