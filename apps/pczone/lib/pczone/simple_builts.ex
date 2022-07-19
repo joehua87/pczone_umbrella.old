@@ -373,15 +373,15 @@ defmodule Pczone.SimpleBuilts do
     )
   end
 
-  def generate_variants(%Pczone.SimpleBuilt{
-        id: simple_built_id,
-        barebone_id: barebone_id,
-        barebone_product: barebone_product,
-        processors: processors,
-        memories: memories,
-        hard_drives: hard_drives,
-        option_value_seperator: seperator
-      }) do
+  defp make_variants(%Pczone.SimpleBuilt{
+         id: simple_built_id,
+         barebone_id: barebone_id,
+         barebone_product: barebone_product,
+         processors: processors,
+         memories: memories,
+         hard_drives: hard_drives,
+         option_value_seperator: seperator
+       }) do
     memories_and_hard_drives =
       [%Pczone.SimpleBuiltMemory{quantity: 0, memory_product: nil} | memories]
       |> Enum.flat_map(fn %Pczone.SimpleBuiltMemory{
@@ -515,7 +515,62 @@ defmodule Pczone.SimpleBuilts do
     end)
   end
 
-  def generate_variants(code) when is_bitstring(code) do
+  def generate_variants(simple_built, opts \\ [])
+
+  def generate_variants(%Pczone.SimpleBuilt{id: simple_built_id} = simple_built, opts) do
+    variants = make_variants(simple_built)
+    name_list = Enum.map(variants, & &1.name)
+
+    multi =
+      Ecto.Multi.new()
+      |> Ecto.Multi.update_all(
+        :update_state,
+        from(v in Pczone.SimpleBuiltVariant,
+          where: v.simple_built_id == ^simple_built_id and v.name not in ^name_list
+        ),
+        set: [state: :disabled]
+      )
+      |> Ecto.Multi.run(:insert_all, fn _, _ ->
+        Repo.insert_all_2(
+          Pczone.SimpleBuiltVariant,
+          variants,
+          [
+            on_conflict:
+              {:replace,
+               [
+                 :barebone_id,
+                 :barebone_product_id,
+                 :barebone_price,
+                 :processor_id,
+                 :processor_product_id,
+                 :processor_price,
+                 :processor_quantity,
+                 :memory_id,
+                 :memory_product_id,
+                 :memory_price,
+                 :memory_quantity,
+                 :hard_drive_id,
+                 :hard_drive_product_id,
+                 :hard_drive_price,
+                 :hard_drive_quantity,
+                 :position,
+                 :total,
+                 :gpu_id,
+                 :gpu_product_id,
+                 :gpu_price,
+                 :gpu_quantity
+               ]},
+            conflict_target: [:simple_built_id, :option_values]
+          ] ++ opts
+        )
+      end)
+
+    with {:ok, %{insert_all: list}} <- Repo.transaction(multi) do
+      {:ok, list}
+    end
+  end
+
+  def generate_variants(code, opts) when is_bitstring(code) do
     Repo.one(
       from b in Pczone.SimpleBuilt,
         where: b.code == ^code,
@@ -528,42 +583,7 @@ defmodule Pczone.SimpleBuilts do
         ],
         limit: 1
     )
-    |> generate_variants()
-  end
-
-  def upsert_variants(list, opts \\ []) do
-    Repo.insert_all_2(
-      Pczone.SimpleBuiltVariant,
-      list,
-      [
-        on_conflict:
-          {:replace,
-           [
-             :barebone_id,
-             :barebone_product_id,
-             :barebone_price,
-             :processor_id,
-             :processor_product_id,
-             :processor_price,
-             :processor_quantity,
-             :memory_id,
-             :memory_product_id,
-             :memory_price,
-             :memory_quantity,
-             :hard_drive_id,
-             :hard_drive_product_id,
-             :hard_drive_price,
-             :hard_drive_quantity,
-             :position,
-             :total,
-             :gpu_id,
-             :gpu_product_id,
-             :gpu_price,
-             :gpu_quantity
-           ]},
-        conflict_target: [:simple_built_id, :option_values]
-      ] ++ opts
-    )
+    |> generate_variants(opts)
   end
 
   def generate_content(simple_built_id, template) do

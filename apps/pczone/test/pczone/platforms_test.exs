@@ -57,8 +57,7 @@ defmodule Pczone.PlatformsTest do
 
       assert {:ok, {_, simple_built_variants}} =
                simple_built
-               |> SimpleBuilts.generate_variants()
-               |> SimpleBuilts.upsert_variants(returning: true)
+               |> SimpleBuilts.generate_variants(returning: true)
 
       list =
         simple_built_variants
@@ -137,9 +136,7 @@ defmodule Pczone.PlatformsTest do
     [simple_built | _] = simple_builts_fixture()
 
     assert {:ok, {_, simple_built_variants}} =
-             simple_built
-             |> SimpleBuilts.generate_variants()
-             |> SimpleBuilts.upsert_variants(returning: true)
+             SimpleBuilts.generate_variants(simple_built, returning: true)
 
     list =
       simple_built_variants

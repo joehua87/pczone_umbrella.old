@@ -446,6 +446,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :option_values, {:array, :string}, null: false
       add :position, :integer, null: false
       add :total, :integer, null: false
+      add :state, :string, null: false, default: "active"
       add :config, :map, null: false, default: %{}
     end
 

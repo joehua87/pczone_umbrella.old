@@ -37,7 +37,8 @@ defmodule Pczone.SimpleBuiltVariant do
     :gpu_price,
     :gpu_quantity,
     :gpu_amount,
-    :image_id
+    :image_id,
+    :state
   ]
 
   schema "simple_built_variant" do
@@ -70,6 +71,7 @@ defmodule Pczone.SimpleBuiltVariant do
     field :option_values, {:array, :string}
     field :position, :integer
     field :total, :integer
+    field :state, Ecto.Enum, values: [:active, :disabled], default: :active
     field :config, :map
   end
 

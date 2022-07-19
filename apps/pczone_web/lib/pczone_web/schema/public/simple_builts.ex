@@ -213,9 +213,7 @@ defmodule PczoneWeb.Schema.SimpleBuilts do
 
       resolve(fn %{code: code}, _info ->
         with {:ok, {_, result}} <-
-               code
-               |> Pczone.SimpleBuilts.generate_variants()
-               |> Pczone.SimpleBuilts.upsert_variants(returning: true) do
+               Pczone.SimpleBuilts.generate_variants(code, returning: true) do
           {:ok, result}
         end
       end)

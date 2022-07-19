@@ -6,11 +6,7 @@ defmodule Pczone.SimpleBuiltVariantsTest do
   describe "simple built variants" do
     test "generate report" do
       [simple_built | _] = simple_builts_fixture()
-
-      assert {_, _} =
-               simple_built
-               |> SimpleBuilts.generate_variants()
-               |> SimpleBuilts.upsert_variants()
+      assert {_, _} = SimpleBuilts.generate_variants(simple_built)
 
       assert %Elixlsx.Workbook{
                datetime: nil,
@@ -58,11 +54,7 @@ defmodule Pczone.SimpleBuiltVariantsTest do
 
     test "export csv" do
       [simple_built] = simple_builts_fixture()
-
-      assert {_, _} =
-               simple_built
-               |> SimpleBuilts.generate_variants()
-               |> SimpleBuilts.upsert_variants()
+      assert {_, _} = SimpleBuilts.generate_variants(simple_built)
 
       assert {
                :ok,
