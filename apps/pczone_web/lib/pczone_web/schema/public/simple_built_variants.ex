@@ -2,6 +2,15 @@ defmodule PczoneWeb.Schema.SimpleBuiltVariants do
   use Absinthe.Schema.Notation
   import Absinthe.Resolution.Helpers
 
+  object :simple_built_variant_platform do
+    field :platform_id, non_null(:id)
+    field :simple_built_variant_id, non_null(:id)
+    field :platform, non_null(:platform)
+    field :simple_built_variant, non_null(:simple_built_variant)
+    field :product_code, non_null(:string)
+    field :variant_code, non_null(:string)
+  end
+
   object :simple_built_variant do
     field :id, non_null(:id)
     field :simple_built_id, non_null(:id)
@@ -42,6 +51,10 @@ defmodule PczoneWeb.Schema.SimpleBuiltVariants do
     field :option_values, non_null(list_of(non_null(:string)))
     field :total, non_null(:integer)
     field :config, non_null(:json)
+
+    field :platforms,
+          non_null(list_of(non_null(:simple_built_variant_platform))),
+          resolve: dataloader(PczoneWeb.Dataloader)
   end
 
   input_object :simple_built_variant_filter_input do

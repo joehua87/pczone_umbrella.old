@@ -2,12 +2,13 @@ defmodule Pczone.Platform do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @required [:code, :name]
+  @required [:code, :name, :merchant_id]
   @optional [:rate]
 
   schema "platform" do
     field :code, :string
     field :name, :string
+    field :merchant_id, :string
     field :rate, :decimal, default: 1
   end
 

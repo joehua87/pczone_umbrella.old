@@ -149,7 +149,7 @@ defmodule Pczone.Platforms do
       |> Enum.reduce(
         [],
         fn
-          %{"product_code" => product_code, "simple_built" => simple_built_code}, acc ->
+          %{"product_code" => product_code, "simple_built_code" => simple_built_code}, acc ->
             acc ++ [%{product_code: product_code, simple_built_code: simple_built_code}]
 
           _, acc ->

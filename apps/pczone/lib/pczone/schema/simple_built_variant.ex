@@ -73,6 +73,7 @@ defmodule Pczone.SimpleBuiltVariant do
     field :total, :integer
     field :state, Ecto.Enum, values: [:active, :disabled], default: :active
     field :config, :map
+    has_many :platforms, Pczone.SimpleBuiltVariantPlatform
   end
 
   def changeset(entity, params) do

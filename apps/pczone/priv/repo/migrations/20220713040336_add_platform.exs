@@ -5,6 +5,7 @@ defmodule Pczone.Repo.Migrations.AddPlatform do
     create table(:platform) do
       add :code, :string, null: false
       add :name, :string, null: false
+      add :merchant_id, :string, null: false
       add :rate, :decimal, null: false, default: 1
     end
 
@@ -14,6 +15,8 @@ defmodule Pczone.Repo.Migrations.AddPlatform do
       add :simple_built_id, references(:simple_built), null: false
       add :platform_id, references(:platform), null: false
       add :product_code, :string, null: false
+      add :variants, :map, null: false, default: "[]"
+      add :update_variants_at, :utc_datetime
     end
 
     create unique_index(:simple_built_platform, [:simple_built_id, :platform_id])
