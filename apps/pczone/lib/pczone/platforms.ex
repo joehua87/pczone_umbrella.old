@@ -74,10 +74,12 @@ defmodule Pczone.Platforms do
   Extract variant_code by product_code & variant_name.
   Then upsert all to simple_built_variant_platform.
   """
+  def upsert_simple_built_variant_platforms(platform, path, opts \\ [])
+
   def upsert_simple_built_variant_platforms(
         %Platform{id: platform_id, code: platform_code},
         path,
-        opts \\ []
+        opts
       ) do
     list = read_product_variants(platform_code, path)
     product_codes = list |> Enum.map(& &1.product_code) |> Enum.uniq()
@@ -127,6 +129,10 @@ defmodule Pczone.Platforms do
         conflict_target: [:simple_built_variant_id, :platform_id]
       )
     )
+  end
+
+  def upsert_simple_built_variant_platforms(platform_id, path, opts) do
+    Pczone.Repo.one(platform_id) |> upsert_simple_built_variant_platforms(path, opts)
   end
 
   def upsert(entities, opts \\ []) do

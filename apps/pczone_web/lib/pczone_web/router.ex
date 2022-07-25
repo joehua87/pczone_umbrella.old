@@ -44,7 +44,18 @@ defmodule PczoneWeb.Router do
 
   scope "/", PczoneWeb do
     pipe_through [:api]
-    post "/upsert/products", UpsertController, :products
+
+    post "/upsert/products",
+         UpsertController,
+         :products
+
+    post "/upsert/simple-built-platforms",
+         UpsertController,
+         :simple_built_platforms
+
+    post "/upsert/simple-built-variant-platforms",
+         UpsertController,
+         :simple_built_variant_platforms
   end
 
   scope "/files", PczoneWeb do

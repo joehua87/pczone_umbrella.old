@@ -8,4 +8,21 @@ defmodule PczoneWeb.UpsertController do
 
     json(conn, %{})
   end
+
+  def simple_built_platforms(conn, %{
+        "platform_id" => platform_id,
+        "file" => %Plug.Upload{path: path}
+      }) do
+    Pczone.Platforms.upsert_simple_built_platforms(platform_id, path)
+
+    json(conn, %{})
+  end
+
+  def simple_built_variant_platforms(conn, %{
+        "platform_id" => platform_id,
+        "file" => %Plug.Upload{path: path}
+      }) do
+    Pczone.Platforms.upsert_simple_built_variant_platforms(platform_id, path)
+    json(conn, %{})
+  end
 end
