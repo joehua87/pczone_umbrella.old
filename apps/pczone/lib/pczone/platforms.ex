@@ -178,6 +178,7 @@ defmodule Pczone.Platforms do
           product_code: product_code
         }
       end)
+      |> Enum.filter(&(&1.simple_built_id != nil))
 
     Repo.insert_all_2(
       Pczone.SimpleBuiltPlatform,

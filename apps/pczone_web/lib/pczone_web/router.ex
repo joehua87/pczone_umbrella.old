@@ -49,6 +49,10 @@ defmodule PczoneWeb.Router do
          UpsertController,
          :products
 
+    post "/upsert/simple-builts",
+         UpsertController,
+         :simple_builts
+
     post "/upsert/simple-built-platforms",
          UpsertController,
          :simple_built_platforms
