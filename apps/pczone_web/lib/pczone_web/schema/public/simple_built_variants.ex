@@ -87,6 +87,14 @@ defmodule PczoneWeb.Schema.SimpleBuiltVariants do
   end
 
   object :simple_built_variant_mutations do
+    field :generate_platform_pricing_report, non_null(:report) do
+      arg :platform_id, non_null(:id)
+
+      resolve fn %{platform_id: platform_id}, _info ->
+        Pczone.Platforms.generate_platform_pricing_report(platform_id)
+      end
+    end
+
     field :generate_simple_built_variants_report, non_null(:report) do
       arg :filter, :simple_built_variant_filter_input
 
