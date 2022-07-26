@@ -13,6 +13,10 @@ defmodule Pczone.Platforms do
     Xlsx
   }
 
+  def get(id) do
+    Repo.get(Platform, id)
+  end
+
   def get_by_code(code) do
     Repo.one(from(Platform, where: [code: ^code], limit: 1))
   end
@@ -132,7 +136,7 @@ defmodule Pczone.Platforms do
   end
 
   def upsert_simple_built_variant_platforms(platform_id, path, opts) do
-    Pczone.Repo.one(platform_id) |> upsert_simple_built_variant_platforms(path, opts)
+    get(platform_id) |> upsert_simple_built_variant_platforms(path, opts)
   end
 
   def upsert(entities, opts \\ []) do

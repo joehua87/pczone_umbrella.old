@@ -27,17 +27,16 @@ defmodule PczoneWeb.UpsertController do
       }) do
     # Assume we have only Shopee
     platform_id = 1
-
     Pczone.Platforms.upsert_simple_built_platforms(platform_id, path)
-    |> IO.inspect(label: "XXXXXX")
-
     json(conn, %{})
   end
 
   def simple_built_variant_platforms(conn, %{
-        "platform_id" => platform_id,
+        # "platform_id" => platform_id,
         "file" => %Plug.Upload{path: path}
       }) do
+    # Assume we have only Shopee
+    platform_id = 1
     Pczone.Platforms.upsert_simple_built_variant_platforms(platform_id, path)
     json(conn, %{})
   end

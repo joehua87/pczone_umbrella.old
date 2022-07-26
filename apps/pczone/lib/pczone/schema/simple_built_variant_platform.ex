@@ -8,7 +8,7 @@ defmodule Pczone.SimpleBuiltVariantPlatform do
   @optional []
 
   schema "simple_built_variant_platform" do
-    belongs_to :platform, Pczone.Memory
+    belongs_to :platform, Pczone.Platform
     belongs_to :simple_built_variant, Pczone.SimpleBuiltVariant
     field :product_code, :string
     field :variant_code, :string
