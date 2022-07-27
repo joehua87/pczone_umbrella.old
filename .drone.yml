@@ -1,6 +1,14 @@
 kind: pipeline
 name: default
 
+services:
+  - name: postgres
+    image: postgres:14
+    ports:
+      - 5432
+    environment:
+      POSTGRES_PASSWORD: password
+
 steps:
   - name: test
     image: elixir:1.13
