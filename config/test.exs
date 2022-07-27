@@ -21,7 +21,7 @@ config :pczone, Pczone.Repo,
   pool_size: 10
 
 config :pczone, Pczone.MongoRepo,
-  url: "mongodb://localhost:27017/pczone",
+  url: System.get_env("MONGO_URL", "mongodb://localhost:27017/pczone"),
   timeout: 60_000,
   idle_interval: 10_000,
   queue_target: 5_000
