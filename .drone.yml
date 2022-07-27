@@ -112,7 +112,7 @@ steps:
       registry: registry.buzzmedia.vn
       username: user
       password: password
-      repo: pczone
+      repo: registry.buzzmedia.vn/pczone
       tags: latest
       dockerfile: Dockerfile.drone
 
