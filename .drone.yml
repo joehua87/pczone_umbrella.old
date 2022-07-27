@@ -10,7 +10,7 @@ services:
       POSTGRES_PASSWORD: postgres
 
 steps:
-  - name: restore-cache
+  - name: restore-test-cache
     image: meltwater/drone-cache
     pull: true
     settings:
@@ -20,20 +20,23 @@ steps:
       archive_format: 'gzip'
       cache_key: '{{ checksum "mix.lock" }}'
       mount:
+        - '_build'
         - 'deps'
     volumes:
       - name: cache
         path: /tmp/cache
   
-  - name: get-deps
+  - name: get-test-deps
     image: elixir:1.13
+    environment:
+      MIX_ENV: test
     commands:
       - mix local.rebar --force
       - mix local.hex --force
       - mix deps.get
       - mix compile
   
-  - name: rebuild-cache
+  - name: rebuild-test-cache
     image: meltwater/drone-cache
     pull: true
     settings:
@@ -43,6 +46,7 @@ steps:
       archive_format: "gzip"
       cache_key: '{{ checksum "mix.lock" }}'
       mount:
+        - '_build'
         - 'deps'
     volumes:
     - name: cache
