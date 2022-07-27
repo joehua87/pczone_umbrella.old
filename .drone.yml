@@ -24,14 +24,16 @@ steps:
     volumes:
       - name: cache
         path: /tmp/cache
+  
   - name: get-deps
     image: elixir:1.13
     commands:
       - mix local.rebar --force
       - mix local.hex --force
       - mix deps.get
-      # - mix compile
- - name: rebuild-cache
+      - mix compile
+  
+  - name: rebuild-cache
     image: meltwater/drone-cache
     pull: true
     settings:
