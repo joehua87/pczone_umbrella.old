@@ -27,6 +27,7 @@ steps:
       archive_format: 'gzip'
       cache_key: 'test:{{ checksum "mix.lock" }}'
       mount:
+        - '_build'
         - 'deps'
     volumes:
       - name: cache
@@ -51,6 +52,7 @@ steps:
       archive_format: 'gzip'
       cache_key: 'test:{{ checksum "mix.lock" }}'
       mount:
+        - '_build'
         - 'deps'
     volumes:
       - name: cache
@@ -76,6 +78,7 @@ steps:
       archive_format: 'gzip'
       cache_key: 'prod:{{ checksum "mix.lock" }}'
       mount:
+        - '_build'
         - 'deps'
     volumes:
       - name: cache
@@ -101,6 +104,7 @@ steps:
       archive_format: 'gzip'
       cache_key: 'prod:{{ checksum "mix.lock" }}'
       mount:
+        - '_build'
         - 'deps'
     volumes:
       - name: cache
