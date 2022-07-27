@@ -31,7 +31,7 @@ steps:
       - mix local.rebar --force
       - mix local.hex --force
       - mix deps.get
-      - mix compile # If cache is mount, do not run this
+      - mix compile
 
  - name: rebuild-cache-with-filesystem
     image: meltwater/drone-cache
