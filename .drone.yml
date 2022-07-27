@@ -12,6 +12,8 @@ services:
 steps:
   - name: test
     image: elixir:1.13
+    environment:
+      POSTGRES_HOST: postgres
     commands:
       - mix local.rebar --force
       - mix local.hex --force
