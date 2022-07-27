@@ -10,7 +10,7 @@ services:
       POSTGRES_PASSWORD: postgres
 
 steps:
-  - name: restore-cache-with-filesystem
+  - name: restore-cache
     image: meltwater/drone-cache
     pull: true
     settings:
@@ -24,7 +24,6 @@ steps:
     volumes:
       - name: cache
         path: /tmp/cache
-
   - name: get-deps
     image: elixir:1.13
     commands:
@@ -32,8 +31,7 @@ steps:
       - mix local.hex --force
       - mix deps.get
       - mix compile
-
- - name: rebuild-cache-with-filesystem
+ - name: rebuild-cache
     image: meltwater/drone-cache
     pull: true
     settings:
