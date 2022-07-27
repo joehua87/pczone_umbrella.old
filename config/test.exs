@@ -39,5 +39,7 @@ config :logger, level: :warn
 # In test we don't send emails.
 config :pczone, Pczone.Mailer, adapter: Swoosh.Adapters.Test
 
+config :goth, disabled: true
+
 # Initialize plugs at runtime for faster test compilation
 config :phoenix, :plug_init_mode, :runtime
