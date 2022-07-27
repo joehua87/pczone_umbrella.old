@@ -467,7 +467,7 @@ defmodule Pczone.SimpleBuilts do
               gpu_product_id: gpu_product_id,
               gpu_price: gpu_price,
               gpu_quantity: gpu_quantity,
-              gpu_amount: gpu_price * gpu_price
+              gpu_amount: gpu_price * gpu_quantity
             }
         end
 
