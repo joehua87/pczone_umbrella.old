@@ -10,12 +10,52 @@ services:
       POSTGRES_PASSWORD: postgres
 
 steps:
+  - name: restore-cache-with-filesystem
+    image: meltwater/drone-cache
+    pull: true
+    settings:
+      backend: 'filesystem'
+      restore: true
+      cache_key: 'volume'
+      archive_format: 'gzip'
+      cache_key: '{{ checksum "mix.lock" }}'
+      mount:
+        - 'deps'
+    volumes:
+      - name: cache
+        path: /tmp/cache
+
+  - name: get-deps
+    image: elixir:1.13
+    commands:
+      - mix local.rebar --force
+      - mix local.hex --force
+      - mix deps.get
+      - mix compile # If cache is mount, do not run this
+
+ - name: rebuild-cache-with-filesystem
+    image: meltwater/drone-cache
+    pull: true
+    settings:
+      backend: "filesystem"
+      rebuild: true
+      cache_key: "volume"
+      archive_format: "gzip"
+      cache_key: '{{ checksum "mix.lock" }}'
+      mount:
+        - 'deps'
+    volumes:
+    - name: cache
+      path: /tmp/cache
+
   - name: test
     image: elixir:1.13
     environment:
       POSTGRES_HOST: postgres
     commands:
-      - mix local.rebar --force
-      - mix local.hex --force
-      - mix deps.get
       - mix test
+
+volumes:
+  - name: cache
+    host:
+      path: /var/lib/cache
