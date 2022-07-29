@@ -16,6 +16,7 @@ defmodule Pczone.Processor do
     :vertical_segment,
     :cache_size,
     :cores,
+    :threads,
     :url,
     :memory_types
   ]
@@ -31,7 +32,6 @@ defmodule Pczone.Processor do
     :tdp,
     :tdp_up,
     :tdp_down,
-    :threads,
     :processor_graphics,
     :gpu_id,
     :memory_types,
@@ -72,6 +72,8 @@ defmodule Pczone.Processor do
   end
 
   def changeset(entity, params) do
+    params = ensure_threads(params)
+
     entity
     |> cast(params, @required ++ @optional)
     |> cast_embed(:attributes)
@@ -81,5 +83,21 @@ defmodule Pczone.Processor do
   def new_changeset(params) do
     changeset(%__MODULE__{}, params)
     |> validate_required(@required)
+  end
+
+  defp ensure_threads(%{threads: threads} = params) when is_integer(threads) do
+    params
+  end
+
+  defp ensure_threads(%{"threads" => threads} = params) when is_integer(threads) do
+    params
+  end
+
+  defp ensure_threads(%{cores: cores} = params) do
+    Map.put(params, :threads, cores)
+  end
+
+  defp ensure_threads(%{"cores" => cores} = params) do
+    Map.put(params, "threads", cores)
   end
 end

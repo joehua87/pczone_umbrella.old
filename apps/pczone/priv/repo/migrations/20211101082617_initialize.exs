@@ -147,7 +147,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :tdp_down, :decimal
       add :cache_size, :decimal, null: false
       add :cores, :integer, null: false
-      add :threads, :integer
+      add :threads, :integer, null: false
       add :processor_graphics, :string
       add :gpu_id, references(:gpu)
       add :url, :string, null: false
