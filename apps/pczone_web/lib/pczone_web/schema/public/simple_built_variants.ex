@@ -59,7 +59,9 @@ defmodule PczoneWeb.Schema.SimpleBuiltVariants do
   end
 
   input_object :simple_built_variant_filter_input do
+    field :simple_built_id, :id_filter_input
     field :name, :string_filter_input
+    field :total, :integer_filter_input
   end
 
   object :simple_built_variant_list_result do

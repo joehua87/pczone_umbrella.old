@@ -104,7 +104,9 @@ defmodule Pczone.SimpleBuiltVariants do
     filter
     |> Enum.reduce(nil, fn {field, value}, acc ->
       case field do
+        :simple_built_id -> parse_id_filter(acc, field, value)
         :name -> parse_string_filter(acc, field, value)
+        :total -> parse_decimal_filter(acc, field, value)
         _ -> acc
       end
     end) || true
