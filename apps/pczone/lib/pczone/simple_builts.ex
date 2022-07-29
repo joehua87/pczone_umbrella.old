@@ -591,7 +591,16 @@ defmodule Pczone.SimpleBuilts do
 
     simple_built =
       Pczone.Repo.get(
-        from(Pczone.SimpleBuilt, preload: [variants: ^variants_query]),
+        from(Pczone.SimpleBuilt,
+          preload: [
+            :barebone,
+            :barebone_product,
+            processors: [:processor, :processor_product, :gpu, :gpu_product],
+            memories: [:memory, :memory_product],
+            hard_drives: [:hard_drive, :hard_drive_product],
+            variants: ^variants_query
+          ]
+        ),
         simple_built_id
       )
 
@@ -603,6 +612,9 @@ defmodule Pczone.SimpleBuilts do
 
         x when is_integer(x) ->
           Number.Delimit.number_to_delimited(x, delimiter: ".", separator: ",", precision: 0)
+
+        nil ->
+          ""
 
         x ->
           x

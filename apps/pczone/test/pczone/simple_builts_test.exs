@@ -67,7 +67,16 @@ defmodule Pczone.SimpleBuiltsTest do
       assert {:ok, {_, _}} = SimpleBuilts.generate_variants(simple_built)
 
       template = """
-      {{name}}
+      # {{name}}
+
+      ## Hỗ trợ CPU:
+
+      {{#processors}}
+      - {{processor.code}} ({{processor.cores}} cores {{processor.threads}} threads)
+      {{/processors}}
+
+      ## Bảng giá chi tiết:
+
       {{#variants}}
       * {{option_values}}: {{total}}
       {{/variants}}
@@ -75,8 +84,10 @@ defmodule Pczone.SimpleBuiltsTest do
 
       # TODO: Findout when string is not equal even if look like equal
       assert """
-             Hp Elitedesk 800 G2 Mini
-             """ <> _ = SimpleBuilts.generate_content(simple_built.id, template)
+             # Hp Elitedesk 800 G2 Mini
+             """ <> _ = content = SimpleBuilts.generate_content(simple_built.id, template)
+
+      IO.puts(content)
     end
   end
 
