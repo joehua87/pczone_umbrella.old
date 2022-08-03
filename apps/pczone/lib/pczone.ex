@@ -82,18 +82,7 @@ defmodule Pczone do
   def read_from_files!(files, name_pattern) do
     files
     |> Enum.filter(&(&1 |> Path.basename() |> String.match?(name_pattern)))
-    |> Enum.map(fn file ->
-      cond do
-        String.match?(file, ~r/\.ya?ml/) ->
-          YamlElixir.read_all_from_file!(file)
-
-        String.match?(file, ~r/\.xlsx/) ->
-          Pczone.Xlsx.read_spreadsheet(file)
-
-        true ->
-          []
-      end
-    end)
+    |> Enum.map(&Pczone.Helpers.read_data/1)
     |> List.flatten()
   end
 end

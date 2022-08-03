@@ -36,6 +36,18 @@ defmodule Pczone.Helpers do
     {:error, changeset}
   end
 
+  @doc """
+  Read data from a csv, json or yaml file, return a Map or a list of Map
+  """
+  def read_data(file, default \\ []) do
+    cond do
+      String.match?(file, ~r/\.ya?ml/) -> YamlElixir.read_from_file!(file)
+      String.match?(file, ~r/\.xlsx/) -> Pczone.Xlsx.read_spreadsheet(file)
+      String.match?(file, ~r/\.json/) -> file |> File.read!() |> Jason.decode!()
+      true -> default
+    end
+  end
+
   def get_attribute_value(attributes, group, label) do
     attributes
     |> Enum.find(&(&1["group"] == group))

@@ -6,15 +6,9 @@ defmodule Pczone.Fixtures do
   end
 
   def read_fixture(name, _opts \\ []) when is_bitstring(name) do
-    path = Path.join([get_fixtures_dir(), name])
-    ext = Path.extname(path)
-
-    case ext do
-      ".json" -> path |> File.read!() |> Jason.decode!()
-      ".yml" -> YamlElixir.read_from_file!(path)
-      ".xlsx" -> Pczone.Xlsx.read_spreadsheet(path)
-      _ -> {:error, "File not found"}
-    end
+    [get_fixtures_dir(), name]
+    |> Path.join()
+    |> Pczone.Helpers.read_data()
   end
 
   def platform_fixture() do

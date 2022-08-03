@@ -85,9 +85,7 @@ defmodule Pczone.SimpleBuiltsTest do
       # TODO: Findout when string is not equal even if look like equal
       assert """
              # Hp Elitedesk 800 G2 Mini
-             """ <> _ = content = SimpleBuilts.generate_content(simple_built.id, template)
-
-      IO.puts(content)
+             """ <> _ = _content = SimpleBuilts.generate_content(simple_built.id, template)
     end
   end
 
