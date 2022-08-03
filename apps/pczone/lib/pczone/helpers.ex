@@ -37,13 +37,24 @@ defmodule Pczone.Helpers do
   end
 
   @doc """
-  Read data from a csv, json or yaml file, return a Map or a list of Map
+  Read data from a csv, json or yaml file (file name or plug upload), return a Map or a list of Map
   """
-  def read_data(file, default \\ []) do
+  def read_data(file, default \\ [])
+
+  def read_data(file, default) when is_bitstring(file) do
     cond do
       String.match?(file, ~r/\.ya?ml/) -> YamlElixir.read_from_file!(file)
       String.match?(file, ~r/\.xlsx/) -> Pczone.Xlsx.read_spreadsheet(file)
       String.match?(file, ~r/\.json/) -> file |> File.read!() |> Jason.decode!()
+      true -> default
+    end
+  end
+
+  def read_data(%{path: path, filename: filename}, default) do
+    cond do
+      String.match?(filename, ~r/\.ya?ml/) -> YamlElixir.read_from_file!(path)
+      String.match?(filename, ~r/\.xlsx/) -> Pczone.Xlsx.read_spreadsheet(path)
+      String.match?(filename, ~r/\.json/) -> path |> File.read!() |> Jason.decode!()
       true -> default
     end
   end
