@@ -56,6 +56,7 @@ defmodule PczoneWeb.Router do
     post "/upsert/memories", UpsertController, :memories
     post "/upsert/motherboards", UpsertController, :motherboards
     post "/upsert/processors", UpsertController, :processors
+    post "/upsert/products", UpsertController, :products
     post "/upsert/psus", UpsertController, :psus
     post "/upsert/simple-builts", UpsertController, :simple_builts
     post "/upsert/simple-built-platforms", UpsertController, :simple_built_platforms
