@@ -4,6 +4,7 @@ defmodule Pczone.Platforms do
   alias Elixlsx.{Sheet, Workbook}
 
   alias Pczone.{
+    Helpers,
     Repo,
     Platform,
     SimpleBuilt,
@@ -160,7 +161,13 @@ defmodule Pczone.Platforms do
         [],
         fn
           %{"product_code" => product_code, "simple_built_code" => simple_built_code}, acc ->
-            acc ++ [%{product_code: product_code, simple_built_code: simple_built_code}]
+            acc ++
+              [
+                %{
+                  product_code: Helpers.ensure_string(product_code),
+                  simple_built_code: simple_built_code
+                }
+              ]
 
           _, acc ->
             acc

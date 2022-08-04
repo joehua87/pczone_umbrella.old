@@ -4,6 +4,9 @@ defmodule Pczone.Helpers do
   def ensure_slug(%{name: name} = params), do: Map.put(params, :slug, Slug.slugify(name))
   def ensure_slug(%{"name" => name} = params), do: Map.put(params, "slug", Slug.slugify(name))
 
+  def ensure_string(value) when is_integer(value), do: to_string(value)
+  def ensure_string("" <> value), do: value
+
   def get_list_changset_changes(list, func) do
     Enum.reduce(list, [], fn
       _, {:error, _} = error ->
