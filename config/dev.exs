@@ -4,15 +4,25 @@ config :pczone,
   report_dir: "/Users/achilles/pczone/reports",
   media_dir: "/Users/achilles/pczone/media"
 
+db_config =
+  if url = System.get_env("DEV_DATABASE_URL") do
+    [url: url]
+  else
+    [
+      username: "postgres",
+      password: "postgres",
+      database: "pczone_dev",
+      hostname: "localhost",
+      port: 5432
+    ]
+  end ++
+    [
+      show_sensitive_data_on_connection_error: true,
+      pool_size: 10
+    ]
+
 # Configure your database
-config :pczone, Pczone.Repo,
-  username: "postgres",
-  password: "postgres",
-  database: "pczone_dev",
-  hostname: "localhost",
-  port: 5432,
-  show_sensitive_data_on_connection_error: true,
-  pool_size: 10
+config :pczone, Pczone.Repo, db_config
 
 config :pczone, Pczone.MongoRepo,
   url: "mongodb://localhost:27017/pczone",
