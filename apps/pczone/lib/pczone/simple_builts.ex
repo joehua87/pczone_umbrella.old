@@ -29,31 +29,31 @@ defmodule Pczone.SimpleBuilts do
   def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
 
   def upsert(list) do
-    barebone_product_skus =
+    barebone_product_codes =
       Enum.map(list, fn %{"barebone_product" => barebone_product} ->
         barebone_product
       end)
       |> Enum.uniq()
 
-    processor_product_skus =
+    processor_product_codes =
       Enum.flat_map(list, fn %{"processors" => processors} ->
         Enum.map(processors, & &1["processor_product"])
       end)
       |> Enum.uniq()
 
-    gpu_product_skus =
+    gpu_product_codes =
       Enum.flat_map(list, fn %{"processors" => processors} ->
         Enum.map(processors, & &1["gpu_product"]) |> Enum.filter(&(&1 != nil))
       end)
       |> Enum.uniq()
 
-    memory_product_skus =
+    memory_product_codes =
       Enum.flat_map(list, fn %{"memories" => memories} ->
         Enum.map(memories, & &1["memory_product"])
       end)
       |> Enum.uniq()
 
-    hard_drive_product_skus =
+    hard_drive_product_codes =
       Enum.flat_map(list, fn %{"hard_drives" => hard_drives} ->
         Enum.map(hard_drives, & &1["hard_drive_product"])
       end)
@@ -62,48 +62,58 @@ defmodule Pczone.SimpleBuilts do
     barebone_products_map =
       Repo.all(
         from p in Pczone.Product,
-          where: p.sku in ^barebone_product_skus,
-          select: {p.sku, %{id: p.barebone_id, product_id: p.id}}
+          join: cp in Pczone.ComponentProduct,
+          on: p.id == cp.product_id,
+          where: p.code in ^barebone_product_codes,
+          select: {p.code, %{id: cp.barebone_id, product_id: p.id}}
       )
       |> Enum.into(%{})
 
     processor_products_map =
       Repo.all(
         from p in Pczone.Product,
-          where: p.sku in ^processor_product_skus,
-          select: {p.sku, %{id: p.processor_id, product_id: p.id}}
+          join: cp in Pczone.ComponentProduct,
+          on: p.id == cp.product_id,
+          where: p.code in ^processor_product_codes,
+          select: {p.code, %{id: cp.processor_id, product_id: p.id}}
       )
       |> Enum.into(%{})
 
     gpu_products_map =
       Repo.all(
         from p in Pczone.Product,
-          where: p.sku in ^gpu_product_skus,
-          select: {p.sku, %{id: p.gpu_id, product_id: p.id}}
+          join: cp in Pczone.ComponentProduct,
+          on: p.id == cp.product_id,
+          where: p.code in ^gpu_product_codes,
+          select: {p.code, %{id: cp.gpu_id, product_id: p.id}}
       )
       |> Enum.into(%{})
 
     memory_products_map =
       Repo.all(
         from p in Pczone.Product,
-          where: p.sku in ^memory_product_skus,
-          select: {p.sku, %{id: p.memory_id, product_id: p.id}}
+          join: cp in Pczone.ComponentProduct,
+          on: p.id == cp.product_id,
+          where: p.code in ^memory_product_codes,
+          select: {p.code, %{id: cp.memory_id, product_id: p.id}}
       )
       |> Enum.into(%{})
 
     hard_drive_products_map =
       Repo.all(
         from p in Pczone.Product,
-          where: p.sku in ^hard_drive_product_skus,
-          select: {p.sku, %{id: p.hard_drive_id, product_id: p.id}}
+          join: cp in Pczone.ComponentProduct,
+          on: p.id == cp.product_id,
+          where: p.code in ^hard_drive_product_codes,
+          select: {p.code, %{id: cp.hard_drive_id, product_id: p.id}}
       )
       |> Enum.into(%{})
 
-    with [] <- barebone_product_skus -- Map.keys(barebone_products_map),
-         [] <- gpu_product_skus -- Map.keys(gpu_products_map),
-         [] <- memory_product_skus -- Map.keys(memory_products_map),
-         [] <- hard_drive_product_skus -- Map.keys(hard_drive_products_map),
-         [] <- processor_product_skus -- Map.keys(processor_products_map),
+    with [] <- barebone_product_codes -- Map.keys(barebone_products_map),
+         [] <- gpu_product_codes -- Map.keys(gpu_products_map),
+         [] <- memory_product_codes -- Map.keys(memory_products_map),
+         [] <- hard_drive_product_codes -- Map.keys(hard_drive_products_map),
+         [] <- processor_product_codes -- Map.keys(processor_products_map),
          {:ok, _} <-
            Ecto.Multi.new()
            |> upsert_simple_builts_multi(list, barebone_products_map)
@@ -160,13 +170,13 @@ defmodule Pczone.SimpleBuilts do
              "code" => code,
              "name" => name,
              "body_template" => body_template,
-             "barebone_product" => barebone_product_sku,
+             "barebone_product" => barebone_product_code,
              "option_types" => option_types
            } ->
           %{
             id: barebone_id,
             product_id: barebone_product_id
-          } = Map.get(barebone_products_map, barebone_product_sku)
+          } = Map.get(barebone_products_map, barebone_product_code)
 
           %{
             code: code,
@@ -224,24 +234,24 @@ defmodule Pczone.SimpleBuilts do
             Enum.map(
               processors,
               fn %{
-                   "processor_product" => processor_product_sku,
+                   "processor_product" => processor_product_code,
                    "processor_label" => processor_label
                  } = params ->
                 %{
                   id: processor_id,
                   product_id: processor_product_id
-                } = Map.get(processor_products_map, processor_product_sku)
+                } = Map.get(processor_products_map, processor_product_code)
 
                 %{
                   gpu_id: gpu_id,
                   gpu_product_id: gpu_product_id,
                   gpu_quantity: gpu_quantity
                 } =
-                  with "" <> gpu_product_sku <- Map.get(params, "gpu_product") do
+                  with "" <> gpu_product_code <- Map.get(params, "gpu_product") do
                     %{
                       id: gpu_id,
                       product_id: gpu_product_id
-                    } = Map.get(gpu_products_map, gpu_product_sku)
+                    } = Map.get(gpu_products_map, gpu_product_code)
 
                     %{
                       gpu_id: gpu_id,
@@ -301,11 +311,11 @@ defmodule Pczone.SimpleBuilts do
         Enum.flat_map(list, fn %{"code" => code, "memories" => memories} ->
           Enum.map(
             memories,
-            fn %{"memory_product" => memory_product_sku, "label" => label} = params ->
+            fn %{"memory_product" => memory_product_code, "label" => label} = params ->
               %{
                 id: memory_id,
                 product_id: memory_product_id
-              } = Map.get(memory_products_map, memory_product_sku)
+              } = Map.get(memory_products_map, memory_product_code)
 
               simple_built_id = Map.get(simple_builts_map, code)
               quantity = Map.get(params, "quantity", 1)
@@ -341,11 +351,11 @@ defmodule Pczone.SimpleBuilts do
           Enum.flat_map(list, fn %{"code" => code, "hard_drives" => hard_drives} ->
             Enum.map(
               hard_drives,
-              fn %{"hard_drive_product" => hard_drive_product_sku, "label" => label} = params ->
+              fn %{"hard_drive_product" => hard_drive_product_code, "label" => label} = params ->
                 %{
                   id: hard_drive_id,
                   product_id: hard_drive_product_id
-                } = Map.get(hard_drive_products_map, hard_drive_product_sku)
+                } = Map.get(hard_drive_products_map, hard_drive_product_code)
 
                 simple_built_id = Map.get(simple_builts_map, code)
                 quantity = Map.get(params, "quantity", 1)

@@ -244,18 +244,31 @@ defmodule Pczone.Repo.Migrations.Initialize do
     create unique_index(:product_category, [:path])
 
     create table(:product) do
-      add :sku, :string, null: false
+      add :sku, :string
+      add :code, :string, null: false
       add :slug, :string, null: false
       add :title, :string, null: false
       add :description, :string
       add :condition, :string, null: false
+      add :is_component, :boolean, null: false
+      add :is_bundled, :boolean, null: false
       add :list_price, :integer
       add :sale_price, :integer, null: false
       add :percentage_off, :decimal, null: false
       add :cost, :integer
       add :stock, :integer, null: false, default: 0
+    end
+
+    create unique_index(:product, [:code])
+    create index(:product, [:is_bundled])
+    create index(:product, [:condition])
+    create index(:product, [:list_price])
+    create index(:product, [:sale_price])
+    create index(:product, [:percentage_off])
+
+    create table(:component_product, primary: false) do
+      add :product_id, references(:product), null: false, primary: true
       add :type, :string
-      add :category_id, references(:product_category)
       add :keywords, {:array, :string}, default: [], null: false
       add :barebone_id, references(:barebone)
       add :motherboard_id, references(:motherboard)
@@ -268,7 +281,25 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :heatsink_id, references(:heatsink)
     end
 
-    create unique_index(:product, [:sku])
+    create unique_index(:component_product, [:product_id])
+
+    create table(:bundled_product) do
+      add :product_id, references(:product), null: false
+      add :discount, :integer, null: false, default: 0
+      add :is_customize, :boolean, null: false, default: false
+    end
+
+    create table(:bundled_product_item) do
+      add :bundled_product_id, references(:bundled_product), null: false
+      add :product_id, references(:product), null: false
+    end
+
+    create table(:product_product_category) do
+      add :product_id, references(:product), null: false
+      add :product_category_id, references(:product_category), null: false
+    end
+
+    create unique_index(:product_product_category, [:product_id, :product_category_id])
 
     create table(:built) do
       add :slug, :string, null: false

@@ -4,7 +4,7 @@ defmodule PczoneWeb.Schema.Products do
 
   object :product do
     field :id, non_null(:id)
-    field :sku, non_null(:string)
+    field :code, non_null(:string)
     field :slug, non_null(:string)
     field :title, non_null(:string)
     field :condition, non_null(:string)

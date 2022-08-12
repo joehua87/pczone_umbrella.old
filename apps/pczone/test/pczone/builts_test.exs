@@ -84,15 +84,15 @@ defmodule Pczone.BuiltsTest do
     Pczone.Fixtures.read_fixture("products.xlsx")
 
     %{id: barebone_id} = Barebones.get_by_code("hp-elitedesk-800-g2-mini-65w")
-    %{id: barebone_product_id} = Products.get_by_sku("hp-elitedesk-800-g2-mini-65w/used")
+    %{id: barebone_product_id} = Products.get_by_code("hp-elitedesk-800-g2-mini-65w/used")
     %{id: processor_id} = Processors.get_by_code("i5-6500")
-    %{id: processor_product_id} = Products.get_by_sku("i5-6500/tray")
+    %{id: processor_product_id} = Products.get_by_code("i5-6500/tray")
     %{id: memory_id, type: memory_slot_type} = Memories.get_by_code("8gb-sodimm-ddr4-2133-mixed")
-    %{id: memory_product_id} = Products.get_by_sku("8gb-sodimm-ddr4-2133-mixed/used")
+    %{id: memory_product_id} = Products.get_by_code("8gb-sodimm-ddr4-2133-mixed/used")
     %{id: m2_id, type: m2_slot_type} = HardDrives.get_by_code("256gb-samsung-pm981")
-    %{id: m2_product_id} = Products.get_by_sku("256gb-samsung-pm981/100%")
+    %{id: m2_product_id} = Products.get_by_code("256gb-samsung-pm981/100%")
     %{id: sata_id, type: sata_slot_type} = HardDrives.get_by_code("1tb-samsung-860-evo")
-    %{id: sata_product_id} = Products.get_by_sku("1tb-samsung-860-evo/100%")
+    %{id: sata_product_id} = Products.get_by_code("1tb-samsung-860-evo/100%")
 
     {:ok,
      barebone_id: barebone_id,

@@ -2,10 +2,10 @@ defmodule Pczone.Products do
   require Logger
   import Ecto.Query, only: [where: 2, from: 2]
   import Dew.FilterParser
-  alias Pczone.{Repo, Product}
+  alias Pczone.{Repo, Product, ComponentProduct}
 
-  def get_by_sku(sku) do
-    Repo.one(from x in Product, where: x.sku == ^sku, limit: 1)
+  def get_by_code(code) do
+    Repo.one(from x in Product, where: x.code == ^code, limit: 1)
   end
 
   def get(id) do
@@ -29,7 +29,7 @@ defmodule Pczone.Products do
 
   def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
 
-  def upsert(entities, opts \\ []) when is_list(entities) do
+  def upsert(entities, _opts \\ []) when is_list(entities) do
     entities =
       ensure_products("motherboard", entities) ++
         ensure_products("barebone", entities) ++
@@ -38,43 +38,74 @@ defmodule Pczone.Products do
         ensure_products("hard_drive", entities) ++
         ensure_products("gpu", entities)
 
-    Repo.insert_all_2(
-      Product,
-      entities,
-      [
-        on_conflict:
-          {:replace,
-           [
-             :sku,
-             :slug,
-             :title,
-             :condition,
-             :sale_price,
-             :percentage_off,
-             :type,
-             :stock,
-             :list_price,
-             :cost,
-             :category_id,
-             :barebone_id,
-             :motherboard_id,
-             :processor_id,
-             :memory_id,
-             :gpu_id,
-             :hard_drive_id,
-             :psu_id,
-             :chassis_id,
-             :heatsink_id
-           ]},
-        conflict_target: [:sku]
-      ] ++ opts
-    )
+    Ecto.Multi.new()
+    |> Ecto.Multi.run(:products, fn _, _ ->
+      product_fields = [
+        :sku,
+        :slug,
+        :title,
+        :condition,
+        :is_component,
+        :is_bundled,
+        :sale_price,
+        :percentage_off,
+        :stock,
+        :list_price,
+        :cost
+      ]
+
+      products = Enum.map(entities, &Map.take(&1, [:code] ++ product_fields))
+
+      Repo.insert_all_2(
+        Product,
+        products,
+        on_conflict: {:replace, product_fields},
+        conflict_target: [:code],
+        returning: true
+      )
+    end)
+    |> Ecto.Multi.run(:component_products, fn _, %{products: {_, products}} ->
+      product_ids_map =
+        products
+        |> Enum.map(fn %{id: id, code: code} ->
+          {code, id}
+        end)
+        |> Enum.into(%{})
+
+      component_product_fields = [
+        :type,
+        :barebone_id,
+        :motherboard_id,
+        :processor_id,
+        :memory_id,
+        :gpu_id,
+        :hard_drive_id,
+        :psu_id,
+        :chassis_id,
+        :heatsink_id
+      ]
+
+      component_products =
+        Enum.map(entities, fn %{code: code} = entity ->
+          Map.put(entity, :product_id, product_ids_map[code])
+        end)
+        |> Enum.map(&Map.take(&1, [:product_id] ++ component_product_fields))
+
+      Repo.insert_all_2(
+        ComponentProduct,
+        component_products,
+        on_conflict: {:replace, component_product_fields},
+        conflict_target: [:product_id],
+        returning: true
+      )
+    end)
+    |> Repo.transaction()
   end
 
-  def ensure_products(kind, entities) do
+  def ensure_products(type, entities) do
     codes =
       entities
-      |> Enum.filter(&(&1["kind"] == kind))
+      |> Enum.filter(&(&1["type"] == type))
       |> Enum.map(& &1["ref_code"])
 
     queryable =
@@ -85,7 +116,7 @@ defmodule Pczone.Products do
         "barebone" => Pczone.Barebone,
         "gpu" => Pczone.Gpu,
         "hard_drive" => Pczone.HardDrive
-      }[kind]
+      }[type]
 
     map =
       Repo.all(
@@ -100,18 +131,8 @@ defmodule Pczone.Products do
     |> Enum.map(fn
       %{"ref_code" => code, "condition" => condition, "sale_price" => sale_price} = params ->
         sale_price = ensure_price(sale_price)
-
-        list_price =
-          case params do
-            %{"list_price" => list_price} -> ensure_price(list_price)
-            _ -> nil
-          end
-
-        cost =
-          case params do
-            %{"cost" => cost} -> ensure_price(cost)
-            _ -> nil
-          end
+        list_price = Map.get(params, "list_price") |> ensure_price()
+        cost = Map.get(params, "cost") |> ensure_price()
 
         percentage_off =
           case list_price do
@@ -124,18 +145,28 @@ defmodule Pczone.Products do
             nil
 
           %{id: id, slug: slug, title: title} ->
-            params
-            |> Map.merge(%{
-              "slug" => get_slug(params) || Slug.slugify("#{slug} #{condition}"),
-              "title" => get_title(params) || "#{title} (#{condition})",
-              "list_price" => list_price,
-              "sale_price" => sale_price,
-              "percentage_off" => percentage_off,
-              "cost" => cost
-            })
-            |> Map.put("#{kind}_id", id)
-            |> Pczone.Product.new_changeset()
-            |> Pczone.Helpers.get_changeset_changes()
+            product =
+              %{
+                "slug" => get_slug(params) || Slug.slugify("#{slug} #{condition}"),
+                "title" => get_title(params) || "#{title} (#{condition})",
+                "list_price" => list_price,
+                "sale_price" => sale_price,
+                "percentage_off" => percentage_off,
+                "cost" => cost,
+                "is_component" => false,
+                "is_bundled" => false
+              }
+              |> Map.merge(params)
+              |> Pczone.Product.new_changeset()
+              |> Pczone.Helpers.get_changeset_changes()
+
+            component_product =
+              params
+              |> Map.put("#{type}_id", id)
+              |> Pczone.ComponentProduct.changes_changeset()
+              |> Pczone.Helpers.get_changeset_changes()
+
+            Map.merge(product, component_product)
         end
 
       _ ->
