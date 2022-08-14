@@ -266,8 +266,8 @@ defmodule Pczone.Repo.Migrations.Initialize do
     create index(:product, [:sale_price])
     create index(:product, [:percentage_off])
 
-    create table(:component_product, primary: false) do
-      add :product_id, references(:product), null: false, primary: true
+    create table(:component_product) do
+      add :product_id, references(:product), null: false
       add :type, :string, null: false
       add :keywords, {:array, :string}, default: [], null: false
       add :barebone_id, references(:barebone)

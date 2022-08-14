@@ -15,7 +15,7 @@ defmodule Pczone.Memory do
     field :capacity, :integer
     field :type, :string
     belongs_to :brand, Pczone.Brand
-    has_many :products, Pczone.Product
+    many_to_many :products, Pczone.Product, join_through: Pczone.ComponentProduct
   end
 
   def changeset(entity, params) do

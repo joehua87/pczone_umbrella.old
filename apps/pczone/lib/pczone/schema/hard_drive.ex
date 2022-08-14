@@ -21,7 +21,7 @@ defmodule Pczone.HardDrive do
     field :random_write, :integer
     field :tbw, :integer
     belongs_to :brand, Pczone.Brand
-    has_many :products, Pczone.Product
+    many_to_many :products, Pczone.Product, join_through: Pczone.ComponentProduct
   end
 
   def changeset(entity, params) do

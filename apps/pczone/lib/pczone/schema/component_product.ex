@@ -2,8 +2,6 @@ defmodule Pczone.ComponentProduct do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @primary_key false
-
   @required [:product_id, :type]
 
   @optional [

@@ -25,7 +25,7 @@ defmodule Pczone.Barebone do
     field :raw_data, :map
     field :source_website, :string
     field :source_url, :string
-    has_many :products, Pczone.Product
+    many_to_many :products, Pczone.Product, join_through: Pczone.ComponentProduct
   end
 
   def changeset(entity, params) do

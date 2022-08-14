@@ -1,20 +1,21 @@
 defmodule PczoneWeb.Schema.Products do
   use Absinthe.Schema.Notation
+  alias Absinthe.Resolution.Helpers
   alias Pczone.Products
 
-  object :product do
-    field :id, non_null(:id)
-    field :code, non_null(:string)
-    field :slug, non_null(:string)
-    field :title, non_null(:string)
-    field :condition, non_null(:string)
+  enum :product_type do
+    value :barebone
+    value :motherboard
+    value :processor
+    value :memory
+    value :gpu
+    value :hard_drive
+    value :psu
+    value :chassis
+  end
+
+  object :component_product do
     field :type, :product_type
-    field :list_price, :integer
-    field :sale_price, non_null(:integer)
-    field :percentage_off, non_null(:decimal)
-    field :stock, non_null(:integer)
-    field :category_id, :id
-    field :category, :product_category
     field :barebone_id, :id
     field :motherboard_id, :id
     field :processor_id, :id
@@ -23,12 +24,46 @@ defmodule PczoneWeb.Schema.Products do
     field :hard_drive_id, :id
     field :psu_id, :id
     field :chassis_id, :id
+    field :product_id, :id
+    field :barebone, :barebone, resolve: Helpers.dataloader(PczoneWeb.Dataloader)
+    field :motherboard, :motherboard, resolve: Helpers.dataloader(PczoneWeb.Dataloader)
+    field :processor, :processor, resolve: Helpers.dataloader(PczoneWeb.Dataloader)
+    field :memory, :memory, resolve: Helpers.dataloader(PczoneWeb.Dataloader)
+    field :gpu, :gpu, resolve: Helpers.dataloader(PczoneWeb.Dataloader)
+    field :hard_drive, :hard_drive, resolve: Helpers.dataloader(PczoneWeb.Dataloader)
+    field :psu, :psu, resolve: Helpers.dataloader(PczoneWeb.Dataloader)
+    field :chassis, :chassis, resolve: Helpers.dataloader(PczoneWeb.Dataloader)
+    field :product, non_null(:product), resolve: Helpers.dataloader(PczoneWeb.Dataloader)
+  end
+
+  object :product do
+    field :id, non_null(:id)
+    field :code, non_null(:string)
+    field :slug, non_null(:string)
+    field :title, non_null(:string)
+    field :condition, non_null(:string)
+    field :component_type, :product_type
+    field :list_price, :integer
+    field :sale_price, non_null(:integer)
+    field :percentage_off, non_null(:decimal)
+    field :stock, non_null(:integer)
+
+    field :component_product,
+          :component_product,
+          resolve: Helpers.dataloader(PczoneWeb.Dataloader)
+
+    field :categories,
+          non_null(list_of(non_null(:product_category))),
+          resolve: Helpers.dataloader(PczoneWeb.Dataloader)
   end
 
   input_object :product_filter_input do
     field :id, :id_filter_input
     field :title, :string_filter_input
     field :condition, :string_filter_input
+    field :category_id, :id_filter_input
+    field :component_type, :string_filter_input
+    field :is_bundled, :boolean_filter_input
   end
 
   object :product_list_result do

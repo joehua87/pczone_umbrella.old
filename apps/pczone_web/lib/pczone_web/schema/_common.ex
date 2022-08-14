@@ -19,17 +19,6 @@ defmodule PczoneWeb.Schema.Common do
     value :datetime
   end
 
-  enum :product_type do
-    value :barebone
-    value :motherboard
-    value :processor
-    value :memory
-    value :gpu
-    value :hard_drive
-    value :psu
-    value :chassis
-  end
-
   object :attribute_item do
     field :label, non_null(:string)
     field :value, :string

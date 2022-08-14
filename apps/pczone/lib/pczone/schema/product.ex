@@ -33,6 +33,7 @@ defmodule Pczone.Product do
     field :percentage_off, :decimal
     field :cost, :integer
     field :stock, :integer, default: 0
+    has_one :component_product, Pczone.ComponentProduct
   end
 
   def changeset(entity, params) do

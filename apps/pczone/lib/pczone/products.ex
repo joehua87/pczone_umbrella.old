@@ -204,6 +204,9 @@ defmodule Pczone.Products do
       case field do
         :id -> parse_id_filter(acc, field, value)
         :title -> parse_string_filter(acc, field, value)
+        :condition -> parse_string_filter(acc, field, value)
+        :component_type -> parse_string_filter(acc, field, value)
+        :is_bundled -> parse_boolean_filter(acc, field, value)
         _ -> acc
       end
     end) || true

@@ -68,7 +68,7 @@ defmodule Pczone.Processor do
     field :memory_types, {:array, :string}
     field :ecc_memory_supported, :boolean
     embeds_many :attributes, Pczone.AttributeGroup
-    has_many :products, Pczone.Product
+    many_to_many :products, Pczone.Product, join_through: Pczone.ComponentProduct
   end
 
   def changeset(entity, params) do
