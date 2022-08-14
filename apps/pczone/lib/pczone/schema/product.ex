@@ -9,7 +9,7 @@ defmodule Pczone.Product do
     :condition,
     :sale_price,
     :percentage_off,
-    :is_component,
+    :component_type,
     :is_bundled
   ]
 
@@ -26,7 +26,7 @@ defmodule Pczone.Product do
     field :slug, :string
     field :title, :string
     field :condition, :string
-    field :is_component, :boolean
+    field :component_type, Ecto.Enum, values: Pczone.Enum.product_component_types()
     field :is_bundled, :boolean
     field :list_price, :integer
     field :sale_price, :integer

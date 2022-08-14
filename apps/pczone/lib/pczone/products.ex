@@ -45,7 +45,7 @@ defmodule Pczone.Products do
         :slug,
         :title,
         :condition,
-        :is_component,
+        :component_type,
         :is_bundled,
         :sale_price,
         :percentage_off,
@@ -153,7 +153,7 @@ defmodule Pczone.Products do
                 "sale_price" => sale_price,
                 "percentage_off" => percentage_off,
                 "cost" => cost,
-                "is_component" => false,
+                "component_type" => type,
                 "is_bundled" => false
               }
               |> Map.merge(params)

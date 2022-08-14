@@ -4,17 +4,6 @@ defmodule Pczone.ComponentProduct do
 
   @primary_key false
 
-  @product_types [
-    :barebone,
-    :motherboard,
-    :processor,
-    :memory,
-    :gpu,
-    :hard_drive,
-    :psu,
-    :chassis
-  ]
-
   @required [:product_id, :type]
 
   @optional [
@@ -31,7 +20,7 @@ defmodule Pczone.ComponentProduct do
 
   schema "component_product" do
     belongs_to :product, Pczone.Product
-    field :type, Ecto.Enum, values: @product_types
+    field :type, Ecto.Enum, values: Pczone.Enum.product_component_types()
     belongs_to :barebone, Pczone.Barebone
     belongs_to :motherboard, Pczone.Motherboard
     belongs_to :processor, Pczone.Processor

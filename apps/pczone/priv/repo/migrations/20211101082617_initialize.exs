@@ -250,7 +250,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :title, :string, null: false
       add :description, :string
       add :condition, :string, null: false
-      add :is_component, :boolean, null: false
+      add :component_type, :string
       add :is_bundled, :boolean, null: false
       add :list_price, :integer
       add :sale_price, :integer, null: false
@@ -268,7 +268,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
 
     create table(:component_product, primary: false) do
       add :product_id, references(:product), null: false, primary: true
-      add :type, :string
+      add :type, :string, null: false
       add :keywords, {:array, :string}, default: [], null: false
       add :barebone_id, references(:barebone)
       add :motherboard_id, references(:motherboard)
