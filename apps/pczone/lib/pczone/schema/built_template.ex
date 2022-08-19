@@ -1,4 +1,4 @@
-defmodule Pczone.SimpleBuilt do
+defmodule Pczone.BuiltTemplate do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -7,7 +7,7 @@ defmodule Pczone.SimpleBuilt do
   @required [:code, :name, :option_types, :barebone_id, :barebone_product_id]
   @optional [:option_value_seperator, :body_template]
 
-  schema "simple_built" do
+  schema "built_template" do
     field :code, :string
     field :name, :string
     embeds_many :media, Pczone.EmbeddedMedium
@@ -16,11 +16,11 @@ defmodule Pczone.SimpleBuilt do
     field :option_value_seperator, :string, default: ", "
     belongs_to :barebone, Pczone.Barebone
     belongs_to :barebone_product, Pczone.Product
-    has_many :processors, Pczone.SimpleBuiltProcessor
-    has_many :memories, Pczone.SimpleBuiltMemory
-    has_many :hard_drives, Pczone.SimpleBuiltHardDrive
-    has_many :variants, Pczone.SimpleBuiltVariant
-    has_many :simple_built_stores, Pczone.SimpleBuiltStore
+    has_many :processors, Pczone.BuiltTemplateProcessor
+    has_many :memories, Pczone.BuiltTemplateMemory
+    has_many :hard_drives, Pczone.BuiltTemplateHardDrive
+    has_many :variants, Pczone.BuiltTemplateVariant
+    has_many :built_template_stores, Pczone.BuiltTemplateStore
   end
 
   def changeset(entity, params) do

@@ -1,9 +1,9 @@
-defmodule PczoneWeb.Schema.SimpleBuilts do
+defmodule PczoneWeb.Schema.BuiltTemplates do
   use Absinthe.Schema.Notation
   alias Absinthe.Resolution.Helpers
   alias PczoneWeb.Dataloader
 
-  object :simple_built_processor do
+  object :built_template_processor do
     field :processor_id, non_null(:id)
     field :processor_product_id, non_null(:id)
     field :processor_label, non_null(:string)
@@ -18,7 +18,7 @@ defmodule PczoneWeb.Schema.SimpleBuilts do
     field :gpu_product, :product, resolve: Helpers.dataloader(Dataloader)
   end
 
-  object :simple_built_memory do
+  object :built_template_memory do
     field :memory_id, non_null(:id)
     field :memory_product_id, non_null(:id)
     field :memory_quantity, non_null(:integer)
@@ -28,7 +28,7 @@ defmodule PczoneWeb.Schema.SimpleBuilts do
     field :memory_product, non_null(:product), resolve: Helpers.dataloader(Dataloader)
   end
 
-  object :simple_built_hard_drive do
+  object :built_template_hard_drive do
     field :hard_drive_id, non_null(:id)
     field :hard_drive_product_id, non_null(:id)
     field :hard_drive_quantity, non_null(:integer)
@@ -44,15 +44,15 @@ defmodule PczoneWeb.Schema.SimpleBuilts do
           resolve: Helpers.dataloader(Dataloader)
   end
 
-  object :simple_built_store do
-    field :simple_built_id, non_null(:id)
+  object :built_template_store do
+    field :built_template_id, non_null(:id)
     field :store_id, non_null(:id)
-    field :simple_built, non_null(:simple_built), resolve: Helpers.dataloader(Dataloader)
+    field :built_template, non_null(:built_template), resolve: Helpers.dataloader(Dataloader)
     field :store, non_null(:store), resolve: Helpers.dataloader(Dataloader)
     field :product_code, non_null(:string)
   end
 
-  object :simple_built do
+  object :built_template do
     field :id, non_null(:id)
     field :code, non_null(:string)
     field :name, non_null(:string)
@@ -64,27 +64,27 @@ defmodule PczoneWeb.Schema.SimpleBuilts do
     field :barebone_product, non_null(:product), resolve: Helpers.dataloader(Dataloader)
 
     field :processors,
-          non_null(list_of(non_null(:simple_built_processor))),
+          non_null(list_of(non_null(:built_template_processor))),
           resolve: Helpers.dataloader(Dataloader)
 
     field :memories,
-          non_null(list_of(non_null(:simple_built_memory))),
+          non_null(list_of(non_null(:built_template_memory))),
           resolve: Helpers.dataloader(Dataloader)
 
     field :hard_drives,
-          non_null(list_of(non_null(:simple_built_hard_drive))),
+          non_null(list_of(non_null(:built_template_hard_drive))),
           resolve: Helpers.dataloader(Dataloader)
 
-    field :simple_built_stores,
-          non_null(list_of(non_null(:simple_built_store))),
+    field :built_template_stores,
+          non_null(list_of(non_null(:built_template_store))),
           resolve: Helpers.dataloader(Dataloader)
   end
 
-  input_object :simple_built_filter_input do
+  input_object :built_template_filter_input do
     field :name, :string_filter_input
   end
 
-  input_object :simple_built_processor_input do
+  input_object :built_template_processor_input do
     # field :processor_product_id, non_null(:id)
     field :processor_product, non_null(:string)
     field :processor, :string
@@ -97,7 +97,7 @@ defmodule PczoneWeb.Schema.SimpleBuilts do
     field :gpu_quantity, :integer
   end
 
-  input_object :simple_built_memory_input do
+  input_object :built_template_memory_input do
     # field :memory_product_id, non_null(:id)
     field :memory_product, non_null(:string)
     field :memory, :string
@@ -106,7 +106,7 @@ defmodule PczoneWeb.Schema.SimpleBuilts do
     field :quantity, :integer
   end
 
-  input_object :simple_built_hard_drive_input do
+  input_object :built_template_hard_drive_input do
     # field :hard_drive_product_id, non_null(:id)
     field :hard_drive_product, non_null(:string)
     field :hard_drive, :string
@@ -115,7 +115,7 @@ defmodule PczoneWeb.Schema.SimpleBuilts do
     field :quantity, :integer
   end
 
-  input_object :create_simple_built_input do
+  input_object :create_built_template_input do
     field :code, non_null(:string)
     field :name, non_null(:string)
     field :option_types, non_null(list_of(non_null(:string)))
@@ -123,27 +123,27 @@ defmodule PczoneWeb.Schema.SimpleBuilts do
     # field :barebone_id, non_null(:id)
     field :barebone, non_null(:string)
     field :barebone_product, non_null(:string)
-    field :processors, non_null(list_of(non_null(:simple_built_processor_input)))
-    field :memories, non_null(list_of(non_null(:simple_built_memory_input)))
-    field :hard_drives, non_null(list_of(non_null(:simple_built_hard_drive_input)))
+    field :processors, non_null(list_of(non_null(:built_template_processor_input)))
+    field :memories, non_null(list_of(non_null(:built_template_memory_input)))
+    field :hard_drives, non_null(list_of(non_null(:built_template_hard_drive_input)))
   end
 
-  object :simple_built_list_result do
-    field :entities, non_null(list_of(non_null(:simple_built)))
+  object :built_template_list_result do
+    field :entities, non_null(list_of(non_null(:built_template)))
     field :paging, non_null(:paging)
   end
 
-  object :simple_built_queries do
-    field :simple_built, :simple_built do
+  object :built_template_queries do
+    field :built_template, :built_template do
       arg :id, non_null(:id)
 
       resolve(fn %{id: id}, _info ->
-        {:ok, Pczone.SimpleBuilts.get(id)}
+        {:ok, Pczone.BuiltTemplates.get(id)}
       end)
     end
 
-    field :simple_builts, non_null(:simple_built_list_result) do
-      arg :filter, :simple_built_filter_input
+    field :built_templates, non_null(:built_template_list_result) do
+      arg :filter, :built_template_filter_input
       arg :order_by, list_of(non_null(:order_by_input))
       arg :paging, :paging_input
 
@@ -153,67 +153,69 @@ defmodule PczoneWeb.Schema.SimpleBuilts do
           |> Map.merge(%{
             selection: PczoneWeb.AbsintheHelper.project(info) |> Keyword.get(:entities)
           })
-          |> Pczone.SimpleBuilts.list()
+          |> Pczone.BuiltTemplates.list()
 
         {:ok, list}
       end)
     end
 
-    field :simple_built_content, non_null(:string) do
-      arg :simple_built_id, non_null(:id)
+    field :built_template_content, non_null(:string) do
+      arg :built_template_id, non_null(:id)
       arg :template, non_null(:string)
 
-      resolve(fn %{simple_built_id: simple_built_id, template: template}, _info ->
-        {:ok, Pczone.SimpleBuilts.generate_content(simple_built_id, template)}
+      resolve(fn %{built_template_id: built_template_id, template: template}, _info ->
+        {:ok, Pczone.BuiltTemplates.generate_content(built_template_id, template)}
       end)
     end
   end
 
-  object :simple_built_mutations do
-    field :upsert_simple_builts, non_null(list_of(non_null(:simple_built))) do
+  object :built_template_mutations do
+    field :upsert_built_templates, non_null(list_of(non_null(:built_template))) do
       arg :data, non_null(:json)
 
       resolve(fn %{data: data}, _info ->
-        Pczone.SimpleBuilts.upsert(data)
+        Pczone.BuiltTemplates.upsert(data)
       end)
     end
 
-    field :remove_simple_built_processors, non_null(:id) do
-      arg :simple_built_id, non_null(:id)
+    field :remove_built_template_processors, non_null(:id) do
+      arg :built_template_id, non_null(:id)
 
-      resolve(fn %{simple_built_id: simple_built_id}, _info ->
-        with {_, nil} <- Pczone.SimpleBuilts.remove_simple_built_processors(simple_built_id) do
-          {:ok, simple_built_id}
+      resolve(fn %{built_template_id: built_template_id}, _info ->
+        with {_, nil} <- Pczone.BuiltTemplates.remove_built_template_processors(built_template_id) do
+          {:ok, built_template_id}
         end
       end)
     end
 
-    field :remove_simple_built_memories, non_null(:id) do
-      arg :simple_built_id, non_null(:id)
+    field :remove_built_template_memories, non_null(:id) do
+      arg :built_template_id, non_null(:id)
 
-      resolve(fn %{simple_built_id: simple_built_id}, _info ->
-        with {_, nil} <- Pczone.SimpleBuilts.remove_simple_built_memories(simple_built_id) do
-          {:ok, simple_built_id}
+      resolve(fn %{built_template_id: built_template_id}, _info ->
+        with {_, nil} <- Pczone.BuiltTemplates.remove_built_template_memories(built_template_id) do
+          {:ok, built_template_id}
         end
       end)
     end
 
-    field :remove_simple_built_hard_drives, non_null(:id) do
-      arg :simple_built_id, non_null(:id)
+    field :remove_built_template_hard_drives, non_null(:id) do
+      arg :built_template_id, non_null(:id)
 
-      resolve(fn %{simple_built_id: simple_built_id}, _info ->
-        with {_, nil} <- Pczone.SimpleBuilts.remove_simple_built_hard_drives(simple_built_id) do
-          {:ok, simple_built_id}
+      resolve(fn %{built_template_id: built_template_id}, _info ->
+        with {_, nil} <-
+               Pczone.BuiltTemplates.remove_built_template_hard_drives(built_template_id) do
+          {:ok, built_template_id}
         end
       end)
     end
 
-    field :generate_simple_built_variants, non_null(list_of(non_null(:simple_built_variant))) do
+    field :generate_built_template_variants,
+          non_null(list_of(non_null(:built_template_variant))) do
       arg :code, non_null(:string)
 
       resolve(fn %{code: code}, _info ->
         with {:ok, {_, result}} <-
-               Pczone.SimpleBuilts.generate_variants(code, returning: true) do
+               Pczone.BuiltTemplates.generate_variants(code, returning: true) do
           {:ok, result}
         end
       end)

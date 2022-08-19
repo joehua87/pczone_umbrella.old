@@ -1,0 +1,110 @@
+defmodule Pczone.BuiltTemplatesTest do
+  use Pczone.DataCase
+  import Ecto.Query, only: [from: 2]
+  import Pczone.Fixtures
+  alias Pczone.{Repo, BuiltTemplates}
+
+  describe "built templates" do
+    test "upsert" do
+      list = Pczone.Fixtures.read_fixture("built_templates.yml")
+      {:ok, [%Pczone.BuiltTemplate{} | _]} = Pczone.BuiltTemplates.upsert(list)
+
+      assert %{
+               processors: [
+                 %{processor_label: "i3-9100", gpu_label: ""},
+                 %{processor_label: "i3-9100F", gpu_label: "K600", gpu: %{}, gpu_product: %{}}
+               ]
+             } =
+               Repo.one(
+                 from Pczone.BuiltTemplate,
+                   preload: [:processors],
+                   where: [code: "dell-optiplex-7060-sff"]
+               )
+    end
+
+    test "remove built template processors" do
+      list = Pczone.Fixtures.read_fixture("built_templates.yml")
+
+      {:ok, [%Pczone.BuiltTemplate{id: built_template_id} | _]} =
+        Pczone.BuiltTemplates.upsert(list)
+
+      Pczone.BuiltTemplates.remove_built_template_processors(built_template_id)
+
+      assert %{processors: []} =
+               Repo.get(from(Pczone.BuiltTemplate, preload: [:processors]), built_template_id)
+    end
+
+    test "remove built template memories" do
+      list = Pczone.Fixtures.read_fixture("built_templates.yml")
+
+      {:ok, [%Pczone.BuiltTemplate{id: built_template_id} | _]} =
+        Pczone.BuiltTemplates.upsert(list)
+
+      Pczone.BuiltTemplates.remove_built_template_memories(built_template_id)
+
+      assert %{memories: []} =
+               Repo.get(from(Pczone.BuiltTemplate, preload: [:memories]), built_template_id)
+    end
+
+    test "remove built template hard_drives" do
+      list = Pczone.Fixtures.read_fixture("built_templates.yml")
+
+      {:ok, [%Pczone.BuiltTemplate{id: built_template_id} | _]} =
+        Pczone.BuiltTemplates.upsert(list)
+
+      Pczone.BuiltTemplates.remove_built_template_hard_drives(built_template_id)
+
+      assert %{hard_drives: []} =
+               Repo.get(from(Pczone.BuiltTemplate, preload: [:hard_drives]), built_template_id)
+    end
+
+    test "generate built template variants" do
+      [built_template | _] = built_templates_fixture()
+      assert {:ok, _} = BuiltTemplates.generate_variants(built_template)
+    end
+
+    test "update variants state when built template processors changed" do
+      [built_template | _] = built_templates_fixture()
+      assert {:ok, _} = BuiltTemplates.generate_variants(built_template)
+      assert {_, nil} = BuiltTemplates.remove_built_template_processors(built_template.id)
+
+      assert {:ok, {0, []}} =
+               BuiltTemplates.generate_variants(built_template.code, returning: true)
+
+      assert [] = Repo.all(from v in Pczone.BuiltTemplateVariant, where: v.state == :active)
+    end
+
+    test "generate content" do
+      [built_template | _] = built_templates_fixture()
+      assert {:ok, {_, _}} = BuiltTemplates.generate_variants(built_template)
+
+      template = """
+      # {{name}}
+
+      ## Hỗ trợ CPU:
+
+      {{#processors}}
+      - {{processor.code}} ({{processor.cores}} cores {{processor.threads}} threads)
+      {{/processors}}
+
+      ## Bảng giá chi tiết:
+
+      {{#variants}}
+      * {{option_values}}: {{total}}
+      {{/variants}}
+      """
+
+      # TODO: Findout when string is not equal even if look like equal
+      assert """
+             # Hp Elitedesk 800 G2 Mini
+             """ <> _ = _content = BuiltTemplates.generate_content(built_template.id, template)
+    end
+  end
+
+  setup do
+    get_fixtures_dir()
+    |> Pczone.initial_data()
+
+    :ok
+  end
+end

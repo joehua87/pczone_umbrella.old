@@ -1,14 +1,14 @@
-defmodule Pczone.SimpleBuilts do
+defmodule Pczone.BuiltTemplates do
   import Ecto.Query, only: [where: 2, from: 2]
   import Dew.FilterParser
   alias Pczone.Repo
 
   def get(id) do
-    Repo.get(Pczone.SimpleBuilt, id)
+    Repo.get(Pczone.BuiltTemplate, id)
   end
 
   def get_by_code(code) do
-    Repo.one(from Pczone.SimpleBuilt, where: [code: ^code], limit: 1)
+    Repo.one(from Pczone.BuiltTemplate, where: [code: ^code], limit: 1)
   end
 
   def list(attrs \\ %{})
@@ -19,7 +19,7 @@ defmodule Pczone.SimpleBuilts do
         selection: selection,
         order_by: order_by
       }) do
-    Pczone.SimpleBuilt
+    Pczone.BuiltTemplate
     |> where(^parse_filter(filter))
     |> select_fields(selection, [])
     |> sort_by(order_by, [])
@@ -116,16 +116,20 @@ defmodule Pczone.SimpleBuilts do
          [] <- processor_product_codes -- Map.keys(processor_products_map),
          {:ok, _} <-
            Ecto.Multi.new()
-           |> upsert_simple_builts_multi(list, barebone_products_map)
-           |> upsert_simple_built_processors_multi(list, processor_products_map, gpu_products_map)
-           |> upsert_simple_built_memories_multi(list, memory_products_map)
-           |> upsert_simple_built_hard_drives_multi(list, hard_drive_products_map)
+           |> upsert_built_templates_multi(list, barebone_products_map)
+           |> upsert_built_template_processors_multi(
+             list,
+             processor_products_map,
+             gpu_products_map
+           )
+           |> upsert_built_template_memories_multi(list, memory_products_map)
+           |> upsert_built_template_hard_drives_multi(list, hard_drive_products_map)
            |> Repo.transaction() do
       codes = Enum.map(list, & &1["code"])
 
       {:ok,
        Repo.all(
-         from b in Pczone.SimpleBuilt,
+         from b in Pczone.BuiltTemplate,
            where: b.code in ^codes,
            preload: [
              :barebone,
@@ -142,28 +146,34 @@ defmodule Pczone.SimpleBuilts do
   end
 
   @doc """
-  Remove all simple built processors
+  Remove all built template processors
   """
-  def remove_simple_built_processors(simple_built_id) do
-    Repo.delete_all(from Pczone.SimpleBuiltProcessor, where: [simple_built_id: ^simple_built_id])
+  def remove_built_template_processors(built_template_id) do
+    Repo.delete_all(
+      from Pczone.BuiltTemplateProcessor, where: [built_template_id: ^built_template_id]
+    )
   end
 
   @doc """
-  Remove all simple built memories
+  Remove all built template memories
   """
-  def remove_simple_built_memories(simple_built_id) do
-    Repo.delete_all(from Pczone.SimpleBuiltMemory, where: [simple_built_id: ^simple_built_id])
+  def remove_built_template_memories(built_template_id) do
+    Repo.delete_all(
+      from Pczone.BuiltTemplateMemory, where: [built_template_id: ^built_template_id]
+    )
   end
 
   @doc """
-  Remove all simple built hard drives
+  Remove all built template hard drives
   """
-  def remove_simple_built_hard_drives(simple_built_id) do
-    Repo.delete_all(from Pczone.SimpleBuiltHardDrive, where: [simple_built_id: ^simple_built_id])
+  def remove_built_template_hard_drives(built_template_id) do
+    Repo.delete_all(
+      from Pczone.BuiltTemplateHardDrive, where: [built_template_id: ^built_template_id]
+    )
   end
 
-  defp upsert_simple_builts_multi(multi, list, barebone_products_map) do
-    simple_builts =
+  defp upsert_built_templates_multi(multi, list, barebone_products_map) do
+    built_templates =
       Enum.map(
         list,
         fn %{
@@ -192,10 +202,10 @@ defmodule Pczone.SimpleBuilts do
 
     Ecto.Multi.run(
       multi,
-      :simple_builts_map,
+      :built_templates_map,
       fn _, _ ->
         {_, result} =
-          Repo.insert_all(Pczone.SimpleBuilt, simple_builts,
+          Repo.insert_all(Pczone.BuiltTemplate, built_templates,
             returning: true,
             on_conflict:
               {:replace,
@@ -219,7 +229,7 @@ defmodule Pczone.SimpleBuilts do
     )
   end
 
-  defp upsert_simple_built_processors_multi(
+  defp upsert_built_template_processors_multi(
          multi,
          list,
          processor_products_map,
@@ -227,8 +237,8 @@ defmodule Pczone.SimpleBuilts do
        ) do
     multi
     |> Ecto.Multi.run(
-      :simple_built_processors,
-      fn _, %{simple_builts_map: simple_builts_map} ->
+      :built_template_processors,
+      fn _, %{built_templates_map: built_templates_map} ->
         entities =
           Enum.flat_map(list, fn %{"code" => code, "processors" => processors} ->
             Enum.map(
@@ -267,20 +277,20 @@ defmodule Pczone.SimpleBuilts do
                       }
                   end
 
-                simple_built_id = Map.get(simple_builts_map, code)
+                built_template_id = Map.get(built_templates_map, code)
                 processor_quantity = Map.get(params, "processor_quantity", 1)
 
                 %{
                   key:
                     [
-                      simple_built_id,
+                      built_template_id,
                       processor_product_id,
                       processor_quantity,
                       gpu_product_id || 0,
                       gpu_quantity
                     ]
                     |> Enum.join(":"),
-                  simple_built_id: simple_built_id,
+                  built_template_id: built_template_id,
                   processor_id: processor_id,
                   processor_product_id: processor_product_id,
                   processor_quantity: processor_quantity,
@@ -295,7 +305,7 @@ defmodule Pczone.SimpleBuilts do
           end)
 
         with {inserted, _} <-
-               Repo.insert_all(Pczone.SimpleBuiltProcessor, entities,
+               Repo.insert_all(Pczone.BuiltTemplateProcessor, entities,
                  on_conflict: :replace_all,
                  conflict_target: [:key]
                ) do
@@ -305,8 +315,9 @@ defmodule Pczone.SimpleBuilts do
     )
   end
 
-  defp upsert_simple_built_memories_multi(multi, list, memory_products_map) do
-    Ecto.Multi.run(multi, :simple_built_memories, fn _, %{simple_builts_map: simple_builts_map} ->
+  defp upsert_built_template_memories_multi(multi, list, memory_products_map) do
+    Ecto.Multi.run(multi, :built_template_memories, fn _,
+                                                       %{built_templates_map: built_templates_map} ->
       entities =
         Enum.flat_map(list, fn %{"code" => code, "memories" => memories} ->
           Enum.map(
@@ -317,12 +328,12 @@ defmodule Pczone.SimpleBuilts do
                 product_id: memory_product_id
               } = Map.get(memory_products_map, memory_product_code)
 
-              simple_built_id = Map.get(simple_builts_map, code)
+              built_template_id = Map.get(built_templates_map, code)
               quantity = Map.get(params, "quantity", 1)
 
               %{
-                key: [simple_built_id, memory_product_id, quantity] |> Enum.join(":"),
-                simple_built_id: simple_built_id,
+                key: [built_template_id, memory_product_id, quantity] |> Enum.join(":"),
+                built_template_id: built_template_id,
                 memory_id: memory_id,
                 memory_product_id: memory_product_id,
                 quantity: quantity,
@@ -333,7 +344,7 @@ defmodule Pczone.SimpleBuilts do
         end)
 
       with {inserted, _} <-
-             Repo.insert_all(Pczone.SimpleBuiltMemory, entities,
+             Repo.insert_all(Pczone.BuiltTemplateMemory, entities,
                on_conflict: :replace_all,
                conflict_target: [:key]
              ) do
@@ -342,11 +353,11 @@ defmodule Pczone.SimpleBuilts do
     end)
   end
 
-  defp upsert_simple_built_hard_drives_multi(multi, list, hard_drive_products_map) do
+  defp upsert_built_template_hard_drives_multi(multi, list, hard_drive_products_map) do
     Ecto.Multi.run(
       multi,
-      :simple_built_hard_drives,
-      fn _, %{simple_builts_map: simple_builts_map} ->
+      :built_template_hard_drives,
+      fn _, %{built_templates_map: built_templates_map} ->
         entities =
           Enum.flat_map(list, fn %{"code" => code, "hard_drives" => hard_drives} ->
             Enum.map(
@@ -357,12 +368,12 @@ defmodule Pczone.SimpleBuilts do
                   product_id: hard_drive_product_id
                 } = Map.get(hard_drive_products_map, hard_drive_product_code)
 
-                simple_built_id = Map.get(simple_builts_map, code)
+                built_template_id = Map.get(built_templates_map, code)
                 quantity = Map.get(params, "quantity", 1)
 
                 %{
-                  key: [simple_built_id, hard_drive_product_id, quantity] |> Enum.join(":"),
-                  simple_built_id: simple_built_id,
+                  key: [built_template_id, hard_drive_product_id, quantity] |> Enum.join(":"),
+                  built_template_id: built_template_id,
                   hard_drive_id: hard_drive_id,
                   hard_drive_product_id: hard_drive_product_id,
                   quantity: quantity,
@@ -373,7 +384,7 @@ defmodule Pczone.SimpleBuilts do
           end)
 
         with {inserted, _} <-
-               Repo.insert_all(Pczone.SimpleBuiltHardDrive, entities,
+               Repo.insert_all(Pczone.BuiltTemplateHardDrive, entities,
                  on_conflict: :replace_all,
                  conflict_target: [:key]
                ) do
@@ -383,8 +394,8 @@ defmodule Pczone.SimpleBuilts do
     )
   end
 
-  defp make_variants(%Pczone.SimpleBuilt{
-         id: simple_built_id,
+  defp make_variants(%Pczone.BuiltTemplate{
+         id: built_template_id,
          barebone_id: barebone_id,
          barebone_product: barebone_product,
          processors: processors,
@@ -393,15 +404,15 @@ defmodule Pczone.SimpleBuilts do
          option_value_seperator: seperator
        }) do
     memories_and_hard_drives =
-      [%Pczone.SimpleBuiltMemory{quantity: 0, memory_product: nil} | memories]
-      |> Enum.flat_map(fn %Pczone.SimpleBuiltMemory{
+      [%Pczone.BuiltTemplateMemory{quantity: 0, memory_product: nil} | memories]
+      |> Enum.flat_map(fn %Pczone.BuiltTemplateMemory{
                             memory_id: memory_id,
                             memory_product: memory_product,
                             quantity: memory_quantity,
                             label: memory_label
                           } ->
-        [%Pczone.SimpleBuiltHardDrive{quantity: 0, hard_drive_product: nil} | hard_drives]
-        |> Enum.map(fn %Pczone.SimpleBuiltHardDrive{
+        [%Pczone.BuiltTemplateHardDrive{quantity: 0, hard_drive_product: nil} | hard_drives]
+        |> Enum.map(fn %Pczone.BuiltTemplateHardDrive{
                          hard_drive_id: hard_drive_id,
                          hard_drive_product: hard_drive_product,
                          quantity: hard_drive_quantity,
@@ -456,7 +467,7 @@ defmodule Pczone.SimpleBuilts do
       end)
 
     processors
-    |> Enum.flat_map(fn %Pczone.SimpleBuiltProcessor{
+    |> Enum.flat_map(fn %Pczone.BuiltTemplateProcessor{
                           processor_id: processor_id,
                           processor_product: processor_product,
                           processor_quantity: processor_quantity,
@@ -490,7 +501,7 @@ defmodule Pczone.SimpleBuilts do
           result =
             %{
               name: Enum.join([option_value_1, option_value_2], ","),
-              simple_built_id: simple_built_id,
+              built_template_id: built_template_id,
               barebone_id: barebone_id,
               barebone_product_id: barebone_product.id,
               barebone_price: barebone_product.sale_price,
@@ -525,24 +536,24 @@ defmodule Pczone.SimpleBuilts do
     end)
   end
 
-  def generate_variants(simple_built, opts \\ [])
+  def generate_variants(built_template, opts \\ [])
 
-  def generate_variants(%Pczone.SimpleBuilt{id: simple_built_id} = simple_built, opts) do
-    variants = make_variants(simple_built)
+  def generate_variants(%Pczone.BuiltTemplate{id: built_template_id} = built_template, opts) do
+    variants = make_variants(built_template)
     name_list = Enum.map(variants, & &1.name)
 
     multi =
       Ecto.Multi.new()
       |> Ecto.Multi.update_all(
         :update_state,
-        from(v in Pczone.SimpleBuiltVariant,
-          where: v.simple_built_id == ^simple_built_id and v.name not in ^name_list
+        from(v in Pczone.BuiltTemplateVariant,
+          where: v.built_template_id == ^built_template_id and v.name not in ^name_list
         ),
         set: [state: :disabled]
       )
       |> Ecto.Multi.run(:insert_all, fn _, _ ->
         Repo.insert_all_2(
-          Pczone.SimpleBuiltVariant,
+          Pczone.BuiltTemplateVariant,
           variants,
           [
             on_conflict:
@@ -570,7 +581,7 @@ defmodule Pczone.SimpleBuilts do
                  :gpu_price,
                  :gpu_quantity
                ]},
-            conflict_target: [:simple_built_id, :option_values]
+            conflict_target: [:built_template_id, :option_values]
           ] ++ opts
         )
       end)
@@ -582,7 +593,7 @@ defmodule Pczone.SimpleBuilts do
 
   def generate_variants(code, opts) when is_bitstring(code) do
     Repo.one(
-      from b in Pczone.SimpleBuilt,
+      from b in Pczone.BuiltTemplate,
         where: b.code == ^code,
         preload: [
           :barebone,
@@ -596,12 +607,12 @@ defmodule Pczone.SimpleBuilts do
     |> generate_variants(opts)
   end
 
-  def generate_content(simple_built_id, template) do
-    variants_query = from Pczone.SimpleBuiltVariant, order_by: [asc: :position]
+  def generate_content(built_template_id, template) do
+    variants_query = from Pczone.BuiltTemplateVariant, order_by: [asc: :position]
 
-    simple_built =
+    built_template =
       Pczone.Repo.get(
-        from(Pczone.SimpleBuilt,
+        from(Pczone.BuiltTemplate,
           preload: [
             :barebone,
             :barebone_product,
@@ -611,10 +622,10 @@ defmodule Pczone.SimpleBuilts do
             variants: ^variants_query
           ]
         ),
-        simple_built_id
+        built_template_id
       )
 
-    :bbmustache.render(template, simple_built,
+    :bbmustache.render(template, built_template,
       key_type: :atom,
       value_serializer: fn
         ["" <> _ | _] = list ->

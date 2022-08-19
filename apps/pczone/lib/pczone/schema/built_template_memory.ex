@@ -1,15 +1,15 @@
-defmodule Pczone.SimpleBuiltMemory do
+defmodule Pczone.BuiltTemplateMemory do
   use Ecto.Schema
   import Ecto.Changeset
 
   @derive Jason.Encoder
 
-  @required [:key, :simple_built_id, :memory_id, :memory_product_id]
+  @required [:key, :built_template_id, :memory_id, :memory_product_id]
   @optional [:quantity, :label]
 
-  schema "simple_built_memory" do
+  schema "built_template_memory" do
     field :key, :string
-    belongs_to :simple_built, Pczone.SimpleBuilt
+    belongs_to :built_template, Pczone.BuiltTemplate
     belongs_to :memory, Pczone.Memory
     belongs_to :memory_product, Pczone.Product
     field :quantity, :integer, default: 1

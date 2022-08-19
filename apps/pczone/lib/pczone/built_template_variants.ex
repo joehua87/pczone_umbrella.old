@@ -1,15 +1,15 @@
-defmodule Pczone.SimpleBuiltVariants do
+defmodule Pczone.BuiltTemplateVariants do
   import Ecto.Query, only: [where: 2, from: 2]
   import Dew.FilterParser
   alias Elixlsx.{Sheet, Workbook}
   alias Pczone.Repo
 
   def get(id) do
-    Repo.get(Pczone.SimpleBuiltVariant, id)
+    Repo.get(Pczone.BuiltTemplateVariant, id)
   end
 
   def get_by_code(code) do
-    Repo.one(from Pczone.SimpleBuiltVariant, where: [code: ^code], limit: 1)
+    Repo.one(from Pczone.BuiltTemplateVariant, where: [code: ^code], limit: 1)
   end
 
   def list(attrs \\ %{})
@@ -20,7 +20,7 @@ defmodule Pczone.SimpleBuiltVariants do
         selection: selection,
         order_by: order_by
       }) do
-    Pczone.SimpleBuiltVariant
+    Pczone.BuiltTemplateVariant
     |> where(^parse_filter(filter))
     |> select_fields(selection, [])
     |> sort_by(order_by, [])
@@ -32,7 +32,7 @@ defmodule Pczone.SimpleBuiltVariants do
   def export_csv(filter \\ %{}) do
     date = Date.utc_today() |> Calendar.strftime("%Y-%m")
     now = DateTime.utc_now() |> DateTime.to_unix()
-    name = "simple-built-variants-#{now}"
+    name = "built-template-variants-#{now}"
     type = "xlsx"
     path = "#{date}/#{name}.#{type}"
     absolute_path = Path.join(Pczone.Reports.get_report_dir(), path)
@@ -43,7 +43,7 @@ defmodule Pczone.SimpleBuiltVariants do
       %{
         name: name,
         type: type,
-        category: "simple-built-variant",
+        category: "built-template-variant",
         path: path,
         size: size
       }
@@ -55,11 +55,11 @@ defmodule Pczone.SimpleBuiltVariants do
   def generate_report(filter \\ %{}) do
     rows =
       Repo.all(
-        from v in Pczone.SimpleBuiltVariant,
-          join: sb in Pczone.SimpleBuilt,
-          on: sb.id == v.simple_built_id,
+        from v in Pczone.BuiltTemplateVariant,
+          join: sb in Pczone.BuiltTemplate,
+          on: sb.id == v.built_template_id,
           where: ^parse_filter(filter),
-          # preload: [:simple_built],
+          # preload: [:built_template],
           order_by: [asc: v.position],
           select: %{
             id: v.id,
@@ -104,7 +104,7 @@ defmodule Pczone.SimpleBuiltVariants do
     filter
     |> Enum.reduce(nil, fn {field, value}, acc ->
       case field do
-        :simple_built_id -> parse_id_filter(acc, field, value)
+        :built_template_id -> parse_id_filter(acc, field, value)
         :name -> parse_string_filter(acc, field, value)
         :total -> parse_decimal_filter(acc, field, value)
         _ -> acc

@@ -58,12 +58,12 @@ defmodule PczoneWeb.Router do
     post "/upsert/processors", UpsertController, :processors
     post "/upsert/products", UpsertController, :products
     post "/upsert/psus", UpsertController, :psus
-    post "/upsert/simple-builts", UpsertController, :simple_builts
-    post "/upsert/simple-built-stores", UpsertController, :simple_built_stores
+    post "/upsert/built-templates", UpsertController, :built_templates
+    post "/upsert/built-template-stores", UpsertController, :built_template_stores
 
-    post "/upsert/simple-built-variant-stores",
+    post "/upsert/built-template-variant-stores",
          UpsertController,
-         :simple_built_variant_stores
+         :built_template_variant_stores
   end
 
   scope "/files", PczoneWeb do

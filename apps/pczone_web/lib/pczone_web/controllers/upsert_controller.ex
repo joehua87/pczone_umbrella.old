@@ -56,36 +56,34 @@ defmodule PczoneWeb.UpsertController do
     upsert(conn, file, &Pczone.Products.upsert/1)
   end
 
-  def simple_builts(conn, %{"file" => %Plug.Upload{} = file}) do
-    upsert(conn, file, &Pczone.SimpleBuilts.upsert/1)
+  def built_templates(conn, %{"file" => %Plug.Upload{} = file}) do
+    upsert(conn, file, &Pczone.BuiltTemplates.upsert/1)
   end
 
-  def simple_built_stores(conn, %{
+  def built_template_stores(conn, %{
         # "store_id" => store_id,
         "file" => %Plug.Upload{path: path}
       }) do
     # Assume we have only Shopee
     store_id = 1
-    Pczone.Stores.upsert_simple_built_stores(store_id, path)
+    Pczone.Stores.upsert_built_template_stores(store_id, path)
     json(conn, %{})
   end
 
-  def simple_built_variant_stores(conn, %{
+  def built_template_variant_stores(conn, %{
         # "store_id" => store_id,
         "file" => %Plug.Upload{path: path}
       }) do
     # Assume we have only Shopee
     store_id = 1
-    Pczone.Stores.upsert_simple_built_variant_stores(store_id, path)
+    Pczone.Stores.upsert_built_template_variant_stores(store_id, path)
     json(conn, %{})
   end
 
   defp upsert(conn, file, func) do
     file
     |> Pczone.Helpers.read_data()
-    |> IO.inspect()
     |> func.()
-    |> IO.inspect(label: "XXXXXXTTT")
 
     json(conn, %{})
   end

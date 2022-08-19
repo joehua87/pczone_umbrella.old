@@ -1,12 +1,12 @@
-defmodule Pczone.SimpleBuiltVariantsTest do
+defmodule Pczone.BuiltTemplateVariantsTest do
   use Pczone.DataCase
   import Pczone.Fixtures
-  alias Pczone.{SimpleBuilts, SimpleBuiltVariants}
+  alias Pczone.{BuiltTemplates, BuiltTemplateVariants}
 
-  describe "simple built variants" do
+  describe "built template variants" do
     test "generate report" do
-      [simple_built | _] = simple_builts_fixture()
-      assert {_, _} = SimpleBuilts.generate_variants(simple_built)
+      [built_template | _] = built_templates_fixture()
+      assert {_, _} = BuiltTemplates.generate_variants(built_template)
 
       assert %Elixlsx.Workbook{
                datetime: nil,
@@ -49,24 +49,24 @@ defmodule Pczone.SimpleBuiltVariantsTest do
                    ]
                  }
                ]
-             } = SimpleBuiltVariants.generate_report()
+             } = BuiltTemplateVariants.generate_report()
     end
 
     test "export csv" do
-      [simple_built | _] = simple_builts_fixture()
-      assert {_, _} = SimpleBuilts.generate_variants(simple_built)
+      [built_template | _] = built_templates_fixture()
+      assert {_, _} = BuiltTemplates.generate_variants(built_template)
 
       assert {
                :ok,
                %Pczone.Report{
-                 category: "simple-built-variant",
-                 name: "simple-built-variants" <> _,
+                 category: "built-template-variant",
+                 name: "built-template-variants" <> _,
                  path: _,
                  type: "xlsx",
                  size: _,
                  updated_at: _
                } = report
-             } = SimpleBuiltVariants.export_csv()
+             } = BuiltTemplateVariants.export_csv()
 
       report
       |> Pczone.Reports.get_report_absolute_path()

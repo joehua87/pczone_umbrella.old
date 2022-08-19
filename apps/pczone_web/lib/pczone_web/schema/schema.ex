@@ -24,8 +24,8 @@ defmodule PczoneWeb.Schema do
   import_types PczoneWeb.Schema.ProductCategories
   import_types PczoneWeb.Schema.Products
   import_types PczoneWeb.Schema.ScrapedEntries
-  import_types PczoneWeb.Schema.SimpleBuilts
-  import_types PczoneWeb.Schema.SimpleBuiltVariants
+  import_types PczoneWeb.Schema.BuiltTemplates
+  import_types PczoneWeb.Schema.BuiltTemplateVariants
   import_types PczoneWeb.Schema.Reports
   import_types PczoneWeb.Schema.Media
   import_types PczoneWeb.Schema.App
@@ -48,8 +48,8 @@ defmodule PczoneWeb.Schema do
     import_fields :built_queries
     import_fields :barebone_queries
     import_fields :scraped_entry_queries
-    import_fields :simple_built_queries
-    import_fields :simple_built_variant_queries
+    import_fields :built_template_queries
+    import_fields :built_template_variant_queries
     import_fields :report_queries
     import_fields :medium_queries
   end
@@ -70,8 +70,8 @@ defmodule PczoneWeb.Schema do
     import_fields :product_category_mutations
     import_fields :product_mutations
     import_fields :built_mutations
-    import_fields :simple_built_mutations
-    import_fields :simple_built_variant_mutations
+    import_fields :built_template_mutations
+    import_fields :built_template_variant_mutations
     import_fields :app_mutations
 
     def middleware(middleware, _field, %{}) do

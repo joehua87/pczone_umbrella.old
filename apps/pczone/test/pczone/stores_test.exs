@@ -1,33 +1,33 @@
 defmodule Pczone.StoresTest do
   use Pczone.DataCase
   import Pczone.Fixtures
-  alias Pczone.{SimpleBuilts, Stores}
+  alias Pczone.{BuiltTemplates, Stores}
 
   describe "stores" do
-    test "upsert simple built stores", %{store: store} do
-      simple_builts_fixture()
-      path = get_fixtures_dir() |> Path.join("simple_built_stores_shopee.xlsx")
+    test "upsert built template stores", %{store: store} do
+      built_templates_fixture()
+      path = get_fixtures_dir() |> Path.join("built_template_stores_shopee.xlsx")
 
       assert {:ok,
               {2,
                [
-                 %Pczone.SimpleBuiltStore{
+                 %Pczone.BuiltTemplateStore{
                    id: _,
                    store_id: _,
                    product_code: "19301333605",
-                   simple_built_id: _
+                   built_template_id: _
                  },
-                 %Pczone.SimpleBuiltStore{
+                 %Pczone.BuiltTemplateStore{
                    id: _,
                    store_id: _,
                    product_code: "15618662714",
-                   simple_built_id: _
+                   built_template_id: _
                  }
-               ]}} = Stores.upsert_simple_built_stores(store.id, path, returning: true)
+               ]}} = Stores.upsert_built_template_stores(store.id, path, returning: true)
     end
 
-    test "read simple built variants from xlsx" do
-      path = get_fixtures_dir() |> Path.join("shopee-simple-built-variants.xlsx")
+    test "read built template variants from xlsx" do
+      path = get_fixtures_dir() |> Path.join("shopee_built_template_variants.xlsx")
 
       assert [
                %{
@@ -49,18 +49,18 @@ defmodule Pczone.StoresTest do
                  "variant_code" => "x2"
                }
                | _
-             ] = Stores.read_store_simple_built_variants(path)
+             ] = Stores.read_store_built_template_variants(path)
     end
 
-    test "upsert simple built variants", %{store: store} do
-      [simple_built | _] = simple_builts_fixture()
+    test "upsert built template variants", %{store: store} do
+      [built_template | _] = built_templates_fixture()
 
-      assert {:ok, {_, simple_built_variants}} =
-               simple_built
-               |> SimpleBuilts.generate_variants(returning: true)
+      assert {:ok, {_, built_template_variants}} =
+               built_template
+               |> BuiltTemplates.generate_variants(returning: true)
 
       list =
-        simple_built_variants
+        built_template_variants
         |> Enum.take(4)
         |> Enum.with_index(fn %{id: id}, index ->
           %{
@@ -70,7 +70,7 @@ defmodule Pczone.StoresTest do
           }
         end)
 
-      assert {:ok, {4, _}} = Stores.upsert_simple_built_variants(store.id, list)
+      assert {:ok, {4, _}} = Stores.upsert_built_template_variants(store.id, list)
     end
   end
 

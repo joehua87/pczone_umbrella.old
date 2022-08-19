@@ -16,13 +16,13 @@ defmodule Pczone.Fixtures do
     store
   end
 
-  def simple_builts_fixture() do
-    list = Pczone.Fixtures.read_fixture("simple_builts.yml")
+  def built_templates_fixture() do
+    list = Pczone.Fixtures.read_fixture("built_templates.yml")
     codes = Enum.map(list, & &1["code"])
-    {:ok, _} = Pczone.SimpleBuilts.upsert(list)
+    {:ok, _} = Pczone.BuiltTemplates.upsert(list)
 
     Pczone.Repo.all(
-      from b in Pczone.SimpleBuilt,
+      from b in Pczone.BuiltTemplate,
         where: b.code in ^codes,
         preload: [
           :barebone,

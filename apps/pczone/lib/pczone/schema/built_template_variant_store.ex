@@ -1,15 +1,15 @@
-defmodule Pczone.SimpleBuiltVariantStore do
+defmodule Pczone.BuiltTemplateVariantStore do
   use Ecto.Schema
   import Ecto.Changeset
 
   @derive Jason.Encoder
 
-  @required [:store_id, :simple_built_variant_id, :product_code, :variant_code]
+  @required [:store_id, :built_template_variant_id, :product_code, :variant_code]
   @optional []
 
-  schema "simple_built_variant_store" do
+  schema "built_template_variant_store" do
     belongs_to :store, Pczone.Store
-    belongs_to :simple_built_variant, Pczone.SimpleBuiltVariant
+    belongs_to :built_template_variant, Pczone.BuiltTemplateVariant
     field :product_code, :string
     field :variant_code, :string
   end

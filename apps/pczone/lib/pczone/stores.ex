@@ -7,10 +7,10 @@ defmodule Pczone.Stores do
     Helpers,
     Repo,
     Store,
-    SimpleBuilt,
-    SimpleBuiltStore,
-    SimpleBuiltVariant,
-    SimpleBuiltVariantStore,
+    BuiltTemplate,
+    BuiltTemplateStore,
+    BuiltTemplateVariant,
+    BuiltTemplateVariantStore,
     Xlsx
   }
 
@@ -77,11 +77,11 @@ defmodule Pczone.Stores do
   @doc """
   Read an xlsx file exported from store.
   Extract variant_code by product_code & variant_name.
-  Then upsert all to simple_built_variant_store.
+  Then upsert all to built_template_variant_store.
   """
-  def upsert_simple_built_variant_stores(store, path, opts \\ [])
+  def upsert_built_template_variant_stores(store, path, opts \\ [])
 
-  def upsert_simple_built_variant_stores(
+  def upsert_built_template_variant_stores(
         %Store{id: store_id, code: store_code},
         path,
         opts
@@ -89,27 +89,27 @@ defmodule Pczone.Stores do
     list = read_product_variants(store_code, path)
     product_codes = list |> Enum.map(& &1.product_code) |> Enum.uniq()
 
-    product_codes_map_by_simple_built_id =
+    product_codes_map_by_built_template_id =
       Repo.all(
-        from p in SimpleBuiltStore,
+        from p in BuiltTemplateStore,
           where: p.product_code in ^product_codes,
-          select: {p.simple_built_id, p.product_code}
+          select: {p.built_template_id, p.product_code}
       )
       |> Enum.into(%{})
 
-    simple_built_ids = Map.keys(product_codes_map_by_simple_built_id)
+    built_template_ids = Map.keys(product_codes_map_by_built_template_id)
 
     variants =
-      Repo.all(from v in SimpleBuiltVariant, where: v.simple_built_id in ^simple_built_ids)
+      Repo.all(from v in BuiltTemplateVariant, where: v.built_template_id in ^built_template_ids)
 
     variant_stores =
       variants
-      |> Enum.map(fn %SimpleBuiltVariant{
-                       id: simple_built_variant_id,
+      |> Enum.map(fn %BuiltTemplateVariant{
+                       id: built_template_variant_id,
                        name: name,
-                       simple_built_id: simple_built_id
+                       built_template_id: built_template_id
                      } ->
-        product_code = product_codes_map_by_simple_built_id[simple_built_id]
+        product_code = product_codes_map_by_built_template_id[built_template_id]
 
         variant_code =
           case Enum.find(list, &(&1.product_code == product_code && &1.variant_name == name)) do
@@ -119,7 +119,7 @@ defmodule Pczone.Stores do
 
         %{
           store_id: store_id,
-          simple_built_variant_id: simple_built_variant_id,
+          built_template_variant_id: built_template_variant_id,
           product_code: product_code,
           variant_code: variant_code
         }
@@ -127,17 +127,17 @@ defmodule Pczone.Stores do
       |> Enum.filter(&(&1.variant_code != nil))
 
     Repo.insert_all_2(
-      Pczone.SimpleBuiltVariantStore,
+      Pczone.BuiltTemplateVariantStore,
       variant_stores,
       Keyword.merge(opts,
         on_conflict: {:replace, [:product_code, :variant_code]},
-        conflict_target: [:simple_built_variant_id, :store_id]
+        conflict_target: [:built_template_variant_id, :store_id]
       )
     )
   end
 
-  def upsert_simple_built_variant_stores(store_id, path, opts) do
-    get(store_id) |> upsert_simple_built_variant_stores(path, opts)
+  def upsert_built_template_variant_stores(store_id, path, opts) do
+    get(store_id) |> upsert_built_template_variant_stores(path, opts)
   end
 
   def upsert(entities, opts \\ []) do
@@ -153,19 +153,19 @@ defmodule Pczone.Stores do
     end
   end
 
-  def upsert_simple_built_stores(store_id, path, opts \\ []) do
+  def upsert_built_template_stores(store_id, path, opts \\ []) do
     list =
       path
       |> Xlsx.read_spreadsheet()
       |> Enum.reduce(
         [],
         fn
-          %{"product_code" => product_code, "simple_built_code" => simple_built_code}, acc ->
+          %{"product_code" => product_code, "built_template_code" => built_template_code}, acc ->
             acc ++
               [
                 %{
                   product_code: Helpers.ensure_string(product_code),
-                  simple_built_code: simple_built_code
+                  built_template_code: built_template_code
                 }
               ]
 
@@ -174,46 +174,46 @@ defmodule Pczone.Stores do
         end
       )
 
-    simple_built_codes = Enum.map(list, & &1.simple_built_code)
+    built_template_codes = Enum.map(list, & &1.built_template_code)
 
-    simple_builts_map =
-      from(b in SimpleBuilt, where: b.code in ^simple_built_codes, select: {b.code, b.id})
+    built_templates_map =
+      from(b in BuiltTemplate, where: b.code in ^built_template_codes, select: {b.code, b.id})
       |> Repo.all()
       |> Enum.into(%{})
 
     list =
-      Enum.map(list, fn %{product_code: product_code, simple_built_code: simple_built_code} ->
+      Enum.map(list, fn %{product_code: product_code, built_template_code: built_template_code} ->
         %{
           store_id: store_id,
-          simple_built_id: simple_builts_map[simple_built_code],
+          built_template_id: built_templates_map[built_template_code],
           product_code: product_code
         }
       end)
-      |> Enum.filter(&(&1.simple_built_id != nil))
+      |> Enum.filter(&(&1.built_template_id != nil))
 
     Repo.insert_all_2(
-      Pczone.SimpleBuiltStore,
+      Pczone.BuiltTemplateStore,
       list,
       [
         on_conflict: {:replace, [:product_code]},
-        conflict_target: [:simple_built_id, :store_id]
+        conflict_target: [:built_template_id, :store_id]
       ] ++ opts
     )
   end
 
   @doc """
-  Upsert simple built variants for a specific store
+  Upsert built template variants for a specific store
   """
-  def upsert_simple_built_variants(store_id, list) do
+  def upsert_built_template_variants(store_id, list) do
     list = list |> Enum.map(&parse_item(store_id, &1))
 
-    Repo.insert_all_2(SimpleBuiltVariantStore, list,
-      conflict_target: [:store_id, :simple_built_variant_id],
+    Repo.insert_all_2(BuiltTemplateVariantStore, list,
+      conflict_target: [:store_id, :built_template_variant_id],
       on_conflict: {:replace, [:product_code, :variant_code]}
     )
   end
 
-  def read_store_simple_built_variants(path) do
+  def read_store_built_template_variants(path) do
     [{:ok, sheet_1} | _] = Xlsxir.multi_extract(path)
     [headers | rows] = Xlsxir.get_list(sheet_1)
 
@@ -266,13 +266,13 @@ defmodule Pczone.Stores do
 
     rows =
       Repo.all(
-        from v in Pczone.SimpleBuiltVariant,
-          join: b in Pczone.SimpleBuilt,
-          on: v.simple_built_id == b.id,
-          join: bp in Pczone.SimpleBuiltStore,
-          on: bp.simple_built_id == b.id,
-          join: vp in Pczone.SimpleBuiltVariantStore,
-          on: v.id == vp.simple_built_variant_id,
+        from v in Pczone.BuiltTemplateVariant,
+          join: b in Pczone.BuiltTemplate,
+          on: v.built_template_id == b.id,
+          join: bp in Pczone.BuiltTemplateStore,
+          on: bp.built_template_id == b.id,
+          join: vp in Pczone.BuiltTemplateVariantStore,
+          on: v.id == vp.built_template_variant_id,
           where: vp.store_id == ^store.id,
           select: [
             bp.product_code,
@@ -327,16 +327,16 @@ defmodule Pczone.Stores do
   # def make_store_pricing_workbook(%Store{rate: rate}) do
   #   rows =
   #     Repo.all(
-  #       from(vp in SimpleBuiltVariantStore,
-  #         preload: [simple_built_variant: [:simple_built]],
+  #       from(vp in BuiltTemplateVariantStore,
+  #         preload: [built_template_variant: [:built_template]],
   #         where: not is_nil(vp.variant_code)
   #       )
   #     )
-  #     |> Enum.map(fn %SimpleBuiltVariantStore{
+  #     |> Enum.map(fn %BuiltTemplateVariantStore{
   #                      product_code: product_code,
   #                      variant_code: variant_code,
-  #                      simple_built_variant: %SimpleBuiltVariant{
-  #                        simple_built: simple_built,
+  #                      built_template_variant: %BuiltTemplateVariant{
+  #                        built_template: built_template,
   #                        option_values: option_values,
   #                        total: total
   #                      }
@@ -345,7 +345,7 @@ defmodule Pczone.Stores do
   #         # Mã Sản phẩm
   #         product_code,
   #         # Tên Sản phẩm
-  #         simple_built.name,
+  #         built_template.name,
   #         # Mã Phân loại
   #         variant_code,
   #         # Tên phân loại
@@ -388,13 +388,13 @@ defmodule Pczone.Stores do
   # end
 
   defp parse_item(store_id, %{
-         "id" => simple_built_variant_id,
+         "id" => built_template_variant_id,
          "product_code" => product_code,
          "variant_code" => variant_code
        }) do
     %{
       store_id: store_id,
-      simple_built_variant_id: simple_built_variant_id,
+      built_template_variant_id: built_template_variant_id,
       product_code: product_code,
       variant_code: variant_code
     }

@@ -1,4 +1,4 @@
-defmodule Pczone.SimpleBuiltVariant do
+defmodule Pczone.BuiltTemplateVariant do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -6,7 +6,7 @@ defmodule Pczone.SimpleBuiltVariant do
 
   @required [
     :name,
-    :simple_built_id,
+    :built_template_id,
     :barebone_id,
     :barebone_product_id,
     :barebone_price,
@@ -41,9 +41,9 @@ defmodule Pczone.SimpleBuiltVariant do
     :state
   ]
 
-  schema "simple_built_variant" do
+  schema "built_template_variant" do
     field :name, :string
-    belongs_to :simple_built, Pczone.SimpleBuilt
+    belongs_to :built_template, Pczone.BuiltTemplate
     belongs_to :barebone, Pczone.Barebone
     belongs_to :barebone_product, Pczone.Product
     field :barebone_price, :integer
@@ -73,7 +73,7 @@ defmodule Pczone.SimpleBuiltVariant do
     field :total, :integer
     field :state, Ecto.Enum, values: [:active, :disabled], default: :active
     field :config, :map
-    has_many :stores, Pczone.SimpleBuiltVariantStore
+    has_many :stores, Pczone.BuiltTemplateVariantStore
   end
 
   def changeset(entity, params) do
