@@ -30,13 +30,19 @@ defmodule Pczone.Products do
   def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
 
   def upsert(entities, _opts \\ []) when is_list(entities) do
+    types = ["motherboard", "barebone", "processor", "memory", "hard_drive", "gpu"]
+
     entities =
-      ensure_products("motherboard", entities) ++
-        ensure_products("barebone", entities) ++
-        ensure_products("processor", entities) ++
-        ensure_products("memory", entities) ++
-        ensure_products("hard_drive", entities) ++
-        ensure_products("gpu", entities)
+      Enum.map(entities, fn
+        # Allow old format
+        %{"kind" => kind, "sku" => sku} = product ->
+          Map.merge(product, %{"type" => kind, "code" => sku})
+
+        product ->
+          product
+      end)
+
+    entities = Enum.flat_map(types, &ensure_products(&1, entities))
 
     Ecto.Multi.new()
     |> Ecto.Multi.run(:products, fn _, _ ->
