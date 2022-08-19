@@ -1,9 +1,9 @@
-defmodule Pczone.Platforms.ShopeeTest do
+defmodule Pczone.Stores.ShopeeTest do
   use Pczone.DataCase, async: true
   import Ecto.Query, only: [from: 2]
   import Pczone.Fixtures
 
-  describe "shopee platform" do
+  describe "shopee store" do
     test "read spreadsheet" do
       path = get_fixtures_dir() |> Path.join("mass_update_sales_info.xlsx")
 
@@ -19,11 +19,11 @@ defmodule Pczone.Platforms.ShopeeTest do
                  variant_name: "i5-6500,16GB + 256GB NVMe"
                }
                | _
-             ] = Pczone.Platforms.read_product_variants("shopee", path)
+             ] = Pczone.Stores.read_product_variants("shopee", path)
     end
 
-    test "upsert simple built variant platforms" do
-      result = upsert_simple_built_variant_platforms()
+    test "upsert simple built variant stores" do
+      result = upsert_simple_built_variant_stores()
 
       assert [
                "210076422096",
@@ -36,9 +36,9 @@ defmodule Pczone.Platforms.ShopeeTest do
     end
 
     test "make pricing workbook" do
-      upsert_simple_built_variant_platforms()
-      platform = Pczone.Repo.one(from Pczone.Platform, where: [code: "shopee"])
-      workbook = Pczone.Platforms.make_pricing_workbook(platform)
+      upsert_simple_built_variant_stores()
+      store = Pczone.Repo.one(from Pczone.Store, where: [code: "shopee"])
+      workbook = Pczone.Stores.make_pricing_workbook(store)
 
       assert %Elixlsx.Workbook{
                datetime: nil,
@@ -96,29 +96,26 @@ defmodule Pczone.Platforms.ShopeeTest do
     end
   end
 
-  defp upsert_simple_built_variant_platforms() do
+  defp upsert_simple_built_variant_stores() do
     # Initial data
     get_fixtures_dir() |> Pczone.initial_data()
     simple_builts = simple_builts_fixture()
-    platform = Pczone.Repo.one(from Pczone.Platform, where: [code: "shopee"])
+    store = Pczone.Repo.one(from Pczone.Store, where: [code: "shopee"])
 
-    # Sync simple built platforms product code
-    simple_built_platforms_path =
-      get_fixtures_dir() |> Path.join("simple_built_platforms_shopee.xlsx")
+    # Sync simple built stores product code
+    simple_built_stores_path = get_fixtures_dir() |> Path.join("simple_built_stores_shopee.xlsx")
 
-    Pczone.Platforms.upsert_simple_built_platforms(platform.id, simple_built_platforms_path)
+    Pczone.Stores.upsert_simple_built_stores(store.id, simple_built_stores_path)
 
     # Generate simple built variants
     simple_built = Enum.find(simple_builts, &(&1.code == "hp-elitedesk-800-g2-mini-65w"))
     Pczone.SimpleBuilts.generate_variants(simple_built)
 
-    # Sync simple built variant platforms variant codes
+    # Sync simple built variant stores variant codes
     path = get_fixtures_dir() |> Path.join("mass_update_sales_info.xlsx")
 
     assert {:ok, {6, result}} =
-             Pczone.Platforms.upsert_simple_built_variant_platforms(platform, path,
-               returning: true
-             )
+             Pczone.Stores.upsert_simple_built_variant_stores(store, path, returning: true)
 
     result
   end

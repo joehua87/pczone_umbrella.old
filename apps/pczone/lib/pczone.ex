@@ -46,7 +46,7 @@ defmodule Pczone do
   end
 
   def initial_data(files) when is_list(files) do
-    platforms = read_from_files!(files, ~r/^platforms.*?\.(ya?ml|xlsx)/)
+    stores = read_from_files!(files, ~r/^stores.*?\.(ya?ml|xlsx)/)
     barebones = read_from_files!(files, ~r/^barebones.*?\.(ya?ml|xlsx)/)
     brands = read_from_files!(files, ~r/^brands.*?\.(ya?ml|xlsx)/)
     chassises = read_from_files!(files, ~r/^chassises.*?\.(ya?ml|xlsx)/)
@@ -60,7 +60,7 @@ defmodule Pczone do
     heatsinks = read_from_files!(files, ~r/^heatsinks.*?\.(ya?ml|xlsx)/)
     products = read_from_files!(files, ~r/^products.*?\.(ya?ml|xlsx)/)
 
-    with {:ok, _} <- Pczone.Platforms.upsert(platforms),
+    with {:ok, _} <- Pczone.Stores.upsert(stores),
          {:ok, _} <- Pczone.Brands.upsert(brands),
          {:ok, _} <- Pczone.Chipsets.upsert(chipsets),
          {:ok, _} <- Pczone.Motherboards.upsert(motherboards),

@@ -60,23 +60,23 @@ defmodule PczoneWeb.UpsertController do
     upsert(conn, file, &Pczone.SimpleBuilts.upsert/1)
   end
 
-  def simple_built_platforms(conn, %{
-        # "platform_id" => platform_id,
+  def simple_built_stores(conn, %{
+        # "store_id" => store_id,
         "file" => %Plug.Upload{path: path}
       }) do
     # Assume we have only Shopee
-    platform_id = 1
-    Pczone.Platforms.upsert_simple_built_platforms(platform_id, path)
+    store_id = 1
+    Pczone.Stores.upsert_simple_built_stores(store_id, path)
     json(conn, %{})
   end
 
-  def simple_built_variant_platforms(conn, %{
-        # "platform_id" => platform_id,
+  def simple_built_variant_stores(conn, %{
+        # "store_id" => store_id,
         "file" => %Plug.Upload{path: path}
       }) do
     # Assume we have only Shopee
-    platform_id = 1
-    Pczone.Platforms.upsert_simple_built_variant_platforms(platform_id, path)
+    store_id = 1
+    Pczone.Stores.upsert_simple_built_variant_stores(store_id, path)
     json(conn, %{})
   end
 

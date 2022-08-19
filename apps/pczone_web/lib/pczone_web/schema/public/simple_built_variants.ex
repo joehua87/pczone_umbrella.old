@@ -3,10 +3,10 @@ defmodule PczoneWeb.Schema.SimpleBuiltVariants do
   import Absinthe.Resolution.Helpers
   alias PczoneWeb.Dataloader
 
-  object :simple_built_variant_platform do
-    field :platform_id, non_null(:id)
+  object :simple_built_variant_store do
+    field :store_id, non_null(:id)
     field :simple_built_variant_id, non_null(:id)
-    field :platform, non_null(:platform), resolve: dataloader(Dataloader)
+    field :store, non_null(:store), resolve: dataloader(Dataloader)
     field :simple_built_variant, non_null(:simple_built_variant), resolve: dataloader(Dataloader)
     field :product_code, non_null(:string)
     field :variant_code, non_null(:string)
@@ -53,8 +53,8 @@ defmodule PczoneWeb.Schema.SimpleBuiltVariants do
     field :total, non_null(:integer)
     field :config, non_null(:json)
 
-    field :platforms,
-          non_null(list_of(non_null(:simple_built_variant_platform))),
+    field :stores,
+          non_null(list_of(non_null(:simple_built_variant_store))),
           resolve: dataloader(Dataloader)
   end
 
@@ -89,11 +89,11 @@ defmodule PczoneWeb.Schema.SimpleBuiltVariants do
   end
 
   object :simple_built_variant_mutations do
-    field :generate_platform_pricing_report, non_null(:report) do
-      arg :platform_id, non_null(:id)
+    field :generate_store_pricing_report, non_null(:report) do
+      arg :store_id, non_null(:id)
 
-      resolve fn %{platform_id: platform_id}, _info ->
-        Pczone.Platforms.generate_platform_pricing_report(platform_id)
+      resolve fn %{store_id: store_id}, _info ->
+        Pczone.Stores.generate_store_pricing_report(store_id)
       end
     end
 

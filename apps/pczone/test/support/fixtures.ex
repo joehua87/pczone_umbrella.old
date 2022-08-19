@@ -11,9 +11,9 @@ defmodule Pczone.Fixtures do
     |> Pczone.Helpers.read_data()
   end
 
-  def platform_fixture() do
-    {:ok, platform} = Pczone.Platforms.create(%{code: "shopee", name: "Shopee", rate: 1.05})
-    platform
+  def store_fixture() do
+    {:ok, store} = Pczone.Stores.create(%{code: "shopee", name: "Shopee", rate: 1.05})
+    store
   end
 
   def simple_builts_fixture() do

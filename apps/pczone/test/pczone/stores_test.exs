@@ -1,29 +1,29 @@
-defmodule Pczone.PlatformsTest do
+defmodule Pczone.StoresTest do
   use Pczone.DataCase
   import Pczone.Fixtures
-  alias Pczone.{SimpleBuilts, Platforms}
+  alias Pczone.{SimpleBuilts, Stores}
 
-  describe "platforms" do
-    test "upsert simple built platforms", %{platform: platform} do
+  describe "stores" do
+    test "upsert simple built stores", %{store: store} do
       simple_builts_fixture()
-      path = get_fixtures_dir() |> Path.join("simple_built_platforms_shopee.xlsx")
+      path = get_fixtures_dir() |> Path.join("simple_built_stores_shopee.xlsx")
 
       assert {:ok,
               {2,
                [
-                 %Pczone.SimpleBuiltPlatform{
+                 %Pczone.SimpleBuiltStore{
                    id: _,
-                   platform_id: _,
+                   store_id: _,
                    product_code: "19301333605",
                    simple_built_id: _
                  },
-                 %Pczone.SimpleBuiltPlatform{
+                 %Pczone.SimpleBuiltStore{
                    id: _,
-                   platform_id: _,
+                   store_id: _,
                    product_code: "15618662714",
                    simple_built_id: _
                  }
-               ]}} = Platforms.upsert_simple_built_platforms(platform.id, path, returning: true)
+               ]}} = Stores.upsert_simple_built_stores(store.id, path, returning: true)
     end
 
     test "read simple built variants from xlsx" do
@@ -49,10 +49,10 @@ defmodule Pczone.PlatformsTest do
                  "variant_code" => "x2"
                }
                | _
-             ] = Platforms.read_platform_simple_built_variants(path)
+             ] = Stores.read_store_simple_built_variants(path)
     end
 
-    test "upsert simple built variants", %{platform: platform} do
+    test "upsert simple built variants", %{store: store} do
       [simple_built | _] = simple_builts_fixture()
 
       assert {:ok, {_, simple_built_variants}} =
@@ -70,12 +70,12 @@ defmodule Pczone.PlatformsTest do
           }
         end)
 
-      assert {:ok, {4, _}} = Platforms.upsert_simple_built_variants(platform.id, list)
+      assert {:ok, {4, _}} = Stores.upsert_simple_built_variants(store.id, list)
     end
   end
 
   setup do
     get_fixtures_dir() |> Pczone.initial_data()
-    {:ok, platform: Pczone.Platforms.get_by_code("shopee")}
+    {:ok, store: Pczone.Stores.get_by_code("shopee")}
   end
 end

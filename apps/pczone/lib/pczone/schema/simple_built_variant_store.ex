@@ -1,14 +1,14 @@
-defmodule Pczone.SimpleBuiltVariantPlatform do
+defmodule Pczone.SimpleBuiltVariantStore do
   use Ecto.Schema
   import Ecto.Changeset
 
   @derive Jason.Encoder
 
-  @required [:platform_id, :simple_built_variant_id, :product_code, :variant_code]
+  @required [:store_id, :simple_built_variant_id, :product_code, :variant_code]
   @optional []
 
-  schema "simple_built_variant_platform" do
-    belongs_to :platform, Pczone.Platform
+  schema "simple_built_variant_store" do
+    belongs_to :store, Pczone.Store
     belongs_to :simple_built_variant, Pczone.SimpleBuiltVariant
     field :product_code, :string
     field :variant_code, :string

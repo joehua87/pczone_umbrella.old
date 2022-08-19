@@ -44,11 +44,11 @@ defmodule PczoneWeb.Schema.SimpleBuilts do
           resolve: Helpers.dataloader(Dataloader)
   end
 
-  object :simple_built_platform do
+  object :simple_built_store do
     field :simple_built_id, non_null(:id)
-    field :platform_id, non_null(:id)
+    field :store_id, non_null(:id)
     field :simple_built, non_null(:simple_built), resolve: Helpers.dataloader(Dataloader)
-    field :platform, non_null(:platform), resolve: Helpers.dataloader(Dataloader)
+    field :store, non_null(:store), resolve: Helpers.dataloader(Dataloader)
     field :product_code, non_null(:string)
   end
 
@@ -75,8 +75,8 @@ defmodule PczoneWeb.Schema.SimpleBuilts do
           non_null(list_of(non_null(:simple_built_hard_drive))),
           resolve: Helpers.dataloader(Dataloader)
 
-    field :simple_built_platforms,
-          non_null(list_of(non_null(:simple_built_platform))),
+    field :simple_built_stores,
+          non_null(list_of(non_null(:simple_built_store))),
           resolve: Helpers.dataloader(Dataloader)
   end
 
