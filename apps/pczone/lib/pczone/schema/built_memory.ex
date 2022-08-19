@@ -8,9 +8,7 @@ defmodule Pczone.BuiltMemory do
     :product_id,
     :slot_type,
     :processor_index,
-    :price,
-    :quantity,
-    :total
+    :quantity
   ]
   @optional [:extension_device_id]
 
@@ -21,9 +19,7 @@ defmodule Pczone.BuiltMemory do
     belongs_to :extension_device, Pczone.ExtensionDevice
     field :slot_type, :string
     field :processor_index, :integer
-    field :price, :integer
     field :quantity, :integer
-    field :total, :integer
   end
 
   def changeset(entity, params) do

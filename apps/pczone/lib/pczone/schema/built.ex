@@ -10,11 +10,7 @@ defmodule Pczone.Built do
     :barebone_product_id,
     :motherboard_product_id,
     :chassis_product_id,
-    :barebone_price,
-    :motherboard_price,
-    :chassis_price,
-    :usable,
-    :total
+    :usable
   ]
 
   schema "built" do
@@ -27,11 +23,7 @@ defmodule Pczone.Built do
     belongs_to :barebone_product, Pczone.Product
     belongs_to :motherboard_product, Pczone.Product
     belongs_to :chassis_product, Pczone.Product
-    field :barebone_price, :integer
-    field :motherboard_price, :integer
-    field :chassis_price, :integer
     field :usable, :boolean, default: false
-    field :total, :integer
     has_many :built_psus, Pczone.BuiltPsu
     has_many :built_heatsinks, Pczone.BuiltHeatsink
     has_many :built_extension_devices, Pczone.BuiltExtensionDevice

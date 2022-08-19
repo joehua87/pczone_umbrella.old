@@ -66,18 +66,12 @@ defmodule Pczone.Builts do
     hard_drives = Map.get(params, :hard_drives, [])
 
     case Ecto.Multi.new()
-         |> get_products_map(params)
-         |> Ecto.Multi.run(:built, fn _, %{products_map: products_map} ->
-           %{barebone_price: barebone_price, total: total} =
-             calculate_built_price(params, products_map)
-
+         |> Ecto.Multi.run(:built, fn _, %{} ->
            Pczone.Built.new_changeset(%{
              name: name,
              slug: slug,
              barebone_id: barebone_id,
-             barebone_product_id: barebone_product_id,
-             barebone_price: barebone_price,
-             total: total
+             barebone_product_id: barebone_product_id
            })
            |> Repo.insert()
          end)
@@ -91,19 +85,17 @@ defmodule Pczone.Builts do
     end
   end
 
-  def create(
-        %{
-          motherboard_id: motherboard_id,
-          motherboard_product_id: motherboard_product_id,
-          chassis_id: chassis_id,
-          chassis_product_id: chassis_product_id,
-          psus: _psus,
-          processor: processor,
-          memory: memory,
-          hard_drives: hard_drives,
-          gpus: _gpus
-        } = params
-      ) do
+  def create(%{
+        motherboard_id: motherboard_id,
+        motherboard_product_id: motherboard_product_id,
+        chassis_id: chassis_id,
+        chassis_product_id: chassis_product_id,
+        psus: _psus,
+        processor: processor,
+        memory: memory,
+        hard_drives: hard_drives,
+        gpus: _gpus
+      }) do
     built_changeset =
       Pczone.Built.new_changeset(%{
         motherboard_id: motherboard_id,
@@ -113,7 +105,6 @@ defmodule Pczone.Builts do
       })
 
     case Ecto.Multi.new()
-         |> get_products_map(params)
          |> Ecto.Multi.insert(:built, built_changeset)
          |> create_built_processor(processor)
          |> create_built_memory(memory)
@@ -125,66 +116,26 @@ defmodule Pczone.Builts do
     end
   end
 
-  defp get_products_map(
-         multi,
-         %{
-           barebone_product_id: barebone_product_id,
-           processor: %{product_id: processor_product_id},
-           memory: %{product_id: memory_product_id}
-         } = params
-       ) do
-    hard_drives = Map.get(params, :hard_drives, [])
-    psus = Map.get(params, :psus, [])
-    gpus = Map.get(params, :gpus, [])
-
-    product_ids =
-      [barebone_product_id, processor_product_id, memory_product_id] ++
-        Enum.map(hard_drives, & &1.product_id) ++
-        Enum.map(psus, & &1.product_id) ++
-        Enum.map(gpus, & &1.product_id)
-
-    multi
-    |> Ecto.Multi.run(:products_map, fn _, _ ->
-      case Repo.all(from p in Pczone.Product, where: p.id in ^product_ids, select: {p.id, p})
-           |> Enum.into(%{}) do
-        products_map = %{} -> {:ok, products_map}
-        reason -> reason
-      end
-    end)
-  end
-
-  defp create_built_processor(multi, processor = %{product_id: product_id, quantity: quantity}) do
+  defp create_built_processor(multi, processor) do
     multi
     |> Ecto.Multi.run(
       :built_processor,
-      fn _, %{built: %{id: built_id}, products_map: products_map} ->
-        %{sale_price: price} = products_map[product_id]
-
+      fn _, %{built: %{id: built_id}} ->
         processor
-        |> Map.merge(%{
-          built_id: built_id,
-          price: price,
-          total: price * quantity
-        })
+        |> Map.merge(%{built_id: built_id})
         |> Pczone.BuiltProcessor.new_changeset()
         |> Repo.insert()
       end
     )
   end
 
-  defp create_built_memory(multi, memory = %{product_id: product_id, quantity: quantity}) do
+  defp create_built_memory(multi, memory) do
     multi
     |> Ecto.Multi.run(
       :built_memory,
-      fn _, %{built: %{id: built_id}, products_map: products_map} ->
-        %{sale_price: price} = products_map[product_id]
-
+      fn _, %{built: %{id: built_id}} ->
         memory
-        |> Map.merge(%{
-          built_id: built_id,
-          price: price,
-          total: price * quantity
-        })
+        |> Map.merge(%{built_id: built_id})
         |> Pczone.BuiltMemory.new_changeset()
         |> Repo.insert()
       end
@@ -195,17 +146,11 @@ defmodule Pczone.Builts do
     multi
     |> Ecto.Multi.run(
       :built_hard_drives,
-      fn _, %{built: %{id: built_id}, products_map: products_map} ->
+      fn _, %{built: %{id: built_id}} ->
         hard_drives =
-          Enum.map(hard_drives, fn %{product_id: product_id, quantity: quantity} = hard_drive ->
-            %{sale_price: price} = products_map[product_id]
-
+          Enum.map(hard_drives, fn hard_drive ->
             hard_drive
-            |> Map.merge(%{
-              built_id: built_id,
-              price: price,
-              total: price * quantity
-            })
+            |> Map.merge(%{built_id: built_id})
           end)
 
         case Repo.insert_all(Pczone.BuiltHardDrive, hard_drives, returning: true) do
@@ -216,48 +161,84 @@ defmodule Pczone.Builts do
     )
   end
 
-  defp calculate_built_price(
-         %{
-           barebone_product_id: barebone_product_id,
-           processor: %{product_id: processor_product_id, quantity: processor_quantity},
-           memory: %{product_id: memory_product_id, quantity: memory_quantity}
-         } = params,
-         products_map
-       ) do
-    hard_drives = Map.get(params, :hard_drives, [])
-    psus = Map.get(params, :psus, [])
-    gpus = Map.get(params, :gpus, [])
-    %{sale_price: barebone_price} = products_map[barebone_product_id]
-    %{sale_price: processor_price} = products_map[processor_product_id]
-    %{sale_price: memory_price} = products_map[memory_product_id]
-    hard_drives_price = calculate_list_price(hard_drives, products_map)
-    psus_price = calculate_list_price(psus, products_map)
-    gpus_price = calculate_list_price(gpus, products_map)
+  def calculate_built_total(%Pczone.Built{
+        barebone_product: %Pczone.Product{
+          id: barebone_product_id,
+          title: barebone_title,
+          component_type: barebone_component_type,
+          sale_price: barebone_price
+        },
+        built_processors: processors,
+        built_memories: memories,
+        built_hard_drives: hard_drives,
+        built_gpus: gpus,
+        built_psus: psus
+      }) do
+    product_ids =
+      Enum.map(processors, & &1.product_id) ++
+        Enum.map(memories, & &1.product_id) ++
+        Enum.map(hard_drives, & &1.product_id) ++
+        Enum.map(psus, & &1.product_id) ++
+        Enum.map(gpus, & &1.product_id)
 
-    total =
+    products_map =
+      Repo.all(from p in Pczone.Product, where: p.id in ^product_ids, select: {p.id, p})
+      |> Enum.into(%{})
+
+    items =
       [
-        barebone_price,
-        processor_price * processor_quantity,
-        memory_price * memory_quantity,
-        hard_drives_price,
-        psus_price,
-        gpus_price
+        %{
+          product_id: barebone_product_id,
+          title: barebone_title,
+          component_type: barebone_component_type,
+          price: barebone_price,
+          quantity: 1,
+          total: barebone_price
+        },
+        calculate_list_total(processors, products_map),
+        calculate_list_total(memories, products_map),
+        calculate_list_total(hard_drives, products_map),
+        calculate_list_total(psus, products_map),
+        calculate_list_total(gpus, products_map)
       ]
-      |> Enum.sum()
+      |> List.flatten()
 
     %{
-      barebone_price: barebone_price,
-      total: total
+      items: items,
+      total: items |> Enum.map(& &1.total) |> Enum.sum()
     }
   end
 
-  defp calculate_list_price(list, products_map) do
+  def calculate_built_total(built_id) do
+    from(Pczone.Built,
+      preload: [
+        :barebone_product,
+        :built_processors,
+        :built_memories,
+        :built_hard_drives,
+        :built_psus,
+        :built_gpus
+      ]
+    )
+    |> Pczone.Repo.get(built_id)
+    |> calculate_built_total()
+  end
+
+  defp calculate_list_total(list, products_map) do
     list
     |> Enum.map(fn %{product_id: product_id, quantity: quantity} ->
-      %{sale_price: price} = products_map[product_id]
-      price * quantity
+      %{title: title, sale_price: price, component_type: component_type} =
+        products_map[product_id]
+
+      %{
+        product_id: product_id,
+        title: title,
+        component_type: component_type,
+        price: price,
+        quantity: quantity,
+        total: price * quantity
+      }
     end)
-    |> Enum.sum()
   end
 
   def validate_chassis(
@@ -450,18 +431,6 @@ defmodule Pczone.Builts do
       # TODO: Combine errors
       errors[0]
     end
-  end
-
-  @doc """
-  Extract a list of products for a built
-  """
-  def extract_products(built_id) do
-  end
-
-  @doc """
-  Check if products is in stocks for a built
-  """
-  def validate_products(built_id) do
   end
 
   defp get_slots_map(slots) do

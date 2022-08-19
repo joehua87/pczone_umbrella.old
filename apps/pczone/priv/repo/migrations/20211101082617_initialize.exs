@@ -312,9 +312,6 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :barebone_product_id, references(:product)
       add :motherboard_product_id, references(:product)
       add :chassis_product_id, references(:product)
-      add :barebone_price, :integer
-      add :motherboard_price, :integer
-      add :chassis_price, :integer
       add :usable, :boolean, null: false
       add :total, :integer
     end
@@ -324,8 +321,6 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :psu_id, references(:psu), null: false
       add :product_id, references(:product), null: false
       add :quantity, :integer, null: false
-      add :price, :integer, null: false
-      add :total, :integer, null: false
     end
 
     create table(:built_heatsink) do
@@ -333,8 +328,6 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :heatsink_id, references(:heatsink), null: false
       add :product_id, references(:product), null: false
       add :quantity, :integer, null: false
-      add :price, :integer, null: false
-      add :total, :integer, null: false
     end
 
     create table(:built_extension_device) do
@@ -344,8 +337,6 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :processor_index, :integer, null: false
       add :slot_type, :string, null: false
       add :quantity, :integer, null: false
-      add :price, :integer, null: false
-      add :total, :integer, null: false
     end
 
     create table(:built_processor) do
@@ -354,8 +345,6 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :product_id, references(:product), null: false
       add :extension_device_id, references(:extension_device)
       add :quantity, :integer, null: false
-      add :price, :integer, null: false
-      add :total, :integer, null: false
     end
 
     create table(:built_memory) do
@@ -366,8 +355,6 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :processor_index, :integer, null: false
       add :slot_type, :string, null: false
       add :quantity, :integer, null: false
-      add :price, :integer, null: false
-      add :total, :integer, null: false
     end
 
     create table(:built_hard_drive) do
@@ -378,8 +365,6 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :processor_index, :integer, null: false
       add :slot_type, :string, null: false
       add :quantity, :integer, null: false
-      add :price, :integer, null: false
-      add :total, :integer, null: false
     end
 
     create table(:built_gpu) do
@@ -389,8 +374,6 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :gpu_id, references(:gpu), null: false
       add :product_id, references(:product), null: false
       add :quantity, :integer, null: false
-      add :price, :integer, null: false
-      add :total, :integer, null: false
     end
 
     create table(:built_template) do

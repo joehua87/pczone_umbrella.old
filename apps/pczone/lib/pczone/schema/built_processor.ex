@@ -6,9 +6,7 @@ defmodule Pczone.BuiltProcessor do
     :built_id,
     :processor_id,
     :product_id,
-    :price,
-    :quantity,
-    :total
+    :quantity
   ]
   @optional [:extension_device_id]
 
@@ -17,9 +15,7 @@ defmodule Pczone.BuiltProcessor do
     belongs_to :processor, Pczone.Processor
     belongs_to :product, Pczone.Product
     belongs_to :extension_device, Pczone.ExtensionDevice
-    field :price, :integer
     field :quantity, :integer
-    field :total, :integer
   end
 
   def changeset(entity, params) do

@@ -6,9 +6,7 @@ defmodule Pczone.BuiltHeatsink do
     :built_id,
     :heatsink_id,
     :product_id,
-    :price,
-    :quantity,
-    :total
+    :quantity
   ]
   @optional []
 
@@ -16,9 +14,7 @@ defmodule Pczone.BuiltHeatsink do
     belongs_to :built, Pczone.Built
     belongs_to :heatsink, Pczone.Heatsink
     belongs_to :product, Pczone.Product
-    field :price, :integer
     field :quantity, :integer
-    field :total, :integer
   end
 
   def changeset(entity, params) do

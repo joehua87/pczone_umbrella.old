@@ -8,9 +8,7 @@ defmodule Pczone.BuiltGpu do
     :product_id,
     :slot_type,
     :processor_index,
-    :price,
-    :quantity,
-    :total
+    :quantity
   ]
   @optional []
 
@@ -20,9 +18,7 @@ defmodule Pczone.BuiltGpu do
     belongs_to :product, Pczone.Product
     field :slot_type, :string
     field :processor_index, :integer
-    field :price, :integer
     field :quantity, :integer
-    field :total, :integer
   end
 
   def changeset(entity, params) do
