@@ -6,7 +6,7 @@ defmodule Pczone.BuiltTemplateVariantsTest do
   describe "built template variants" do
     test "generate report" do
       [built_template | _] = built_templates_fixture()
-      assert {_, _} = BuiltTemplates.generate_variants(built_template)
+      assert {_, _} = BuiltTemplates.generate_builts(built_template)
 
       assert %Elixlsx.Workbook{
                datetime: nil,
@@ -54,7 +54,7 @@ defmodule Pczone.BuiltTemplateVariantsTest do
 
     test "export csv" do
       [built_template | _] = built_templates_fixture()
-      assert {_, _} = BuiltTemplates.generate_variants(built_template)
+      assert {_, _} = BuiltTemplates.generate_builts(built_template)
 
       assert {
                :ok,

@@ -215,7 +215,7 @@ defmodule PczoneWeb.Schema.BuiltTemplates do
 
       resolve(fn %{code: code}, _info ->
         with {:ok, {_, result}} <-
-               Pczone.BuiltTemplates.generate_variants(code, returning: true) do
+               Pczone.BuiltTemplates.generate_builts(code, returning: true) do
           {:ok, result}
         end
       end)

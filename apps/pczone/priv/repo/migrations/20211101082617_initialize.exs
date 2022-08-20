@@ -363,14 +363,19 @@ defmodule Pczone.Repo.Migrations.Initialize do
     create table(:built) do
       add :slug, :string, null: false
       add :name, :string, null: false
+      add :built_template_id, references(:built_template)
+      add :option_values, {:array, :string}
       add :barebone_id, references(:barebone)
       add :motherboard_id, references(:motherboard)
       add :chassis_id, references(:chassis)
       add :barebone_product_id, references(:product)
       add :motherboard_product_id, references(:product)
       add :chassis_product_id, references(:product)
-      add :usable, :boolean, null: false
+      add :position, :integer
+      add :state, :string, default: "published"
     end
+
+    create unique_index(:built, [:built_template_id, :option_values])
 
     create table(:built_psu) do
       add :built_id, references(:built), null: false
@@ -408,9 +413,9 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :memory_id, references(:memory), null: false
       add :product_id, references(:product), null: false
       add :extension_device_id, references(:extension_device)
-      add :processor_index, :integer, null: false
-      add :slot_type, :string, null: false
-      add :quantity, :integer, null: false
+      add :processor_index, :integer
+      add :slot_type, :string
+      add :quantity, :integer
     end
 
     create table(:built_hard_drive) do
@@ -418,18 +423,18 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :hard_drive_id, references(:hard_drive), null: false
       add :product_id, references(:product), null: false
       add :extension_device_id, references(:extension_device)
-      add :processor_index, :integer, null: false
-      add :slot_type, :string, null: false
-      add :quantity, :integer, null: false
+      add :processor_index, :integer
+      add :slot_type, :string
+      add :quantity, :integer
     end
 
     create table(:built_gpu) do
       add :built_id, references(:built), null: false
-      add :processor_index, :integer, null: false
-      add :slot_type, :string, null: false
       add :gpu_id, references(:gpu), null: false
       add :product_id, references(:product), null: false
       add :quantity, :integer, null: false
+      add :processor_index, :integer
+      add :slot_type, :string
     end
 
     create table(:built_template_variant) do

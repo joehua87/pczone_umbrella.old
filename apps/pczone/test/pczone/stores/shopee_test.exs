@@ -110,7 +110,7 @@ defmodule Pczone.Stores.ShopeeTest do
 
     # Generate built template variants
     built_template = Enum.find(built_templates, &(&1.code == "hp-elitedesk-800-g2-mini-65w"))
-    Pczone.BuiltTemplates.generate_variants(built_template)
+    Pczone.BuiltTemplates.generate_builts(built_template)
 
     # Sync built template variant stores variant codes
     path = get_fixtures_dir() |> Path.join("mass_update_sales_info.xlsx")

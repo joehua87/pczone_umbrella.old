@@ -394,15 +394,15 @@ defmodule Pczone.BuiltTemplates do
     )
   end
 
-  defp make_variants(%Pczone.BuiltTemplate{
-         id: built_template_id,
-         barebone_id: barebone_id,
-         barebone_product: barebone_product,
-         processors: processors,
-         memories: memories,
-         hard_drives: hard_drives,
-         option_value_seperator: seperator
-       }) do
+  def make_builts(%Pczone.BuiltTemplate{
+        id: built_template_id,
+        barebone_id: barebone_id,
+        barebone_product: barebone_product,
+        processors: processors,
+        memories: memories,
+        hard_drives: hard_drives,
+        option_value_seperator: seperator
+      }) do
     memories_and_hard_drives =
       [%Pczone.BuiltTemplateMemory{quantity: 0, memory_product: nil} | memories]
       |> Enum.flat_map(fn %Pczone.BuiltTemplateMemory{
@@ -421,36 +421,30 @@ defmodule Pczone.BuiltTemplates do
           memory_data =
             if(memory_product,
               do: %{
-                memory_id: memory_id,
-                memory_product_id: memory_product.id,
-                memory_price: memory_product.sale_price,
-                memory_quantity: memory_quantity,
-                memory_amount: memory_quantity * memory_product.sale_price
+                built_memories: [
+                  %{
+                    memory_id: memory_id,
+                    product_id: memory_product.id,
+                    quantity: memory_quantity
+                  }
+                ]
               },
-              else: %{
-                memory_id: nil,
-                memory_product_id: nil,
-                memory_price: 0,
-                memory_quantity: 0,
-                memory_amount: 0
-              }
+              else: %{built_memories: []}
             )
 
           hard_drive_data =
             if(hard_drive_product,
               do: %{
-                hard_drive_id: hard_drive_id,
-                hard_drive_product_id: hard_drive_product.id,
-                hard_drive_price: hard_drive_product.sale_price,
-                hard_drive_quantity: hard_drive_quantity,
-                hard_drive_amount: hard_drive_quantity * hard_drive_product.sale_price
+                built_hard_drives: [
+                  %{
+                    hard_drive_id: hard_drive_id,
+                    product_id: hard_drive_product.id,
+                    quantity: hard_drive_quantity
+                  }
+                ]
               },
               else: %{
-                hard_drive_id: nil,
-                hard_drive_product_id: nil,
-                hard_drive_price: 0,
-                hard_drive_quantity: 0,
-                hard_drive_amount: 0
+                built_hard_drives: []
               }
             )
 
@@ -467,123 +461,144 @@ defmodule Pczone.BuiltTemplates do
       end)
 
     processors
-    |> Enum.flat_map(fn %Pczone.BuiltTemplateProcessor{
-                          processor_id: processor_id,
-                          processor_product: processor_product,
-                          processor_quantity: processor_quantity,
-                          processor_label: processor_label,
-                          gpu_product: gpu_product,
-                          gpu_quantity: gpu_quantity,
-                          gpu_label: gpu_label
-                        } ->
-      processor_amount = processor_quantity * processor_product.sale_price
+    |> Enum.flat_map(
+      # gpu_product: gpu_product,
+      # gpu_quantity: gpu_quantity,
+      # gpu_label: gpu_label
+      fn %Pczone.BuiltTemplateProcessor{
+           processor_id: processor_id,
+           processor_product: processor_product,
+           processor_quantity: processor_quantity,
+           processor_label: processor_label,
+           gpu_id: gpu_id,
+           gpu_product: gpu_product,
+           gpu_quantity: gpu_quantity,
+           gpu_label: gpu_label
+         } ->
+        gpu =
+          case gpu_product do
+            nil ->
+              %{built_gpus: []}
 
-      gpu =
-        case gpu_product do
-          nil ->
-            %{gpu_product_id: nil, gpu_price: 0, gpu_quantity: 0, gpu_amount: 0}
+            _ ->
+              %{
+                built_gpus: [
+                  %{gpu_id: gpu_id, product_id: gpu_product.id, quantity: gpu_quantity}
+                ]
+              }
+          end
 
-          %{id: gpu_product_id, sale_price: gpu_price} ->
+        option_value_1 =
+          [processor_label, gpu_label] |> Enum.filter(&(&1 != "")) |> Enum.join(seperator)
+
+        Enum.map(
+          memories_and_hard_drives,
+          fn memory_and_hard_drive = %{option_value_2: option_value_2} ->
+            name = Enum.join([option_value_1, option_value_2], ",")
+            slug = Slug.slugify(name)
+
             %{
-              gpu_product_id: gpu_product_id,
-              gpu_price: gpu_price,
-              gpu_quantity: gpu_quantity,
-              gpu_amount: gpu_price * gpu_quantity
-            }
-        end
-
-      option_value_1 =
-        [processor_label, gpu_label] |> Enum.filter(&(&1 != "")) |> Enum.join(seperator)
-
-      Enum.map(
-        memories_and_hard_drives,
-        fn memory_and_hard_drive = %{option_value_2: option_value_2} ->
-          result =
-            %{
-              name: Enum.join([option_value_1, option_value_2], ","),
+              slug: slug,
+              name: name,
               built_template_id: built_template_id,
               barebone_id: barebone_id,
               barebone_product_id: barebone_product.id,
-              barebone_price: barebone_product.sale_price,
-              processor_id: processor_id,
-              processor_product_id: processor_product.id,
-              processor_price: processor_product.sale_price,
-              processor_quantity: processor_quantity,
-              processor_amount: processor_amount,
+              built_processors: [
+                %{
+                  processor_id: processor_id,
+                  product_id: processor_product.id,
+                  quantity: processor_quantity
+                }
+              ],
               option_values: [option_value_1, option_value_2]
             }
             |> Map.merge(gpu)
             |> Map.merge(Map.delete(memory_and_hard_drive, :option_value_2))
-
-          total =
-            result
-            |> Map.take([
-              :barebone_price,
-              :gpu_amount,
-              :hard_drive_amount,
-              :memory_amount,
-              :processor_amount
-            ])
-            |> Map.values()
-            |> Enum.sum()
-
-          Map.put(result, :total, total)
-        end
-      )
-    end)
+          end
+        )
+      end
+    )
     |> Enum.with_index(fn item, position ->
       Map.put(item, :position, position)
     end)
   end
 
-  def generate_variants(built_template, opts \\ [])
+  def generate_builts(built_template, opts \\ [])
 
-  def generate_variants(%Pczone.BuiltTemplate{id: built_template_id} = built_template, opts) do
-    variants = make_variants(built_template)
-    name_list = Enum.map(variants, & &1.name)
+  def generate_builts(%Pczone.BuiltTemplate{id: built_template_id} = built_template, _opts) do
+    builts = make_builts(built_template) |> IO.inspect()
+    name_list = Enum.map(builts, & &1.name)
 
     multi =
       Ecto.Multi.new()
       |> Ecto.Multi.update_all(
         :update_state,
-        from(v in Pczone.BuiltTemplateVariant,
+        from(v in Pczone.Built,
           where: v.built_template_id == ^built_template_id and v.name not in ^name_list
         ),
-        set: [state: :disabled]
+        set: [state: :archived]
       )
-      |> Ecto.Multi.run(:insert_all, fn _, _ ->
-        Repo.insert_all_2(
-          Pczone.BuiltTemplateVariant,
-          variants,
-          [
-            on_conflict:
-              {:replace,
-               [
-                 :barebone_id,
-                 :barebone_product_id,
-                 :barebone_price,
-                 :processor_id,
-                 :processor_product_id,
-                 :processor_price,
-                 :processor_quantity,
-                 :memory_id,
-                 :memory_product_id,
-                 :memory_price,
-                 :memory_quantity,
-                 :hard_drive_id,
-                 :hard_drive_product_id,
-                 :hard_drive_price,
-                 :hard_drive_quantity,
-                 :position,
-                 :total,
-                 :gpu_id,
-                 :gpu_product_id,
-                 :gpu_price,
-                 :gpu_quantity
-               ]},
-            conflict_target: [:built_template_id, :option_values]
-          ] ++ opts
-        )
+      |> Ecto.Multi.run(:builts_map, fn _, _ ->
+        entities =
+          Enum.map(
+            builts,
+            &Map.drop(&1, [:built_gpus, :built_hard_drives, :built_memories, :built_processors])
+          )
+
+        with {:ok, {_, result}} <-
+               Repo.insert_all_2(
+                 Pczone.Built,
+                 entities,
+                 on_conflict:
+                   {:replace,
+                    [
+                      :barebone_id,
+                      :barebone_product_id,
+                      :motherboard_id,
+                      :motherboard_product_id,
+                      :position
+                    ]},
+                 conflict_target: [:built_template_id, :option_values],
+                 returning: true
+               ) do
+          {:ok, result |> Enum.map(fn %{id: id, name: name} -> {name, id} end) |> Enum.into(%{})}
+        end
+      end)
+      |> Ecto.Multi.run(:built_processors, fn _, %{builts_map: builts_map} ->
+        entities =
+          builts
+          |> Enum.flat_map(fn %{name: name, built_processors: built_processors} ->
+            Enum.map(built_processors, &Map.put(&1, :built_id, builts_map[name]))
+          end)
+
+        Repo.insert_all_2(Pczone.BuiltProcessor, entities, on_conflict: :nothing)
+      end)
+      |> Ecto.Multi.run(:built_memories, fn _, %{builts_map: builts_map} ->
+        entities =
+          builts
+          |> Enum.flat_map(fn %{name: name, built_memories: built_memories} ->
+            Enum.map(built_memories, &Map.put(&1, :built_id, builts_map[name]))
+          end)
+
+        Repo.insert_all_2(Pczone.BuiltMemory, entities, on_conflict: :nothing)
+      end)
+      |> Ecto.Multi.run(:built_hard_drives, fn _, %{builts_map: builts_map} ->
+        entities =
+          builts
+          |> Enum.flat_map(fn %{name: name, built_hard_drives: built_hard_drives} ->
+            Enum.map(built_hard_drives, &Map.put(&1, :built_id, builts_map[name]))
+          end)
+
+        Repo.insert_all_2(Pczone.BuiltHardDrive, entities, on_conflict: :nothing)
+      end)
+      |> Ecto.Multi.run(:built_gpus, fn _, %{builts_map: builts_map} ->
+        entities =
+          builts
+          |> Enum.flat_map(fn %{name: name, built_gpus: built_gpus} ->
+            Enum.map(built_gpus, &Map.put(&1, :built_id, builts_map[name]))
+          end)
+
+        Repo.insert_all_2(Pczone.BuiltGpu, entities, on_conflict: :nothing)
       end)
 
     with {:ok, %{insert_all: list}} <- Repo.transaction(multi) do
@@ -591,7 +606,7 @@ defmodule Pczone.BuiltTemplates do
     end
   end
 
-  def generate_variants(code, opts) when is_bitstring(code) do
+  def generate_builts(code, opts) when is_bitstring(code) do
     Repo.one(
       from b in Pczone.BuiltTemplate,
         where: b.code == ^code,
@@ -604,7 +619,7 @@ defmodule Pczone.BuiltTemplates do
         ],
         limit: 1
     )
-    |> generate_variants(opts)
+    |> generate_builts(opts)
   end
 
   def generate_content(built_template_id, template) do

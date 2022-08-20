@@ -57,7 +57,7 @@ defmodule Pczone.StoresTest do
 
       assert {:ok, {_, built_template_variants}} =
                built_template
-               |> BuiltTemplates.generate_variants(returning: true)
+               |> BuiltTemplates.generate_builts(returning: true)
 
       list =
         built_template_variants

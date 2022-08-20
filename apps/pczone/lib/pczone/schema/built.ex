@@ -4,25 +4,31 @@ defmodule Pczone.Built do
 
   @required [:slug, :name]
   @optional [
+    :built_template,
+    :option_values,
     :barebone_id,
     :motherboard_id,
     :chassis_id,
     :barebone_product_id,
     :motherboard_product_id,
     :chassis_product_id,
-    :usable
+    :position,
+    :state
   ]
 
   schema "built" do
     field :slug, :string
     field :name, :string
+    belongs_to :built_template, Pczone.BuiltTemplate
+    field :option_values, {:array, :string}
     belongs_to :barebone, Pczone.Barebone
     belongs_to :motherboard, Pczone.Motherboard
     belongs_to :chassis, Pczone.Chassis
     belongs_to :barebone_product, Pczone.Product
     belongs_to :motherboard_product, Pczone.Product
     belongs_to :chassis_product, Pczone.Product
-    field :usable, :boolean, default: false
+    field :position, :integer
+    field :state, Ecto.Enum, default: :published, values: [:published, :archived]
     has_many :built_psus, Pczone.BuiltPsu
     has_many :built_heatsinks, Pczone.BuiltHeatsink
     has_many :built_extension_devices, Pczone.BuiltExtensionDevice

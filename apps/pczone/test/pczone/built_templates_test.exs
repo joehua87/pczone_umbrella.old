@@ -58,25 +58,45 @@ defmodule Pczone.BuiltTemplatesTest do
                Repo.get(from(Pczone.BuiltTemplate, preload: [:hard_drives]), built_template_id)
     end
 
-    test "generate built template variants" do
+    test "make builts" do
       [built_template | _] = built_templates_fixture()
-      assert {:ok, _} = BuiltTemplates.generate_variants(built_template)
+
+      assert [
+               %{
+                 barebone_id: _,
+                 barebone_product_id: _,
+                 built_gpus: [],
+                 built_hard_drives: [],
+                 built_memories: [],
+                 built_processors: [%{processor_id: _, product_id: _, quantity: 1}],
+                 built_template_id: _,
+                 name: "i5-6500T,Ko RAM + Ko SSD",
+                 option_values: ["i5-6500T", "Ko RAM + Ko SSD"],
+                 position: 0,
+                 slug: "i5-6500t-ko-ram-ko-ssd"
+               }
+               | _
+             ] = BuiltTemplates.make_builts(built_template)
+    end
+
+    test "generate builts" do
+      [built_template | _] = built_templates_fixture()
+      assert {:ok, _} = BuiltTemplates.generate_builts(built_template)
     end
 
     test "update variants state when built template processors changed" do
       [built_template | _] = built_templates_fixture()
-      assert {:ok, _} = BuiltTemplates.generate_variants(built_template)
+      assert {:ok, _} = BuiltTemplates.generate_builts(built_template)
       assert {_, nil} = BuiltTemplates.remove_built_template_processors(built_template.id)
 
-      assert {:ok, {0, []}} =
-               BuiltTemplates.generate_variants(built_template.code, returning: true)
+      assert {:ok, {0, []}} = BuiltTemplates.generate_builts(built_template.code, returning: true)
 
       assert [] = Repo.all(from v in Pczone.BuiltTemplateVariant, where: v.state == :active)
     end
 
     test "generate content" do
       [built_template | _] = built_templates_fixture()
-      assert {:ok, {_, _}} = BuiltTemplates.generate_variants(built_template)
+      assert {:ok, {_, _}} = BuiltTemplates.generate_builts(built_template)
 
       template = """
       # {{name}}
