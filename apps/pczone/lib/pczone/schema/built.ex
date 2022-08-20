@@ -19,7 +19,6 @@ defmodule Pczone.Built do
     belongs_to :barebone, Pczone.Barebone
     belongs_to :motherboard, Pczone.Motherboard
     belongs_to :chassis, Pczone.Chassis
-    belongs_to :processor, Pczone.Processor
     belongs_to :barebone_product, Pczone.Product
     belongs_to :motherboard_product, Pczone.Product
     belongs_to :chassis_product, Pczone.Product

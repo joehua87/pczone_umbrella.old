@@ -301,19 +301,75 @@ defmodule Pczone.Repo.Migrations.Initialize do
 
     create unique_index(:product_product_category, [:product_id, :product_category_id])
 
+    create table(:built_template) do
+      add :code, :string, null: false
+      add :name, :string, null: false
+      add :media, :map, null: false, default: "[]"
+      add :body_template, :string, null: false
+      add :barebone_id, references(:barebone), null: false
+      add :barebone_product_id, references(:product), null: false
+      add :option_value_seperator, :string, null: false
+      add :option_types, {:array, :string}, null: false
+      add :config, :map, null: false, default: %{}
+    end
+
+    create unique_index(:built_template, [:code])
+
+    create table(:built_template_processor) do
+      add :key, :string, null: false
+      add :built_template_id, references(:built_template, on_delete: :delete_all), null: false
+      add :processor_id, references(:processor), null: false
+      add :processor_product_id, references(:product), null: false
+      add :processor_quantity, :integer, null: false, default: 1
+      add :processor_label, :string
+      add :gpu_id, references(:gpu)
+      add :gpu_product_id, references(:product)
+      add :gpu_quantity, :integer, null: false, default: 0
+      add :gpu_label, :string, default: ""
+    end
+
+    create unique_index(:built_template_processor, [:key])
+
+    create unique_index(:built_template_processor, [
+             :built_template_id,
+             :processor_label,
+             :gpu_label
+           ])
+
+    create table(:built_template_memory) do
+      add :key, :string, null: false
+      add :built_template_id, references(:built_template, on_delete: :delete_all), null: false
+      add :memory_id, references(:memory), null: false
+      add :memory_product_id, references(:product), null: false
+      add :quantity, :integer, null: false, default: 1
+      add :label, :string
+    end
+
+    create unique_index(:built_template_memory, [:key])
+    create unique_index(:built_template_memory, [:built_template_id, :label])
+
+    create table(:built_template_hard_drive) do
+      add :key, :string, null: false
+      add :built_template_id, references(:built_template, on_delete: :delete_all), null: false
+      add :hard_drive_id, references(:hard_drive), null: false
+      add :hard_drive_product_id, references(:product), null: false
+      add :quantity, :integer, null: false, default: 1
+      add :label, :string
+    end
+
+    create unique_index(:built_template_hard_drive, [:key])
+    create unique_index(:built_template_hard_drive, [:built_template_id, :label])
+
     create table(:built) do
       add :slug, :string, null: false
       add :name, :string, null: false
       add :barebone_id, references(:barebone)
       add :motherboard_id, references(:motherboard)
       add :chassis_id, references(:chassis)
-      # For embedded processor
-      add :processor_id, references(:processor)
       add :barebone_product_id, references(:product)
       add :motherboard_product_id, references(:product)
       add :chassis_product_id, references(:product)
       add :usable, :boolean, null: false
-      add :total, :integer
     end
 
     create table(:built_psu) do
@@ -375,65 +431,6 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :product_id, references(:product), null: false
       add :quantity, :integer, null: false
     end
-
-    create table(:built_template) do
-      add :code, :string, null: false
-      add :name, :string, null: false
-      add :media, :map, null: false, default: "[]"
-      add :body_template, :string, null: false
-      add :barebone_id, references(:barebone), null: false
-      add :barebone_product_id, references(:product), null: false
-      add :option_value_seperator, :string, null: false
-      add :option_types, {:array, :string}, null: false
-      add :config, :map, null: false, default: %{}
-    end
-
-    create unique_index(:built_template, [:code])
-
-    create table(:built_template_processor) do
-      add :key, :string, null: false
-      add :built_template_id, references(:built_template, on_delete: :delete_all), null: false
-      add :processor_id, references(:processor), null: false
-      add :processor_product_id, references(:product), null: false
-      add :processor_quantity, :integer, null: false, default: 1
-      add :processor_label, :string
-      add :gpu_id, references(:gpu)
-      add :gpu_product_id, references(:product)
-      add :gpu_quantity, :integer, null: false, default: 0
-      add :gpu_label, :string, default: ""
-    end
-
-    create unique_index(:built_template_processor, [:key])
-
-    create unique_index(:built_template_processor, [
-             :built_template_id,
-             :processor_label,
-             :gpu_label
-           ])
-
-    create table(:built_template_memory) do
-      add :key, :string, null: false
-      add :built_template_id, references(:built_template, on_delete: :delete_all), null: false
-      add :memory_id, references(:memory), null: false
-      add :memory_product_id, references(:product), null: false
-      add :quantity, :integer, null: false, default: 1
-      add :label, :string
-    end
-
-    create unique_index(:built_template_memory, [:key])
-    create unique_index(:built_template_memory, [:built_template_id, :label])
-
-    create table(:built_template_hard_drive) do
-      add :key, :string, null: false
-      add :built_template_id, references(:built_template, on_delete: :delete_all), null: false
-      add :hard_drive_id, references(:hard_drive), null: false
-      add :hard_drive_product_id, references(:product), null: false
-      add :quantity, :integer, null: false, default: 1
-      add :label, :string
-    end
-
-    create unique_index(:built_template_hard_drive, [:key])
-    create unique_index(:built_template_hard_drive, [:built_template_id, :label])
 
     create table(:built_template_variant) do
       add :name, :string, null: false
