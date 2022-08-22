@@ -22,8 +22,8 @@ defmodule Pczone.Stores.ShopeeTest do
              ] = Pczone.Stores.read_product_variants("shopee", path)
     end
 
-    test "upsert built template variant stores" do
-      result = upsert_built_template_variant_stores()
+    test "upsert built stores" do
+      result = upsert_built_stores()
 
       assert [
                "210076422096",
@@ -36,7 +36,7 @@ defmodule Pczone.Stores.ShopeeTest do
     end
 
     test "make pricing workbook" do
-      upsert_built_template_variant_stores()
+      upsert_built_stores()
       store = Pczone.Repo.one(from Pczone.Store, where: [code: "shopee"])
       workbook = Pczone.Stores.make_pricing_workbook(store)
 
@@ -96,7 +96,7 @@ defmodule Pczone.Stores.ShopeeTest do
     end
   end
 
-  defp upsert_built_template_variant_stores() do
+  defp upsert_built_stores() do
     # Initial data
     get_fixtures_dir() |> Pczone.initial_data()
     built_templates = built_templates_fixture()
@@ -108,15 +108,14 @@ defmodule Pczone.Stores.ShopeeTest do
 
     Pczone.Stores.upsert_built_template_stores(store.id, built_template_stores_path)
 
-    # Generate built template variants
+    # Generate builts
     built_template = Enum.find(built_templates, &(&1.code == "hp-elitedesk-800-g2-mini-65w"))
     Pczone.BuiltTemplates.generate_builts(built_template)
 
-    # Sync built template variant stores variant codes
+    # Sync built stores variant codes
     path = get_fixtures_dir() |> Path.join("mass_update_sales_info.xlsx")
 
-    assert {:ok, {6, result}} =
-             Pczone.Stores.upsert_built_template_variant_stores(store, path, returning: true)
+    assert {:ok, {6, result}} = Pczone.Stores.upsert_built_stores(store, path, returning: true)
 
     result
   end

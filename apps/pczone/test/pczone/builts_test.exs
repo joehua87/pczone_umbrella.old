@@ -1,6 +1,7 @@
 defmodule Pczone.BuiltsTest do
   use Pczone.DataCase
   import Ecto.Query, only: [from: 2]
+  import Pczone.Fixtures
   alias Pczone.{Builts, Barebones, Processors, Memories, Products, HardDrives}
 
   describe "builts" do
@@ -69,7 +70,57 @@ defmodule Pczone.BuiltsTest do
                  }
                ],
                total: 7_540_000
-             } = Builts.calculate_built_total(id)
+             } = Builts.calculate_built_price(id)
+    end
+
+    test "calculate built price" do
+      [built_template | _] = built_templates_fixture()
+
+      assert {:ok, %{builts_map: builts_map}} =
+               Pczone.BuiltTemplates.generate_builts(built_template)
+
+      [%{id: built_id} | _] = Map.values(builts_map)
+
+      assert %{
+               items: [
+                 %{
+                   component_type: :barebone,
+                   price: 1_800_000,
+                   product_id: _,
+                   quantity: 1,
+                   title: "HP EliteDesk 800 G2 Mini (Used)",
+                   total: 1_800_000
+                 },
+                 %{
+                   component_type: :processor,
+                   price: 1_700_000,
+                   product_id: _,
+                   quantity: 1,
+                   title: "Intel® Core™ i5-6500T Processor (Tray)",
+                   total: 1_700_000
+                 },
+                 %{
+                   component_type: :memory,
+                   price: 520_000,
+                   product_id: _,
+                   quantity: 1,
+                   title: "8Gb SODIMM DDR4 2133 Mixed (Used)",
+                   total: 520_000
+                 }
+               ],
+               total: 4_020_000
+             } = Pczone.Builts.calculate_built_price(built_id)
+    end
+
+    test "calculate builts price" do
+      [built_template | _] = built_templates_fixture()
+
+      assert {:ok, %{builts_map: builts_map}} =
+               Pczone.BuiltTemplates.generate_builts(built_template)
+
+      built_ids = Map.values(builts_map) |> Enum.map(& &1.id)
+      assert %{} = result = Pczone.Builts.calculate_builts_price(built_ids)
+      assert result |> Map.keys() |> length() == 36
     end
   end
 

@@ -2,19 +2,6 @@ defmodule Pczone.Builts do
   import Ecto.Query, only: [from: 2]
   alias Pczone.{Repo, Motherboard, Memory, Processor, ChipsetProcessor}
 
-  defmodule CreateBuiltParams do
-    defstruct name: nil,
-              motherboard_id: nil,
-              chassis_id: nil,
-              psu_id: nil,
-              barebone_id: nil,
-              extension_devices: nil,
-              processors: nil,
-              memories: nil,
-              hard_drives: nil,
-              gpus: nil
-  end
-
   def processor_ids_query(motherboard_id) do
     processor_ids_query =
       from(mp in Pczone.MotherboardProcessor,
@@ -161,7 +148,7 @@ defmodule Pczone.Builts do
     )
   end
 
-  def calculate_built_total(%Pczone.Built{
+  def calculate_built_price(%Pczone.Built{
         barebone_product: %Pczone.Product{
           id: barebone_product_id,
           title: barebone_title,
@@ -209,8 +196,8 @@ defmodule Pczone.Builts do
     }
   end
 
-  def calculate_built_total(built_id) do
-    from(Pczone.Built,
+  def calculate_built_price(built_id) do
+    from(b in Pczone.Built,
       preload: [
         :barebone_product,
         :built_processors,
@@ -221,7 +208,33 @@ defmodule Pczone.Builts do
       ]
     )
     |> Pczone.Repo.get(built_id)
-    |> calculate_built_total()
+    |> calculate_built_price()
+  end
+
+  def calculate_builts_price([]), do: []
+
+  def calculate_builts_price([%Pczone.Built{} | _] = builts) do
+    builts
+    |> Enum.map(fn %Pczone.Built{id: built_id} = built ->
+      {built_id, calculate_built_price(built)}
+    end)
+    |> Enum.into(%{})
+  end
+
+  def calculate_builts_price([_ | _] = built_ids) do
+    from(b in Pczone.Built,
+      where: b.id in ^built_ids,
+      preload: [
+        :barebone_product,
+        :built_processors,
+        :built_memories,
+        :built_hard_drives,
+        :built_psus,
+        :built_gpus
+      ]
+    )
+    |> Pczone.Repo.all()
+    |> calculate_builts_price()
   end
 
   defp calculate_list_total(list, products_map) do

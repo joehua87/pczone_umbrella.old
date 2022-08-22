@@ -21,14 +21,14 @@ defmodule Pczone.Repo.Migrations.AddStore do
 
     create unique_index(:built_template_store, [:built_template_id, :store_id])
 
-    create table(:built_template_variant_store) do
-      add :built_template_variant_id, references(:built_template_variant), null: false
+    create table(:built_store) do
+      add :built_id, references(:built), null: false
       add :store_id, references(:store), null: false
       add :product_code, :string, null: false
       add :variant_code, :string, null: false
     end
 
-    create unique_index(:built_template_variant_store, [:built_template_variant_id, :store_id])
+    create unique_index(:built_store, [:built_id, :store_id])
 
     # create table(:product_store) do
     #   add :store_id, references(:store), null: false

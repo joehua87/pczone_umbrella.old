@@ -371,6 +371,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :barebone_product_id, references(:product)
       add :motherboard_product_id, references(:product)
       add :chassis_product_id, references(:product)
+      add :price, :integer
       add :position, :integer
       add :state, :string, default: "published"
     end
@@ -436,42 +437,6 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :processor_index, :integer
       add :slot_type, :string
     end
-
-    create table(:built_template_variant) do
-      add :name, :string, null: false
-      add :built_template_id, references(:built_template), null: false
-      add :barebone_id, references(:barebone), null: false
-      add :barebone_product_id, references(:product), null: false
-      add :barebone_price, :integer, null: false
-      add :processor_id, references(:processor), null: false
-      add :processor_product_id, references(:product), null: false
-      add :processor_price, :integer, null: false
-      add :processor_quantity, :integer, null: false
-      add :processor_amount, :integer, null: false
-      add :gpu_id, references(:gpu)
-      add :gpu_product_id, references(:product)
-      add :gpu_price, :integer
-      add :gpu_quantity, :integer
-      add :gpu_amount, :integer
-      add :memory_id, references(:memory)
-      add :memory_product_id, references(:product)
-      add :memory_price, :integer, null: false
-      add :memory_quantity, :integer, null: false
-      add :memory_amount, :integer, null: false
-      add :hard_drive_id, references(:hard_drive)
-      add :hard_drive_product_id, references(:product)
-      add :hard_drive_price, :integer, null: false
-      add :hard_drive_quantity, :integer, null: false
-      add :hard_drive_amount, :integer, null: false
-      add :image_id, :string
-      add :option_values, {:array, :string}, null: false
-      add :position, :integer, null: false
-      add :total, :integer, null: false
-      add :state, :string, null: false, default: "active"
-      add :config, :map, null: false, default: %{}
-    end
-
-    create unique_index(:built_template_variant, [:built_template_id, :option_values])
   end
 
   defp create_extension(names) when is_list(names) do

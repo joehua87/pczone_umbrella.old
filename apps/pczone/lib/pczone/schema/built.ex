@@ -4,7 +4,7 @@ defmodule Pczone.Built do
 
   @required [:slug, :name]
   @optional [
-    :built_template,
+    :built_template_id,
     :option_values,
     :barebone_id,
     :motherboard_id,
@@ -12,6 +12,7 @@ defmodule Pczone.Built do
     :barebone_product_id,
     :motherboard_product_id,
     :chassis_product_id,
+    :price,
     :position,
     :state
   ]
@@ -27,6 +28,7 @@ defmodule Pczone.Built do
     belongs_to :barebone_product, Pczone.Product
     belongs_to :motherboard_product, Pczone.Product
     belongs_to :chassis_product, Pczone.Product
+    field :price, :integer
     field :position, :integer
     field :state, Ecto.Enum, default: :published, values: [:published, :archived]
     has_many :built_psus, Pczone.BuiltPsu

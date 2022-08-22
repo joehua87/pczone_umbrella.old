@@ -209,8 +209,8 @@ defmodule PczoneWeb.Schema.BuiltTemplates do
       end)
     end
 
-    field :generate_built_template_variants,
-          non_null(list_of(non_null(:built_template_variant))) do
+    field :generate_builts,
+          non_null(list_of(non_null(:built))) do
       arg :code, non_null(:string)
 
       resolve(fn %{code: code}, _info ->

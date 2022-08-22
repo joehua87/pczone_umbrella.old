@@ -20,6 +20,13 @@ defmodule Pczone.Repo do
     end
   end
 
+  def update_all_2(schema, list, opts \\ []) do
+    case update_all(schema, list, opts) do
+      {:error, reason} -> {:error, reason}
+      {updated, list} -> {:ok, {updated, list}}
+    end
+  end
+
   defp parse_list_result(%{
          entries: entries,
          page_number: page_number,

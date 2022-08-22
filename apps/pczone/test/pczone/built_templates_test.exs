@@ -82,21 +82,24 @@ defmodule Pczone.BuiltTemplatesTest do
     test "generate builts" do
       [built_template | _] = built_templates_fixture()
       assert {:ok, _} = BuiltTemplates.generate_builts(built_template)
+
+      assert [%{price: 3_500_000} | _] =
+               Repo.all(
+                 from v in Pczone.Built, where: v.state == :published, order_by: [asc: :position]
+               )
     end
 
     test "update variants state when built template processors changed" do
       [built_template | _] = built_templates_fixture()
       assert {:ok, _} = BuiltTemplates.generate_builts(built_template)
       assert {_, nil} = BuiltTemplates.remove_built_template_processors(built_template.id)
-
-      assert {:ok, {0, []}} = BuiltTemplates.generate_builts(built_template.code, returning: true)
-
-      assert [] = Repo.all(from v in Pczone.BuiltTemplateVariant, where: v.state == :active)
+      assert {:ok, _} = BuiltTemplates.generate_builts(built_template.code, returning: true)
+      assert [] = Repo.all(from v in Pczone.Built, where: v.state == :published)
     end
 
     test "generate content" do
       [built_template | _] = built_templates_fixture()
-      assert {:ok, {_, _}} = BuiltTemplates.generate_builts(built_template)
+      assert {:ok, _} = BuiltTemplates.generate_builts(built_template)
 
       template = """
       # {{name}}
@@ -109,9 +112,9 @@ defmodule Pczone.BuiltTemplatesTest do
 
       ## Bảng giá chi tiết:
 
-      {{#variants}}
-      * {{option_values}}: {{total}}
-      {{/variants}}
+      {{#builts}}
+      * {{option_values}}: {{price}}
+      {{/builts}}
       """
 
       # TODO: Findout when string is not equal even if look like equal

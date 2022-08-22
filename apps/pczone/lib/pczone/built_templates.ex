@@ -526,7 +526,7 @@ defmodule Pczone.BuiltTemplates do
   def generate_builts(built_template, opts \\ [])
 
   def generate_builts(%Pczone.BuiltTemplate{id: built_template_id} = built_template, _opts) do
-    builts = make_builts(built_template) |> IO.inspect()
+    builts = make_builts(built_template)
     name_list = Enum.map(builts, & &1.name)
 
     multi =
@@ -561,14 +561,15 @@ defmodule Pczone.BuiltTemplates do
                  conflict_target: [:built_template_id, :option_values],
                  returning: true
                ) do
-          {:ok, result |> Enum.map(fn %{id: id, name: name} -> {name, id} end) |> Enum.into(%{})}
+          {:ok,
+           result |> Enum.map(fn built = %{name: name} -> {name, built} end) |> Enum.into(%{})}
         end
       end)
       |> Ecto.Multi.run(:built_processors, fn _, %{builts_map: builts_map} ->
         entities =
           builts
           |> Enum.flat_map(fn %{name: name, built_processors: built_processors} ->
-            Enum.map(built_processors, &Map.put(&1, :built_id, builts_map[name]))
+            Enum.map(built_processors, &Map.put(&1, :built_id, builts_map[name].id))
           end)
 
         Repo.insert_all_2(Pczone.BuiltProcessor, entities, on_conflict: :nothing)
@@ -577,7 +578,7 @@ defmodule Pczone.BuiltTemplates do
         entities =
           builts
           |> Enum.flat_map(fn %{name: name, built_memories: built_memories} ->
-            Enum.map(built_memories, &Map.put(&1, :built_id, builts_map[name]))
+            Enum.map(built_memories, &Map.put(&1, :built_id, builts_map[name].id))
           end)
 
         Repo.insert_all_2(Pczone.BuiltMemory, entities, on_conflict: :nothing)
@@ -586,7 +587,7 @@ defmodule Pczone.BuiltTemplates do
         entities =
           builts
           |> Enum.flat_map(fn %{name: name, built_hard_drives: built_hard_drives} ->
-            Enum.map(built_hard_drives, &Map.put(&1, :built_id, builts_map[name]))
+            Enum.map(built_hard_drives, &Map.put(&1, :built_id, builts_map[name].id))
           end)
 
         Repo.insert_all_2(Pczone.BuiltHardDrive, entities, on_conflict: :nothing)
@@ -595,10 +596,20 @@ defmodule Pczone.BuiltTemplates do
         entities =
           builts
           |> Enum.flat_map(fn %{name: name, built_gpus: built_gpus} ->
-            Enum.map(built_gpus, &Map.put(&1, :built_id, builts_map[name]))
+            Enum.map(built_gpus, &Map.put(&1, :built_id, builts_map[name].id))
           end)
 
         Repo.insert_all_2(Pczone.BuiltGpu, entities, on_conflict: :nothing)
+      end)
+
+    multi =
+      name_list
+      |> Enum.reduce(multi, fn built_name, acc ->
+        Ecto.Multi.run(acc, "update price " <> built_name, fn _, %{builts_map: builts_map} ->
+          built = builts_map[built_name]
+          %{total: price} = Pczone.Builts.calculate_built_price(built.id)
+          Repo.update_all_2(from(Pczone.Built, where: [id: ^built.id]), set: [price: price])
+        end)
       end)
 
     with {:ok, %{insert_all: list}} <- Repo.transaction(multi) do
@@ -623,7 +634,7 @@ defmodule Pczone.BuiltTemplates do
   end
 
   def generate_content(built_template_id, template) do
-    variants_query = from Pczone.BuiltTemplateVariant, order_by: [asc: :position]
+    builts_query = from Pczone.Built, order_by: [asc: :position]
 
     built_template =
       Pczone.Repo.get(
@@ -634,7 +645,7 @@ defmodule Pczone.BuiltTemplates do
             processors: [:processor, :processor_product, :gpu, :gpu_product],
             memories: [:memory, :memory_product],
             hard_drives: [:hard_drive, :hard_drive_product],
-            variants: ^variants_query
+            builts: ^builts_query
           ]
         ),
         built_template_id

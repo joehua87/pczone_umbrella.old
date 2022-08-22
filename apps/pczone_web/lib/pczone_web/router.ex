@@ -60,10 +60,6 @@ defmodule PczoneWeb.Router do
     post "/upsert/psus", UpsertController, :psus
     post "/upsert/built-templates", UpsertController, :built_templates
     post "/upsert/built-template-stores", UpsertController, :built_template_stores
-
-    post "/upsert/built-template-variant-stores",
-         UpsertController,
-         :built_template_variant_stores
   end
 
   scope "/files", PczoneWeb do

@@ -19,7 +19,7 @@ defmodule Pczone.BuiltTemplate do
     has_many :processors, Pczone.BuiltTemplateProcessor
     has_many :memories, Pczone.BuiltTemplateMemory
     has_many :hard_drives, Pczone.BuiltTemplateHardDrive
-    has_many :variants, Pczone.BuiltTemplateVariant
+    has_many :builts, Pczone.Built
     has_many :built_template_stores, Pczone.BuiltTemplateStore
   end
 

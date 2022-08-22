@@ -48,7 +48,6 @@ defmodule PczoneWeb.UpsertController do
   end
 
   def psus(conn, %{"file" => %Plug.Upload{} = file} = upload) do
-    IO.inspect(upload)
     upsert(conn, file, &Pczone.Psus.upsert/1)
   end
 
@@ -70,13 +69,13 @@ defmodule PczoneWeb.UpsertController do
     json(conn, %{})
   end
 
-  def built_template_variant_stores(conn, %{
+  def built_stores(conn, %{
         # "store_id" => store_id,
         "file" => %Plug.Upload{path: path}
       }) do
     # Assume we have only Shopee
     store_id = 1
-    Pczone.Stores.upsert_built_template_variant_stores(store_id, path)
+    Pczone.Stores.upsert_built_stores(store_id, path)
     json(conn, %{})
   end
 
