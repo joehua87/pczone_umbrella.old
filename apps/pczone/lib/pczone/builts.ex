@@ -1,6 +1,24 @@
 defmodule Pczone.Builts do
-  import Ecto.Query, only: [from: 2]
+  import Ecto.Query, only: [from: 2, where: 2]
+  import Dew.FilterParser
   alias Pczone.{Repo, Motherboard, Memory, Processor, ChipsetProcessor}
+
+  def list(attrs \\ %{})
+
+  def list(%Dew.Filter{
+        filter: filter,
+        paging: paging,
+        selection: selection,
+        order_by: order_by
+      }) do
+    Pczone.Built
+    |> where(^parse_filter(filter))
+    |> select_fields(selection, [])
+    |> sort_by(order_by, [])
+    |> Repo.paginate(paging)
+  end
+
+  def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
 
   def processor_ids_query(motherboard_id) do
     processor_ids_query =
@@ -444,6 +462,17 @@ defmodule Pczone.Builts do
       # TODO: Combine errors
       errors[0]
     end
+  end
+
+  def parse_filter(filter) do
+    filter
+    |> Enum.reduce(nil, fn {field, value}, acc ->
+      case field do
+        :name -> parse_string_filter(acc, field, value)
+        :built_template_id -> parse_string_filter(acc, field, value)
+        _ -> acc
+      end
+    end) || true
   end
 
   defp get_slots_map(slots) do

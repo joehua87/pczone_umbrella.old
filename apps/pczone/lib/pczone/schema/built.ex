@@ -38,6 +38,7 @@ defmodule Pczone.Built do
     has_many :built_memories, Pczone.BuiltMemory
     has_many :built_hard_drives, Pczone.BuiltHardDrive
     has_many :built_gpus, Pczone.BuiltGpu
+    has_many :built_stores, Pczone.BuiltStore
   end
 
   def changeset(entity, params) do

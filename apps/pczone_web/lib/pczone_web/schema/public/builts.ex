@@ -1,45 +1,26 @@
 defmodule PczoneWeb.Schema.Builts do
   use Absinthe.Schema.Notation
-  alias Absinthe.Resolution.Helpers
+  import Absinthe.Resolution.Helpers
   alias Pczone.Builts
+  alias PczoneWeb.Dataloader
 
   object :built_psu do
     field :built_id, non_null(:id)
     field :psu_id, non_null(:id)
     field :product_id, non_null(:id)
-
-    field :built,
-          non_null(:built),
-          resolve: Helpers.dataloader(PczoneWeb.Dataloader)
-
-    field :psu,
-          non_null(:psu),
-          resolve: Helpers.dataloader(PczoneWeb.Dataloader)
-
-    field :product,
-          non_null(:product),
-          resolve: Helpers.dataloader(PczoneWeb.Dataloader)
-
+    field :built, non_null(:built), resolve: dataloader(Dataloader)
+    field :psu, non_null(:psu), resolve: dataloader(Dataloader)
+    field :product, non_null(:product), resolve: dataloader(Dataloader)
     field :quantity, non_null(:integer)
   end
 
   object :built_extension_device do
     field :built_id, non_null(:id)
+    field :built, non_null(:built), resolve: dataloader(Dataloader)
     field :extension_device_id, non_null(:id)
+    field :extension_device, non_null(:extension_device), resolve: dataloader(Dataloader)
     field :product_id, non_null(:id)
-
-    field :built,
-          non_null(:built),
-          resolve: Helpers.dataloader(PczoneWeb.Dataloader)
-
-    field :extension_device,
-          non_null(:extension_device),
-          resolve: Helpers.dataloader(PczoneWeb.Dataloader)
-
-    field :product,
-          non_null(:product),
-          resolve: Helpers.dataloader(PczoneWeb.Dataloader)
-
+    field :product, non_null(:product), resolve: dataloader(Dataloader)
     field :slot, non_null(:string)
     field :quantity, non_null(:integer)
   end
@@ -49,23 +30,10 @@ defmodule PczoneWeb.Schema.Builts do
     field :extension_device_id, :id
     field :processor_id, non_null(:id)
     field :product_id, non_null(:id)
-
-    field :built,
-          non_null(:built),
-          resolve: Helpers.dataloader(PczoneWeb.Dataloader)
-
-    field :extension_device,
-          :extension_device,
-          resolve: Helpers.dataloader(PczoneWeb.Dataloader)
-
-    field :processor,
-          non_null(:processor),
-          resolve: Helpers.dataloader(PczoneWeb.Dataloader)
-
-    field :product,
-          non_null(:product),
-          resolve: Helpers.dataloader(PczoneWeb.Dataloader)
-
+    field :built, non_null(:built), resolve: dataloader(Dataloader)
+    field :extension_device, :extension_device, resolve: dataloader(Dataloader)
+    field :processor, non_null(:processor), resolve: dataloader(Dataloader)
+    field :product, non_null(:product), resolve: dataloader(Dataloader)
     field :slot, non_null(:string)
     field :quantity, non_null(:integer)
   end
@@ -75,23 +43,10 @@ defmodule PczoneWeb.Schema.Builts do
     field :extension_device_id, :id
     field :memory_id, non_null(:id)
     field :product_id, non_null(:id)
-
-    field :built,
-          non_null(:built),
-          resolve: Helpers.dataloader(PczoneWeb.Dataloader)
-
-    field :extension_device,
-          :extension_device,
-          resolve: Helpers.dataloader(PczoneWeb.Dataloader)
-
-    field :memory,
-          non_null(:memory),
-          resolve: Helpers.dataloader(PczoneWeb.Dataloader)
-
-    field :product,
-          non_null(:product),
-          resolve: Helpers.dataloader(PczoneWeb.Dataloader)
-
+    field :built, non_null(:built), resolve: dataloader(Dataloader)
+    field :extension_device, :extension_device, resolve: dataloader(Dataloader)
+    field :memory, non_null(:memory), resolve: dataloader(Dataloader)
+    field :product, non_null(:product), resolve: dataloader(Dataloader)
     field :slot, non_null(:string)
     field :quantity, non_null(:integer)
   end
@@ -101,23 +56,10 @@ defmodule PczoneWeb.Schema.Builts do
     field :extension_device_id, :id
     field :hard_drive_id, non_null(:id)
     field :product_id, non_null(:id)
-
-    field :built,
-          non_null(:built),
-          resolve: Helpers.dataloader(PczoneWeb.Dataloader)
-
-    field :extension_device,
-          :extension_device,
-          resolve: Helpers.dataloader(PczoneWeb.Dataloader)
-
-    field :hard_drive,
-          non_null(:hard_drive),
-          resolve: Helpers.dataloader(PczoneWeb.Dataloader)
-
-    field :product,
-          non_null(:product),
-          resolve: Helpers.dataloader(PczoneWeb.Dataloader)
-
+    field :built, non_null(:built), resolve: dataloader(Dataloader)
+    field :extension_device, :extension_device, resolve: dataloader(Dataloader)
+    field :hard_drive, non_null(:hard_drive), resolve: dataloader(Dataloader)
+    field :product, non_null(:product), resolve: dataloader(Dataloader)
     field :slot, non_null(:string)
     field :quantity, non_null(:integer)
   end
@@ -126,42 +68,68 @@ defmodule PczoneWeb.Schema.Builts do
     field :built_id, non_null(:id)
     field :gpu_id, non_null(:id)
     field :product_id, non_null(:id)
-
-    field :built,
-          non_null(:built),
-          resolve: Helpers.dataloader(PczoneWeb.Dataloader)
-
-    field :gpu,
-          non_null(:gpu),
-          resolve: Helpers.dataloader(PczoneWeb.Dataloader)
-
-    field :product,
-          non_null(:product),
-          resolve: Helpers.dataloader(PczoneWeb.Dataloader)
-
+    field :built, non_null(:built), resolve: dataloader(Dataloader)
+    field :gpu, non_null(:gpu), resolve: dataloader(Dataloader)
+    field :product, non_null(:product), resolve: dataloader(Dataloader)
     field :slot, non_null(:string)
     field :quantity, non_null(:integer)
+  end
+
+  object :built_store do
+    field :built_id, non_null(:id)
+    field :built, non_null(:built), resolve: dataloader(Dataloader)
+    field :store_id, non_null(:id)
+    field :store, non_null(:store), resolve: dataloader(Dataloader)
+    field :product_code, non_null(:string)
+    field :variant_code, non_null(:string)
   end
 
   object :built do
     field :id, non_null(:id)
     field :slug, non_null(:string)
     field :name, non_null(:string)
+    field :option_values, list_of(non_null(:string))
+    field :price, non_null(:integer)
     field :barebone_id, :id
+    field :barebone, :barebone, resolve: dataloader(Dataloader)
     field :motherboard_id, :id
+    field :motherboard, :motherboard, resolve: dataloader(Dataloader)
     field :chassis_id, :id
-    field :barebone, :barebone
-    field :motherboard, :motherboard
-    field :chassis, :chassis
-    field :built_psus, non_null(list_of(non_null(:built_psu)))
-    field :built_extension_devices, non_null(list_of(non_null(:built_extension_device)))
-    field :built_processors, non_null(list_of(non_null(:built_processor)))
-    field :built_memories, non_null(list_of(non_null(:built_memory)))
-    field :built_hard_drives, non_null(list_of(non_null(:built_hard_drive)))
-    field :built_gpus, non_null(list_of(non_null(:built_gpu)))
+    field :chassis, :chassis, resolve: dataloader(Dataloader)
+    field :built_template_id, :id
+    field :built_template, :built_template, resolve: dataloader(Dataloader)
+
+    field :built_psus,
+          non_null(list_of(non_null(:built_psu))),
+          resolve: dataloader(Dataloader)
+
+    field :built_extension_devices,
+          non_null(list_of(non_null(:built_extension_device))),
+          resolve: dataloader(Dataloader)
+
+    field :built_processors,
+          non_null(list_of(non_null(:built_processor))),
+          resolve: dataloader(Dataloader)
+
+    field :built_memories,
+          non_null(list_of(non_null(:built_memory))),
+          resolve: dataloader(Dataloader)
+
+    field :built_hard_drives,
+          non_null(list_of(non_null(:built_hard_drive))),
+          resolve: dataloader(Dataloader)
+
+    field :built_gpus,
+          non_null(list_of(non_null(:built_gpu))),
+          resolve: dataloader(Dataloader)
+
+    field :built_stores,
+          non_null(list_of(non_null(:built_store))),
+          resolve: dataloader(Dataloader)
   end
 
   input_object :built_filter_input do
+    field :built_template_id, :id_filter_input
     field :name, :string_filter_input
   end
 
