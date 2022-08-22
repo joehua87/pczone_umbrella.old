@@ -106,7 +106,7 @@ defmodule Pczone.Stores.ShopeeTest do
     built_template_stores_path =
       get_fixtures_dir() |> Path.join("built_template_stores_shopee.xlsx")
 
-    Pczone.Stores.upsert_built_template_stores(store.id, built_template_stores_path)
+    Pczone.BuiltTemplateStores.upsert_from_xlsx(store.id, built_template_stores_path)
 
     # Generate builts
     built_template = Enum.find(built_templates, &(&1.code == "hp-elitedesk-800-g2-mini-65w"))

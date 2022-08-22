@@ -4,28 +4,6 @@ defmodule Pczone.StoresTest do
   alias Pczone.{BuiltTemplates, Stores}
 
   describe "stores" do
-    test "upsert built template stores", %{store: store} do
-      built_templates_fixture()
-      path = get_fixtures_dir() |> Path.join("built_template_stores_shopee.xlsx")
-
-      assert {:ok,
-              {2,
-               [
-                 %Pczone.BuiltTemplateStore{
-                   id: _,
-                   store_id: _,
-                   product_code: "19301333605",
-                   built_template_id: _
-                 },
-                 %Pczone.BuiltTemplateStore{
-                   id: _,
-                   store_id: _,
-                   product_code: "15618662714",
-                   built_template_id: _
-                 }
-               ]}} = Stores.upsert_built_template_stores(store.id, path, returning: true)
-    end
-
     test "read builts from xlsx" do
       path = get_fixtures_dir() |> Path.join("shopee_builts.xlsx")
 

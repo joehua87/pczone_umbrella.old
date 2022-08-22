@@ -4,12 +4,12 @@ defmodule Pczone.BuiltTemplateStore do
 
   @derive Jason.Encoder
 
-  @required [:store_id, :built_template_id, :product_code]
+  @required [:built_template_id, :store_id, :product_code]
   @optional [:variants, :update_variants_at]
 
   schema "built_template_store" do
-    belongs_to :store, Pczone.Memory
     belongs_to :built_template, Pczone.BuiltTemplate
+    belongs_to :store, Pczone.Memory
     field :product_code, :string
     field :variants, {:array, :map}
     field :update_variants_at, :utc_datetime

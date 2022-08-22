@@ -4,10 +4,8 @@ defmodule Pczone.Stores do
   alias Elixlsx.{Sheet, Workbook}
 
   alias Pczone.{
-    Helpers,
     Repo,
     Store,
-    BuiltTemplate,
     BuiltTemplateStore,
     Built,
     BuiltStore,
@@ -150,54 +148,6 @@ defmodule Pczone.Stores do
         Keyword.merge(opts, on_conflict: {:replace, [:name]}, conflict_target: [:code])
       )
     end
-  end
-
-  def upsert_built_template_stores(store_id, path, opts \\ []) do
-    list =
-      path
-      |> Xlsx.read_spreadsheet()
-      |> Enum.reduce(
-        [],
-        fn
-          %{"product_code" => product_code, "built_template_code" => built_template_code}, acc ->
-            acc ++
-              [
-                %{
-                  product_code: Helpers.ensure_string(product_code),
-                  built_template_code: built_template_code
-                }
-              ]
-
-          _, acc ->
-            acc
-        end
-      )
-
-    built_template_codes = Enum.map(list, & &1.built_template_code)
-
-    built_templates_map =
-      from(b in BuiltTemplate, where: b.code in ^built_template_codes, select: {b.code, b.id})
-      |> Repo.all()
-      |> Enum.into(%{})
-
-    list =
-      Enum.map(list, fn %{product_code: product_code, built_template_code: built_template_code} ->
-        %{
-          store_id: store_id,
-          built_template_id: built_templates_map[built_template_code],
-          product_code: product_code
-        }
-      end)
-      |> Enum.filter(&(&1.built_template_id != nil))
-
-    Repo.insert_all_2(
-      Pczone.BuiltTemplateStore,
-      list,
-      [
-        on_conflict: {:replace, [:product_code]},
-        conflict_target: [:built_template_id, :store_id]
-      ] ++ opts
-    )
   end
 
   @doc """
