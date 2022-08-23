@@ -140,7 +140,7 @@ defmodule Pczone.BuiltTemplates do
            ]
        )}
     else
-      [_ | _] = list -> {:error, [message: "Missing products", products: Enum.uniq(list)]}
+      [_ | _] = list -> {:error, {"Missing products", %{products: Enum.uniq(list)}}}
       reason -> reason
     end
   end

@@ -80,10 +80,14 @@ defmodule PczoneWeb.UpsertController do
   end
 
   defp upsert(conn, file, func) do
-    file
-    |> Pczone.Helpers.read_data()
-    |> func.()
+    case file
+         |> Pczone.Helpers.read_data()
+         |> func.() do
+      {:ok, _result} ->
+        json(conn, %{})
 
-    json(conn, %{})
+      {:error, {message, data}} ->
+        conn |> json(%{error: %{message: message, data: data}}) |> put_status(400)
+    end
   end
 end
