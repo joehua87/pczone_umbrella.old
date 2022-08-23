@@ -9,7 +9,7 @@ defmodule Pczone.BuiltTemplateStore do
 
   schema "built_template_store" do
     belongs_to :built_template, Pczone.BuiltTemplate
-    belongs_to :store, Pczone.Memory
+    belongs_to :store, Pczone.Store
     field :product_code, :string
     field :variants, {:array, :map}
     field :update_variants_at, :utc_datetime

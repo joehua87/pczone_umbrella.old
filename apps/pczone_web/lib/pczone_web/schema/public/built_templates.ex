@@ -128,6 +128,12 @@ defmodule PczoneWeb.Schema.BuiltTemplates do
     field :hard_drives, non_null(list_of(non_null(:built_template_hard_drive_input)))
   end
 
+  input_object :built_template_store_input do
+    field :store_id, non_null(:id)
+    field :built_template_id, non_null(:id)
+    field :product_code, non_null(:string)
+  end
+
   object :built_template_list_result do
     field :entities, non_null(list_of(non_null(:built_template)))
     field :paging, non_null(:paging)
@@ -216,6 +222,17 @@ defmodule PczoneWeb.Schema.BuiltTemplates do
       resolve(fn %{code: code}, _info ->
         with {:ok, {_, result}} <-
                Pczone.BuiltTemplates.generate_builts(code, returning: true) do
+          {:ok, result}
+        end
+      end)
+    end
+
+    field :upsert_built_template_stores, non_null(list_of(non_null(:built_template_store))) do
+      arg :data, non_null(list_of(non_null(:built_template_store_input)))
+
+      resolve(fn %{data: data}, _info ->
+        with {:ok, {_, result}} <-
+               Pczone.BuiltTemplateStores.upsert(data, returning: true) do
           {:ok, result}
         end
       end)
