@@ -69,6 +69,7 @@ defmodule PczoneWeb.Schema do
     import_fields :product_mutations
     import_fields :built_mutations
     import_fields :built_template_mutations
+    import_fields :store_mutations
     import_fields :app_mutations
 
     def middleware(middleware, _field, %{}) do

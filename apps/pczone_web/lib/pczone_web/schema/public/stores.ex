@@ -37,6 +37,14 @@ defmodule PczoneWeb.Schema.Stores do
   end
 
   object :store_mutations do
+    field :generate_store_pricing_report, non_null(:report) do
+      arg :store_id, non_null(:id)
+
+      resolve fn %{store_id: store_id}, _info ->
+        Pczone.Stores.generate_store_pricing_report(store_id)
+      end
+    end
+
     field :upsert_stores, non_null(list_of(non_null(:store))) do
       arg :data, non_null(:json)
 
