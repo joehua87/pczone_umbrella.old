@@ -200,6 +200,14 @@ defmodule PczoneWeb.Schema.Builts do
       end)
     end
 
+    field :built, :built do
+      arg :id, non_null(:id)
+
+      resolve(fn %{id: id}, _info ->
+        {:ok, Pczone.Builts.get(id)}
+      end)
+    end
+
     field :processors_for_built, non_null(list_of(non_null(:processor))) do
       arg :motherboard_id, non_null(:id)
 

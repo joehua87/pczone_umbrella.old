@@ -3,6 +3,10 @@ defmodule Pczone.Builts do
   import Dew.FilterParser
   alias Pczone.{Repo, Motherboard, Memory, Processor, ChipsetProcessor}
 
+  def get(id) do
+    Repo.get(Pczone.Built, id)
+  end
+
   def list(attrs \\ %{})
 
   def list(%Dew.Filter{
