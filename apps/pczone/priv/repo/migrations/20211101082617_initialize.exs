@@ -385,12 +385,16 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :quantity, :integer, null: false
     end
 
+    create unique_index(:built_psu, [:built_id, :psu_id])
+
     create table(:built_heatsink) do
       add :built_id, references(:built), null: false
       add :heatsink_id, references(:heatsink), null: false
       add :product_id, references(:product), null: false
       add :quantity, :integer, null: false
     end
+
+    create unique_index(:built_heatsink, [:built_id, :heatsink_id])
 
     create table(:built_extension_device) do
       add :built_id, references(:built), null: false
@@ -401,6 +405,8 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :quantity, :integer, null: false
     end
 
+    create unique_index(:built_extension_device, [:built_id, :extension_device_id])
+
     create table(:built_processor) do
       add :built_id, references(:built), null: false
       add :processor_id, references(:processor), null: false
@@ -408,6 +414,8 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :extension_device_id, references(:extension_device)
       add :quantity, :integer, null: false
     end
+
+    create unique_index(:built_processor, [:built_id, :processor_id])
 
     create table(:built_memory) do
       add :built_id, references(:built), null: false
@@ -419,6 +427,8 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :quantity, :integer
     end
 
+    create unique_index(:built_memory, [:built_id, :memory_id])
+
     create table(:built_hard_drive) do
       add :built_id, references(:built), null: false
       add :hard_drive_id, references(:hard_drive), null: false
@@ -429,6 +439,8 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :quantity, :integer
     end
 
+    create unique_index(:built_hard_drive, [:built_id, :hard_drive_id])
+
     create table(:built_gpu) do
       add :built_id, references(:built), null: false
       add :gpu_id, references(:gpu), null: false
@@ -437,6 +449,8 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :processor_index, :integer
       add :slot_type, :string
     end
+
+    create unique_index(:built_gpu, [:built_id, :gpu_id])
   end
 
   defp create_extension(names) when is_list(names) do

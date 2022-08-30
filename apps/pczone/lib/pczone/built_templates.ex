@@ -572,7 +572,10 @@ defmodule Pczone.BuiltTemplates do
             Enum.map(built_processors, &Map.put(&1, :built_id, builts_map[name].id))
           end)
 
-        Repo.insert_all_2(Pczone.BuiltProcessor, entities, on_conflict: :nothing)
+        Repo.insert_all_2(Pczone.BuiltProcessor, entities,
+          on_conflict: {:replace, [:quantity]},
+          conflict_target: [:built_id, :processor_id]
+        )
       end)
       |> Ecto.Multi.run(:built_memories, fn _, %{builts_map: builts_map} ->
         entities =
@@ -581,7 +584,10 @@ defmodule Pczone.BuiltTemplates do
             Enum.map(built_memories, &Map.put(&1, :built_id, builts_map[name].id))
           end)
 
-        Repo.insert_all_2(Pczone.BuiltMemory, entities, on_conflict: :nothing)
+        Repo.insert_all_2(Pczone.BuiltMemory, entities,
+          on_conflict: {:replace, [:quantity]},
+          conflict_target: [:built_id, :memory_id]
+        )
       end)
       |> Ecto.Multi.run(:built_hard_drives, fn _, %{builts_map: builts_map} ->
         entities =
@@ -590,7 +596,10 @@ defmodule Pczone.BuiltTemplates do
             Enum.map(built_hard_drives, &Map.put(&1, :built_id, builts_map[name].id))
           end)
 
-        Repo.insert_all_2(Pczone.BuiltHardDrive, entities, on_conflict: :nothing)
+        Repo.insert_all_2(Pczone.BuiltHardDrive, entities,
+          on_conflict: {:replace, [:quantity]},
+          conflict_target: [:built_id, :hard_drive_id]
+        )
       end)
       |> Ecto.Multi.run(:built_gpus, fn _, %{builts_map: builts_map} ->
         entities =
@@ -599,7 +608,10 @@ defmodule Pczone.BuiltTemplates do
             Enum.map(built_gpus, &Map.put(&1, :built_id, builts_map[name].id))
           end)
 
-        Repo.insert_all_2(Pczone.BuiltGpu, entities, on_conflict: :nothing)
+        Repo.insert_all_2(Pczone.BuiltGpu, entities,
+          on_conflict: {:replace, [:quantity]},
+          conflict_target: [:built_id, :gpu_id]
+        )
       end)
 
     multi =

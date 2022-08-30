@@ -7,7 +7,6 @@ defmodule Pczone.BuiltTemplateStoresTest do
   describe "built template stores" do
     test "upsert", %{store: store} do
       built_templates_fixture()
-      path = get_fixtures_dir() |> Path.join("built_template_stores_shopee.xlsx")
 
       [id_1, id_2] =
         Repo.all(
