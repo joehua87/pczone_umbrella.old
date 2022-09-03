@@ -4,12 +4,13 @@ defmodule Pczone.BuiltTemplate do
 
   @derive Jason.Encoder
 
-  @required [:code, :name, :option_types, :barebone_id, :barebone_product_id]
+  @required [:code, :name, :category, :option_types, :barebone_id, :barebone_product_id]
   @optional [:option_value_seperator, :body_template]
 
   schema "built_template" do
     field :code, :string
     field :name, :string
+    field :category, :string
     embeds_many :media, Pczone.EmbeddedMedium
     field :body_template, :string
     field :option_types, {:array, :string}

@@ -304,6 +304,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
     create table(:built_template) do
       add :code, :string, null: false
       add :name, :string, null: false
+      add :category, :string, null: false
       add :media, :map, null: false, default: "[]"
       add :body_template, :string, null: false
       add :barebone_id, references(:barebone), null: false

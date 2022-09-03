@@ -82,6 +82,7 @@ defmodule PczoneWeb.Schema.BuiltTemplates do
 
   input_object :built_template_filter_input do
     field :name, :string_filter_input
+    field :category, :string_filter_input
   end
 
   input_object :built_template_processor_input do

@@ -179,6 +179,7 @@ defmodule Pczone.BuiltTemplates do
         fn %{
              "code" => code,
              "name" => name,
+             "category" => category,
              "body_template" => body_template,
              "barebone_product" => barebone_product_code,
              "option_types" => option_types
@@ -191,6 +192,7 @@ defmodule Pczone.BuiltTemplates do
           %{
             code: code,
             name: name,
+            category: category,
             body_template: body_template,
             barebone_id: barebone_id,
             barebone_product_id: barebone_product_id,
@@ -686,6 +688,7 @@ defmodule Pczone.BuiltTemplates do
     |> Enum.reduce(nil, fn {field, value}, acc ->
       case field do
         :name -> parse_string_filter(acc, field, value)
+        :category -> parse_string_filter(acc, field, value)
         _ -> acc
       end
     end) || true
