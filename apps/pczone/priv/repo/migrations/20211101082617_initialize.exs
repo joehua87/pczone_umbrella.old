@@ -19,6 +19,23 @@ defmodule Pczone.Repo.Migrations.Initialize do
 
     create unique_index(:brand, [:slug])
 
+    create table(:attribute) do
+      add :code, :string, null: false
+      add :name, :string, null: false
+    end
+
+    create table(:attribute_item) do
+      add :code, :string, null: false
+      add :name, :string, null: false
+      add :path, :ltree, null: false
+      add :description, :text
+      add :attribute_id, references(:attribute), null: false
+      add :count, :integer
+    end
+
+    create index(:attribute_item, [:code])
+    create index(:attribute_item, [:attribute_id])
+
     create table(:chipset) do
       add :slug, :string, null: false
       add :code, :string, null: false
@@ -301,6 +318,15 @@ defmodule Pczone.Repo.Migrations.Initialize do
 
     create unique_index(:product_product_category, [:product_id, :product_category_id])
 
+    create table(:product_attribute) do
+      add :product_id, references(:product), null: false
+      add :attribute_id, references(:attribute), null: false
+      add :attribute_item_id, references(:attribute_item), null: false
+    end
+
+    create unique_index(:product_attribute, [:product_id, :attribute_item_id])
+    create index(:product_attribute, [:attribute_id, :attribute_item_id])
+
     create table(:built_template) do
       add :code, :string, null: false
       add :name, :string, null: false
@@ -360,6 +386,15 @@ defmodule Pczone.Repo.Migrations.Initialize do
 
     create unique_index(:built_template_hard_drive, [:key])
     create unique_index(:built_template_hard_drive, [:built_template_id, :label])
+
+    create table(:built_template_attribute) do
+      add :built_template_id, references(:built_template), null: false
+      add :attribute_id, references(:attribute), null: false
+      add :attribute_item_id, references(:attribute_item), null: false
+    end
+
+    create unique_index(:built_template_attribute, [:built_template_id, :attribute_item_id])
+    create index(:built_template_attribute, [:attribute_id, :attribute_item_id])
 
     create table(:built) do
       add :slug, :string, null: false
