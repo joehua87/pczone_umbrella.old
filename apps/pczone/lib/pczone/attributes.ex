@@ -1,6 +1,30 @@
 defmodule Pczone.Attributes do
-  import Ecto.Query, only: [from: 2]
+  import Ecto.Query, only: [from: 2, where: 2]
+  import Dew.FilterParser
   alias Pczone.Repo
+
+  def get(attrs = %{}) when is_map(attrs), do: get(struct(Dew.Filter, attrs))
+
+  def get(id) do
+    Repo.get(Pczone.Attribute, id)
+  end
+
+  def list(attrs \\ %{})
+
+  def list(%Dew.Filter{
+        filter: filter,
+        paging: paging,
+        selection: selection,
+        order_by: order_by
+      }) do
+    Pczone.Attribute
+    |> where(^parse_filter(filter))
+    |> select_fields(selection, [])
+    |> sort_by(order_by, [])
+    |> Repo.paginate(paging)
+  end
+
+  def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
 
   @doc """
   Upsert a list of attributes
@@ -54,5 +78,16 @@ defmodule Pczone.Attributes do
   def get_map_by_code(codes) do
     Repo.all(from a in Pczone.Attribute, select: {a.code, a}, where: a.code in ^codes)
     |> Enum.into(%{})
+  end
+
+  def parse_filter(filter) do
+    filter
+    |> Enum.reduce(nil, fn {field, value}, acc ->
+      case field do
+        :code -> parse_string_filter(acc, field, value)
+        :name -> parse_string_filter(acc, field, value)
+        _ -> acc
+      end
+    end) || true
   end
 end

@@ -9,6 +9,7 @@ defmodule Pczone.Attribute do
     field :code, :string
     field :name, :string
     field :description, :string
+    has_many :items, Pczone.AttributeItem
   end
 
   def changeset(entity, params) do
