@@ -7,7 +7,7 @@ defmodule Pczone.UsersFixtures do
   def unique_user_email, do: "user#{System.unique_integer()}@example.com"
   def valid_user_password, do: "hello world!"
 
-  def valid_user_attributes(attrs \\ %{}) do
+  def valid_user_taxonomies(attrs \\ %{}) do
     Enum.into(attrs, %{
       email: unique_user_email(),
       password: valid_user_password()
@@ -17,7 +17,7 @@ defmodule Pczone.UsersFixtures do
   def user_fixture(attrs \\ %{}) do
     {:ok, user} =
       attrs
-      |> valid_user_attributes()
+      |> valid_user_taxonomies()
       |> Pczone.Users.register_user()
 
     user

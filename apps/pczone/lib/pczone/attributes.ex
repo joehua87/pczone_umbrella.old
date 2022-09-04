@@ -1,4 +1,4 @@
-defmodule Pczone.Attributes do
+defmodule Pczone.Taxonomies do
   import Ecto.Query, only: [from: 2, where: 2]
   import Dew.FilterParser
   alias Pczone.Repo
@@ -6,7 +6,7 @@ defmodule Pczone.Attributes do
   def get(attrs = %{}) when is_map(attrs), do: get(struct(Dew.Filter, attrs))
 
   def get(id) do
-    Repo.get(Pczone.Attribute, id)
+    Repo.get(Pczone.Taxonomy, id)
   end
 
   def list(attrs \\ %{})
@@ -17,7 +17,7 @@ defmodule Pczone.Attributes do
         selection: selection,
         order_by: order_by
       }) do
-    Pczone.Attribute
+    Pczone.Taxonomy
     |> where(^parse_filter(filter))
     |> select_fields(selection, [])
     |> sort_by(order_by, [])
@@ -27,7 +27,7 @@ defmodule Pczone.Attributes do
   def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
 
   @doc """
-  Upsert a list of attributes
+  Upsert a list of taxonomies
   """
   def upsert(list, opts \\ []) do
     list =
@@ -44,39 +44,39 @@ defmodule Pczone.Attributes do
       end)
 
     Repo.insert_all_2(
-      Pczone.Attribute,
+      Pczone.Taxonomy,
       list,
       [on_conflict: {:replace, [:name, :description]}, conflict_target: [:code]] ++ opts
     )
   end
 
   @doc """
-  Upsert attributes with attribute items from xlsx file
+  Upsert taxonomies with taxonomy items from xlsx file
   """
   def upsert_from_xlsx(path) do
-    attributes = Pczone.Xlsx.read_spreadsheet(path, 1)
-    attribute_items = Pczone.Xlsx.read_spreadsheet(path, 2)
+    taxonomies = Pczone.Xlsx.read_spreadsheet(path, 1)
+    taxons = Pczone.Xlsx.read_spreadsheet(path, 2)
 
     Ecto.Multi.new()
-    |> Ecto.Multi.run(:attributes, fn _, _ ->
-      upsert(attributes, returning: true)
+    |> Ecto.Multi.run(:taxonomies, fn _, _ ->
+      upsert(taxonomies, returning: true)
     end)
-    |> Ecto.Multi.run(:attribute_items, fn _, %{attributes: {_, attributes}} ->
-      attributes_map =
-        attributes |> Enum.map(fn %{code: code} = item -> {code, item} end) |> Enum.into(%{})
+    |> Ecto.Multi.run(:taxons, fn _, %{taxonomies: {_, taxonomies}} ->
+      taxonomies_map =
+        taxonomies |> Enum.map(fn %{code: code} = item -> {code, item} end) |> Enum.into(%{})
 
-      Pczone.AttributeItems.upsert(attribute_items, attributes_map)
+      Pczone.Taxons.upsert(taxons, taxonomies_map)
     end)
     |> Repo.transaction()
   end
 
   def get_map_by_code() do
-    Repo.all(from a in Pczone.Attribute, select: {a.code, a})
+    Repo.all(from a in Pczone.Taxonomy, select: {a.code, a})
     |> Enum.into(%{})
   end
 
   def get_map_by_code(codes) do
-    Repo.all(from a in Pczone.Attribute, select: {a.code, a}, where: a.code in ^codes)
+    Repo.all(from a in Pczone.Taxonomy, select: {a.code, a}, where: a.code in ^codes)
     |> Enum.into(%{})
   end
 

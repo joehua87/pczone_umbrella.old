@@ -19,14 +19,14 @@ defmodule PczoneWeb.Schema.Common do
     value :datetime
   end
 
-  object :property_item do
+  object :attribute_item do
     field :label, non_null(:string)
     field :value, :string
   end
 
-  object :property_group do
+  object :attribute_group do
     field :title, non_null(:string)
-    field :items, non_null(list_of(non_null(:property_item)))
+    field :items, non_null(list_of(non_null(:attribute_item)))
   end
 
   input_object :order_by_input do

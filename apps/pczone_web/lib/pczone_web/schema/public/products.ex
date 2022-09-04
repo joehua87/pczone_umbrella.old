@@ -52,26 +52,21 @@ defmodule PczoneWeb.Schema.Products do
           :component_product,
           resolve: Helpers.dataloader(PczoneWeb.Dataloader)
 
-    field :categories,
-          non_null(list_of(non_null(:product_category))),
-          resolve: Helpers.dataloader(PczoneWeb.Dataloader)
-
-    field :attributes,
-          non_null(list_of(non_null(:attribute_item))),
+    field :taxons,
+          non_null(list_of(non_null(:taxon))),
           resolve: Helpers.dataloader(PczoneWeb.Dataloader)
   end
 
-  object :product_attribute do
+  object :product_taxon do
     field :product_id, non_null(:id)
-    field :attribute_id, non_null(:id)
-    field :attribute_item_id, non_null(:id)
+    field :taxonomy_id, non_null(:id)
+    field :taxon_id, non_null(:id)
   end
 
   input_object :product_filter_input do
     field :id, :id_filter_input
     field :title, :string_filter_input
     field :condition, :string_filter_input
-    field :category_id, :id_filter_input
     field :component_type, :string_filter_input
     field :is_bundled, :boolean_filter_input
   end
@@ -124,7 +119,6 @@ defmodule PczoneWeb.Schema.Products do
     field :sale_price, non_null(:integer)
     field :stock, :integer
     field :type, non_null(:product_type)
-    field :category_id, :id
     field :barebone_id, :id
     field :motherboard_id, :id
     field :processor_id, :id
@@ -143,27 +137,26 @@ defmodule PczoneWeb.Schema.Products do
     field :list_price, :integer
     field :sale_price, :integer
     field :stock, :integer
-    field :category_id, :id
   end
 
-  input_object :add_product_attribute_input do
+  input_object :add_product_taxon_input do
     field :product_id, non_null(:id)
-    field :attribute_item_id, non_null(:id)
+    field :taxon_id, non_null(:id)
   end
 
-  input_object :remove_product_attribute_input do
+  input_object :remove_product_taxon_input do
     field :product_id, non_null(:id)
-    field :attribute_item_id, non_null(:id)
+    field :taxon_id, non_null(:id)
   end
 
-  input_object :add_product_attributes_input do
+  input_object :add_product_taxonomies_input do
     field :product_id, non_null(:id)
-    field :attribute_item_ids, non_null(list_of(non_null(:id)))
+    field :taxon_ids, non_null(list_of(non_null(:id)))
   end
 
-  input_object :remove_product_attributes_input do
+  input_object :remove_product_taxonomies_input do
     field :product_id, non_null(:id)
-    field :attribute_item_ids, non_null(list_of(non_null(:id)))
+    field :taxon_ids, non_null(list_of(non_null(:id)))
   end
 
   object :product_mutations do
@@ -183,37 +176,37 @@ defmodule PczoneWeb.Schema.Products do
       end)
     end
 
-    field :add_product_attribute, non_null(:product_attribute) do
-      arg :data, non_null(:add_product_attribute_input)
+    field :add_product_taxon, non_null(:product_taxon) do
+      arg :data, non_null(:add_product_taxon_input)
 
       resolve(fn %{data: data}, _info ->
-        Products.add_attribute(data)
+        Products.add_taxonomy(data)
       end)
     end
 
-    field :remove_product_attribute, non_null(:product_attribute) do
-      arg :data, non_null(:remove_product_attribute_input)
+    field :remove_product_taxon, non_null(:product_taxon) do
+      arg :data, non_null(:remove_product_taxon_input)
 
       resolve(fn %{data: data}, _info ->
-        Products.remove_attribute(data)
+        Products.remove_taxonomy(data)
       end)
     end
 
-    field :add_product_attributes, non_null(list_of(non_null(:product_attribute))) do
-      arg :data, non_null(:add_product_attributes_input)
+    field :add_product_taxonomies, non_null(list_of(non_null(:product_taxon))) do
+      arg :data, non_null(:add_product_taxonomies_input)
 
       resolve(fn %{data: data}, _info ->
-        with {:ok, {_, result}} <- Products.add_attributes(data) do
+        with {:ok, {_, result}} <- Products.add_taxonomies(data) do
           {:ok, result}
         end
       end)
     end
 
-    field :remove_product_attributes, non_null(:integer) do
-      arg :data, non_null(:remove_product_attribute_input)
+    field :remove_product_taxonomies, non_null(:integer) do
+      arg :data, non_null(:remove_product_taxon_input)
 
       resolve(fn %{data: data}, _info ->
-        with {:ok, {removed, _}} <- Products.remove_attributes(data) do
+        with {:ok, {removed, _}} <- Products.remove_taxonomies(data) do
           {:ok, removed}
         end
       end)

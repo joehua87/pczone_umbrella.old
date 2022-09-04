@@ -10,7 +10,7 @@ defmodule Pczone.SampleData do
       :collection_name,
       :vertical_segment,
       :status
-      # :attributes
+      # :taxonomies
     ]
 
     entities = Pczone.Repo.all(from c in Pczone.Chipset, select: map(c, ^fields))
@@ -27,7 +27,7 @@ defmodule Pczone.SampleData do
       :m2_slots,
       :pci_slots,
       :chipset_id
-      # :attributes
+      # :taxonomies
     ]
 
     entities =

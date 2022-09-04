@@ -34,7 +34,7 @@ defmodule Pczone.Product do
     field :cost, :integer
     field :stock, :integer, default: 0
     has_one :component_product, Pczone.ComponentProduct
-    many_to_many :attributes, Pczone.AttributeItem, join_through: Pczone.ProductAttribute
+    many_to_many :taxons, Pczone.Taxon, join_through: Pczone.ProductTaxon
   end
 
   def changeset(entity, params) do

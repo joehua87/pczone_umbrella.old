@@ -29,46 +29,46 @@ defmodule Pczone.Products do
 
   def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
 
-  def add_attribute(%{product_id: product_id, attribute_item_id: attribute_item_id}) do
-    with %{attribute_id: attribute_id} <- Pczone.AttributeItems.get(attribute_item_id) do
-      %{product_id: product_id, attribute_id: attribute_id, attribute_item_id: attribute_item_id}
-      |> Pczone.ProductAttribute.new_changeset()
+  def add_taxonomy(%{product_id: product_id, taxon_id: taxon_id}) do
+    with %{taxonomy_id: taxonomy_id} <- Pczone.Taxons.get(taxon_id) do
+      %{product_id: product_id, taxonomy_id: taxonomy_id, taxon_id: taxon_id}
+      |> Pczone.ProductTaxon.new_changeset()
       |> Repo.insert(on_conflict: :nothing)
     end
   end
 
-  def add_attributes(
-        %{product_id: product_id, attribute_item_ids: attribute_item_ids},
+  def add_taxonomies(
+        %{product_id: product_id, taxon_ids: taxon_ids},
         opts \\ []
       ) do
-    attribute_items = Repo.all(from i in Pczone.AttributeItem, where: i.id in ^attribute_item_ids)
+    taxons = Repo.all(from i in Pczone.Taxon, where: i.id in ^taxon_ids)
 
     entities =
-      Enum.map(attribute_items, fn %{attribute_id: attribute_id, id: attribute_item_id} ->
+      Enum.map(taxons, fn %{taxonomy_id: taxonomy_id, id: taxon_id} ->
         %{
           product_id: product_id,
-          attribute_id: attribute_id,
-          attribute_item_id: attribute_item_id
+          taxonomy_id: taxonomy_id,
+          taxon_id: taxon_id
         }
       end)
 
-    Repo.insert_all_2(Pczone.ProductAttribute, entities, [on_conflict: :nothing] ++ opts)
+    Repo.insert_all_2(Pczone.ProductTaxon, entities, [on_conflict: :nothing] ++ opts)
   end
 
-  def remove_attribute(%{product_id: product_id, attribute_item_id: attribute_item_id}) do
+  def remove_taxonomy(%{product_id: product_id, taxon_id: taxon_id}) do
     with entity = %{} <-
            Repo.one(
-             from pa in Pczone.ProductAttribute,
-               where: pa.product_id == ^product_id and pa.attribute_item_id == ^attribute_item_id
+             from pa in Pczone.ProductTaxon,
+               where: pa.product_id == ^product_id and pa.taxon_id == ^taxon_id
            ) do
       Repo.delete(entity)
     end
   end
 
-  def remove_attributes(%{product_id: product_id, attribute_item_ids: attribute_item_ids}) do
+  def remove_taxonomies(%{product_id: product_id, taxon_ids: taxon_ids}) do
     Repo.delete_all_2(
-      from(pa in Pczone.ProductAttribute,
-        where: pa.product_id == ^product_id and pa.attribute_item_id in ^attribute_item_ids
+      from(pa in Pczone.ProductTaxon,
+        where: pa.product_id == ^product_id and pa.taxon_id in ^taxon_ids
       ),
       on_conflict: :nothing
     )

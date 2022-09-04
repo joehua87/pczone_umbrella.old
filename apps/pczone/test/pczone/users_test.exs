@@ -86,7 +86,7 @@ defmodule Pczone.UsersTest do
 
     test "registers user with a hashed password" do
       email = unique_user_email()
-      {:ok, user} = Users.register_user(valid_user_attributes(email: email))
+      {:ok, user} = Users.register_user(valid_user_taxonomies(email: email))
       assert user.email == email
       assert is_binary(user.hashed_password)
       assert is_nil(user.confirmed_at)
@@ -107,7 +107,7 @@ defmodule Pczone.UsersTest do
       changeset =
         Users.change_user_registration(
           %User{},
-          valid_user_attributes(email: email, password: password)
+          valid_user_taxonomies(email: email, password: password)
         )
 
       assert changeset.valid?

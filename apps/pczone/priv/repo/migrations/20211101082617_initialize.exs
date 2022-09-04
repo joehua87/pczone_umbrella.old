@@ -19,25 +19,25 @@ defmodule Pczone.Repo.Migrations.Initialize do
 
     create unique_index(:brand, [:slug])
 
-    create table(:attribute) do
+    create table(:taxonomy) do
       add :code, :string, null: false
       add :name, :string, null: false
       add :description, :text
     end
 
-    create unique_index(:attribute, [:code])
+    create unique_index(:taxonomy, [:code])
 
-    create table(:attribute_item) do
+    create table(:taxon) do
       add :name, :string, null: false
       add :path, :ltree, null: false
       add :description, :text
       add :translation, {:map, :string}
-      add :attribute_id, references(:attribute), null: false
+      add :taxonomy_id, references(:taxonomy), null: false
     end
 
-    create unique_index(:attribute_item, [:attribute_id, :path])
-    create index(:attribute_item, [:path])
-    create index(:attribute_item, [:attribute_id])
+    create unique_index(:taxon, [:taxonomy_id, :path])
+    create index(:taxon, [:path])
+    create index(:taxon, [:taxonomy_id])
 
     create table(:chipset) do
       add :slug, :string, null: false
@@ -255,14 +255,6 @@ defmodule Pczone.Repo.Migrations.Initialize do
     create unique_index(:hard_drive, [:slug])
     create unique_index(:hard_drive, [:collection, :capacity, :brand_id])
 
-    create table(:product_category) do
-      add :slug, :string, null: false
-      add :title, :string, null: false
-      add :path, :ltree, null: false
-    end
-
-    create unique_index(:product_category, [:path])
-
     create table(:product) do
       add :sku, :string
       add :code, :string, null: false
@@ -314,26 +306,18 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :product_id, references(:product), null: false
     end
 
-    create table(:product_product_category) do
+    create table(:product_taxon) do
       add :product_id, references(:product), null: false
-      add :product_category_id, references(:product_category), null: false
+      add :taxonomy_id, references(:taxonomy), null: false
+      add :taxon_id, references(:taxon), null: false
     end
 
-    create unique_index(:product_product_category, [:product_id, :product_category_id])
-
-    create table(:product_attribute) do
-      add :product_id, references(:product), null: false
-      add :attribute_id, references(:attribute), null: false
-      add :attribute_item_id, references(:attribute_item), null: false
-    end
-
-    create unique_index(:product_attribute, [:product_id, :attribute_item_id])
-    create index(:product_attribute, [:attribute_id, :attribute_item_id])
+    create unique_index(:product_taxon, [:product_id, :taxon_id])
+    create index(:product_taxon, [:taxonomy_id, :taxon_id])
 
     create table(:built_template) do
       add :code, :string, null: false
       add :name, :string, null: false
-      add :category, :string, null: false
       add :media, :map, null: false, default: "[]"
       add :body_template, :string, null: false
       add :barebone_id, references(:barebone), null: false
@@ -390,14 +374,14 @@ defmodule Pczone.Repo.Migrations.Initialize do
     create unique_index(:built_template_hard_drive, [:key])
     create unique_index(:built_template_hard_drive, [:built_template_id, :label])
 
-    create table(:built_template_attribute) do
+    create table(:built_template_taxon) do
       add :built_template_id, references(:built_template), null: false
-      add :attribute_id, references(:attribute), null: false
-      add :attribute_item_id, references(:attribute_item), null: false
+      add :taxonomy_id, references(:taxonomy), null: false
+      add :taxon_id, references(:taxon), null: false
     end
 
-    create unique_index(:built_template_attribute, [:built_template_id, :attribute_item_id])
-    create index(:built_template_attribute, [:attribute_id, :attribute_item_id])
+    create unique_index(:built_template_taxon, [:built_template_id, :taxon_id])
+    create index(:built_template_taxon, [:taxonomy_id, :taxon_id])
 
     create table(:built) do
       add :slug, :string, null: false

@@ -4,13 +4,12 @@ defmodule Pczone.BuiltTemplate do
 
   @derive Jason.Encoder
 
-  @required [:code, :name, :category, :option_types, :barebone_id, :barebone_product_id]
+  @required [:code, :name, :option_types, :barebone_id, :barebone_product_id]
   @optional [:option_value_seperator, :body_template]
 
   schema "built_template" do
     field :code, :string
     field :name, :string
-    field :category, :string
     embeds_many :media, Pczone.EmbeddedMedium
     field :body_template, :string
     field :option_types, {:array, :string}
@@ -22,7 +21,7 @@ defmodule Pczone.BuiltTemplate do
     has_many :hard_drives, Pczone.BuiltTemplateHardDrive
     has_many :builts, Pczone.Built
     has_many :built_template_stores, Pczone.BuiltTemplateStore
-    many_to_many :attributes, Pczone.AttributeItem, join_through: Pczone.BuiltTemplateAttribute
+    many_to_many :taxons, Pczone.Taxon, join_through: Pczone.BuiltTemplateTaxon
   end
 
   def changeset(entity, params) do

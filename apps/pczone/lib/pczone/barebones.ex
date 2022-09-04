@@ -237,7 +237,7 @@ defmodule Pczone.Barebones do
           quantity: 0
         }
       ],
-      attributes: [],
+      taxonomies: [],
       processor_slots_count: 1,
       memory_slots_count: memory_slots,
       max_memory_capacity: max_memory_capacity

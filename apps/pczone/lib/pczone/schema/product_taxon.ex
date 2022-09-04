@@ -1,14 +1,14 @@
-defmodule Pczone.ProductAttribute do
+defmodule Pczone.ProductTaxon do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @required [:product_id, :attribute_id, :attribute_item_id]
+  @required [:product_id, :taxonomy_id, :taxon_id]
   @optional []
 
-  schema "product_attribute" do
+  schema "product_taxon" do
     belongs_to :product, Pczone.Product
-    belongs_to :attribute, Pczone.Attribute
-    belongs_to :attribute_item, Pczone.AttributeItem
+    belongs_to :taxonomy, Pczone.Taxonomy
+    belongs_to :taxon, Pczone.Taxon
   end
 
   def changeset(entity, params) do

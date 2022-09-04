@@ -80,20 +80,19 @@ defmodule PczoneWeb.Schema.BuiltTemplates do
           non_null(list_of(non_null(:built_template_store))),
           resolve: Helpers.dataloader(Dataloader)
 
-    field :attributes,
-          non_null(list_of(non_null(:attribute_item))),
+    field :taxons,
+          non_null(list_of(non_null(:taxon))),
           resolve: Helpers.dataloader(PczoneWeb.Dataloader)
   end
 
-  object :built_template_attribute do
+  object :built_template_taxon do
     field :built_template_id, non_null(:id)
-    field :attribute_id, non_null(:id)
-    field :attribute_item_id, non_null(:id)
+    field :taxonomy_id, non_null(:id)
+    field :taxon_id, non_null(:id)
   end
 
   input_object :built_template_filter_input do
     field :name, :string_filter_input
-    field :category, :string_filter_input
   end
 
   input_object :built_template_processor_input do
@@ -187,24 +186,24 @@ defmodule PczoneWeb.Schema.BuiltTemplates do
     end
   end
 
-  input_object :add_built_template_attribute_input do
+  input_object :add_built_template_taxon_input do
     field :built_template_id, non_null(:id)
-    field :attribute_item_id, non_null(:id)
+    field :taxon_id, non_null(:id)
   end
 
-  input_object :remove_built_template_attribute_input do
+  input_object :remove_built_template_taxon_input do
     field :built_template_id, non_null(:id)
-    field :attribute_item_id, non_null(:id)
+    field :taxon_id, non_null(:id)
   end
 
-  input_object :add_built_template_attributes_input do
+  input_object :add_built_template_taxonomies_input do
     field :built_template_id, non_null(:id)
-    field :attribute_item_ids, non_null(list_of(non_null(:id)))
+    field :taxon_ids, non_null(list_of(non_null(:id)))
   end
 
-  input_object :remove_built_template_attributes_input do
+  input_object :remove_built_template_taxonomies_input do
     field :built_template_id, non_null(:id)
-    field :attribute_item_ids, non_null(list_of(non_null(:id)))
+    field :taxon_ids, non_null(list_of(non_null(:id)))
   end
 
   object :built_template_mutations do
@@ -270,38 +269,38 @@ defmodule PczoneWeb.Schema.BuiltTemplates do
       end)
     end
 
-    field :add_built_template_attribute, non_null(:built_template_attribute) do
-      arg :data, non_null(:add_built_template_attribute_input)
+    field :add_built_template_taxon, non_null(:built_template_taxon) do
+      arg :data, non_null(:add_built_template_taxon_input)
 
       resolve(fn %{data: data}, _info ->
-        BuiltTemplates.add_attribute(data)
+        BuiltTemplates.add_taxonomy(data)
       end)
     end
 
-    field :remove_built_template_attribute, non_null(:built_template_attribute) do
-      arg :data, non_null(:remove_built_template_attribute_input)
+    field :remove_built_template_taxon, non_null(:built_template_taxon) do
+      arg :data, non_null(:remove_built_template_taxon_input)
 
       resolve(fn %{data: data}, _info ->
-        BuiltTemplates.remove_attribute(data)
+        BuiltTemplates.remove_taxonomy(data)
       end)
     end
 
-    field :add_built_template_attributes,
-          non_null(list_of(non_null(:built_template_attribute))) do
-      arg :data, non_null(:add_built_template_attributes_input)
+    field :add_built_template_taxonomies,
+          non_null(list_of(non_null(:built_template_taxon))) do
+      arg :data, non_null(:add_built_template_taxonomies_input)
 
       resolve(fn %{data: data}, _info ->
-        with {:ok, {_, result}} <- BuiltTemplates.add_attributes(data) do
+        with {:ok, {_, result}} <- BuiltTemplates.add_taxonomies(data) do
           {:ok, result}
         end
       end)
     end
 
-    field :remove_built_template_attributes, non_null(:integer) do
-      arg :data, non_null(:remove_built_template_attribute_input)
+    field :remove_built_template_taxonomies, non_null(:integer) do
+      arg :data, non_null(:remove_built_template_taxon_input)
 
       resolve(fn %{data: data}, _info ->
-        with {:ok, {removed, _}} <- BuiltTemplates.remove_attributes(data) do
+        with {:ok, {removed, _}} <- BuiltTemplates.remove_taxonomies(data) do
           {:ok, removed}
         end
       end)

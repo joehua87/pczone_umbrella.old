@@ -1,14 +1,14 @@
-defmodule Pczone.ProductCategory do
+defmodule Pczone.BuiltTemplateTaxon do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @required [:slug, :title, :path]
+  @required [:built_template_id, :taxonomy_id, :taxon_id]
   @optional []
 
-  schema "product_category" do
-    field :slug, :string
-    field :title, :string
-    field :path, EctoLtree.LabelTree
+  schema "built_template_taxon" do
+    belongs_to :built_template, Pczone.BuiltTemplate
+    belongs_to :taxonomy, Pczone.Taxonomy
+    belongs_to :taxon, Pczone.Taxon
   end
 
   def changeset(entity, params) do

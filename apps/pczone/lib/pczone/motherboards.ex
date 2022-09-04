@@ -30,7 +30,7 @@ defmodule Pczone.Motherboards do
       }) do
     Motherboard
     |> where(^parse_filter(filter))
-    |> select_fields(selection, [:attributes])
+    |> select_fields(selection, [:taxonomies])
     |> sort_by(order_by, [])
     |> Repo.paginate(paging)
   end
@@ -227,7 +227,7 @@ defmodule Pczone.Motherboards do
       sata_slots: [],
       m2_slots: [],
       pci_slots: [],
-      attributes: []
+      taxonomies: []
     }
   end
 

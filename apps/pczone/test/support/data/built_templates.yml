@@ -1,6 +1,5 @@
 - code: hp-elitedesk-800-g2-mini
   name: Hp Elitedesk 800 G2 Mini
-  category: minipc
   barebone: hp-elitedesk-800-g2-mini
   barebone_product: hp-elitedesk-800-g2-mini/used
   option_types: []
@@ -38,7 +37,6 @@
 
 - code: hp-elitedesk-800-g2-mini-65w
   name: Hp Elitedesk 800 G2 Mini 65w
-  category: minipc
   barebone: hp-elitedesk-800-g2-mini-65w
   barebone_product: hp-elitedesk-800-g2-mini-65w/used
   option_types: []
@@ -76,7 +74,6 @@
 
 - code: dell-optiplex-7060-sff
   name: Dell OptiPlex 7060 SFF
-  category: pc
   barebone: dell-optiplex-7060-sff
   barebone_product: dell-optiplex-7060-sff/used
   option_types: []

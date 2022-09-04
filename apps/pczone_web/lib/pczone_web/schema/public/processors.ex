@@ -29,7 +29,7 @@ defmodule PczoneWeb.Schema.Processors do
     field :url, :string
     field :memory_types, non_null(list_of(non_null(:string)))
     field :ecc_memory_supported, :boolean
-    field :properties, non_null(list_of(non_null(:property_group)))
+    field :attributes, non_null(list_of(non_null(:attribute_group)))
 
     field :products,
           non_null(list_of(non_null(:product))),

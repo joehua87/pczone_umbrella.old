@@ -7,7 +7,7 @@ defmodule PczoneWeb.Schema do
 
   import_types PczoneWeb.Schema.Common
   import_types PczoneWeb.Schema.Users
-  import_types PczoneWeb.Schema.Attributes
+  import_types PczoneWeb.Schema.Taxonomies
   import_types PczoneWeb.Schema.Brands
   import_types PczoneWeb.Schema.Stores
   import_types PczoneWeb.Schema.Chipsets
@@ -22,7 +22,6 @@ defmodule PczoneWeb.Schema do
   import_types PczoneWeb.Schema.HardDrives
   import_types PczoneWeb.Schema.Gpus
   import_types PczoneWeb.Schema.Builts
-  import_types PczoneWeb.Schema.ProductCategories
   import_types PczoneWeb.Schema.Products
   import_types PczoneWeb.Schema.ScrapedEntries
   import_types PczoneWeb.Schema.BuiltTemplates
@@ -32,7 +31,7 @@ defmodule PczoneWeb.Schema do
 
   query do
     import_fields :user_queries
-    import_fields :attribute_queries
+    import_fields :taxonomy_queries
     import_fields :brand_queries
     import_fields :store_queries
     import_fields :chipset_queries
@@ -44,7 +43,6 @@ defmodule PczoneWeb.Schema do
     import_fields :memory_queries
     import_fields :hard_drive_queries
     import_fields :gpu_queries
-    import_fields :product_category_queries
     import_fields :product_queries
     import_fields :built_queries
     import_fields :barebone_queries
@@ -67,7 +65,6 @@ defmodule PczoneWeb.Schema do
     import_fields :processor_mutations
     import_fields :hard_drive_mutations
     import_fields :gpu_mutations
-    import_fields :product_category_mutations
     import_fields :product_mutations
     import_fields :built_mutations
     import_fields :built_template_mutations

@@ -179,7 +179,6 @@ defmodule Pczone.BuiltTemplates do
         fn %{
              "code" => code,
              "name" => name,
-             "category" => category,
              "body_template" => body_template,
              "barebone_product" => barebone_product_code,
              "option_types" => option_types
@@ -192,7 +191,6 @@ defmodule Pczone.BuiltTemplates do
           %{
             code: code,
             name: name,
-            category: category,
             body_template: body_template,
             barebone_id: barebone_id,
             barebone_product_id: barebone_product_id,
@@ -683,60 +681,60 @@ defmodule Pczone.BuiltTemplates do
     )
   end
 
-  def add_attribute(%{built_template_id: built_template_id, attribute_item_id: attribute_item_id}) do
-    with %{attribute_id: attribute_id} <- Pczone.AttributeItems.get(attribute_item_id) do
+  def add_taxonomy(%{built_template_id: built_template_id, taxon_id: taxon_id}) do
+    with %{taxonomy_id: taxonomy_id} <- Pczone.Taxons.get(taxon_id) do
       %{
         built_template_id: built_template_id,
-        attribute_id: attribute_id,
-        attribute_item_id: attribute_item_id
+        taxonomy_id: taxonomy_id,
+        taxon_id: taxon_id
       }
-      |> Pczone.BuiltTemplateAttribute.new_changeset()
+      |> Pczone.BuiltTemplateTaxon.new_changeset()
       |> Repo.insert(on_conflict: :nothing)
     end
   end
 
-  def add_attributes(
-        %{built_template_id: built_template_id, attribute_item_ids: attribute_item_ids},
+  def add_taxonomies(
+        %{built_template_id: built_template_id, taxon_ids: taxon_ids},
         opts \\ []
       ) do
-    attribute_items = Repo.all(from i in Pczone.AttributeItem, where: i.id in ^attribute_item_ids)
+    taxons = Repo.all(from i in Pczone.Taxon, where: i.id in ^taxon_ids)
 
     entities =
-      Enum.map(attribute_items, fn %{attribute_id: attribute_id, id: attribute_item_id} ->
+      Enum.map(taxons, fn %{taxonomy_id: taxonomy_id, id: taxon_id} ->
         %{
           built_template_id: built_template_id,
-          attribute_id: attribute_id,
-          attribute_item_id: attribute_item_id
+          taxonomy_id: taxonomy_id,
+          taxon_id: taxon_id
         }
       end)
 
-    Repo.insert_all_2(Pczone.BuiltTemplateAttribute, entities, [on_conflict: :nothing] ++ opts)
+    Repo.insert_all_2(Pczone.BuiltTemplateTaxon, entities, [on_conflict: :nothing] ++ opts)
   end
 
-  def remove_attribute(%{
+  def remove_taxonomy(%{
         built_template_id: built_template_id,
-        attribute_item_id: attribute_item_id
+        taxon_id: taxon_id
       }) do
     with entity = %{} <-
            Repo.one(
-             from pa in Pczone.BuiltTemplateAttribute,
+             from pa in Pczone.BuiltTemplateTaxon,
                where:
                  pa.built_template_id == ^built_template_id and
-                   pa.attribute_item_id == ^attribute_item_id
+                   pa.taxon_id == ^taxon_id
            ) do
       Repo.delete(entity)
     end
   end
 
-  def remove_attributes(%{
+  def remove_taxonomies(%{
         built_template_id: built_template_id,
-        attribute_item_ids: attribute_item_ids
+        taxon_ids: taxon_ids
       }) do
     Repo.delete_all_2(
-      from(pa in Pczone.BuiltTemplateAttribute,
+      from(pa in Pczone.BuiltTemplateTaxon,
         where:
           pa.built_template_id == ^built_template_id and
-            pa.attribute_item_id in ^attribute_item_ids
+            pa.taxon_id in ^taxon_ids
       ),
       on_conflict: :nothing
     )
@@ -747,7 +745,6 @@ defmodule Pczone.BuiltTemplates do
     |> Enum.reduce(nil, fn {field, value}, acc ->
       case field do
         :name -> parse_string_filter(acc, field, value)
-        :category -> parse_string_filter(acc, field, value)
         _ -> acc
       end
     end) || true

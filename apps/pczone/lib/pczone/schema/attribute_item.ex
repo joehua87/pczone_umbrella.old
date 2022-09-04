@@ -1,16 +1,16 @@
-defmodule Pczone.AttributeItem do
+defmodule Pczone.Taxon do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @required [:name, :path, :attribute_id]
+  @required [:name, :path, :taxonomy_id]
   @optional [:description, :translation]
 
-  schema "attribute_item" do
+  schema "taxon" do
     field :name, :string
     field :path, EctoLtree.LabelTree
     field :description, :string
     field :translation, {:map, :string}
-    belongs_to :attribute, Pczone.Attribute
+    belongs_to :taxonomy, Pczone.Taxonomy
   end
 
   def changeset(entity, params) do
