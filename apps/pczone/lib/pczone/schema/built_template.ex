@@ -22,6 +22,7 @@ defmodule Pczone.BuiltTemplate do
     has_many :hard_drives, Pczone.BuiltTemplateHardDrive
     has_many :builts, Pczone.Built
     has_many :built_template_stores, Pczone.BuiltTemplateStore
+    many_to_many :attributes, Pczone.AttributeItem, join_through: Pczone.BuiltTemplateAttribute
   end
 
   def changeset(entity, params) do

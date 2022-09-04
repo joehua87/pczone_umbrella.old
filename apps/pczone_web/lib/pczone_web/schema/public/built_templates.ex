@@ -1,6 +1,7 @@
 defmodule PczoneWeb.Schema.BuiltTemplates do
   use Absinthe.Schema.Notation
   alias Absinthe.Resolution.Helpers
+  alias Pczone.BuiltTemplates
   alias PczoneWeb.Dataloader
 
   object :built_template_processor do
@@ -78,6 +79,16 @@ defmodule PczoneWeb.Schema.BuiltTemplates do
     field :built_template_stores,
           non_null(list_of(non_null(:built_template_store))),
           resolve: Helpers.dataloader(Dataloader)
+
+    field :attributes,
+          non_null(list_of(non_null(:attribute_item))),
+          resolve: Helpers.dataloader(PczoneWeb.Dataloader)
+  end
+
+  object :built_template_attribute do
+    field :built_template_id, non_null(:id)
+    field :attribute_id, non_null(:id)
+    field :attribute_item_id, non_null(:id)
   end
 
   input_object :built_template_filter_input do
@@ -176,6 +187,26 @@ defmodule PczoneWeb.Schema.BuiltTemplates do
     end
   end
 
+  input_object :add_built_template_attribute_input do
+    field :built_template_id, non_null(:id)
+    field :attribute_item_id, non_null(:id)
+  end
+
+  input_object :remove_built_template_attribute_input do
+    field :built_template_id, non_null(:id)
+    field :attribute_item_id, non_null(:id)
+  end
+
+  input_object :add_built_template_attributes_input do
+    field :built_template_id, non_null(:id)
+    field :attribute_item_ids, non_null(list_of(non_null(:id)))
+  end
+
+  input_object :remove_built_template_attributes_input do
+    field :built_template_id, non_null(:id)
+    field :attribute_item_ids, non_null(list_of(non_null(:id)))
+  end
+
   object :built_template_mutations do
     field :upsert_built_templates, non_null(list_of(non_null(:built_template))) do
       arg :data, non_null(:json)
@@ -235,6 +266,43 @@ defmodule PczoneWeb.Schema.BuiltTemplates do
         with {:ok, {_, result}} <-
                Pczone.BuiltTemplateStores.upsert(data, returning: true) do
           {:ok, result}
+        end
+      end)
+    end
+
+    field :add_built_template_attribute, non_null(:built_template_attribute) do
+      arg :data, non_null(:add_built_template_attribute_input)
+
+      resolve(fn %{data: data}, _info ->
+        BuiltTemplates.add_attribute(data)
+      end)
+    end
+
+    field :remove_built_template_attribute, non_null(:built_template_attribute) do
+      arg :data, non_null(:remove_built_template_attribute_input)
+
+      resolve(fn %{data: data}, _info ->
+        BuiltTemplates.remove_attribute(data)
+      end)
+    end
+
+    field :add_built_template_attributes,
+          non_null(list_of(non_null(:built_template_attribute))) do
+      arg :data, non_null(:add_built_template_attributes_input)
+
+      resolve(fn %{data: data}, _info ->
+        with {:ok, {_, result}} <- BuiltTemplates.add_attributes(data) do
+          {:ok, result}
+        end
+      end)
+    end
+
+    field :remove_built_template_attributes, non_null(:integer) do
+      arg :data, non_null(:remove_built_template_attribute_input)
+
+      resolve(fn %{data: data}, _info ->
+        with {:ok, {removed, _}} <- BuiltTemplates.remove_attributes(data) do
+          {:ok, removed}
         end
       end)
     end

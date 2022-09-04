@@ -683,6 +683,65 @@ defmodule Pczone.BuiltTemplates do
     )
   end
 
+  def add_attribute(%{built_template_id: built_template_id, attribute_item_id: attribute_item_id}) do
+    with %{attribute_id: attribute_id} <- Pczone.AttributeItems.get(attribute_item_id) do
+      %{
+        built_template_id: built_template_id,
+        attribute_id: attribute_id,
+        attribute_item_id: attribute_item_id
+      }
+      |> Pczone.BuiltTemplateAttribute.new_changeset()
+      |> Repo.insert(on_conflict: :nothing)
+    end
+  end
+
+  def add_attributes(
+        %{built_template_id: built_template_id, attribute_item_ids: attribute_item_ids},
+        opts \\ []
+      ) do
+    attribute_items = Repo.all(from i in Pczone.AttributeItem, where: i.id in ^attribute_item_ids)
+
+    entities =
+      Enum.map(attribute_items, fn %{attribute_id: attribute_id, id: attribute_item_id} ->
+        %{
+          built_template_id: built_template_id,
+          attribute_id: attribute_id,
+          attribute_item_id: attribute_item_id
+        }
+      end)
+
+    Repo.insert_all_2(Pczone.BuiltTemplateAttribute, entities, [on_conflict: :nothing] ++ opts)
+  end
+
+  def remove_attribute(%{
+        built_template_id: built_template_id,
+        attribute_item_id: attribute_item_id
+      }) do
+    with entity = %{} <-
+           Repo.one(
+             from pa in Pczone.BuiltTemplateAttribute,
+               where:
+                 pa.built_template_id == ^built_template_id and
+                   pa.attribute_item_id == ^attribute_item_id
+           ) do
+      Repo.delete(entity)
+    end
+  end
+
+  def remove_attributes(%{
+        built_template_id: built_template_id,
+        attribute_item_ids: attribute_item_ids
+      }) do
+    Repo.delete_all_2(
+      from(pa in Pczone.BuiltTemplateAttribute,
+        where:
+          pa.built_template_id == ^built_template_id and
+            pa.attribute_item_id in ^attribute_item_ids
+      ),
+      on_conflict: :nothing
+    )
+  end
+
   def parse_filter(filter) do
     filter
     |> Enum.reduce(nil, fn {field, value}, acc ->
