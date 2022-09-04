@@ -22,18 +22,21 @@ defmodule Pczone.Repo.Migrations.Initialize do
     create table(:attribute) do
       add :code, :string, null: false
       add :name, :string, null: false
+      add :description, :text
     end
 
+    create unique_index(:attribute, [:code])
+
     create table(:attribute_item) do
-      add :code, :string, null: false
       add :name, :string, null: false
       add :path, :ltree, null: false
       add :description, :text
+      add :translation, {:map, :string}
       add :attribute_id, references(:attribute), null: false
-      add :count, :integer
     end
 
-    create index(:attribute_item, [:code])
+    create unique_index(:attribute_item, [:attribute_id, :path])
+    create index(:attribute_item, [:path])
     create index(:attribute_item, [:attribute_id])
 
     create table(:chipset) do

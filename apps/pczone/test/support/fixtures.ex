@@ -5,6 +5,10 @@ defmodule Pczone.Fixtures do
     __ENV__.file |> Path.dirname() |> Path.join("data")
   end
 
+  def get_fixture_path(name) do
+    Path.join([__ENV__.file |> Path.dirname(), "data", name])
+  end
+
   def read_fixture(name, _opts \\ []) when is_bitstring(name) do
     [get_fixtures_dir(), name]
     |> Path.join()
