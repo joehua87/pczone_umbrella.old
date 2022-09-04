@@ -27,6 +27,13 @@ defmodule Pczone.Repo do
     end
   end
 
+  def delete_all_2(queryable, opts \\ []) do
+    case delete_all(queryable, opts) do
+      {:error, reason} -> {:error, reason}
+      {deleted, list} -> {:ok, {deleted, list}}
+    end
+  end
+
   defp parse_list_result(%{
          entries: entries,
          page_number: page_number,

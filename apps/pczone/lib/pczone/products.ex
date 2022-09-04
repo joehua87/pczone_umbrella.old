@@ -29,6 +29,51 @@ defmodule Pczone.Products do
 
   def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
 
+  def add_attribute(%{product_id: product_id, attribute_item_id: attribute_item_id}) do
+    with %{attribute_id: attribute_id} <- Pczone.AttributeItems.get(attribute_item_id) do
+      %{product_id: product_id, attribute_id: attribute_id, attribute_item_id: attribute_item_id}
+      |> Pczone.ProductAttribute.new_changeset()
+      |> Repo.insert(on_conflict: :nothing)
+    end
+  end
+
+  def add_attributes(
+        %{product_id: product_id, attribute_item_ids: attribute_item_ids},
+        opts \\ []
+      ) do
+    attribute_items = Repo.all(from i in Pczone.AttributeItem, where: i.id in ^attribute_item_ids)
+
+    entities =
+      Enum.map(attribute_items, fn %{attribute_id: attribute_id, id: attribute_item_id} ->
+        %{
+          product_id: product_id,
+          attribute_id: attribute_id,
+          attribute_item_id: attribute_item_id
+        }
+      end)
+
+    Repo.insert_all_2(Pczone.ProductAttribute, entities, [on_conflict: :nothing] ++ opts)
+  end
+
+  def remove_attribute(%{product_id: product_id, attribute_item_id: attribute_item_id}) do
+    with entity = %{} <-
+           Repo.one(
+             from pa in Pczone.ProductAttribute,
+               where: pa.product_id == ^product_id and pa.attribute_item_id == ^attribute_item_id
+           ) do
+      Repo.delete(entity)
+    end
+  end
+
+  def remove_attributes(%{product_id: product_id, attribute_item_ids: attribute_item_ids}) do
+    Repo.delete_all_2(
+      from(pa in Pczone.ProductAttribute,
+        where: pa.product_id == ^product_id and pa.attribute_item_id in ^attribute_item_ids
+      ),
+      on_conflict: :nothing
+    )
+  end
+
   def upsert(entities, _opts \\ []) when is_list(entities) do
     types = ["motherboard", "barebone", "processor", "memory", "hard_drive", "gpu"]
 

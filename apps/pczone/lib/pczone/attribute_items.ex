@@ -2,6 +2,10 @@ defmodule Pczone.AttributeItems do
   # import Ecto.Query, only: [from: 2]
   alias Pczone.Repo
 
+  def get(id) do
+    Repo.get(Pczone.AttributeItem, id)
+  end
+
   @doc """
   Upsert a list of attributes
   """

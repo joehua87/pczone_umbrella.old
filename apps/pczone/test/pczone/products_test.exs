@@ -4,7 +4,6 @@ defmodule Pczone.ProductsTest do
 
   describe "products" do
     test "upsert" do
-      Pczone.Fixtures.get_fixtures_dir() |> Pczone.initial_data()
       products = Pczone.Fixtures.read_fixture("products.xlsx")
 
       assert {:ok,
@@ -14,8 +13,6 @@ defmodule Pczone.ProductsTest do
     end
 
     test "upsert from xlsx" do
-      Pczone.Fixtures.get_fixtures_dir() |> Pczone.initial_data()
-
       assert {:ok,
               %{
                 products: {38, [%Pczone.Product{} | _]}
@@ -25,5 +22,10 @@ defmodule Pczone.ProductsTest do
                |> Pczone.Xlsx.read_spreadsheet()
                |> Products.upsert()
     end
+  end
+
+  setup do
+    Pczone.Fixtures.get_fixtures_dir() |> Pczone.initial_data()
+    :ok
   end
 end
