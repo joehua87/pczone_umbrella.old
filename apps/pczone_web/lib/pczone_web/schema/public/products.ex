@@ -55,6 +55,16 @@ defmodule PczoneWeb.Schema.Products do
     field :categories,
           non_null(list_of(non_null(:product_category))),
           resolve: Helpers.dataloader(PczoneWeb.Dataloader)
+
+    field :attributes,
+          non_null(list_of(non_null(:attribute_item))),
+          resolve: Helpers.dataloader(PczoneWeb.Dataloader)
+  end
+
+  object :product_attribute do
+    field :product_id, non_null(:id)
+    field :attribute_id, non_null(:id)
+    field :attribute_item_id, non_null(:id)
   end
 
   input_object :product_filter_input do
@@ -136,6 +146,26 @@ defmodule PczoneWeb.Schema.Products do
     field :category_id, :id
   end
 
+  input_object :add_product_attribute_input do
+    field :product_id, non_null(:id)
+    field :attribute_item_id, non_null(:id)
+  end
+
+  input_object :remove_product_attribute_input do
+    field :product_id, non_null(:id)
+    field :attribute_item_id, non_null(:id)
+  end
+
+  input_object :add_product_attributes_input do
+    field :product_id, non_null(:id)
+    field :attribute_item_ids, non_null(list_of(non_null(:id)))
+  end
+
+  input_object :remove_product_attributes_input do
+    field :product_id, non_null(:id)
+    field :attribute_item_ids, non_null(list_of(non_null(:id)))
+  end
+
   object :product_mutations do
     field :create_product, non_null(:product) do
       arg :data, non_null(:create_product_input)
@@ -150,6 +180,42 @@ defmodule PczoneWeb.Schema.Products do
 
       resolve(fn %{data: data}, _info ->
         Products.update(data)
+      end)
+    end
+
+    field :add_product_attribute, non_null(:product_attribute) do
+      arg :data, non_null(:add_product_attribute_input)
+
+      resolve(fn %{data: data}, _info ->
+        Products.add_attribute(data)
+      end)
+    end
+
+    field :remove_product_attribute, non_null(:product_attribute) do
+      arg :data, non_null(:remove_product_attribute_input)
+
+      resolve(fn %{data: data}, _info ->
+        Products.remove_attribute(data)
+      end)
+    end
+
+    field :add_product_attributes, non_null(list_of(non_null(:product_attribute))) do
+      arg :data, non_null(:add_product_attributes_input)
+
+      resolve(fn %{data: data}, _info ->
+        with {:ok, {_, result}} <- Products.add_attributes(data) do
+          {:ok, result}
+        end
+      end)
+    end
+
+    field :remove_product_attributes, non_null(:integer) do
+      arg :data, non_null(:remove_product_attribute_input)
+
+      resolve(fn %{data: data}, _info ->
+        with {:ok, {removed, _}} <- Products.remove_attributes(data) do
+          {:ok, removed}
+        end
       end)
     end
   end
