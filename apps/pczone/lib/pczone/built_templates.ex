@@ -3,6 +3,10 @@ defmodule Pczone.BuiltTemplates do
   import Dew.FilterParser
   alias Pczone.Repo
 
+  def get(%{} = filter) do
+    Repo.one(from Pczone.BuiltTemplate, where: ^parse_filter(filter), limit: 1)
+  end
+
   def get(id) do
     Repo.get(Pczone.BuiltTemplate, id)
   end
@@ -744,6 +748,7 @@ defmodule Pczone.BuiltTemplates do
     filter
     |> Enum.reduce(nil, fn {field, value}, acc ->
       case field do
+        :code -> parse_string_filter(acc, field, value)
         :name -> parse_string_filter(acc, field, value)
         _ -> acc
       end

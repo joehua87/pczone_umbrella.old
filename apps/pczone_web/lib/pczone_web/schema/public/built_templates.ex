@@ -80,6 +80,10 @@ defmodule PczoneWeb.Schema.BuiltTemplates do
           non_null(list_of(non_null(:built_template_store))),
           resolve: Helpers.dataloader(Dataloader)
 
+    field :builts,
+          non_null(list_of(non_null(:built))),
+          resolve: Helpers.dataloader(PczoneWeb.Dataloader)
+
     field :taxons,
           non_null(list_of(non_null(:taxon))),
           resolve: Helpers.dataloader(PczoneWeb.Dataloader)
@@ -92,6 +96,7 @@ defmodule PczoneWeb.Schema.BuiltTemplates do
   end
 
   input_object :built_template_filter_input do
+    field :code, :string_filter_input
     field :name, :string_filter_input
   end
 
@@ -156,6 +161,14 @@ defmodule PczoneWeb.Schema.BuiltTemplates do
 
       resolve(fn %{id: id}, _info ->
         {:ok, Pczone.BuiltTemplates.get(id)}
+      end)
+    end
+
+    field :built_template_by_filter, :built_template do
+      arg :filter, non_null(:built_template_filter_input)
+
+      resolve(fn %{filter: filter}, _info ->
+        {:ok, Pczone.BuiltTemplates.get(filter)}
       end)
     end
 
