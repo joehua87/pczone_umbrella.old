@@ -11,6 +11,7 @@ defmodule Pczone.ExtensionDevice do
     field :name, :string
     field :type, :string
     belongs_to :brand, Pczone.Brand
+    belongs_to :post, Pczone.Post
     embeds_many :processor_slots, Pczone.ProcessorSlot
     embeds_many :memory_slots, Pczone.MemorySlot
     embeds_many :sata_slots, Pczone.SataSlot

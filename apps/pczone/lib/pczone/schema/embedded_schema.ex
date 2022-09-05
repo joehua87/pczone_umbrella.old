@@ -40,13 +40,35 @@ defmodule Pczone.EmbeddedMedium do
 
   embedded_schema do
     field :id, :string
+    field :type, :string
     field :caption, :string
   end
 
   def changeset(entity, params) do
     entity
-    |> cast(params, [:id, :caption])
-    |> validate_required([:id])
+    |> cast(params, [:id, :type, :caption])
+    |> validate_required([:id, :type])
+  end
+end
+
+defmodule Pczone.Seo do
+  use Ecto.Schema
+  import Ecto.Changeset
+
+  @primary_key false
+  @derive Jason.Encoder
+
+  embedded_schema do
+    field :title, :string
+    field :description, :string
+    field :keyword, :string
+    field :image, :string
+    field :meta, :string
+  end
+
+  def changeset(entity, params) do
+    entity
+    |> cast(params, [:title, :description, :keyword, :image, :meta])
   end
 end
 

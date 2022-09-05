@@ -17,6 +17,7 @@ defmodule Pczone.Gpu do
     field :form_factors, {:array, :string}
     field :tdp, :integer
     belongs_to :brand, Pczone.Brand
+    belongs_to :post, Pczone.Post
     many_to_many :products, Pczone.Product, join_through: Pczone.ComponentProduct
   end
 

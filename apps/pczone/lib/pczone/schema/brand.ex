@@ -10,6 +10,7 @@ defmodule Pczone.Brand do
   schema "brand" do
     field :slug, :string
     field :name, :string
+    belongs_to :post, Pczone.Post
   end
 
   def changeset(entity, params) do

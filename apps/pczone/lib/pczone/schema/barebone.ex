@@ -21,6 +21,7 @@ defmodule Pczone.Barebone do
     belongs_to :psu, Pczone.Psu
     belongs_to :processor, Pczone.Processor
     belongs_to :brand, Pczone.Brand
+    belongs_to :post, Pczone.Post
     field :launch_date, :string
     field :raw_data, :map
     field :source_website, :string

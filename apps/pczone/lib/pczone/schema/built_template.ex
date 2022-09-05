@@ -16,6 +16,7 @@ defmodule Pczone.BuiltTemplate do
     field :option_value_seperator, :string, default: ", "
     belongs_to :barebone, Pczone.Barebone
     belongs_to :barebone_product, Pczone.Product
+    belongs_to :post, Pczone.Post
     has_many :processors, Pczone.BuiltTemplateProcessor
     has_many :memories, Pczone.BuiltTemplateMemory
     has_many :hard_drives, Pczone.BuiltTemplateHardDrive

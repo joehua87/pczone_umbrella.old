@@ -25,6 +25,7 @@ defmodule Pczone.Chipset do
     field :collection_name, :string
     field :vertical_segment, :string
     field :status, :string
+    belongs_to :post, Pczone.Post
     embeds_many :attributes, Pczone.AttributeGroup
   end
 

@@ -15,6 +15,7 @@ defmodule Pczone.Memory do
     field :capacity, :integer
     field :type, :string
     belongs_to :brand, Pczone.Brand
+    belongs_to :post, Pczone.Post
     many_to_many :products, Pczone.Product, join_through: Pczone.ComponentProduct
   end
 

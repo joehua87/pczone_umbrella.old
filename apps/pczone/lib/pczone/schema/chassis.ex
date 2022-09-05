@@ -13,6 +13,7 @@ defmodule Pczone.Chassis do
     embeds_many :hard_drive_slots, Pczone.HardDriveSlot
     field :psu_form_factors, {:array, :string}, default: []
     belongs_to :brand, Pczone.Brand
+    belongs_to :post, Pczone.Post
     many_to_many :products, Pczone.Product, join_through: Pczone.ComponentProduct
   end
 

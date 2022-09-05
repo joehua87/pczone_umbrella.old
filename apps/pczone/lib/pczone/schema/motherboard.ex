@@ -33,6 +33,7 @@ defmodule Pczone.Motherboard do
     field :sata_slots_count, :integer
     field :m2_slots_count, :integer
     field :pci_slots_count, :integer
+    belongs_to :post, Pczone.Post
     embeds_many :attributes, Pczone.AttributeGroup
     many_to_many :products, Pczone.Product, join_through: Pczone.ComponentProduct
     many_to_many :processors, Pczone.Processor, join_through: Pczone.MotherboardProcessor

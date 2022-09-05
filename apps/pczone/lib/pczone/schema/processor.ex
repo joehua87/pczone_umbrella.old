@@ -67,6 +67,7 @@ defmodule Pczone.Processor do
     field :meta, :map, default: %{}
     field :memory_types, {:array, :string}
     field :ecc_memory_supported, :boolean
+    belongs_to :post, Pczone.Post
     embeds_many :attributes, Pczone.AttributeGroup
     many_to_many :products, Pczone.Product, join_through: Pczone.ComponentProduct
   end

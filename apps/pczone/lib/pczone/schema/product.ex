@@ -33,6 +33,7 @@ defmodule Pczone.Product do
     field :percentage_off, :decimal
     field :cost, :integer
     field :stock, :integer, default: 0
+    belongs_to :post, Pczone.Post
     has_one :component_product, Pczone.ComponentProduct
     many_to_many :taxons, Pczone.Taxon, join_through: Pczone.ProductTaxon
   end

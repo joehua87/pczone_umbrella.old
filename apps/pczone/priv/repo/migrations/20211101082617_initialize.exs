@@ -12,13 +12,6 @@ defmodule Pczone.Repo.Migrations.Initialize do
 
     create index(:enum, [:name])
 
-    create table(:brand) do
-      add :slug, :string, null: false
-      add :name, :string, null: false
-    end
-
-    create unique_index(:brand, [:slug])
-
     create table(:taxonomy) do
       add :code, :string, null: false
       add :name, :string, null: false
@@ -39,6 +32,35 @@ defmodule Pczone.Repo.Migrations.Initialize do
     create index(:taxon, [:path])
     create index(:taxon, [:taxonomy_id])
 
+    create table(:post) do
+      add :slug, :string
+      add :title, :string, null: false
+      add :description, :text
+      add :md, :text
+      add :media, :map
+      add :seo, :map
+      add :state, :string
+    end
+
+    create unique_index(:post, [:slug])
+
+    create table(:post_taxon) do
+      add :post_id, references(:post), null: false
+      add :taxonomy_id, references(:taxonomy), null: false
+      add :taxon_id, references(:taxon), null: false
+    end
+
+    create unique_index(:post_taxon, [:post_id, :taxon_id])
+    create index(:post_taxon, [:taxonomy_id, :taxon_id])
+
+    create table(:brand) do
+      add :slug, :string, null: false
+      add :name, :string, null: false
+      add :post_id, references(:post)
+    end
+
+    create unique_index(:brand, [:slug])
+
     create table(:chipset) do
       add :slug, :string, null: false
       add :code, :string, null: false
@@ -49,6 +71,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :vertical_segment, :string, null: false
       add :status, :string, null: false
       add :attributes, :map, null: false, default: "[]"
+      add :post_id, references(:post)
     end
 
     create unique_index(:chipset, [:slug])
@@ -63,6 +86,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :form_factors, {:array, :string}, null: false
       add :tdp, :integer
       add :brand_id, references(:brand), null: false
+      add :post_id, references(:post)
     end
 
     create unique_index(:gpu, [:code])
@@ -76,6 +100,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :hard_drive_slots, :map, default: "[]"
       add :psu_form_factors, {:array, :string}, default: []
       add :brand_id, references(:brand), null: false
+      add :post_id, references(:post)
     end
 
     create unique_index(:chassis, [:slug])
@@ -88,6 +113,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :wattage, :integer, null: false
       add :form_factor, :string
       add :brand_id, references(:brand), null: false
+      add :post_id, references(:post)
     end
 
     create unique_index(:psu, [:slug])
@@ -99,6 +125,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :name, :string, null: false
       add :supported_types, {:array, :string}, null: false
       add :brand_id, references(:brand), null: false
+      add :post_id, references(:post)
     end
 
     create unique_index(:heatsink, [:slug])
@@ -125,6 +152,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :brand_id, references(:brand), null: false
       add :attributes, :map, null: false, default: "[]"
       add :note, :string
+      add :post_id, references(:post)
     end
 
     create unique_index(:motherboard, [:slug])
@@ -140,6 +168,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :memory_slots, :map, default: "[]"
       add :sata_slots, :map, default: "[]"
       add :m2_slots, :map, default: "[]"
+      add :post_id, references(:post)
     end
 
     create unique_index(:extension_device, [:slug])
@@ -175,6 +204,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :ecc_memory_supported, :boolean, default: false
       add :meta, :map
       add :attributes, :map, default: "[]"
+      add :post_id, references(:post)
     end
 
     # Slug must be unique index
@@ -212,6 +242,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :raw_data, :map
       add :source_website, :string
       add :source_url, :string
+      add :post_id, references(:post)
     end
 
     create unique_index(:barebone, [:slug])
@@ -225,6 +256,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :capacity, :integer, null: false
       add :tdp, :integer
       add :brand_id, references(:brand), null: false
+      add :post_id, references(:post)
     end
 
     create unique_index(:memory, [:slug])
@@ -250,6 +282,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :tbw, :integer
       add :tdp, :integer
       add :brand_id, references(:brand), null: false
+      add :post_id, references(:post)
     end
 
     create unique_index(:hard_drive, [:slug])
@@ -260,7 +293,6 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :code, :string, null: false
       add :slug, :string, null: false
       add :title, :string, null: false
-      add :description, :string
       add :condition, :string, null: false
       add :component_type, :string
       add :is_bundled, :boolean, null: false
@@ -269,6 +301,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :percentage_off, :decimal, null: false
       add :cost, :integer
       add :stock, :integer, null: false, default: 0
+      add :post_id, references(:post)
     end
 
     create unique_index(:product, [:code])
@@ -325,6 +358,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :option_value_seperator, :string, null: false
       add :option_types, {:array, :string}, null: false
       add :config, :map, null: false, default: %{}
+      add :post_id, references(:post)
     end
 
     create unique_index(:built_template, [:code])
