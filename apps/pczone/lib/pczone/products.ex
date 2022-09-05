@@ -29,6 +29,23 @@ defmodule Pczone.Products do
 
   def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
 
+  def create_post(id) do
+    with %{post_id: post_id, title: title} = entity when is_nil(post_id) <-
+           Repo.get(Pczone.Product, id) do
+      Ecto.Multi.new()
+      |> Ecto.Multi.run(:post, fn _, _ ->
+        Pczone.Posts.create(%{title: title})
+      end)
+      |> Ecto.Multi.run(:update, fn _, %{post: %{id: post_id}} ->
+        entity |> Ecto.Changeset.change(%{post_id: post_id}) |> Repo.update()
+      end)
+      |> Repo.transaction()
+    else
+      nil -> {:error, "entity not found"}
+      %{post_id: post_id} -> {:error, {"post exists", %{post_id: post_id}}}
+    end
+  end
+
   def add_taxonomy(%{product_id: product_id, taxon_id: taxon_id}) do
     with %{taxonomy_id: taxonomy_id} <- Pczone.Taxons.get(taxon_id) do
       %{product_id: product_id, taxonomy_id: taxonomy_id, taxon_id: taxon_id}

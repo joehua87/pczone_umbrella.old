@@ -32,6 +32,23 @@ defmodule Pczone.BuiltTemplates do
 
   def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
 
+  def create_post(id) do
+    with %{post_id: post_id, name: name} = entity when is_nil(post_id) <-
+           Repo.get(Pczone.BuiltTemplate, id) do
+      Ecto.Multi.new()
+      |> Ecto.Multi.run(:post, fn _, _ ->
+        Pczone.Posts.create(%{title: name})
+      end)
+      |> Ecto.Multi.run(:update, fn _, %{post: %{id: post_id}} ->
+        entity |> Ecto.Changeset.change(%{post_id: post_id}) |> Repo.update()
+      end)
+      |> Repo.transaction()
+    else
+      nil -> {:error, "entity not found"}
+      %{post_id: post_id} -> {:error, {"post exists", %{post_id: post_id}}}
+    end
+  end
+
   def upsert(list) do
     barebone_product_codes =
       Enum.map(list, fn %{"barebone_product" => barebone_product} ->

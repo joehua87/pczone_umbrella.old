@@ -61,6 +61,18 @@ defmodule PczoneWeb.Schema.Common do
     field :keywords, list_of(non_null(:string))
   end
 
+  object :embedded_medium do
+    field :id, non_null(:id)
+    field :type, non_null(:string)
+    field :caption, :string
+  end
+
+  input_object :embedded_medium_input do
+    field :id, non_null(:id)
+    field :type, non_null(:string)
+    field :caption, :string
+  end
+
   input_object :boolean_filter_input do
     field :eq, :boolean
     field :neq, :boolean

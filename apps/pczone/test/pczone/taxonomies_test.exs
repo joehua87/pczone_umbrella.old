@@ -3,7 +3,6 @@ defmodule Pczone.TaxonomiesTest do
   alias Pczone.Taxonomies
 
   describe "taxonomies" do
-    @tag :wip
     test "upsert from xlsx" do
       path = Pczone.Fixtures.get_fixture_path("taxonomies.xlsx")
 

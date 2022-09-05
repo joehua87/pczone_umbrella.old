@@ -63,6 +63,7 @@ defmodule PczoneWeb.Schema.BuiltTemplates do
     field :barebone_product_id, non_null(:id)
     field :barebone, non_null(:barebone), resolve: Helpers.dataloader(Dataloader)
     field :barebone_product, non_null(:product), resolve: Helpers.dataloader(Dataloader)
+    field :post, :post, resolve: Helpers.dataloader(Dataloader)
 
     field :processors,
           non_null(list_of(non_null(:built_template_processor))),
@@ -220,6 +221,14 @@ defmodule PczoneWeb.Schema.BuiltTemplates do
   end
 
   object :built_template_mutations do
+    field :create_built_template_post, non_null(:post) do
+      arg :id, non_null(:id)
+
+      resolve(fn %{id: id}, _info ->
+        BuiltTemplates.create_post(id) |> IO.inspect()
+      end)
+    end
+
     field :upsert_built_templates, non_null(list_of(non_null(:built_template))) do
       arg :data, non_null(:json)
 

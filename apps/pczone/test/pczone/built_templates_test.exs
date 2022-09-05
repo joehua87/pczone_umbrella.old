@@ -97,6 +97,11 @@ defmodule Pczone.BuiltTemplatesTest do
       assert [] = Repo.all(from v in Pczone.Built, where: v.state == :published)
     end
 
+    test "create post" do
+      [built_template | _] = built_templates_fixture()
+      assert {:ok, %{post: %{title: _}}} = Pczone.BuiltTemplates.create_post(built_template.id)
+    end
+
     test "generate content" do
       [built_template | _] = built_templates_fixture()
       assert {:ok, _} = BuiltTemplates.generate_builts(built_template)

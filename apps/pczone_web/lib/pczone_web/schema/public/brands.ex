@@ -1,10 +1,13 @@
 defmodule PczoneWeb.Schema.Brands do
   use Absinthe.Schema.Notation
+  alias Absinthe.Resolution.Helpers
+  alias PczoneWeb.Dataloader
 
   object :brand do
     field :id, non_null(:id)
     field :slug, non_null(:string)
     field :name, non_null(:string)
+    field :post, :post, resolve: Helpers.dataloader(Dataloader)
   end
 
   input_object :brand_filter_input do
@@ -36,6 +39,14 @@ defmodule PczoneWeb.Schema.Brands do
   end
 
   object :brand_mutations do
+    field :create_brand_post, non_null(:post) do
+      arg :id, non_null(:id)
+
+      resolve(fn %{id: id}, _info ->
+        Pczone.Brands.create_post(id)
+      end)
+    end
+
     field :upsert_brands, non_null(list_of(non_null(:brand))) do
       arg :data, non_null(:json)
 

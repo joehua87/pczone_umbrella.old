@@ -8,6 +8,7 @@ defmodule PczoneWeb.Schema do
   import_types PczoneWeb.Schema.Common
   import_types PczoneWeb.Schema.Users
   import_types PczoneWeb.Schema.Taxonomies
+  import_types PczoneWeb.Schema.Posts
   import_types PczoneWeb.Schema.Brands
   import_types PczoneWeb.Schema.Stores
   import_types PczoneWeb.Schema.Chipsets
@@ -31,6 +32,7 @@ defmodule PczoneWeb.Schema do
 
   query do
     import_fields :user_queries
+    import_fields :post_queries
     import_fields :taxonomy_queries
     import_fields :brand_queries
     import_fields :store_queries
@@ -54,6 +56,7 @@ defmodule PczoneWeb.Schema do
 
   mutation do
     import_fields :user_mutations
+    import_fields :post_mutations
     import_fields :brand_mutations
     import_fields :chassis_mutations
     import_fields :chipset_mutations

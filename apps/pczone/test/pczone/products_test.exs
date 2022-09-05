@@ -22,6 +22,17 @@ defmodule Pczone.ProductsTest do
                |> Pczone.Xlsx.read_spreadsheet()
                |> Products.upsert()
     end
+
+    test "create post" do
+      products = Pczone.Fixtures.read_fixture("products.xlsx")
+
+      assert {:ok,
+              %{
+                products: {38, [%Pczone.Product{} = product | _]}
+              }} = Products.upsert(products)
+
+      assert {:ok, %{post: %{title: _}}} = Pczone.Products.create_post(product.id)
+    end
   end
 
   setup do

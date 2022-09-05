@@ -55,6 +55,8 @@ defmodule PczoneWeb.Schema.Products do
     field :taxons,
           non_null(list_of(non_null(:taxon))),
           resolve: Helpers.dataloader(PczoneWeb.Dataloader)
+
+    field :post, :post, resolve: Helpers.dataloader(Dataloader)
   end
 
   object :product_taxon do
@@ -173,6 +175,14 @@ defmodule PczoneWeb.Schema.Products do
 
       resolve(fn %{data: data}, _info ->
         Products.update(data)
+      end)
+    end
+
+    field :create_product_post, non_null(:post) do
+      arg :id, non_null(:id)
+
+      resolve(fn %{id: id}, _info ->
+        Products.create_post(id)
       end)
     end
 

@@ -5,10 +5,11 @@ defmodule Pczone.Post do
   @derive Jason.Encoder
 
   @required [:title]
-  @optional [:description, :md, :state]
+  @optional [:type, :description, :md, :state]
 
   schema "post" do
     field :title, :string
+    field :type, :string
     field :description, :string
     field :md, :string
     field :state, :string

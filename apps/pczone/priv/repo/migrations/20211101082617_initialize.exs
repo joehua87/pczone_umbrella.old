@@ -35,6 +35,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
     create table(:post) do
       add :slug, :string
       add :title, :string, null: false
+      add :type, :string
       add :description, :text
       add :md, :text
       add :media, :map
@@ -43,6 +44,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
     end
 
     create unique_index(:post, [:slug])
+    create index(:post, [:type])
 
     create table(:post_taxon) do
       add :post_id, references(:post), null: false
