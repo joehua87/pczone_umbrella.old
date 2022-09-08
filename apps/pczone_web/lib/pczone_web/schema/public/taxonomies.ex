@@ -2,13 +2,6 @@ defmodule PczoneWeb.Schema.Taxonomies do
   use Absinthe.Schema.Notation
   alias Absinthe.Resolution.Helpers
 
-  object :taxon do
-    field :id, non_null(:id)
-    field :name, non_null(:string)
-    field :path, non_null(:string)
-    field :description, :string
-  end
-
   object :taxonomy do
     field :id, non_null(:id)
     field :code, non_null(:string)

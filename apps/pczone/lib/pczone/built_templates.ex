@@ -1,7 +1,7 @@
 defmodule Pczone.BuiltTemplates do
   import Ecto.Query, only: [where: 2, from: 2]
   import Dew.FilterParser
-  alias Pczone.Repo
+  alias Pczone.{Repo, BuiltTemplateTaxon, Taxon, Taxons}
 
   def get(%{} = filter) do
     Repo.one(from Pczone.BuiltTemplate, where: ^parse_filter(filter), limit: 1)
@@ -23,14 +23,19 @@ defmodule Pczone.BuiltTemplates do
         selection: selection,
         order_by: order_by
       }) do
-    Pczone.BuiltTemplate
-    |> where(^parse_filter(filter))
+    make_query(filter)
     |> select_fields(selection, [])
     |> sort_by(order_by, [])
     |> Repo.paginate(paging)
   end
 
   def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
+
+  def make_query(filter) do
+    Pczone.BuiltTemplate
+    |> parse_taxons_filter(filter)
+    |> where(^parse_filter(filter))
+  end
 
   def create_post(id) do
     with %{post_id: post_id, name: name} = entity when is_nil(post_id) <-
@@ -770,5 +775,23 @@ defmodule Pczone.BuiltTemplates do
         _ -> acc
       end
     end) || true
+  end
+
+  def parse_taxons_filter(acc, %{taxons: taxons_filter_list}) do
+    taxons_filter_list
+    |> Enum.reduce(acc, fn taxons_filter, queryable ->
+      taxon_subquery =
+        from t in Taxon,
+          where: ^Taxons.parse_filter(taxons_filter),
+          select: t.id
+
+      entry_subquery =
+        from et in BuiltTemplateTaxon,
+          where: et.taxon_id in subquery(taxon_subquery),
+          distinct: et.entry_id,
+          select: [:entry_id]
+
+      from(e in queryable, join: et in subquery(entry_subquery), on: et.entry_id == e.id)
+    end)
   end
 end

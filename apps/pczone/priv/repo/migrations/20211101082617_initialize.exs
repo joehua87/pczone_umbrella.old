@@ -15,10 +15,14 @@ defmodule Pczone.Repo.Migrations.Initialize do
     create table(:taxonomy) do
       add :code, :string, null: false
       add :name, :string, null: false
+      add :featured, :boolean, null: false, default: false
+      add :position, :integer, default: 0
       add :description, :text
     end
 
     create unique_index(:taxonomy, [:code])
+    create index(:taxonomy, [:featured])
+    create index(:taxonomy, [:position])
 
     create table(:taxon) do
       add :name, :string, null: false
@@ -26,17 +30,23 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :description, :text
       add :translation, {:map, :string}
       add :taxonomy_id, references(:taxonomy), null: false
+      add :featured, :boolean, null: false, default: false
+      add :position, :integer, default: 0
     end
 
     create unique_index(:taxon, [:taxonomy_id, :path])
     create index(:taxon, [:path])
     create index(:taxon, [:taxonomy_id])
+    create index(:taxon, [:featured])
+    create index(:taxon, [:position])
 
     create table(:post) do
       add :slug, :string
       add :title, :string, null: false
       add :type, :string
       add :description, :text
+      add :featured, :boolean, null: false, default: false
+      add :position, :integer, default: 0
       add :md, :text
       add :media, :map
       add :seo, :map
@@ -45,6 +55,8 @@ defmodule Pczone.Repo.Migrations.Initialize do
 
     create unique_index(:post, [:slug])
     create index(:post, [:type])
+    create index(:post, [:featured])
+    create index(:post, [:position])
 
     create table(:post_taxon) do
       add :post_id, references(:post), null: false
@@ -298,6 +310,8 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :condition, :string, null: false
       add :component_type, :string
       add :is_bundled, :boolean, null: false
+      add :featured, :boolean, null: false, default: false
+      add :position, :integer, default: 0
       add :list_price, :integer
       add :sale_price, :integer, null: false
       add :percentage_off, :decimal, null: false
@@ -312,6 +326,8 @@ defmodule Pczone.Repo.Migrations.Initialize do
     create index(:product, [:list_price])
     create index(:product, [:sale_price])
     create index(:product, [:percentage_off])
+    create index(:product, [:featured])
+    create index(:product, [:position])
 
     create table(:component_product) do
       add :product_id, references(:product), null: false
@@ -355,6 +371,8 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :name, :string, null: false
       add :media, :map, null: false, default: "[]"
       add :body_template, :string, null: false
+      add :featured, :boolean, null: false, default: false
+      add :position, :integer, default: 0
       add :barebone_id, references(:barebone), null: false
       add :barebone_product_id, references(:product), null: false
       add :option_value_seperator, :string, null: false
@@ -364,6 +382,8 @@ defmodule Pczone.Repo.Migrations.Initialize do
     end
 
     create unique_index(:built_template, [:code])
+    create index(:built_template, [:featured])
+    create index(:built_template, [:position])
 
     create table(:built_template_processor) do
       add :key, :string, null: false

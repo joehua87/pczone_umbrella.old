@@ -2,7 +2,7 @@ defmodule Pczone.Products do
   require Logger
   import Ecto.Query, only: [where: 2, from: 2]
   import Dew.FilterParser
-  alias Pczone.{Repo, Product, ComponentProduct}
+  alias Pczone.{Repo, Product, Taxon, ProductTaxon, ComponentProduct, Taxons}
 
   def get_by_code(code) do
     Repo.one(from x in Product, where: x.code == ^code, limit: 1)
@@ -20,14 +20,19 @@ defmodule Pczone.Products do
         selection: selection,
         order_by: order_by
       }) do
-    Product
-    |> where(^parse_filter(filter))
+    make_query(filter)
     |> select_fields(selection)
     |> sort_by(order_by, ["title"])
     |> Repo.paginate(paging)
   end
 
   def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
+
+  def make_query(filter) do
+    Product
+    |> parse_taxons_filter(filter)
+    |> where(^parse_filter(filter))
+  end
 
   def create_post(id) do
     with %{post_id: post_id, title: title} = entity when is_nil(post_id) <-
@@ -278,5 +283,23 @@ defmodule Pczone.Products do
         _ -> acc
       end
     end) || true
+  end
+
+  def parse_taxons_filter(acc, %{taxons: taxons_filter_list}) do
+    taxons_filter_list
+    |> Enum.reduce(acc, fn taxons_filter, queryable ->
+      taxon_subquery =
+        from t in Taxon,
+          where: ^Taxons.parse_filter(taxons_filter),
+          select: t.id
+
+      entry_subquery =
+        from et in ProductTaxon,
+          where: et.taxon_id in subquery(taxon_subquery),
+          distinct: et.entry_id,
+          select: [:entry_id]
+
+      from(e in queryable, join: et in subquery(entry_subquery), on: et.entry_id == e.id)
+    end)
   end
 end

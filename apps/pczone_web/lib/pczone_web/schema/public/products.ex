@@ -71,6 +71,7 @@ defmodule PczoneWeb.Schema.Products do
     field :condition, :string_filter_input
     field :component_type, :string_filter_input
     field :is_bundled, :boolean_filter_input
+    field :taxons, list_of(non_null(:taxon_filter_input))
   end
 
   object :product_list_result do

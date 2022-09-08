@@ -40,6 +40,14 @@ defmodule PczoneWeb.Schema.Posts do
         {:ok, list}
       end)
     end
+
+    field :post, :post do
+      arg :id, non_null(:id)
+
+      resolve(fn %{id: id}, _info ->
+        {:ok, Pczone.Posts.get(id)}
+      end)
+    end
   end
 
   input_object :create_post_input do

@@ -17,14 +17,18 @@ defmodule Pczone.Taxonomies do
         selection: selection,
         order_by: order_by
       }) do
-    Pczone.Taxonomy
-    |> where(^parse_filter(filter))
+    make_query(filter)
     |> select_fields(selection, [])
     |> sort_by(order_by, [])
     |> Repo.paginate(paging)
   end
 
   def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
+
+  def make_query(filter) do
+    Pczone.Taxonomy
+    |> where(^parse_filter(filter))
+  end
 
   @doc """
   Upsert a list of taxonomies
