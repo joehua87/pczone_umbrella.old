@@ -794,4 +794,6 @@ defmodule Pczone.BuiltTemplates do
       from(e in queryable, join: et in subquery(entry_subquery), on: et.entry_id == e.id)
     end)
   end
+
+  def parse_taxons_filter(acc, _), do: acc
 end
