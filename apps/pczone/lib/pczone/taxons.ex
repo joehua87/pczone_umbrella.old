@@ -59,7 +59,7 @@ defmodule Pczone.Taxons do
     |> Enum.reduce(nil, fn {field, value}, acc ->
       case field do
         :id -> parse_id_filter(acc, field, value)
-        :path -> parse_path_filter(acc, field, value)
+        :path -> parse_ltree_filter(acc, field, value)
         :taxonomy_id -> parse_id_filter(acc, field, value)
         :featured -> parse_boolean_filter(acc, field, value)
         _ -> acc

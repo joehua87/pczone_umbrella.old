@@ -38,7 +38,6 @@ defmodule Pczone.MixProject do
     [
       {:bcrypt_elixir, "~> 2.0"},
       {:bbmustache, "~> 1.12"},
-      {:dew_util, "~> 0.2"},
       {:ecto_ltree, "~> 0.4.0"},
       {:elixlsx, "~> 0.3.1"},
       {:nimble_csv, "~> 1.1"},
