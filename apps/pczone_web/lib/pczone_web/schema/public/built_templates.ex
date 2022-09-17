@@ -22,7 +22,6 @@ defmodule PczoneWeb.Schema.BuiltTemplates do
   object :built_template_memory do
     field :memory_id, non_null(:id)
     field :memory_product_id, non_null(:id)
-    field :memory_quantity, non_null(:integer)
     field :label, non_null(:string)
     field :quantity, non_null(:integer)
     field :memory, non_null(:memory), resolve: Helpers.dataloader(Dataloader)
@@ -32,7 +31,6 @@ defmodule PczoneWeb.Schema.BuiltTemplates do
   object :built_template_hard_drive do
     field :hard_drive_id, non_null(:id)
     field :hard_drive_product_id, non_null(:id)
-    field :hard_drive_quantity, non_null(:integer)
     field :label, non_null(:string)
     field :quantity, non_null(:integer)
 
@@ -119,7 +117,6 @@ defmodule PczoneWeb.Schema.BuiltTemplates do
     # field :memory_product_id, non_null(:id)
     field :memory_product, non_null(:string)
     field :memory, :string
-    field :memory_quantity, :integer
     field :label, non_null(:string)
     field :quantity, :integer
   end
@@ -128,7 +125,6 @@ defmodule PczoneWeb.Schema.BuiltTemplates do
     # field :hard_drive_product_id, non_null(:id)
     field :hard_drive_product, non_null(:string)
     field :hard_drive, :string
-    field :hard_drive_quantity, :integer
     field :label, non_null(:string)
     field :quantity, :integer
   end
