@@ -34,7 +34,7 @@ defmodule PczoneWeb.Schema.Motherboards do
 
   object :processor_slot do
     field :socket, :string
-    field :heatsink_type, :string
+    field :cooler_type, :string
     field :quantity, non_null(:integer)
   end
 

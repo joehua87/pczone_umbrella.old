@@ -31,8 +31,8 @@ defmodule PczoneWeb.UpsertController do
     upsert(conn, file, &Pczone.HardDrives.upsert/1)
   end
 
-  def heatsinks(conn, %{"file" => %Plug.Upload{} = file}) do
-    upsert(conn, file, &Pczone.Heatsinks.upsert/1)
+  def coolers(conn, %{"file" => %Plug.Upload{} = file}) do
+    upsert(conn, file, &Pczone.Coolers.upsert/1)
   end
 
   def memories(conn, %{"file" => %Plug.Upload{} = file}) do

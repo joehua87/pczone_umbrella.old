@@ -60,7 +60,7 @@ defmodule Pczone.MotherboardsTest do
                    ],
                    pci_slots_count: nil,
                    processor_slots: [
-                     %Pczone.ProcessorSlot{heatsink_type: nil, quantity: 1, socket: nil}
+                     %Pczone.ProcessorSlot{cooler_type: nil, quantity: 1, socket: nil}
                    ],
                    processor_slots_count: nil,
                    sata_slots: [

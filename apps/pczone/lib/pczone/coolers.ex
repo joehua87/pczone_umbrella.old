@@ -1,4 +1,4 @@
-defmodule Pczone.Heatsinks do
+defmodule Pczone.Coolers do
   import Ecto.Query, only: [from: 2, where: 2]
   import Dew.FilterParser
   alias Pczone.Repo
@@ -6,7 +6,7 @@ defmodule Pczone.Heatsinks do
   def get(attrs = %{}) when is_map(attrs), do: get(struct(Dew.Filter, attrs))
 
   def get(id) do
-    Repo.get(Pczone.Heatsink, id)
+    Repo.get(Pczone.Cooler, id)
   end
 
   def list(attrs \\ %{})
@@ -17,7 +17,7 @@ defmodule Pczone.Heatsinks do
         selection: selection,
         order_by: order_by
       }) do
-    Pczone.Heatsink
+    Pczone.Cooler
     |> where(^parse_filter(filter))
     |> select_fields(selection, [])
     |> sort_by(order_by, [])
@@ -27,7 +27,7 @@ defmodule Pczone.Heatsinks do
   def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
 
   def get_map_by_slug() do
-    Repo.all(from c in Pczone.Heatsink, select: {c.slug, c.id}) |> Enum.into(%{})
+    Repo.all(from c in Pczone.Cooler, select: {c.slug, c.id}) |> Enum.into(%{})
   end
 
   def upsert(entities, opts \\ []) do
@@ -39,7 +39,7 @@ defmodule Pczone.Heatsinks do
              &parse_entity_for_upsert(&1, brands_map: brands_map)
            ) do
       Repo.insert_all_2(
-        Pczone.Heatsink,
+        Pczone.Cooler,
         list,
         Keyword.merge(opts,
           on_conflict: {:replace, [:code, :name, :supported_types, :brand_id]},
@@ -58,7 +58,7 @@ defmodule Pczone.Heatsinks do
         Map.put(params, "brand_id", brands_map[brand])
     end
     |> Pczone.Helpers.ensure_slug()
-    |> Pczone.Heatsink.new_changeset()
+    |> Pczone.Cooler.new_changeset()
     |> Pczone.Helpers.get_changeset_changes()
   end
 

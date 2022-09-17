@@ -57,7 +57,7 @@ defmodule Pczone do
     motherboards = read_from_files!(files, ~r/^motherboards.*?\.(ya?ml|xlsx)/)
     processors = read_from_files!(files, ~r/^processors.*?\.(ya?ml|xlsx)/)
     psus = read_from_files!(files, ~r/^psus.*?\.(ya?ml|xlsx)/)
-    heatsinks = read_from_files!(files, ~r/^heatsinks.*?\.(ya?ml|xlsx)/)
+    coolers = read_from_files!(files, ~r/^coolers.*?\.(ya?ml|xlsx)/)
     products = read_from_files!(files, ~r/^products.*?\.(ya?ml|xlsx)/)
 
     with {:ok, _} <- Pczone.Stores.upsert(stores),
@@ -70,7 +70,7 @@ defmodule Pczone do
          {:ok, _} <- Pczone.Gpus.upsert(gpus),
          {:ok, _} <- Pczone.Chassises.upsert(chassises),
          {:ok, _} <- Pczone.Psus.upsert(psus),
-         {:ok, _} <- Pczone.Heatsinks.upsert(heatsinks),
+         {:ok, _} <- Pczone.Coolers.upsert(coolers),
          {:ok, _} <- Pczone.Barebones.upsert(barebones),
          {:ok, _} <- Pczone.Chipsets.upsert_chipset_processors(chipsets),
          {:ok, _} <- Pczone.Motherboards.upsert_motherboard_processors(motherboards),

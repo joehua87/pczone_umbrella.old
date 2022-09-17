@@ -133,7 +133,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
     create unique_index(:psu, [:slug])
     create unique_index(:psu, [:code])
 
-    create table(:heatsink) do
+    create table(:cooler) do
       add :slug, :string, null: false
       add :code, :string, null: false
       add :name, :string, null: false
@@ -142,8 +142,8 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :post_id, references(:post)
     end
 
-    create unique_index(:heatsink, [:slug])
-    create unique_index(:heatsink, [:code])
+    create unique_index(:cooler, [:slug])
+    create unique_index(:cooler, [:code])
 
     create table(:motherboard) do
       add :slug, :string, null: false
@@ -341,7 +341,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :gpu_id, references(:gpu)
       add :chassis_id, references(:chassis)
       add :psu_id, references(:psu)
-      add :heatsink_id, references(:heatsink)
+      add :cooler_id, references(:cooler)
     end
 
     create unique_index(:component_product, [:product_id])
@@ -466,14 +466,14 @@ defmodule Pczone.Repo.Migrations.Initialize do
 
     create unique_index(:built_psu, [:built_id, :psu_id])
 
-    create table(:built_heatsink) do
+    create table(:built_cooler) do
       add :built_id, references(:built), null: false
-      add :heatsink_id, references(:heatsink), null: false
+      add :cooler_id, references(:cooler), null: false
       add :product_id, references(:product), null: false
       add :quantity, :integer, null: false
     end
 
-    create unique_index(:built_heatsink, [:built_id, :heatsink_id])
+    create unique_index(:built_cooler, [:built_id, :cooler_id])
 
     create table(:built_extension_device) do
       add :built_id, references(:built), null: false

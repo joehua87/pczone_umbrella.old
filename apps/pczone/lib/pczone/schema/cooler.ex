@@ -1,11 +1,11 @@
-defmodule Pczone.Heatsink do
+defmodule Pczone.Cooler do
   use Ecto.Schema
   import Ecto.Changeset
 
   @required [:slug, :code, :name, :supported_types, :brand_id]
   @optional []
 
-  schema "heatsink" do
+  schema "cooler" do
     field :slug, :string
     field :code, :string
     field :name, :string

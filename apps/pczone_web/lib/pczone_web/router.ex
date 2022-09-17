@@ -52,7 +52,7 @@ defmodule PczoneWeb.Router do
     post "/upsert/extension-devices", UpsertController, :extension_devices
     post "/upsert/gpus", UpsertController, :gpus
     post "/upsert/hard-drives", UpsertController, :hard_drives
-    post "/upsert/heatsinks", UpsertController, :heatsinks
+    post "/upsert/coolers", UpsertController, :coolers
     post "/upsert/memories", UpsertController, :memories
     post "/upsert/motherboards", UpsertController, :motherboards
     post "/upsert/processors", UpsertController, :processors

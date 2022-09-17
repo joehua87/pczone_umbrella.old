@@ -13,7 +13,7 @@ defmodule Pczone.ComponentProduct do
     :hard_drive_id,
     :psu_id,
     :chassis_id,
-    :heatsink_id
+    :cooler_id
   ]
 
   schema "component_product" do
@@ -27,7 +27,7 @@ defmodule Pczone.ComponentProduct do
     belongs_to :hard_drive, Pczone.HardDrive
     belongs_to :psu, Pczone.Psu
     belongs_to :chassis, Pczone.Chassis
-    belongs_to :heatsink, Pczone.Heatsink
+    belongs_to :cooler, Pczone.Cooler
   end
 
   def changeset(entity, params) do

@@ -32,7 +32,7 @@ defmodule Pczone.Built do
     field :position, :integer
     field :state, Ecto.Enum, default: :published, values: [:published, :archived]
     has_many :built_psus, Pczone.BuiltPsu
-    has_many :built_heatsinks, Pczone.BuiltHeatsink
+    has_many :built_coolers, Pczone.BuiltCooler
     has_many :built_extension_devices, Pczone.BuiltExtensionDevice
     has_many :built_processors, Pczone.BuiltProcessor
     has_many :built_memories, Pczone.BuiltMemory

@@ -19,7 +19,7 @@ defmodule PczoneWeb.Schema do
   import_types PczoneWeb.Schema.Processors
   import_types PczoneWeb.Schema.Memories
   import_types PczoneWeb.Schema.Psus
-  import_types PczoneWeb.Schema.Heatsinks
+  import_types PczoneWeb.Schema.Coolers
   import_types PczoneWeb.Schema.Chassises
   import_types PczoneWeb.Schema.HardDrives
   import_types PczoneWeb.Schema.Gpus
@@ -42,7 +42,7 @@ defmodule PczoneWeb.Schema do
     import_fields :processor_queries
     import_fields :chassis_queries
     import_fields :psu_queries
-    import_fields :heatsink_queries
+    import_fields :cooler_queries
     import_fields :motherboard_queries
     import_fields :memory_queries
     import_fields :hard_drive_queries
@@ -63,7 +63,7 @@ defmodule PczoneWeb.Schema do
     import_fields :chassis_mutations
     import_fields :chipset_mutations
     import_fields :psu_mutations
-    import_fields :heatsink_mutations
+    import_fields :cooler_mutations
     import_fields :motherboard_mutations
     import_fields :barebone_mutations
     import_fields :memory_mutations

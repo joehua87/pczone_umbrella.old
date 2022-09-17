@@ -81,12 +81,12 @@ defmodule Pczone.ProcessorSlot do
 
   embedded_schema do
     field :socket, :string
-    field :heatsink_type, :string
+    field :cooler_type, :string
     field :quantity, :integer
   end
 
   def changeset(entity, params) do
-    cast(entity, params, [:socket, :heatsink_type, :quantity])
+    cast(entity, params, [:socket, :cooler_type, :quantity])
   end
 end
 

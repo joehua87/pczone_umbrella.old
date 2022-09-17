@@ -155,7 +155,7 @@ defmodule Pczone.Products do
         :hard_drive_id,
         :psu_id,
         :chassis_id,
-        :heatsink_id
+        :cooler_id
       ]
 
       component_products =
