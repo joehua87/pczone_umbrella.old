@@ -86,6 +86,7 @@ defmodule PczoneWeb.Schema.Builts do
 
   object :built do
     field :id, non_null(:id)
+    field :key, :string
     field :slug, non_null(:string)
     field :name, non_null(:string)
     field :option_values, list_of(non_null(:string))

@@ -440,6 +440,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
     create index(:built_template_taxon, [:taxonomy_id, :taxon_id])
 
     create table(:built) do
+      add :key, :string
       add :slug, :string, null: false
       add :name, :string, null: false
       add :built_template_id, references(:built_template)
@@ -455,6 +456,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :state, :string, default: "published"
     end
 
+    create unique_index(:built, [:key])
     create unique_index(:built, [:built_template_id, :option_values])
 
     create table(:built_psu) do

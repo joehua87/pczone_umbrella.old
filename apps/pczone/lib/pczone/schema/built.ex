@@ -4,6 +4,7 @@ defmodule Pczone.Built do
 
   @required [:slug, :name]
   @optional [
+    :key,
     :built_template_id,
     :option_values,
     :barebone_id,
@@ -18,6 +19,7 @@ defmodule Pczone.Built do
   ]
 
   schema "built" do
+    field :key, :string
     field :slug, :string
     field :name, :string
     belongs_to :built_template, Pczone.BuiltTemplate

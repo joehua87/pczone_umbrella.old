@@ -5,6 +5,7 @@ defmodule PczoneWeb.Schema.BuiltTemplates do
   alias PczoneWeb.Dataloader
 
   object :built_template_processor do
+    field :key, non_null(:string)
     field :processor_id, non_null(:id)
     field :processor_product_id, non_null(:id)
     field :processor_label, non_null(:string)
@@ -20,6 +21,7 @@ defmodule PczoneWeb.Schema.BuiltTemplates do
   end
 
   object :built_template_memory do
+    field :key, non_null(:string)
     field :memory_id, non_null(:id)
     field :memory_product_id, non_null(:id)
     field :label, non_null(:string)
@@ -29,6 +31,7 @@ defmodule PczoneWeb.Schema.BuiltTemplates do
   end
 
   object :built_template_hard_drive do
+    field :key, non_null(:string)
     field :hard_drive_id, non_null(:id)
     field :hard_drive_product_id, non_null(:id)
     field :label, non_null(:string)

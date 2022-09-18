@@ -432,6 +432,7 @@ defmodule Pczone.BuiltTemplates do
     memories_and_hard_drives =
       [%Pczone.BuiltTemplateMemory{quantity: 0, memory_product: nil} | memories]
       |> Enum.flat_map(fn %Pczone.BuiltTemplateMemory{
+                            key: memory_key,
                             memory_id: memory_id,
                             memory_product: memory_product,
                             quantity: memory_quantity,
@@ -439,6 +440,7 @@ defmodule Pczone.BuiltTemplates do
                           } ->
         [%Pczone.BuiltTemplateHardDrive{quantity: 0, hard_drive_product: nil} | hard_drives]
         |> Enum.map(fn %Pczone.BuiltTemplateHardDrive{
+                         key: hard_drive_key,
                          hard_drive_id: hard_drive_id,
                          hard_drive_product: hard_drive_product,
                          quantity: hard_drive_quantity,
@@ -475,6 +477,8 @@ defmodule Pczone.BuiltTemplates do
             )
 
           %{
+            memory_key: memory_key,
+            hard_drive_key: hard_drive_key,
             option_value_2:
               Enum.join(
                 [memory_label || "Ko RAM", hard_drive_label || "Ko SSD"],
@@ -487,63 +491,66 @@ defmodule Pczone.BuiltTemplates do
       end)
 
     processors
-    |> Enum.flat_map(
-      # gpu_product: gpu_product,
-      # gpu_quantity: gpu_quantity,
-      # gpu_label: gpu_label
-      fn %Pczone.BuiltTemplateProcessor{
-           processor_id: processor_id,
-           processor_product: processor_product,
-           processor_quantity: processor_quantity,
-           processor_label: processor_label,
-           gpu_id: gpu_id,
-           gpu_product: gpu_product,
-           gpu_quantity: gpu_quantity,
-           gpu_label: gpu_label
-         } ->
-        gpu =
-          case gpu_product do
-            nil ->
-              %{built_gpus: []}
+    |> Enum.flat_map(fn %Pczone.BuiltTemplateProcessor{
+                          key: processor_key,
+                          processor_id: processor_id,
+                          processor_product: processor_product,
+                          processor_quantity: processor_quantity,
+                          processor_label: processor_label,
+                          gpu_id: gpu_id,
+                          gpu_product: gpu_product,
+                          gpu_quantity: gpu_quantity,
+                          gpu_label: gpu_label
+                        } ->
+      gpu =
+        case gpu_product do
+          nil ->
+            %{built_gpus: []}
 
-            _ ->
-              %{
-                built_gpus: [
-                  %{gpu_id: gpu_id, product_id: gpu_product.id, quantity: gpu_quantity}
-                ]
-              }
-          end
-
-        option_value_1 =
-          [processor_label, gpu_label] |> Enum.filter(&(&1 != "")) |> Enum.join(seperator)
-
-        Enum.map(
-          memories_and_hard_drives,
-          fn memory_and_hard_drive = %{option_value_2: option_value_2} ->
-            name = Enum.join([option_value_1, option_value_2], ",")
-            slug = Slug.slugify(name)
-
+          _ ->
             %{
-              slug: slug,
-              name: name,
-              built_template_id: built_template_id,
-              barebone_id: barebone_id,
-              barebone_product_id: barebone_product.id,
-              built_processors: [
-                %{
-                  processor_id: processor_id,
-                  product_id: processor_product.id,
-                  quantity: processor_quantity
-                }
-              ],
-              option_values: [option_value_1, option_value_2]
+              built_gpus: [
+                %{gpu_id: gpu_id, product_id: gpu_product.id, quantity: gpu_quantity}
+              ]
             }
-            |> Map.merge(gpu)
-            |> Map.merge(Map.delete(memory_and_hard_drive, :option_value_2))
-          end
-        )
-      end
-    )
+        end
+
+      option_value_1 =
+        [processor_label, gpu_label] |> Enum.filter(&(&1 != "")) |> Enum.join(seperator)
+
+      Enum.map(
+        memories_and_hard_drives,
+        fn memory_and_hard_drive = %{
+             memory_key: memory_key,
+             hard_drive_key: hard_drive_key,
+             option_value_2: option_value_2
+           } ->
+          name = Enum.join([option_value_1, option_value_2], ",")
+          slug = Slug.slugify(name)
+
+          %{
+            slug: slug,
+            name: name,
+            key: Enum.join([processor_key, memory_key, hard_drive_key], "_"),
+            built_template_id: built_template_id,
+            barebone_id: barebone_id,
+            barebone_product_id: barebone_product.id,
+            built_processors: [
+              %{
+                processor_id: processor_id,
+                product_id: processor_product.id,
+                quantity: processor_quantity
+              }
+            ],
+            option_values: [option_value_1, option_value_2]
+          }
+          |> Map.merge(gpu)
+          |> Map.merge(
+            Map.drop(memory_and_hard_drive, [:option_value_2, :memory_key, :hard_drive_key])
+          )
+        end
+      )
+    end)
     |> Enum.with_index(fn item, position ->
       Map.put(item, :position, position)
     end)
@@ -578,6 +585,7 @@ defmodule Pczone.BuiltTemplates do
                  on_conflict:
                    {:replace,
                     [
+                      :key,
                       :barebone_id,
                       :barebone_product_id,
                       :motherboard_id,
