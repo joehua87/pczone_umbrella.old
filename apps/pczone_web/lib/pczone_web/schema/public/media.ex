@@ -43,4 +43,14 @@ defmodule PczoneWeb.Schema.Media do
       end)
     end
   end
+
+  object :medium_mutations do
+    field :delete_medium, non_null(:medium) do
+      arg :id, non_null(:id)
+
+      resolve(fn %{id: id}, _info ->
+        Pczone.Media.delete(id)
+      end)
+    end
+  end
 end

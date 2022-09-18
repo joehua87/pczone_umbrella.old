@@ -60,6 +60,7 @@ defmodule PczoneWeb.Schema do
     import_fields :user_mutations
     import_fields :post_mutations
     import_fields :brand_mutations
+    import_fields :medium_mutations
     import_fields :chassis_mutations
     import_fields :chipset_mutations
     import_fields :psu_mutations
