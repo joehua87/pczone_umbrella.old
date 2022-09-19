@@ -60,6 +60,7 @@ defmodule PczoneWeb.Schema.BuiltTemplates do
     field :name, non_null(:string)
     field :option_types, non_null(list_of(non_null(:string)))
     field :option_value_seperator, non_null(:string)
+    field :media, non_null(list_of(non_null(:embedded_medium)))
     field :barebone_id, non_null(:id)
     field :barebone_product_id, non_null(:id)
     field :barebone, non_null(:barebone), resolve: Helpers.dataloader(Dataloader)
@@ -137,12 +138,17 @@ defmodule PczoneWeb.Schema.BuiltTemplates do
     field :name, non_null(:string)
     field :option_types, non_null(list_of(non_null(:string)))
     field :option_value_seperator, :string
+    field :media, list_of(non_null(:embedded_medium_input))
     # field :barebone_id, non_null(:id)
     field :barebone, non_null(:string)
     field :barebone_product, non_null(:string)
     field :processors, non_null(list_of(non_null(:built_template_processor_input)))
     field :memories, non_null(list_of(non_null(:built_template_memory_input)))
     field :hard_drives, non_null(list_of(non_null(:built_template_hard_drive_input)))
+  end
+
+  input_object :update_built_template_input do
+    field :media, list_of(non_null(:embedded_medium_input))
   end
 
   input_object :built_template_store_input do
@@ -221,11 +227,20 @@ defmodule PczoneWeb.Schema.BuiltTemplates do
   end
 
   object :built_template_mutations do
+    field :update_built_template, non_null(:built_template) do
+      arg :id, non_null(:id)
+      arg :data, non_null(:update_built_template_input)
+
+      resolve(fn %{id: id, data: data}, _info ->
+        BuiltTemplates.update(id, data)
+      end)
+    end
+
     field :create_built_template_post, non_null(:post) do
       arg :id, non_null(:id)
 
       resolve(fn %{id: id}, _info ->
-        BuiltTemplates.create_post(id) |> IO.inspect()
+        BuiltTemplates.create_post(id)
       end)
     end
 

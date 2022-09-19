@@ -33,6 +33,7 @@ defmodule Pczone.Product do
     field :percentage_off, :decimal
     field :cost, :integer
     field :stock, :integer, default: 0
+    embeds_many :media, Pczone.EmbeddedMedium, on_replace: :delete
     belongs_to :post, Pczone.Post
     has_one :component_product, Pczone.ComponentProduct
     many_to_many :taxons, Pczone.Taxon, join_through: Pczone.ProductTaxon
@@ -42,6 +43,7 @@ defmodule Pczone.Product do
     entity
     |> cast(params, @required ++ @optional)
     |> validate_required(@required)
+    |> cast_embed(:media)
   end
 
   def new_changeset(params) do

@@ -1,7 +1,7 @@
 defmodule Pczone.BuiltTemplates do
   import Ecto.Query, only: [where: 2, from: 2]
   import Dew.FilterParser
-  alias Pczone.{Repo, BuiltTemplateTaxon, Taxon, Taxons}
+  alias Pczone.{Repo, BuiltTemplate, BuiltTemplateTaxon, Taxon, Taxons}
 
   def get(%{} = filter) do
     Repo.one(from Pczone.BuiltTemplate, where: ^parse_filter(filter), limit: 1)
@@ -24,7 +24,7 @@ defmodule Pczone.BuiltTemplates do
         order_by: order_by
       }) do
     make_query(filter)
-    |> select_fields(selection, [])
+    |> select_fields(selection, [:media])
     |> sort_by(order_by, [])
     |> Repo.paginate(paging)
   end
@@ -35,6 +35,10 @@ defmodule Pczone.BuiltTemplates do
     Pczone.BuiltTemplate
     |> parse_taxons_filter(filter)
     |> where(^parse_filter(filter))
+  end
+
+  def update(id, params) do
+    Repo.get(BuiltTemplate, id) |> BuiltTemplate.changeset(params) |> Repo.update()
   end
 
   def create_post(id) do

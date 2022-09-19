@@ -13,8 +13,8 @@ defmodule Pczone.Post do
     field :description, :string
     field :md, :string
     field :state, :string
-    embeds_one :seo, Pczone.Seo
-    embeds_many :media, Pczone.EmbeddedMedium
+    embeds_one :seo, Pczone.Seo, on_replace: :update
+    embeds_many :media, Pczone.EmbeddedMedium, on_replace: :delete
   end
 
   def changeset(entity, params) do

@@ -47,7 +47,7 @@ defmodule Pczone.EmbeddedMedium do
   def changeset(entity, params) do
     entity
     |> cast(params, [:id, :type, :caption])
-    |> validate_required([:id, :type])
+    |> validate_required([:id])
   end
 end
 

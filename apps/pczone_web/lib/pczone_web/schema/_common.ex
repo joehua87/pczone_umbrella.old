@@ -63,13 +63,13 @@ defmodule PczoneWeb.Schema.Common do
 
   object :embedded_medium do
     field :id, non_null(:id)
-    field :type, non_null(:string)
+    field :type, :string
     field :caption, :string
   end
 
   input_object :embedded_medium_input do
     field :id, non_null(:id)
-    field :type, non_null(:string)
+    field :type, :string
     field :caption, :string
   end
 

@@ -55,7 +55,7 @@ defmodule PczoneWeb.Schema.Posts do
     field :title, non_null(:string)
     field :description, :string
     field :md, :string
-    field :media, non_null(list_of(non_null(:embedded_medium_input)))
+    field :media, list_of(non_null(:embedded_medium_input))
     field :seo, :embedded_medium_input
     field :state, :string
   end

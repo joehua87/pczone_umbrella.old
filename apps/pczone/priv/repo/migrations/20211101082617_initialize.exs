@@ -317,6 +317,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :percentage_off, :decimal, null: false
       add :cost, :integer
       add :stock, :integer, null: false, default: 0
+      add :media, :map, null: false, default: "[]"
       add :post_id, references(:post)
     end
 

@@ -47,6 +47,7 @@ defmodule PczoneWeb.Schema.Products do
     field :sale_price, non_null(:integer)
     field :percentage_off, non_null(:decimal)
     field :stock, non_null(:integer)
+    field :media, non_null(list_of(non_null(:embedded_medium)))
 
     field :component_product,
           :component_product,
@@ -67,6 +68,7 @@ defmodule PczoneWeb.Schema.Products do
 
   input_object :product_filter_input do
     field :id, :id_filter_input
+    field :slug, :string_filter_input
     field :title, :string_filter_input
     field :condition, :string_filter_input
     field :component_type, :string_filter_input
@@ -130,16 +132,17 @@ defmodule PczoneWeb.Schema.Products do
     field :hard_drive_id, :id
     field :psu_id, :id
     field :chassis_id, :id
+    field :media, list_of(non_null(:embedded_medium_input))
   end
 
   input_object :update_product_input do
-    field :id, non_null(:string)
     field :slug, :string
     field :title, :string
     field :condition, :string
     field :list_price, :integer
     field :sale_price, :integer
     field :stock, :integer
+    field :media, list_of(non_null(:embedded_medium_input))
   end
 
   input_object :add_product_taxon_input do
@@ -172,10 +175,11 @@ defmodule PczoneWeb.Schema.Products do
     end
 
     field :update_product, non_null(:product) do
+      arg :id, non_null(:id)
       arg :data, non_null(:update_product_input)
 
-      resolve(fn %{data: data}, _info ->
-        Products.update(data)
+      resolve(fn %{id: id, data: data}, _info ->
+        Products.update(id, data)
       end)
     end
 

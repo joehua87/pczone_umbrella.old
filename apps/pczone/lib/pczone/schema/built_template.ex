@@ -10,7 +10,7 @@ defmodule Pczone.BuiltTemplate do
   schema "built_template" do
     field :code, :string
     field :name, :string
-    embeds_many :media, Pczone.EmbeddedMedium
+    embeds_many :media, Pczone.EmbeddedMedium, on_replace: :delete
     field :body_template, :string
     field :option_types, {:array, :string}
     field :option_value_seperator, :string, default: ", "

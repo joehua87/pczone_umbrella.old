@@ -8,6 +8,10 @@ defmodule Pczone.Products do
     Repo.one(from x in Product, where: x.code == ^code, limit: 1)
   end
 
+  def get(%{filter: filter}) do
+    Repo.one(from Product, where: ^parse_filter(filter), limit: 1)
+  end
+
   def get(id) do
     Repo.get(Product, id)
   end
@@ -21,7 +25,7 @@ defmodule Pczone.Products do
         order_by: order_by
       }) do
     make_query(filter)
-    |> select_fields(selection)
+    |> select_fields(selection, [:media])
     |> sort_by(order_by, ["title"])
     |> Repo.paginate(paging)
   end
@@ -266,7 +270,7 @@ defmodule Pczone.Products do
     params |> Product.new_changeset() |> Repo.insert()
   end
 
-  def update(%{id: id} = params) do
+  def update(id, params) do
     params = Enum.filter(params, fn {_key, value} -> value != nil end) |> Enum.into(%{})
     get(id) |> Product.changeset(params) |> Repo.update()
   end
@@ -276,6 +280,7 @@ defmodule Pczone.Products do
     |> Enum.reduce(nil, fn {field, value}, acc ->
       case field do
         :id -> parse_id_filter(acc, field, value)
+        :slug -> parse_string_filter(acc, field, value)
         :title -> parse_string_filter(acc, field, value)
         :condition -> parse_string_filter(acc, field, value)
         :component_type -> parse_string_filter(acc, field, value)
