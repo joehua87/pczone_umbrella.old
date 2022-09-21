@@ -34,7 +34,7 @@ defmodule Pczone.Media do
          {:ok, %Medium{id: id, ext: ext}} = result <- Repo.insert(changeset),
          :ok <- File.mkdir_p(Path.dirname(path)),
          {:ok, _} <- File.copy(uploaded_path, path) do
-      if ext in [".jpg", ".jpeg", ".png"] do
+      if String.downcase(ext) in [".jpg", ".jpeg", ".png"] do
         transform(id)
       end
 
@@ -99,7 +99,6 @@ defmodule Pczone.Media do
       {_, 0} -> :ok
       _ -> {:error, "Cannot transform"}
     end
-    |> IO.inspect()
   end
 
   def bulk_upload(plug_uploads) do
