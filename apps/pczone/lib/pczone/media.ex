@@ -99,6 +99,7 @@ defmodule Pczone.Media do
       {_, 0} -> :ok
       _ -> {:error, "Cannot transform"}
     end
+    |> IO.inspect()
   end
 
   def bulk_upload(plug_uploads) do
