@@ -37,12 +37,13 @@ defmodule Pczone.BuiltTemplateStores do
             "built_template_code" => built_template_code,
             "store_code" => store_code
           },
-          acc ->
+          acc
+          when is_binary(built_template_code) ->
             acc ++
               [
                 %{
                   product_code: Helpers.ensure_string(product_code),
-                  built_template_code: built_template_code,
+                  built_template_code: String.trim(built_template_code),
                   store_code: store_code
                 }
               ]

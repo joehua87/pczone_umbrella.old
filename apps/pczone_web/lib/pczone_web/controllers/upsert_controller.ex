@@ -69,11 +69,10 @@ defmodule PczoneWeb.UpsertController do
   end
 
   def built_stores(conn, %{
-        # "store_id" => store_id,
+        "store_id" => store_id,
         "file" => %Plug.Upload{path: path}
       }) do
     # Assume we have only Shopee
-    store_id = 1
     Pczone.Stores.upsert_built_stores(store_id, path)
     json(conn, %{})
   end

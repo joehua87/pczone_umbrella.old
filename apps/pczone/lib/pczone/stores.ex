@@ -72,6 +72,28 @@ defmodule Pczone.Stores do
     end
   end
 
+  def read_product_variants("lazada", path) do
+    with [{:ok, sheet} | _] <- Xlsxir.multi_extract(path),
+         list <-
+           Xlsxir.get_list(sheet) |> Xlsx.spreadsheet_to_list() do
+      Enum.map(list, fn %{
+                          "tr(s-wb-product@md5key)" => variant_code,
+                          "Product ID" => product_code,
+                          "sku.skuId" => sku,
+                          "Lazada SKU" => lazada_sku,
+                          "Variations Combo" => variant_name
+                        } ->
+        %{
+          product_code: product_code,
+          variant_name: variant_name,
+          variant_code: "#{sku}:#{lazada_sku}:#{variant_code}"
+        }
+      end)
+      |> Enum.filter(&(&1.product_code != nil))
+      |> Enum.drop(3)
+    end
+  end
+
   @doc """
   Read an xlsx file exported from store.
   Extract variant_code by product_code & variant_name.
@@ -85,7 +107,11 @@ defmodule Pczone.Stores do
         opts
       ) do
     list = read_product_variants(store_code, path)
-    product_codes = list |> Enum.map(& &1.product_code) |> Enum.uniq()
+
+    product_codes =
+      list
+      |> Enum.map(& &1.product_code)
+      |> Enum.uniq()
 
     product_codes_map_by_built_template_id =
       Repo.all(
@@ -97,10 +123,10 @@ defmodule Pczone.Stores do
 
     built_template_ids = Map.keys(product_codes_map_by_built_template_id)
 
-    variants = Repo.all(from v in Built, where: v.built_template_id in ^built_template_ids)
+    builts = Repo.all(from v in Built, where: v.built_template_id in ^built_template_ids)
 
-    variant_stores =
-      variants
+    built_stores =
+      builts
       |> Enum.map(fn %Built{
                        id: built_id,
                        name: name,
@@ -125,7 +151,7 @@ defmodule Pczone.Stores do
 
     Repo.insert_all_2(
       Pczone.BuiltStore,
-      variant_stores,
+      built_stores,
       Keyword.merge(opts,
         on_conflict: {:replace, [:product_code, :variant_code]},
         conflict_target: [:built_id, :store_id]
@@ -177,7 +203,7 @@ defmodule Pczone.Stores do
     end)
   end
 
-  def make_pricing_workbook(store = %{rate: rate}) do
+  def make_pricing_workbook(store = %{code: "shopee", rate: rate}) do
     headers = [
       [
         "et_title_product_id",
@@ -234,6 +260,78 @@ defmodule Pczone.Stores do
             99
           ]
       )
+
+    %Workbook{
+      sheets: [
+        %Sheet{
+          name: "Sheet1",
+          rows: headers ++ rows
+        }
+      ]
+    }
+  end
+
+  def make_pricing_workbook(store = %{code: "lazada", rate: rate}) do
+    headers = [
+      [
+        "Product ID",
+        "catId",
+        "Tên sản phẩm",
+        "currencyCode",
+        "sku.skuId",
+        "Variations Combo",
+        "Lazada SKU",
+        "status",
+        "SpecialPrice",
+        "SpecialPrice Start",
+        "SpecialPrice End",
+        "Giá",
+        "SellerSku",
+        "Kho hàng",
+        "tr(s-wb-product@md5key)"
+      ],
+      [],
+      [],
+      []
+    ]
+
+    rows =
+      Repo.all(
+        from v in Pczone.Built,
+          join: b in Pczone.BuiltTemplate,
+          on: v.built_template_id == b.id,
+          join: vp in Pczone.BuiltStore,
+          on: v.id == vp.built_id,
+          where: vp.store_id == ^store.id,
+          select: [
+            vp.product_code,
+            b.name,
+            v.name,
+            fragment("(?::decimal * ?)::integer", v.price, ^rate),
+            vp.variant_code
+          ]
+      )
+      |> Enum.map(fn [product_code, product_name, variant_name, price, variant_code] ->
+        [sku, lazada_sku, product_md5] = String.split(variant_code, ":")
+
+        [
+          product_code,
+          "",
+          product_name,
+          "",
+          sku,
+          variant_name,
+          lazada_sku,
+          "active",
+          "",
+          "",
+          "",
+          price,
+          "",
+          99,
+          product_md5
+        ]
+      end)
 
     %Workbook{
       sheets: [
