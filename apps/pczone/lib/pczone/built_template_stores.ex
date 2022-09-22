@@ -25,19 +25,25 @@ defmodule Pczone.BuiltTemplateStores do
     end
   end
 
-  def upsert_from_xlsx(store_id, path, opts \\ []) do
+  def upsert_from_xlsx(path, opts \\ []) do
     list =
       path
       |> Xlsx.read_spreadsheet()
       |> Enum.reduce(
         [],
         fn
-          %{"product_code" => product_code, "built_template_code" => built_template_code}, acc ->
+          %{
+            "product_code" => product_code,
+            "built_template_code" => built_template_code,
+            "store_code" => store_code
+          },
+          acc ->
             acc ++
               [
                 %{
                   product_code: Helpers.ensure_string(product_code),
-                  built_template_code: built_template_code
+                  built_template_code: built_template_code,
+                  store_code: store_code
                 }
               ]
 
@@ -47,16 +53,26 @@ defmodule Pczone.BuiltTemplateStores do
       )
 
     built_template_codes = Enum.map(list, & &1.built_template_code)
+    store_codes = Enum.map(list, & &1.store_code)
 
     built_templates_map =
       from(b in BuiltTemplate, where: b.code in ^built_template_codes, select: {b.code, b.id})
       |> Repo.all()
       |> Enum.into(%{})
 
+    stores_map =
+      from(b in Pczone.Store, where: b.code in ^store_codes, select: {b.code, b.id})
+      |> Repo.all()
+      |> Enum.into(%{})
+
     list =
-      Enum.map(list, fn %{product_code: product_code, built_template_code: built_template_code} ->
+      Enum.map(list, fn %{
+                          product_code: product_code,
+                          built_template_code: built_template_code,
+                          store_code: store_code
+                        } ->
         %{
-          store_id: store_id,
+          store_id: stores_map[store_code],
           built_template_id: built_templates_map[built_template_code],
           product_code: product_code
         }

@@ -40,7 +40,7 @@ defmodule Pczone.BuiltTemplateStoresTest do
                )
     end
 
-    test "upsert from xlsx", %{store: store} do
+    test "upsert from xlsx" do
       built_templates_fixture()
       path = get_fixtures_dir() |> Path.join("built_template_stores_shopee.xlsx")
 
@@ -59,7 +59,7 @@ defmodule Pczone.BuiltTemplateStoresTest do
                    product_code: "15618662714",
                    built_template_id: _
                  }
-               ]}} = BuiltTemplateStores.upsert_from_xlsx(store.id, path, returning: true)
+               ]}} = BuiltTemplateStores.upsert_from_xlsx(path, returning: true)
     end
   end
 

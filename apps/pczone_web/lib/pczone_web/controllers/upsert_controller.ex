@@ -64,8 +64,7 @@ defmodule PczoneWeb.UpsertController do
         "file" => %Plug.Upload{path: path}
       }) do
     # Assume we have only Shopee
-    store_id = 1
-    Pczone.BuiltTemplateStores.upsert_from_xlsx(store_id, path)
+    Pczone.BuiltTemplateStores.upsert_from_xlsx(path)
     json(conn, %{})
   end
 
