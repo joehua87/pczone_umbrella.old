@@ -84,6 +84,14 @@ defmodule PczoneWeb.Schema.Builts do
     field :variant_code, non_null(:string)
   end
 
+  object :built_product do
+    field :built_id, non_null(:id)
+    field :built, non_null(:built), resolve: dataloader(Dataloader)
+    field :product_id, non_null(:id)
+    field :product, non_null(:product), resolve: dataloader(Dataloader)
+    field :quantity, non_null(:integer)
+  end
+
   object :built do
     field :id, non_null(:id)
     field :key, :string
@@ -126,6 +134,10 @@ defmodule PczoneWeb.Schema.Builts do
 
     field :built_stores,
           non_null(list_of(non_null(:built_store))),
+          resolve: dataloader(Dataloader)
+
+    field :built_products,
+          non_null(list_of(non_null(:built_product))),
           resolve: dataloader(Dataloader)
   end
 

@@ -651,6 +651,10 @@ defmodule Pczone.BuiltTemplates do
           conflict_target: [:built_id, :gpu_id]
         )
       end)
+      |> Ecto.Multi.run(:built_products, fn _, %{builts_map: builts_map} ->
+        built_ids = builts_map |> Map.values() |> Enum.map(& &1.id)
+        Pczone.Builts.calculate_built_products(built_ids)
+      end)
 
     multi =
       name_list

@@ -24,6 +24,59 @@ defmodule Pczone.Builts do
 
   def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
 
+  def calculate_built_products(built_ids) when is_list(built_ids) do
+    items_1 =
+      Repo.all(
+        from b in Pczone.Built,
+          select: [:id, :barebone_product_id, :motherboard_product_id, :chassis_product_id],
+          where: b.id in ^built_ids
+      )
+      |> Enum.flat_map(fn %{
+                            id: built_id,
+                            barebone_product_id: barebone_product_id,
+                            motherboard_product_id: motherboard_product_id,
+                            chassis_product_id: chassis_product_id
+                          } ->
+        [
+          barebone_product_id &&
+            %{built_id: built_id, product_id: barebone_product_id, quantity: 1},
+          motherboard_product_id &&
+            %{built_id: built_id, product_id: motherboard_product_id, quantity: 1},
+          chassis_product_id &&
+            %{built_id: built_id, product_id: chassis_product_id, quantity: 1}
+        ]
+        |> Enum.filter(&(&1 != nil))
+      end)
+
+    items_2 =
+      [
+        Pczone.BuiltCooler,
+        Pczone.BuiltExtensionDevice,
+        Pczone.BuiltGpu,
+        Pczone.BuiltHardDrive,
+        Pczone.BuiltMemory,
+        Pczone.BuiltProcessor,
+        Pczone.BuiltPsu
+      ]
+      |> Enum.map(fn schema ->
+        Repo.all(
+          from x in schema,
+            where: x.built_id in ^built_ids,
+            select: map(x, [:built_id, :product_id, :quantity])
+        )
+      end)
+      |> List.flatten()
+
+    Repo.insert_all_2(Pczone.BuiltProduct, items_1 ++ items_2,
+      on_conflict: {:replace, [:quantity]},
+      conflict_target: [:built_id, :product_id]
+    )
+  end
+
+  def calculate_built_products(built_id) do
+    calculate_built_products([built_id])
+  end
+
   def processor_ids_query(motherboard_id) do
     processor_ids_query =
       from(mp in Pczone.MotherboardProcessor,

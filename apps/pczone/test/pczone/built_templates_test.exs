@@ -87,6 +87,8 @@ defmodule Pczone.BuiltTemplatesTest do
                Repo.all(
                  from v in Pczone.Built, where: v.state == :published, order_by: [asc: :position]
                )
+
+      assert 123 = Repo.aggregate(Pczone.BuiltProduct, :count)
     end
 
     test "update variants state when built template processors changed" do
