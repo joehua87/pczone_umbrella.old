@@ -1,11 +1,12 @@
 defmodule PczoneWeb.Router do
   use PczoneWeb, :router
 
+  pipeline :graphql do
+    plug PczoneWeb.Context
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
-
-    forward "/graphql", Absinthe.Plug, schema: PczoneWeb.Schema
-    forward "/graphiql", Absinthe.Plug.GraphiQL, schema: PczoneWeb.Schema, interface: :playground
   end
 
   # Other scopes may use custom stacks.
@@ -42,9 +43,14 @@ defmodule PczoneWeb.Router do
     end
   end
 
-  scope "/", PczoneWeb do
-    pipe_through [:api]
+  scope "/" do
+    pipe_through :graphql
+    forward "/graphql", Absinthe.Plug, schema: PczoneWeb.Schema
+    forward "/graphiql", Absinthe.Plug.GraphiQL, schema: PczoneWeb.Schema, interface: :playground
+  end
 
+  scope "/", PczoneWeb do
+    pipe_through :api
     post "/upsert/barebones", UpsertController, :barebones
     post "/upsert/brands", UpsertController, :brands
     post "/upsert/chassises", UpsertController, :chassises
