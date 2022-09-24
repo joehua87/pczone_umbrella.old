@@ -62,6 +62,7 @@ defmodule Pczone.MixProject do
       {:google_api_drive, "~> 0.25"},
       {:google_api_sheets, "~> 0.29"},
       {:goth, "~> 1.2.0"},
+      {:timex, "~> 3.0"},
       {:phoenix_pubsub, "~> 2.0"},
       {:ecto_sql, "~> 3.7"},
       {:postgrex, ">= 0.0.0"},
