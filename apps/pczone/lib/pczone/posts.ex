@@ -1,7 +1,11 @@
 defmodule Pczone.Posts do
-  import Ecto.Query, only: [where: 2]
+  import Ecto.Query, only: [where: 2, from: 2]
   import Dew.FilterParser
   alias Pczone.{Repo, Post}
+
+  def get(%{filter: filter}) do
+    Repo.one(from Pczone.Post, where: ^parse_filter(filter), limit: 1)
+  end
 
   def get(id) do
     Repo.get(Pczone.Post, id)

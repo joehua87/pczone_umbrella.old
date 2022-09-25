@@ -48,6 +48,14 @@ defmodule PczoneWeb.Schema.Posts do
         {:ok, Pczone.Posts.get(id)}
       end)
     end
+
+    field :post_by, :post do
+      arg :filter, :post_filter_input
+
+      resolve(fn args, _info ->
+        {:ok, Pczone.Posts.get(args)}
+      end)
+    end
   end
 
   input_object :create_post_input do
