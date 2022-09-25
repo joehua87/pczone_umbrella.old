@@ -12,7 +12,7 @@ defmodule Pczone.Order do
     field :billing_address, :map
     field :shipping_address, :map
     field :tax_info, :map
-    field :state, :string
+    field :state, Ecto.Enum, values: [:cart, :submitted, :approved, :cancel], default: :cart
     field :total, :integer, default: 0
     field :token, :string
     has_many :items, Pczone.OrderItem

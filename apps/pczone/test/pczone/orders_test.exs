@@ -22,7 +22,8 @@ defmodule Pczone.OrdersTest do
                 price: 1_900_000,
                 quantity: 1,
                 amount: 1_900_000
-              }} = Orders.add_item(%{order_id: order.id, product_id: product.id, quantity: 1})
+              }} =
+               Orders.add_item(%{product_id: product.id, quantity: 1}, %{order_token: order.token})
     end
 
     test "update order item" do
@@ -30,14 +31,17 @@ defmodule Pczone.OrdersTest do
       assert {:ok, order} = Orders.create()
 
       assert {:ok, _} =
-               Orders.add_item(%{order_id: order.id, product_id: product.id, quantity: 1})
+               Orders.add_item(%{product_id: product.id, quantity: 1}, %{order_token: order.token})
 
       assert {:ok,
               %Pczone.OrderItem{
                 price: 1_900_000,
                 quantity: 2,
                 amount: 3_800_000
-              }} = Orders.update_item(%{order_id: order.id, product_id: product.id, quantity: 2})
+              }} =
+               Orders.update_item(%{product_id: product.id, quantity: 2}, %{
+                 order_token: order.token
+               })
     end
 
     test "remove order item" do
@@ -45,10 +49,10 @@ defmodule Pczone.OrdersTest do
       assert {:ok, order} = Orders.create()
 
       assert {:ok, _} =
-               Orders.add_item(%{order_id: order.id, product_id: product.id, quantity: 1})
+               Orders.add_item(%{product_id: product.id, quantity: 1}, %{order_token: order.token})
 
       assert {:ok, %Pczone.OrderItem{price: 1_900_000, quantity: 1}} =
-               Orders.remove_item(%{order_id: order.id, product_id: product.id})
+               Orders.remove_item(%{product_id: product.id}, %{order_token: order.token})
 
       assert %{items: []} =
                Repo.one(from o in Pczone.Order, preload: [:items], where: o.id == ^order.id)
