@@ -64,17 +64,17 @@ defmodule PczoneWeb.Schema.Posts do
     field :description, :string
     field :md, :string
     field :media, list_of(non_null(:embedded_medium_input))
-    field :seo, :embedded_medium_input
+    field :seo, :seo_input
     field :state, :string
   end
 
   input_object :update_post_input do
     field :slug, :string
-    field :title, non_null(:string)
+    field :title, :string
     field :description, :string
     field :md, :string
     field :media, list_of(non_null(:embedded_medium_input))
-    field :seo, :embedded_medium_input
+    field :seo, :seo_input
     field :state, :string
   end
 

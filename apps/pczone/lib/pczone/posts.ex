@@ -21,7 +21,7 @@ defmodule Pczone.Posts do
       }) do
     Pczone.Post
     |> where(^parse_filter(filter))
-    |> select_fields(selection, [])
+    |> select_fields(selection, [:media, :seo])
     |> sort_by(order_by, [])
     |> Repo.paginate(paging)
   end
