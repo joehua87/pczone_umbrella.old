@@ -157,4 +157,52 @@ defmodule PczoneWeb.Schema.Common do
     # field :phrase, :string
     # field :plain, :string
   end
+
+  object :address do
+    field :first_name, non_null(:string)
+    field :last_name, non_null(:string)
+    field :full_name, non_null(:string)
+    field :email, non_null(:string)
+    field :phone, non_null(:string)
+    field :address1, non_null(:string)
+    field :address2, :string
+    field :zipcode, :string
+    field :region_code, non_null(:string)
+    field :ward, non_null(:string)
+    field :district, non_null(:string)
+    field :province, non_null(:string)
+    field :region, non_null(:string)
+  end
+
+  input_object :address_input do
+    field :first_name, non_null(:string)
+    field :last_name, non_null(:string)
+    field :full_name, non_null(:string)
+    field :email, non_null(:string)
+    field :phone, non_null(:string)
+    field :address1, non_null(:string)
+    field :address2, :string
+    field :zipcode, :string
+    field :ward, non_null(:string)
+    field :district, non_null(:string)
+    field :province, non_null(:string)
+    field :region, non_null(:string)
+    field :region_code, non_null(:string)
+  end
+
+  object :tax_info do
+    field :name, non_null(:string)
+    field :tax_id, non_null(:string)
+    field :address, non_null(:string)
+    field :email, :string
+    field :note, :string
+  end
+
+  input_object :tax_info_input do
+    field :name, non_null(:string)
+    field :tax_id, non_null(:string)
+    field :address, non_null(:string)
+    field :email, :string
+    field :note, :string
+  end
 end

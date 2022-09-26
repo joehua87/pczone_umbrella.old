@@ -184,3 +184,69 @@ defmodule Pczone.HardDriveSlot do
     cast(entity, params, [:form_factor, :quantity])
   end
 end
+
+defmodule Pczone.Address do
+  use Ecto.Schema
+  import Ecto.Changeset
+
+  @primary_key false
+  @required_fields [
+    :first_name,
+    :last_name,
+    :full_name,
+    :address1,
+    :email,
+    :phone,
+    :province,
+    :district,
+    :ward,
+    :region,
+    :region_code
+  ]
+  @optional_fields [:zipcode, :address2]
+
+  embedded_schema do
+    field :first_name, :string
+    field :last_name, :string
+    field :full_name, :string
+    field :address1, :string
+    field :address2, :string
+    field :email, :string
+    field :phone, :string
+    field :zipcode, :string
+    field :province, :string
+    field :district, :string
+    field :ward, :string
+    field :region, :string
+    field :region_code, :string
+  end
+
+  def changeset(entity, attrs) do
+    entity
+    |> cast(attrs, @required_fields ++ @optional_fields)
+    |> validate_required(@required_fields)
+  end
+end
+
+defmodule Pczone.TaxInfo do
+  use Ecto.Schema
+  import Ecto.Changeset
+
+  @primary_key false
+  @required_fields [:name, :tax_id, :address]
+  @optional_fields [:email, :note]
+
+  embedded_schema do
+    field :name, :string
+    field :tax_id, :string
+    field :address, :string
+    field :email, :string
+    field :note, :string
+  end
+
+  def changeset(entity, attrs) do
+    entity
+    |> cast(attrs, @required_fields ++ @optional_fields)
+    |> validate_required(@required_fields)
+  end
+end

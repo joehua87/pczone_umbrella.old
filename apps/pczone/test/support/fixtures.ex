@@ -37,4 +37,21 @@ defmodule Pczone.Fixtures do
         ]
     )
   end
+
+  def address_fixture() do
+    %{
+      first_name: "Dew",
+      last_name: "John",
+      full_name: "Dew John",
+      address1: "123 Some Street",
+      zipcode: "111111",
+      ward: "ward_code",
+      district: "district_code",
+      province: "province_code",
+      region_code: "province_code:district_code:ward_code",
+      region: "Pretty region name",
+      email: "valid_email@company.com",
+      phone: "123123123"
+    }
+  end
 end

@@ -2,6 +2,7 @@ defmodule Pczone.Order do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @timestamps_opts [type: :utc_datetime]
   @required [:code, :token]
   @optional [:user_id, :customer_id, :state, :total]
 
@@ -9,9 +10,8 @@ defmodule Pczone.Order do
     field :code, :string
     belongs_to :user, Pczone.Users.User
     belongs_to :customer, Pczone.Customer
-    field :billing_address, :map
-    field :shipping_address, :map
-    field :tax_info, :map
+    embeds_one :shipping_address, Pczone.Address
+    embeds_one :tax_info, Pczone.TaxInfo
     field :state, Ecto.Enum, values: [:cart, :submitted, :approved, :cancel], default: :cart
     field :total, :integer, default: 0
     field :token, :string
@@ -24,6 +24,8 @@ defmodule Pczone.Order do
     entity
     |> cast(params, @required ++ @optional)
     |> validate_required(@required)
+    |> cast_embed(:shipping_address)
+    |> cast_embed(:tax_info)
   end
 
   def new_changeset(params) do

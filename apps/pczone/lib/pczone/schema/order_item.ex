@@ -2,6 +2,7 @@ defmodule Pczone.OrderItem do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @timestamps_opts [type: :utc_datetime]
   @required [:order_id, :product_id, :quantity, :price, :amount]
   @optional []
 

@@ -34,9 +34,8 @@ defmodule PczoneWeb.Schema.Orders do
     field :user, :user, resolve: Helpers.dataloader(PczoneWeb.Dataloader)
     field :customer_id, :id
     field :customer, :customer, resolve: Helpers.dataloader(PczoneWeb.Dataloader)
-    # field :billing_address, :map
-    # field :shipping_address, :map
-    # field :tax_info, :map
+    field :shipping_address, :address
+    field :tax_info, :tax_info
     field :state, :string
     field :total, :integer
 
@@ -128,6 +127,12 @@ defmodule PczoneWeb.Schema.Orders do
     field :built_id, non_null(:id)
   end
 
+  input_object :submit_order_input do
+    field :item_ids, non_null(list_of(non_null(:id)))
+    field :shipping_address, non_null(:address_input)
+    field :tax_info, non_null(:tax_info_input)
+  end
+
   object :order_mutations do
     field :create_order, non_null(:order) do
       resolve(fn _, _info ->
@@ -180,6 +185,14 @@ defmodule PczoneWeb.Schema.Orders do
 
       resolve(fn %{data: data}, _info ->
         Pczone.Orders.remove_built(data)
+      end)
+    end
+
+    field :submit_order, non_null(:order) do
+      arg :data, non_null(:submit_order_input)
+
+      resolve(fn %{data: data}, %{context: context} ->
+        Pczone.Orders.submit(data, context)
       end)
     end
   end

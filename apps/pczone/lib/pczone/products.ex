@@ -32,6 +32,11 @@ defmodule Pczone.Products do
 
   def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
 
+  def get_price_map(ids) do
+    Repo.all(from(p in Pczone.Product, where: p.id in ^ids, select: {p.id, p.sale_price}))
+    |> Enum.into(%{})
+  end
+
   def make_query(filter) do
     Product
     |> parse_taxons_filter(filter)

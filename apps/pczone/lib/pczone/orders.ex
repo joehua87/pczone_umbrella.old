@@ -3,7 +3,7 @@ defmodule Pczone.Orders do
   alias Pczone.{Repo, Builts, Products}
 
   def get(context = %{user: %{id: user_id}}) do
-    case Repo.one(from Pczone.Order, where: [user_id: ^user_id, state: :cart]) do
+    case Repo.one(from(Pczone.Order, where: [user_id: ^user_id, state: :cart])) do
       nil ->
         {:ok, order} = create(context)
         order
@@ -14,7 +14,7 @@ defmodule Pczone.Orders do
   end
 
   def get(context = %{order_token: order_token}) do
-    case Repo.one(from Pczone.Order, where: [token: ^order_token, state: :cart]) do
+    case Repo.one(from(Pczone.Order, where: [token: ^order_token, state: :cart])) do
       nil ->
         {:ok, order} = create(context)
         order
@@ -31,12 +31,12 @@ defmodule Pczone.Orders do
 
   def get_cart_items(context) do
     order = get(context)
-    Repo.paginate(from i in Pczone.OrderItem, where: i.order_id == ^order.id)
+    Repo.paginate(from(i in Pczone.OrderItem, where: i.order_id == ^order.id))
   end
 
-  def create(context \\ %{})
+  def create(context \\ %{}, params \\ %{})
 
-  def create(context) do
+  def create(context, params) do
     user_id =
       case context do
         %{user: %{id: user_id}} -> user_id
@@ -45,7 +45,55 @@ defmodule Pczone.Orders do
 
     code = generate_code()
     token = generate_token()
-    %{code: code, token: token, user_id: user_id} |> Pczone.Order.new_changeset() |> Repo.insert()
+
+    %{code: code, token: token, user_id: user_id}
+    |> Map.merge(params)
+    |> Pczone.Order.new_changeset()
+    |> Repo.insert()
+  end
+
+  def submit(%{item_ids: item_ids} = params, context) do
+    order = get(context)
+
+    items =
+      Repo.all(from(i in Pczone.OrderItem, where: i.order_id == ^order.id and i.id in ^item_ids))
+
+    case items do
+      [] ->
+        {:error, "Item ids must be more than 1"}
+
+      _ ->
+        products_price_map = items |> Enum.map(& &1.product_id) |> Products.get_price_map()
+
+        Ecto.Multi.new()
+        |> Ecto.Multi.run(:order, fn _, _ ->
+          # TODO: Add billing address, shipping address, state, tax_info
+          create(context, Map.merge(params, %{state: :submitted}))
+        end)
+        |> Ecto.Multi.run(:items, fn _, %{order: order} ->
+          items =
+            Enum.map(items, fn %{product_id: product_id, quantity: quantity} ->
+              price = products_price_map[product_id]
+              now = DateTime.utc_now() |> DateTime.truncate(:second)
+
+              %{
+                order_id: order.id,
+                product_id: product_id,
+                price: price,
+                quantity: quantity,
+                amount: price * quantity,
+                inserted_at: now,
+                updated_at: now
+              }
+            end)
+
+          Repo.insert_all_2(Pczone.OrderItem, items)
+        end)
+        |> Ecto.Multi.run(:remove_cart_items, fn _, %{} ->
+          Repo.delete_all_2(from(i in Pczone.OrderItem, where: i.id in ^item_ids))
+        end)
+        |> Repo.transaction()
+    end
   end
 
   def add_built(%{order_id: order_id, built_id: built_id, quantity: quantity}) do
@@ -64,7 +112,7 @@ defmodule Pczone.Orders do
 
   def update_built(%{order_id: order_id, built_id: built_id, quantity: quantity}) do
     with %Pczone.OrderBuilt{} = order_item <-
-           Repo.one(from Pczone.OrderBuilt, where: [order_id: ^order_id, built_id: ^built_id]) do
+           Repo.one(from(Pczone.OrderBuilt, where: [order_id: ^order_id, built_id: ^built_id])) do
       %{price: price} = Builts.get(built_id)
 
       order_item
@@ -79,7 +127,7 @@ defmodule Pczone.Orders do
 
   def remove_built(%{order_id: order_id, built_id: built_id}) do
     with %Pczone.OrderBuilt{} = order_built <-
-           Repo.one(from Pczone.OrderBuilt, where: [order_id: ^order_id, built_id: ^built_id]) do
+           Repo.one(from(Pczone.OrderBuilt, where: [order_id: ^order_id, built_id: ^built_id])) do
       order_built
       |> Pczone.OrderBuilt.changeset(%{})
       |> Repo.delete()
@@ -108,7 +156,7 @@ defmodule Pczone.Orders do
   def update_item(%{product_id: product_id, quantity: quantity}, context) do
     with %{id: order_id, state: :cart} <- get(context),
          %Pczone.OrderItem{} = order_item <-
-           Repo.one(from Pczone.OrderItem, where: [order_id: ^order_id, product_id: ^product_id]) do
+           Repo.one(from(Pczone.OrderItem, where: [order_id: ^order_id, product_id: ^product_id])) do
       %{sale_price: price} = Products.get(product_id)
 
       order_item
@@ -127,7 +175,7 @@ defmodule Pczone.Orders do
   def remove_item(%{product_id: product_id}, context) do
     with %{id: order_id, state: :cart} <- get(context),
          %Pczone.OrderItem{} = order_item <-
-           Repo.one(from Pczone.OrderItem, where: [order_id: ^order_id, product_id: ^product_id]) do
+           Repo.one(from(Pczone.OrderItem, where: [order_id: ^order_id, product_id: ^product_id])) do
       order_item
       |> Pczone.OrderItem.changeset(%{})
       |> Repo.delete()
