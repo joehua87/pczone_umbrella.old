@@ -96,6 +96,10 @@ defmodule Pczone.Orders do
     end
   end
 
+  def approve() do
+    # TODO: Add stock_movement
+  end
+
   def add_built(%{order_id: order_id, built_id: built_id, quantity: quantity}) do
     %{price: price} = Pczone.Builts.get(built_id)
 
@@ -186,7 +190,7 @@ defmodule Pczone.Orders do
   end
 
   def generate_code() do
-    date = Timex.now("Asia/Ho_Chi_Minh") |> Timex.format!("{YYYY}{0M}{D}")
+    date = Timex.now("Asia/Ho_Chi_Minh") |> Timex.format!("{ISOdate}") |> String.replace("-", "")
     rand = for _ <- 1..6, into: "", do: <<Enum.random('0123456789abcdefghijklmnopqrstuvwxzy')>>
     "#{date}#{rand}"
   end

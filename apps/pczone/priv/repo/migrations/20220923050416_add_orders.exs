@@ -19,19 +19,24 @@ defmodule Pczone.Repo.Migrations.AddOrders do
       add :data, :map, null: false, default: %{}
     end
 
-    create unique_index(:product_stock, [:code])
+    create unique_index(:product_stock, [:product_id, :code])
 
     create table(:stock_movement) do
-      timestamps(updated_at: false)
+      add :state, :string, null: false
+      add :submitted_at, :utc_datetime
+      timestamps()
     end
 
     create table(:stock_movement_item) do
-      add :code, :string, null: false
+      add :stock_movement_id, references(:stock_movement), null: false
       add :product_id, references(:product), null: false
+      add :code, :string, null: false
       add :source_location, :string, null: false
       add :destination_location, :string, null: false
       add :quantity, :integer, null: false
     end
+
+    create unique_index(:stock_movement_item, [:stock_movement_id, :product_id, :code])
 
     create table(:customer) do
       add :name, :string, null: false

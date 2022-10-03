@@ -3,11 +3,10 @@ defmodule Pczone.ProductStock do
   import Ecto.Changeset
 
   @required [:product_id, :quantity, :location]
-  @optional [:code, :lot, :media, :data]
+  @optional [:code, :media, :data]
 
   schema "product_stock" do
     field :code, :string
-    field :lot, :string
     belongs_to :product, Pczone.Product
     field :quantity, :integer
     field :location, :string

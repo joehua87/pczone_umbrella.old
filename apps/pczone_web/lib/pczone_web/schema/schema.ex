@@ -27,6 +27,7 @@ defmodule PczoneWeb.Schema do
   import_types PczoneWeb.Schema.Products
   import_types PczoneWeb.Schema.ScrapedEntries
   import_types PczoneWeb.Schema.BuiltTemplates
+  import_types PczoneWeb.Schema.StockMovements
   import_types PczoneWeb.Schema.Reports
   import_types PczoneWeb.Schema.Orders
   import_types PczoneWeb.Schema.Media
@@ -53,6 +54,7 @@ defmodule PczoneWeb.Schema do
     import_fields :barebone_queries
     import_fields :scraped_entry_queries
     import_fields :built_template_queries
+    import_fields :stock_movement_queries
     import_fields :report_queries
     import_fields :medium_queries
     import_fields :order_queries
@@ -76,6 +78,7 @@ defmodule PczoneWeb.Schema do
     import_fields :product_mutations
     import_fields :built_mutations
     import_fields :built_template_mutations
+    import_fields :stock_movement_mutations
     import_fields :store_mutations
     import_fields :order_mutations
     import_fields :app_mutations

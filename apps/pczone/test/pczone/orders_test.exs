@@ -143,6 +143,9 @@ defmodule Pczone.OrdersTest do
 
       assert %{paging: %{total_entities: 0}} = Orders.get_cart_items(context)
     end
+
+    test "approve order" do
+    end
   end
 
   setup do

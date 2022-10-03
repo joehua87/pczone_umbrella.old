@@ -152,6 +152,10 @@ defmodule Pczone.Helpers do
     String.replace(value, suffix, "") |> Decimal.new()
   end
 
+  def utc_datetime(precision \\ :second) do
+    DateTime.utc_now() |> DateTime.truncate(precision)
+  end
+
   defp get_value(items, label) do
     items
     |> Enum.find(&(&1["label"] == label))
