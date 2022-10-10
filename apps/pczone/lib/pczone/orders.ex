@@ -13,7 +13,7 @@ defmodule Pczone.Orders do
     end
   end
 
-  def get(context = %{order_token: order_token}) do
+  def get(context = %{order_token: "" <> order_token}) do
     case Repo.one(from(Pczone.Order, where: [token: ^order_token, state: :cart])) do
       nil ->
         {:ok, order} = create(context)
