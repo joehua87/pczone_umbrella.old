@@ -603,6 +603,10 @@ defmodule Pczone.BuiltTemplates do
            result |> Enum.map(fn built = %{name: name} -> {name, built} end) |> Enum.into(%{})}
         end
       end)
+      |> Ecto.Multi.run(:delete_built_processors, fn _, %{builts_map: builts_map} ->
+        built_ids = builts_map |> Map.values() |> Enum.map(& &1.id)
+        Repo.delete_all_2(from bp in Pczone.BuiltProcessor, where: bp.built_id in ^built_ids)
+      end)
       |> Ecto.Multi.run(:built_processors, fn _, %{builts_map: builts_map} ->
         entities =
           builts
@@ -614,6 +618,10 @@ defmodule Pczone.BuiltTemplates do
           on_conflict: {:replace, [:quantity]},
           conflict_target: [:built_id, :processor_id]
         )
+      end)
+      |> Ecto.Multi.run(:delete_built_memories, fn _, %{builts_map: builts_map} ->
+        built_ids = builts_map |> Map.values() |> Enum.map(& &1.id)
+        Repo.delete_all_2(from bp in Pczone.BuiltMemory, where: bp.built_id in ^built_ids)
       end)
       |> Ecto.Multi.run(:built_memories, fn _, %{builts_map: builts_map} ->
         entities =
@@ -627,6 +635,10 @@ defmodule Pczone.BuiltTemplates do
           conflict_target: [:built_id, :memory_id]
         )
       end)
+      |> Ecto.Multi.run(:delete_built_hard_drives, fn _, %{builts_map: builts_map} ->
+        built_ids = builts_map |> Map.values() |> Enum.map(& &1.id)
+        Repo.delete_all_2(from bp in Pczone.BuiltHardDrive, where: bp.built_id in ^built_ids)
+      end)
       |> Ecto.Multi.run(:built_hard_drives, fn _, %{builts_map: builts_map} ->
         entities =
           builts
@@ -639,6 +651,10 @@ defmodule Pczone.BuiltTemplates do
           conflict_target: [:built_id, :hard_drive_id]
         )
       end)
+      |> Ecto.Multi.run(:delete_built_gpus, fn _, %{builts_map: builts_map} ->
+        built_ids = builts_map |> Map.values() |> Enum.map(& &1.id)
+        Repo.delete_all_2(from bp in Pczone.BuiltGpu, where: bp.built_id in ^built_ids)
+      end)
       |> Ecto.Multi.run(:built_gpus, fn _, %{builts_map: builts_map} ->
         entities =
           builts
@@ -650,6 +666,10 @@ defmodule Pczone.BuiltTemplates do
           on_conflict: {:replace, [:quantity]},
           conflict_target: [:built_id, :gpu_id]
         )
+      end)
+      |> Ecto.Multi.run(:delete_built_products, fn _, %{builts_map: builts_map} ->
+        built_ids = builts_map |> Map.values() |> Enum.map(& &1.id)
+        Repo.delete_all_2(from bp in Pczone.BuiltProduct, where: bp.built_id in ^built_ids)
       end)
       |> Ecto.Multi.run(:built_products, fn _, %{builts_map: builts_map} ->
         built_ids = builts_map |> Map.values() |> Enum.map(& &1.id)
