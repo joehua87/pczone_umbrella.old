@@ -461,7 +461,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
     create unique_index(:built, [:built_template_id, :option_values])
 
     create table(:built_psu) do
-      add :built_id, references(:built), null: false
+      add :built_id, references(:built, on_delete: :delete_all), null: false
       add :psu_id, references(:psu), null: false
       add :product_id, references(:product), null: false
       add :quantity, :integer, null: false
@@ -470,7 +470,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
     create unique_index(:built_psu, [:built_id, :psu_id])
 
     create table(:built_cooler) do
-      add :built_id, references(:built), null: false
+      add :built_id, references(:built, on_delete: :delete_all), null: false
       add :cooler_id, references(:cooler), null: false
       add :product_id, references(:product), null: false
       add :quantity, :integer, null: false
@@ -479,7 +479,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
     create unique_index(:built_cooler, [:built_id, :cooler_id])
 
     create table(:built_extension_device) do
-      add :built_id, references(:built), null: false
+      add :built_id, references(:built, on_delete: :delete_all), null: false
       add :extension_device_id, references(:extension_device), null: false
       add :product_id, references(:product), null: false
       add :processor_index, :integer, null: false
@@ -490,7 +490,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
     create unique_index(:built_extension_device, [:built_id, :extension_device_id])
 
     create table(:built_processor) do
-      add :built_id, references(:built), null: false
+      add :built_id, references(:built, on_delete: :delete_all), null: false
       add :processor_id, references(:processor), null: false
       add :product_id, references(:product), null: false
       add :extension_device_id, references(:extension_device)
@@ -500,7 +500,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
     create unique_index(:built_processor, [:built_id, :processor_id])
 
     create table(:built_memory) do
-      add :built_id, references(:built), null: false
+      add :built_id, references(:built, on_delete: :delete_all), null: false
       add :memory_id, references(:memory), null: false
       add :product_id, references(:product), null: false
       add :extension_device_id, references(:extension_device)
@@ -512,7 +512,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
     create unique_index(:built_memory, [:built_id, :memory_id])
 
     create table(:built_hard_drive) do
-      add :built_id, references(:built), null: false
+      add :built_id, references(:built, on_delete: :delete_all), null: false
       add :hard_drive_id, references(:hard_drive), null: false
       add :product_id, references(:product), null: false
       add :extension_device_id, references(:extension_device)
@@ -524,7 +524,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
     create unique_index(:built_hard_drive, [:built_id, :hard_drive_id])
 
     create table(:built_gpu) do
-      add :built_id, references(:built), null: false
+      add :built_id, references(:built, on_delete: :delete_all), null: false
       add :gpu_id, references(:gpu), null: false
       add :product_id, references(:product), null: false
       add :quantity, :integer, null: false

@@ -25,6 +25,11 @@ defmodule Pczone.BuiltsTest do
              } = Pczone.Repo.get(built_query, id)
     end
 
+    test "delete built", %{built_params: built_params} do
+      assert {:ok, %Pczone.Built{id: id}} = Builts.create(built_params)
+      assert {:ok, _} = Builts.delete(id)
+    end
+
     test "calculate total", %{built_params: built_params} do
       assert {
                :ok,

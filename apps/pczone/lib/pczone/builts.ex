@@ -178,6 +178,10 @@ defmodule Pczone.Builts do
     end
   end
 
+  def delete(built_id) do
+    Repo.get(Pczone.Built, built_id) |> Repo.delete()
+  end
+
   defp create_built_processor(multi, processor) do
     multi
     |> Ecto.Multi.run(
