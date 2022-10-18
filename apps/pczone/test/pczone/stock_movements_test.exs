@@ -27,7 +27,6 @@ defmodule Pczone.StockMovementsTest do
       assert {:ok, {2, _}} = StockMovements.add_items(items)
     end
 
-    @tag :wip
     test "submit" do
       {:ok, %{id: stock_movement_id, state: :created}} = StockMovements.create()
 

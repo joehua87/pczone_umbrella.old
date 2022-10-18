@@ -43,7 +43,6 @@ defmodule Pczone.Stores.LazadaTest do
              ] = result |> Enum.map(& &1.variant_code) |> Enum.sort()
     end
 
-    @tag :wip
     test "make pricing workbook" do
       upsert_built_stores()
       store = Pczone.Repo.one(from Pczone.Store, where: [code: "lazada"])
