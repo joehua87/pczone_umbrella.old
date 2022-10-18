@@ -33,7 +33,7 @@ defmodule Pczone.Coolers do
   def upsert(entities, opts \\ []) do
     brands_map = Pczone.Brands.get_map_by_slug()
 
-    with list = [_ | _] <-
+    with list when is_list(list) <-
            Pczone.Helpers.get_list_changset_changes(
              entities,
              &parse_entity_for_upsert(&1, brands_map: brands_map)

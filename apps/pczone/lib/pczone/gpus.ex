@@ -29,7 +29,7 @@ defmodule Pczone.Gpus do
   def upsert(entities, opts \\ []) do
     brands_map = Pczone.Brands.get_map_by_slug()
 
-    with list = [_ | _] <-
+    with list when is_list(list) <-
            Enum.map(entities, &parse_entity_for_upsert(&1, brands_map: brands_map)) do
       Repo.insert_all_2(
         Pczone.Gpu,

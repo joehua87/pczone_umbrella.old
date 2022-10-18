@@ -9,7 +9,7 @@ defmodule Pczone.BuiltTemplateStores do
   }
 
   def upsert(entities, opts \\ []) when is_list(entities) do
-    with list = [_ | _] <-
+    with list when is_list(list) <-
            Pczone.Helpers.get_list_changset_changes(entities, fn entity ->
              Pczone.BuiltTemplateStore.new_changeset(entity)
              |> Pczone.Helpers.get_changeset_changes()

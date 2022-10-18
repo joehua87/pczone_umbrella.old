@@ -24,6 +24,127 @@ defmodule Pczone.Builts do
 
   def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
 
+  def upsert(builts) do
+    name_list = Enum.map(builts, & &1.name)
+
+    multi =
+      Ecto.Multi.new()
+      |> Ecto.Multi.run(:builts_map, fn _, _ ->
+        entities =
+          Enum.map(
+            builts,
+            &Map.drop(&1, [:built_gpus, :built_hard_drives, :built_memories, :built_processors])
+          )
+
+        with {:ok, {_, result}} <-
+               Repo.insert_all_2(
+                 Pczone.Built,
+                 entities,
+                 on_conflict:
+                   {:replace,
+                    [
+                      :key,
+                      :barebone_id,
+                      :barebone_product_id,
+                      :motherboard_id,
+                      :motherboard_product_id,
+                      :position
+                    ]},
+                 conflict_target: [:built_template_id, :option_values],
+                 returning: true
+               ) do
+          {:ok,
+           result |> Enum.map(fn built = %{name: name} -> {name, built} end) |> Enum.into(%{})}
+        end
+      end)
+      |> Ecto.Multi.run(:delete_built_processors, fn _, %{builts_map: builts_map} ->
+        built_ids = builts_map |> Map.values() |> Enum.map(& &1.id)
+        Repo.delete_all_2(from bp in Pczone.BuiltProcessor, where: bp.built_id in ^built_ids)
+      end)
+      |> Ecto.Multi.run(:built_processors, fn _, %{builts_map: builts_map} ->
+        entities =
+          builts
+          |> Enum.flat_map(fn %{name: name, built_processors: built_processors} ->
+            Enum.map(built_processors, &Map.put(&1, :built_id, builts_map[name].id))
+          end)
+
+        Repo.insert_all_2(Pczone.BuiltProcessor, entities,
+          on_conflict: {:replace, [:quantity]},
+          conflict_target: [:built_id, :processor_id]
+        )
+      end)
+      |> Ecto.Multi.run(:delete_built_memories, fn _, %{builts_map: builts_map} ->
+        built_ids = builts_map |> Map.values() |> Enum.map(& &1.id)
+        Repo.delete_all_2(from bp in Pczone.BuiltMemory, where: bp.built_id in ^built_ids)
+      end)
+      |> Ecto.Multi.run(:built_memories, fn _, %{builts_map: builts_map} ->
+        entities =
+          builts
+          |> Enum.flat_map(fn %{name: name, built_memories: built_memories} ->
+            Enum.map(built_memories, &Map.put(&1, :built_id, builts_map[name].id))
+          end)
+
+        Repo.insert_all_2(Pczone.BuiltMemory, entities,
+          on_conflict: {:replace, [:quantity]},
+          conflict_target: [:built_id, :memory_id]
+        )
+      end)
+      |> Ecto.Multi.run(:delete_built_hard_drives, fn _, %{builts_map: builts_map} ->
+        built_ids = builts_map |> Map.values() |> Enum.map(& &1.id)
+        Repo.delete_all_2(from bp in Pczone.BuiltHardDrive, where: bp.built_id in ^built_ids)
+      end)
+      |> Ecto.Multi.run(:built_hard_drives, fn _, %{builts_map: builts_map} ->
+        entities =
+          builts
+          |> Enum.flat_map(fn %{name: name, built_hard_drives: built_hard_drives} ->
+            Enum.map(built_hard_drives, &Map.put(&1, :built_id, builts_map[name].id))
+          end)
+
+        Repo.insert_all_2(Pczone.BuiltHardDrive, entities,
+          on_conflict: {:replace, [:quantity]},
+          conflict_target: [:built_id, :hard_drive_id]
+        )
+      end)
+      |> Ecto.Multi.run(:delete_built_gpus, fn _, %{builts_map: builts_map} ->
+        built_ids = builts_map |> Map.values() |> Enum.map(& &1.id)
+        Repo.delete_all_2(from bp in Pczone.BuiltGpu, where: bp.built_id in ^built_ids)
+      end)
+      |> Ecto.Multi.run(:built_gpus, fn _, %{builts_map: builts_map} ->
+        entities =
+          builts
+          |> Enum.flat_map(fn %{name: name, built_gpus: built_gpus} ->
+            Enum.map(built_gpus, &Map.put(&1, :built_id, builts_map[name].id))
+          end)
+
+        Repo.insert_all_2(Pczone.BuiltGpu, entities,
+          on_conflict: {:replace, [:quantity]},
+          conflict_target: [:built_id, :gpu_id]
+        )
+      end)
+      |> Ecto.Multi.run(:delete_built_products, fn _, %{builts_map: builts_map} ->
+        built_ids = builts_map |> Map.values() |> Enum.map(& &1.id)
+        Repo.delete_all_2(from bp in Pczone.BuiltProduct, where: bp.built_id in ^built_ids)
+      end)
+      |> Ecto.Multi.run(:built_products, fn _, %{builts_map: builts_map} ->
+        built_ids = builts_map |> Map.values() |> Enum.map(& &1.id)
+        Pczone.Builts.calculate_built_products(built_ids)
+      end)
+
+    multi =
+      name_list
+      |> Enum.reduce(multi, fn built_name, acc ->
+        Ecto.Multi.run(acc, "update price " <> built_name, fn _, %{builts_map: builts_map} ->
+          built = builts_map[built_name]
+          %{total: price} = Pczone.Builts.calculate_built_price(built.id)
+          Repo.update_all_2(from(Pczone.Built, where: [id: ^built.id]), set: [price: price])
+        end)
+      end)
+
+    with {:ok, %{insert_all: list}} <- Repo.transaction(multi) do
+      {:ok, list}
+    end
+  end
+
   def calculate_built_products(built_ids) when is_list(built_ids) do
     items_1 =
       Repo.all(

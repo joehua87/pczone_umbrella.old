@@ -35,7 +35,7 @@ defmodule Pczone.Barebones do
     psus_map = Pczone.Psus.get_map_by_slug()
     chassises_map = Pczone.Chassises.get_map_by_slug()
 
-    with list = [_ | _] <-
+    with list when is_list(list) <-
            Pczone.Helpers.get_list_changset_changes(
              entities,
              &parse_entity_for_upsert(&1,

@@ -29,7 +29,7 @@ defmodule Pczone.Chipsets do
   def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
 
   def upsert(entities, opts \\ []) do
-    with list = [_ | _] <-
+    with list when is_list(list) <-
            Pczone.Helpers.get_list_changset_changes(
              entities,
              fn entity ->

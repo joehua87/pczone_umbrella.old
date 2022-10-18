@@ -44,7 +44,7 @@ defmodule Pczone.Brands do
   end
 
   def upsert(entities, opts \\ []) do
-    with list = [_ | _] <-
+    with list when is_list(list) <-
            Pczone.Helpers.get_list_changset_changes(entities, fn entity ->
              Pczone.Brand.new_changeset(entity) |> Pczone.Helpers.get_changeset_changes()
            end) do

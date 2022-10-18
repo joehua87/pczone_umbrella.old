@@ -41,7 +41,7 @@ defmodule Pczone.Motherboards do
     brands_map = Pczone.Brands.get_map_by_slug()
     chipsets_map = Pczone.Chipsets.get_map_by_code()
 
-    with list = [_ | _] <-
+    with list when is_list(list) <-
            Pczone.Helpers.get_list_changset_changes(
              entities,
              &parse_entity_for_upsert(&1, brands_map: brands_map, chipsets_map: chipsets_map)

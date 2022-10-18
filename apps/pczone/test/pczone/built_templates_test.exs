@@ -91,6 +91,13 @@ defmodule Pczone.BuiltTemplatesTest do
       assert 123 = Repo.aggregate(Pczone.BuiltProduct, :count)
     end
 
+    test "generate all builts" do
+      built_templates_fixture()
+      assert {:ok, _} = BuiltTemplates.generate_all_builts()
+      assert 315 = Repo.aggregate(Pczone.BuiltProduct, :count)
+    end
+
+    @tag :skip
     test "update variants state when built template processors changed" do
       [built_template | _] = built_templates_fixture()
       assert {:ok, _} = BuiltTemplates.generate_builts(built_template)

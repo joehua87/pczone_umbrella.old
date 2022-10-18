@@ -47,7 +47,7 @@ defmodule Pczone.Processors do
   end
 
   def upsert(entities, opts \\ []) do
-    with list = [_ | _] <-
+    with list when is_list(list) <-
            Pczone.Helpers.get_list_changset_changes(entities, &parse_entity_for_upsert/1) do
       Repo.insert_all_2(
         Processor,
