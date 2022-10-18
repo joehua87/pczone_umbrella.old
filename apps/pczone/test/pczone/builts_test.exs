@@ -84,7 +84,12 @@ defmodule Pczone.BuiltsTest do
       assert {:ok, %{builts_map: builts_map}} =
                Pczone.BuiltTemplates.generate_builts(built_template)
 
-      [%{id: built_id} | _] = Map.values(builts_map)
+      sample_built =
+        builts_map
+        |> Map.values()
+        |> Enum.find(
+          &(&1.built_template_id == built_template.id && &1.name == "i5-6500T,8GB + Ko SSD")
+        )
 
       assert %{
                items: [
@@ -114,7 +119,7 @@ defmodule Pczone.BuiltsTest do
                  }
                ],
                total: 4_020_000
-             } = Pczone.Builts.calculate_built_price(built_id)
+             } = Pczone.Builts.calculate_built_price(sample_built.id)
     end
 
     test "calculate builts price" do
