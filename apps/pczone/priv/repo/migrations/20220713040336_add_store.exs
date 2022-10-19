@@ -12,7 +12,7 @@ defmodule Pczone.Repo.Migrations.AddStore do
     create unique_index(:store, [:code])
 
     create table(:built_template_store) do
-      add :built_template_id, references(:built_template), null: false
+      add :built_template_id, references(:built_template, on_delete: :delete_all), null: false
       add :store_id, references(:store), null: false
       add :product_code, :string, null: false
       add :variants, :map, null: false, default: "[]"
@@ -22,7 +22,7 @@ defmodule Pczone.Repo.Migrations.AddStore do
     create unique_index(:built_template_store, [:built_template_id, :store_id])
 
     create table(:built_store) do
-      add :built_id, references(:built), null: false
+      add :built_id, references(:built, on_delete: :delete_all), null: false
       add :store_id, references(:store), null: false
       add :product_code, :string, null: false
       add :variant_code, :string, null: false

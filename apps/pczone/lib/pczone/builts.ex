@@ -149,9 +149,11 @@ defmodule Pczone.Builts do
                builts_map: builts_map
              } ->
             built = builts_map[key]
-            %{total: price} = Pczone.Builts.calculate_built_price(built.id)
+            %{total: price, stock: stock} = Pczone.Builts.calculate_built_price(built.id)
 
-            Repo.update_all_2(from(Pczone.Built, where: [id: ^built.id]), set: [price: price])
+            Repo.update_all_2(from(Pczone.Built, where: [id: ^built.id]),
+              set: [price: price, stock: stock]
+            )
           end
         )
       end)
@@ -369,7 +371,8 @@ defmodule Pczone.Builts do
           id: barebone_product_id,
           title: barebone_title,
           component_type: barebone_component_type,
-          sale_price: barebone_price
+          sale_price: barebone_price,
+          stock: barebone_stock
         },
         built_processors: processors,
         built_memories: memories,
@@ -396,7 +399,8 @@ defmodule Pczone.Builts do
           component_type: barebone_component_type,
           price: barebone_price,
           quantity: 1,
-          total: barebone_price
+          total: barebone_price,
+          stock: barebone_stock
         },
         calculate_list_total(processors, products_map),
         calculate_list_total(memories, products_map),
@@ -408,6 +412,7 @@ defmodule Pczone.Builts do
 
     %{
       items: items,
+      stock: items |> Enum.map(& &1.stock) |> Enum.min(),
       total: items |> Enum.map(& &1.total) |> Enum.sum()
     }
   end
@@ -456,13 +461,18 @@ defmodule Pczone.Builts do
   defp calculate_list_total(list, products_map) do
     list
     |> Enum.map(fn %{product_id: product_id, quantity: quantity} ->
-      %{title: title, sale_price: price, component_type: component_type} =
-        products_map[product_id]
+      %{
+        title: title,
+        sale_price: price,
+        component_type: component_type,
+        stock: stock
+      } = products_map[product_id]
 
       %{
         product_id: product_id,
         title: title,
         component_type: component_type,
+        stock: div(stock, quantity),
         price: price,
         quantity: quantity,
         total: price * quantity

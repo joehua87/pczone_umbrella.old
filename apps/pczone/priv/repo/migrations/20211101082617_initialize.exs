@@ -452,6 +452,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :barebone_product_id, references(:product)
       add :motherboard_product_id, references(:product)
       add :chassis_product_id, references(:product)
+      add :stock, :integer
       add :price, :integer
       add :position, :integer
       add :state, :string, default: "published"

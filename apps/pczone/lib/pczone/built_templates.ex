@@ -175,6 +175,14 @@ defmodule Pczone.BuiltTemplates do
     end
   end
 
+  def delete(id) do
+    Repo.get(Pczone.BuiltTemplate, id) |> Repo.delete()
+  end
+
+  def delete_all_builts(built_template_id) do
+    Repo.delete_all_2(from b in Pczone.Built, where: b.built_template_id == ^built_template_id)
+  end
+
   @doc """
   Remove all built template processors
   """

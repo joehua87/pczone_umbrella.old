@@ -257,7 +257,7 @@ defmodule Pczone.Stores do
             "",
             "",
             fragment("(?::decimal * ?)::integer", v.price, ^rate),
-            99
+            v.stock
           ]
       )
 
@@ -308,10 +308,11 @@ defmodule Pczone.Stores do
             b.name,
             v.name,
             fragment("(?::decimal * ?)::integer", v.price, ^rate),
-            vp.variant_code
+            vp.variant_code,
+            v.stock
           ]
       )
-      |> Enum.map(fn [product_code, product_name, variant_name, price, variant_code] ->
+      |> Enum.map(fn [product_code, product_name, variant_name, price, variant_code, stock] ->
         [sku, lazada_sku, product_md5] = String.split(variant_code, ":")
 
         [
@@ -328,7 +329,7 @@ defmodule Pczone.Stores do
           "",
           price,
           "",
-          99,
+          stock,
           product_md5
         ]
       end)

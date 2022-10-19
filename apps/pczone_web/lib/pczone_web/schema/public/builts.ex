@@ -98,6 +98,7 @@ defmodule PczoneWeb.Schema.Builts do
     field :slug, non_null(:string)
     field :name, non_null(:string)
     field :option_values, list_of(non_null(:string))
+    field :stock, non_null(:integer)
     field :price, non_null(:integer)
     field :barebone_id, :id
     field :barebone, :barebone, resolve: dataloader(Dataloader)

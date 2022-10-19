@@ -13,6 +13,7 @@ defmodule Pczone.Built do
     :barebone_product_id,
     :motherboard_product_id,
     :chassis_product_id,
+    :stock,
     :price,
     :position,
     :state
@@ -30,6 +31,7 @@ defmodule Pczone.Built do
     belongs_to :barebone_product, Pczone.Product
     belongs_to :motherboard_product, Pczone.Product
     belongs_to :chassis_product, Pczone.Product
+    field :stock, :integer
     field :price, :integer
     field :position, :integer
     field :state, Ecto.Enum, default: :published, values: [:published, :archived]
