@@ -11,7 +11,6 @@ defmodule Pczone.UserAddressesTest do
       assert {:ok,
               %Pczone.UserAddress{
                 address: %Pczone.Address{
-                  id: _,
                   first_name: "Dew",
                   last_name: "John",
                   full_name: "Dew John",
@@ -26,7 +25,7 @@ defmodule Pczone.UserAddressesTest do
       address_params = address_fixture()
       assert {:ok, %{id: address_id}} = Users.add_address(user.id, address_params)
 
-      assert {:ok, %Pczone.UserAddress{address: %Pczone.Address{id: _, first_name: "New Dew"}}} =
+      assert {:ok, %Pczone.UserAddress{address: %Pczone.Address{first_name: "New Dew"}}} =
                Users.update_address(user.id, address_id, %{address_params | first_name: "New Dew"})
     end
 

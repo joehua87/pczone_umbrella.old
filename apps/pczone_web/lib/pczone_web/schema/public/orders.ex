@@ -8,6 +8,7 @@ defmodule PczoneWeb.Schema.Orders do
   end
 
   object :order_item do
+    field :id, non_null(:id)
     field :order_id, non_null(:id)
     field :order, non_null(:order), resolve: Helpers.dataloader(PczoneWeb.Dataloader)
     field :product_id, non_null(:id)

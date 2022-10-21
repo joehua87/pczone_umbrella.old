@@ -22,7 +22,7 @@ defmodule Pczone.UserTaxInfoTest do
       tax_info_params = tax_info_fixture()
       assert {:ok, %{id: tax_info_id}} = Users.add_tax_info(user.id, tax_info_params)
 
-      assert {:ok, %Pczone.UserTaxInfo{tax_info: %Pczone.TaxInfo{id: _, name: "New name"}}} =
+      assert {:ok, %Pczone.UserTaxInfo{tax_info: %Pczone.TaxInfo{name: "New name"}}} =
                Users.update_tax_info(user.id, tax_info_id, %{
                  tax_info_params
                  | name: "New name"

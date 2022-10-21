@@ -189,7 +189,7 @@ defmodule Pczone.Address do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @primary_key {:id, :binary_id, autogenerate: true}
+  @primary_key false
   @required_fields [
     :first_name,
     :last_name,
@@ -232,7 +232,7 @@ defmodule Pczone.TaxInfo do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @primary_key {:id, :binary_id, autogenerate: true}
+  @primary_key false
   @required_fields [:name, :tax_id, :address]
   @optional_fields [:email, :note]
 
