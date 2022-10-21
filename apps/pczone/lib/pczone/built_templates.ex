@@ -147,12 +147,24 @@ defmodule Pczone.BuiltTemplates do
          {:ok, _} <-
            Ecto.Multi.new()
            |> upsert_built_templates_multi(list, barebone_products_map)
+           |> remove_built_template_references(
+             :delete_built_template_processors,
+             Pczone.BuiltTemplateProcessor
+           )
            |> upsert_built_template_processors_multi(
              list,
              processor_products_map,
              gpu_products_map
            )
+           |> remove_built_template_references(
+             :delete_built_template_memories,
+             Pczone.BuiltTemplateMemory
+           )
            |> upsert_built_template_memories_multi(list, memory_products_map)
+           |> remove_built_template_references(
+             :delete_built_template_hard_drives,
+             Pczone.BuiltTemplateHardDrive
+           )
            |> upsert_built_template_hard_drives_multi(list, hard_drive_products_map)
            |> Repo.transaction() do
       codes = Enum.map(list, & &1["code"])
@@ -263,6 +275,21 @@ defmodule Pczone.BuiltTemplates do
            {code, id}
          end)
          |> Enum.into(%{})}
+      end
+    )
+  end
+
+  defp remove_built_template_references(multi, key, schema) do
+    Ecto.Multi.run(
+      multi,
+      key,
+      fn _, %{built_templates_map: built_templates_map} ->
+        built_template_ids = Map.values(built_templates_map)
+
+        Repo.delete_all_2(
+          from bp in schema,
+            where: bp.built_template_id in ^built_template_ids
+        )
       end
     )
   end
