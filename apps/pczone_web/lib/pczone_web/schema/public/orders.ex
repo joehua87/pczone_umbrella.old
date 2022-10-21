@@ -130,7 +130,7 @@ defmodule PczoneWeb.Schema.Orders do
   input_object :submit_order_input do
     field :item_ids, non_null(list_of(non_null(:id)))
     field :shipping_address, non_null(:address_input)
-    field :tax_info, non_null(:tax_info_input)
+    field :tax_info, :tax_info_input
   end
 
   object :order_mutations do
