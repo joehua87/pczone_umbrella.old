@@ -8,6 +8,8 @@ defmodule Pczone.Users.User do
     field :hashed_password, :string, redact: true
     field :role, Ecto.Enum, values: [:user, :admin], default: :user
     field :confirmed_at, :naive_datetime
+    has_many :user_addresses, Pczone.UserAddress
+    has_many :user_tax_infos, Pczone.UserTaxInfo
 
     timestamps()
   end

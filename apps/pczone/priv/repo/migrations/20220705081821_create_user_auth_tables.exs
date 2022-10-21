@@ -7,6 +7,7 @@ defmodule Pczone.Repo.Migrations.CreateUserAuthTables do
       add :hashed_password, :string, null: false
       add :role, :string
       add :confirmed_at, :naive_datetime
+      add :field_values, :map, default: "[]", null: false
       timestamps()
     end
 
@@ -19,6 +20,20 @@ defmodule Pczone.Repo.Migrations.CreateUserAuthTables do
       add :sent_to, :string
       timestamps(updated_at: false)
     end
+
+    create table(:user_address) do
+      add :user_id, references(:user), null: false
+      add :address, :map, null: false
+    end
+
+    create index(:user_address, [:user_id])
+
+    create table(:user_tax_info) do
+      add :user_id, references(:user), null: false
+      add :tax_info, :map, null: false
+    end
+
+    create index(:user_tax_info, [:user_id])
 
     create index(:user_token, [:user_id])
     create unique_index(:user_token, [:context, :token])

@@ -347,4 +347,40 @@ defmodule Pczone.Users do
       {:error, :user, changeset, _} -> {:error, changeset}
     end
   end
+
+  def add_address(user_id, params) do
+    %{user_id: user_id, address: params}
+    |> Pczone.UserAddress.new_changeset()
+    |> Repo.insert()
+  end
+
+  def update_address(user_id, address_id, params) do
+    Repo.get(from(Pczone.UserAddress, where: [user_id: ^user_id]), address_id)
+    |> Pczone.UserAddress.changeset(%{address: params})
+    |> Repo.update()
+  end
+
+  def remove_address(user_id, address_id) do
+    Repo.get(from(Pczone.UserAddress, where: [user_id: ^user_id]), address_id)
+    |> Ecto.Changeset.change()
+    |> Repo.delete()
+  end
+
+  def add_tax_info(user_id, params) do
+    %{user_id: user_id, tax_info: params}
+    |> Pczone.UserTaxInfo.new_changeset()
+    |> Repo.insert()
+  end
+
+  def update_tax_info(user_id, tax_info_id, params) do
+    Repo.get(from(Pczone.UserTaxInfo, where: [user_id: ^user_id]), tax_info_id)
+    |> Pczone.UserTaxInfo.changeset(%{tax_info: params})
+    |> Repo.update()
+  end
+
+  def remove_tax_info(user_id, tax_info_id) do
+    Repo.get(from(Pczone.UserTaxInfo, where: [user_id: ^user_id]), tax_info_id)
+    |> Ecto.Changeset.change()
+    |> Repo.delete()
+  end
 end

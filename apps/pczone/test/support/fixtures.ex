@@ -54,4 +54,13 @@ defmodule Pczone.Fixtures do
       phone: "123123123"
     }
   end
+
+  def tax_info_fixture() do
+    %{
+      name: "CÔNG TY CP KẾT NỐI PHONG CÁCH SỐNG",
+      tax_id: "0313496812",
+      address:
+        "Tầng 1, số 4, Nguyễn Thị Minh Khai, Phường Đa Kao, Quận 1, Thành phố Hồ Chí Minh, Việt Nam"
+    }
+  end
 end
