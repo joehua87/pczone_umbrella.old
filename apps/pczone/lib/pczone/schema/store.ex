@@ -2,12 +2,16 @@ defmodule Pczone.Store do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @required [:code, :name, :merchant_id]
-  @optional [:rate]
+  @required [:code, :name, :platform]
+  @optional [:email, :phone, :cookie, :merchant_id, :rate]
 
   schema "store" do
     field :code, :string
     field :name, :string
+    field :platform, :string
+    field :email, :string
+    field :phone, :string
+    field :cookie, :string
     field :merchant_id, :string
     field :rate, :decimal, default: 1
   end

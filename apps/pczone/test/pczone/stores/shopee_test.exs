@@ -1,6 +1,5 @@
 defmodule Pczone.Stores.ShopeeTest do
   use Pczone.DataCase, async: true
-  import Ecto.Query, only: [from: 2]
   import Pczone.Fixtures
 
   describe "shopee store" do
@@ -37,7 +36,7 @@ defmodule Pczone.Stores.ShopeeTest do
 
     test "make pricing workbook" do
       upsert_built_stores()
-      store = Pczone.Repo.one(from Pczone.Store, where: [code: "shopee"])
+      store = Pczone.Stores.get_by_code("shopee:storexeonvn")
       workbook = Pczone.Stores.make_pricing_workbook(store)
 
       assert %Elixlsx.Workbook{
@@ -100,7 +99,7 @@ defmodule Pczone.Stores.ShopeeTest do
     # Initial data
     get_fixtures_dir() |> Pczone.initial_data()
     built_templates = built_templates_fixture()
-    store = Pczone.Repo.one(from Pczone.Store, where: [code: "shopee"])
+    store = Pczone.Stores.get_by_code("shopee:storexeonvn")
 
     # Sync built template stores product code
     built_template_stores_path =

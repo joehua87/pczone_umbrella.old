@@ -55,6 +55,6 @@ defmodule Pczone.StoresTest do
 
   setup do
     get_fixtures_dir() |> Pczone.initial_data()
-    {:ok, store: Pczone.Stores.get_by_code("shopee")}
+    {:ok, store: Pczone.Stores.get_by_code("shopee:storexeonvn")}
   end
 end

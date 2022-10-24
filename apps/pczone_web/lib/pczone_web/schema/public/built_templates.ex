@@ -52,6 +52,7 @@ defmodule PczoneWeb.Schema.BuiltTemplates do
     field :built_template, non_null(:built_template), resolve: Helpers.dataloader(Dataloader)
     field :store, non_null(:store), resolve: Helpers.dataloader(Dataloader)
     field :product_code, non_null(:string)
+    field :name, :string
   end
 
   object :built_template do

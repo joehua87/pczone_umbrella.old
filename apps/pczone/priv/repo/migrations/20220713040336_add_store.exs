@@ -5,7 +5,11 @@ defmodule Pczone.Repo.Migrations.AddStore do
     create table(:store) do
       add :code, :string, null: false
       add :name, :string, null: false
-      add :merchant_id, :string, null: false
+      add :platform, :string, null: false
+      add :email, :string
+      add :phone, :string
+      add :cookie, :text
+      add :merchant_id, :string
       add :rate, :decimal, null: false, default: 1
     end
 
@@ -15,6 +19,7 @@ defmodule Pczone.Repo.Migrations.AddStore do
       add :built_template_id, references(:built_template, on_delete: :delete_all), null: false
       add :store_id, references(:store), null: false
       add :product_code, :string, null: false
+      add :name, :string
       add :variants, :map, null: false, default: "[]"
       add :update_variants_at, :utc_datetime
     end

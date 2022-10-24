@@ -102,11 +102,11 @@ defmodule Pczone.Stores do
   def upsert_built_stores(store, path, opts \\ [])
 
   def upsert_built_stores(
-        %Store{id: store_id, code: store_code},
+        %Store{id: store_id, platform: platform},
         path,
         opts
       ) do
-    list = read_product_variants(store_code, path)
+    list = read_product_variants(platform, path)
 
     product_codes =
       list
@@ -115,15 +115,15 @@ defmodule Pczone.Stores do
 
     product_codes_map_by_built_template_id =
       Repo.all(
-        from p in BuiltTemplateStore,
+        from(p in BuiltTemplateStore,
           where: p.product_code in ^product_codes,
           select: {p.built_template_id, p.product_code}
+        )
       )
       |> Enum.into(%{})
 
     built_template_ids = Map.keys(product_codes_map_by_built_template_id)
-
-    builts = Repo.all(from v in Built, where: v.built_template_id in ^built_template_ids)
+    builts = Repo.all(from(v in Built, where: v.built_template_id in ^built_template_ids))
 
     built_stores =
       builts
@@ -171,7 +171,11 @@ defmodule Pczone.Stores do
       Repo.insert_all_2(
         Pczone.Store,
         list,
-        Keyword.merge(opts, on_conflict: {:replace, [:name]}, conflict_target: [:code])
+        Keyword.merge(opts,
+          on_conflict:
+            {:replace, [:name, :platform, :email, :phone, :cookie, :merchant_id, :rate]},
+          conflict_target: [:code]
+        )
       )
     end
   end
@@ -203,7 +207,7 @@ defmodule Pczone.Stores do
     end)
   end
 
-  def make_pricing_workbook(store = %{code: "shopee", rate: rate}) do
+  def make_pricing_workbook(store = %{code: "shopee:" <> _, rate: rate}) do
     headers = [
       [
         "et_title_product_id",
@@ -241,24 +245,23 @@ defmodule Pczone.Stores do
 
     rows =
       Repo.all(
-        from v in Pczone.Built,
-          join: b in Pczone.BuiltTemplate,
-          on: v.built_template_id == b.id,
-          join: bp in Pczone.BuiltTemplateStore,
-          on: bp.built_template_id == b.id,
-          join: vp in Pczone.BuiltStore,
-          on: v.id == vp.built_id,
-          where: vp.store_id == ^store.id,
+        from(bs in Pczone.BuiltStore,
+          join: b in Pczone.Built,
+          on: bs.built_id == b.id,
+          join: bt in Pczone.BuiltTemplate,
+          on: b.built_template_id == bt.id,
+          where: bs.store_id == ^store.id,
           select: [
-            bp.product_code,
+            bs.product_code,
+            bt.name,
+            bs.variant_code,
             b.name,
-            vp.variant_code,
-            v.name,
             "",
             "",
-            fragment("(?::decimal * ?)::integer", v.price, ^rate),
-            v.stock
+            fragment("(?::decimal * ?)::integer", b.price, ^rate),
+            b.stock
           ]
+        )
       )
 
     %Workbook{
@@ -271,7 +274,7 @@ defmodule Pczone.Stores do
     }
   end
 
-  def make_pricing_workbook(store = %{code: "lazada", rate: rate}) do
+  def make_pricing_workbook(store = %{code: "lazada:" <> _, rate: rate}) do
     headers = [
       [
         "Product ID",
@@ -297,20 +300,21 @@ defmodule Pczone.Stores do
 
     rows =
       Repo.all(
-        from v in Pczone.Built,
-          join: b in Pczone.BuiltTemplate,
-          on: v.built_template_id == b.id,
-          join: vp in Pczone.BuiltStore,
-          on: v.id == vp.built_id,
-          where: vp.store_id == ^store.id,
+        from(bs in Pczone.BuiltStore,
+          join: b in Pczone.Built,
+          on: bs.built_id == b.id,
+          join: bt in Pczone.BuiltTemplate,
+          on: b.built_template_id == bt.id,
+          where: bs.store_id == ^store.id,
           select: [
-            vp.product_code,
+            bs.product_code,
+            bt.name,
             b.name,
-            v.name,
-            fragment("(?::decimal * ?)::integer", v.price, ^rate),
-            vp.variant_code,
-            v.stock
+            fragment("(?::decimal * ?)::integer", b.price, ^rate),
+            bs.variant_code,
+            b.stock
           ]
+        )
       )
       |> Enum.map(fn [product_code, product_name, variant_name, price, variant_code, stock] ->
         [sku, lazada_sku, product_md5] = String.split(variant_code, ":")

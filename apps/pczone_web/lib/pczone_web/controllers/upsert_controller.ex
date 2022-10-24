@@ -60,7 +60,6 @@ defmodule PczoneWeb.UpsertController do
   end
 
   def built_template_stores(conn, %{
-        # "store_id" => store_id,
         "file" => %Plug.Upload{path: path}
       }) do
     # Assume we have only Shopee
