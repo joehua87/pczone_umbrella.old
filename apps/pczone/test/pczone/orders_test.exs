@@ -134,6 +134,7 @@ defmodule Pczone.OrdersTest do
                     last_name: "John",
                     full_name: "Dew John"
                   },
+                  total: 1_900_000,
                   state: :submitted
                 },
                 remove_cart_items: {1, nil}

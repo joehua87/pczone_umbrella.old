@@ -85,31 +85,37 @@ defmodule Pczone.Orders do
       _ ->
         products_price_map = items |> Enum.map(& &1.product_id) |> Products.get_price_map()
 
+        items =
+          Enum.map(items, fn %{product_id: product_id, quantity: quantity} ->
+            price = products_price_map[product_id]
+            now = DateTime.utc_now() |> DateTime.truncate(:second)
+
+            %{
+              product_id: product_id,
+              price: price,
+              quantity: quantity,
+              amount: price * quantity,
+              inserted_at: now,
+              updated_at: now
+            }
+          end)
+
         Ecto.Multi.new()
         |> Ecto.Multi.run(:order, fn _, _ ->
-          # TODO: Add billing address, shipping address, state, tax_info
+          total = items |> Enum.map(& &1.amount) |> Enum.sum()
+
           create(
             context,
-            %{state: :submitted, shipping_address: shipping_address, tax_info: tax_info}
+            %{
+              state: :submitted,
+              shipping_address: shipping_address,
+              tax_info: tax_info,
+              total: total
+            }
           )
         end)
-        |> Ecto.Multi.run(:items, fn _, %{order: order} ->
-          items =
-            Enum.map(items, fn %{product_id: product_id, quantity: quantity} ->
-              price = products_price_map[product_id]
-              now = DateTime.utc_now() |> DateTime.truncate(:second)
-
-              %{
-                order_id: order.id,
-                product_id: product_id,
-                price: price,
-                quantity: quantity,
-                amount: price * quantity,
-                inserted_at: now,
-                updated_at: now
-              }
-            end)
-
+        |> Ecto.Multi.run(:items, fn _, %{order: new_order} ->
+          items = Enum.map(items, &Map.put(&1, :order_id, new_order.id))
           Repo.insert_all_2(Pczone.OrderItem, items)
         end)
         |> Ecto.Multi.run(:remove_cart_items, fn _, %{} ->
