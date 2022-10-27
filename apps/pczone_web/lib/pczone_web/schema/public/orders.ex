@@ -37,8 +37,8 @@ defmodule PczoneWeb.Schema.Orders do
     field :customer, :customer, resolve: Helpers.dataloader(PczoneWeb.Dataloader)
     field :shipping_address, :address
     field :tax_info, :tax_info
-    field :state, :string
-    field :total, :integer
+    field :state, non_null(:string)
+    field :total, non_null(:integer)
 
     field :items, non_null(list_of(non_null(:order_item))),
       resolve: Helpers.dataloader(PczoneWeb.Dataloader)
@@ -87,7 +87,7 @@ defmodule PczoneWeb.Schema.Orders do
           |> Map.merge(%{
             selection: PczoneWeb.AbsintheHelper.project(info) |> Keyword.get(:entities)
           })
-          |> Pczone.Psus.list()
+          |> Pczone.Orders.list()
 
         {:ok, list}
       end)
@@ -130,8 +130,10 @@ defmodule PczoneWeb.Schema.Orders do
 
   input_object :submit_order_input do
     field :item_ids, non_null(list_of(non_null(:id)))
-    field :shipping_address, non_null(:address_input)
+    field :shipping_address, :address_input
     field :tax_info, :tax_info_input
+    field :shipping_address_id, :id
+    field :tax_info_id, :id
   end
 
   object :order_mutations do

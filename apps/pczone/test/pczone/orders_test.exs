@@ -111,7 +111,9 @@ defmodule Pczone.OrdersTest do
       assert {:ok, order} = Orders.create()
       context = %{order_token: order.token}
       assert {:ok, _} = Orders.add_item(%{product_id: product.id, quantity: 1}, context)
-      assert {:error, "Item ids must be more than 1"} = Orders.submit(%{item_ids: []}, context)
+
+      assert {:error, "Item ids must be more than 1"} =
+               Orders.submit(%{item_ids: [], shipping_address: address_fixture()}, context)
     end
 
     test "submit order" do

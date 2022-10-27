@@ -1,6 +1,24 @@
 defmodule Pczone.Orders do
-  import Ecto.Query, only: [from: 2]
+  import Ecto.Query, only: [from: 2, where: 2]
+  import Dew.FilterParser
   alias Pczone.{Repo, Builts, Products}
+
+  def list(attrs \\ %{})
+
+  def list(%Dew.Filter{
+        filter: filter,
+        paging: paging,
+        selection: selection,
+        order_by: order_by
+      }) do
+    Pczone.Order
+    |> where(^parse_filter(filter))
+    |> select_fields(selection, [:shipping_address, :tax_info])
+    |> sort_by(order_by, [])
+    |> Repo.paginate(paging)
+  end
+
+  def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
 
   def get(context = %{user: %{id: user_id}}) do
     case Repo.one(from(Pczone.Order, where: [user_id: ^user_id, state: :cart])) do
@@ -54,6 +72,8 @@ defmodule Pczone.Orders do
 
   def submit(%{item_ids: item_ids} = params, context) do
     order = get(context)
+    shipping_address = get_shipping_address(params)
+    tax_info = get_tax_info(params)
 
     items =
       Repo.all(from(i in Pczone.OrderItem, where: i.order_id == ^order.id and i.id in ^item_ids))
@@ -68,7 +88,10 @@ defmodule Pczone.Orders do
         Ecto.Multi.new()
         |> Ecto.Multi.run(:order, fn _, _ ->
           # TODO: Add billing address, shipping address, state, tax_info
-          create(context, Map.merge(params, %{state: :submitted}))
+          create(
+            context,
+            %{state: :submitted, shipping_address: shipping_address, tax_info: tax_info}
+          )
         end)
         |> Ecto.Multi.run(:items, fn _, %{order: order} ->
           items =
@@ -197,5 +220,38 @@ defmodule Pczone.Orders do
 
   def generate_token(bytes \\ 64) do
     :crypto.strong_rand_bytes(bytes) |> Base.url_encode64()
+  end
+
+  defp get_tax_info(%{tax_info_id: tax_info_id}) when is_bitstring(tax_info_id) do
+    %{tax_info: tax_info} = Repo.get(Pczone.UserTaxInfo, tax_info_id)
+    Map.from_struct(tax_info)
+  end
+
+  defp get_tax_info(%{tax_info: tax_info = %{}}) do
+    tax_info
+  end
+
+  defp get_tax_info(_params) do
+    nil
+  end
+
+  defp get_shipping_address(%{shipping_address_id: shipping_address_id})
+       when is_bitstring(shipping_address_id) do
+    %{address: address} = Repo.get(Pczone.UserAddress, shipping_address_id)
+    Map.from_struct(address)
+  end
+
+  defp get_shipping_address(%{shipping_address: shipping_address = %{}}) do
+    shipping_address
+  end
+
+  def parse_filter(filter) do
+    filter
+    |> Enum.reduce(nil, fn {field, value}, acc ->
+      case field do
+        :state -> parse_string_filter(acc, field, value)
+        _ -> acc
+      end
+    end) || true
   end
 end
