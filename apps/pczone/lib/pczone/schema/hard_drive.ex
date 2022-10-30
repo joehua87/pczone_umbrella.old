@@ -1,5 +1,5 @@
 defmodule Pczone.HardDrive do
-  use Ecto.Schema
+  use Pczone.Schema
   import Ecto.Changeset
 
   @derive Jason.Encoder

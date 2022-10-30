@@ -387,7 +387,6 @@ defmodule Pczone.Repo.Migrations.Initialize do
     create index(:built_template, [:position])
 
     create table(:built_template_processor) do
-      add :key, :string, null: false
       add :built_template_id, references(:built_template, on_delete: :delete_all), null: false
       add :processor_id, references(:processor), null: false
       add :processor_product_id, references(:product), null: false
@@ -399,8 +398,6 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :gpu_label, :string, default: ""
     end
 
-    create unique_index(:built_template_processor, [:key])
-
     create unique_index(:built_template_processor, [
              :built_template_id,
              :processor_label,
@@ -408,7 +405,6 @@ defmodule Pczone.Repo.Migrations.Initialize do
            ])
 
     create table(:built_template_memory) do
-      add :key, :string, null: false
       add :built_template_id, references(:built_template, on_delete: :delete_all), null: false
       add :memory_id, references(:memory), null: false
       add :memory_product_id, references(:product), null: false
@@ -416,11 +412,9 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :label, :string
     end
 
-    create unique_index(:built_template_memory, [:key])
     create unique_index(:built_template_memory, [:built_template_id, :label])
 
     create table(:built_template_hard_drive) do
-      add :key, :string, null: false
       add :built_template_id, references(:built_template, on_delete: :delete_all), null: false
       add :hard_drive_id, references(:hard_drive), null: false
       add :hard_drive_product_id, references(:product), null: false
@@ -428,7 +422,6 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :label, :string
     end
 
-    create unique_index(:built_template_hard_drive, [:key])
     create unique_index(:built_template_hard_drive, [:built_template_id, :label])
 
     create table(:built_template_taxon) do
@@ -441,7 +434,6 @@ defmodule Pczone.Repo.Migrations.Initialize do
     create index(:built_template_taxon, [:taxonomy_id, :taxon_id])
 
     create table(:built) do
-      add :key, :string
       add :slug, :string, null: false
       add :name, :string, null: false
       add :built_template_id, references(:built_template)
@@ -458,7 +450,6 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :state, :string, default: "published"
     end
 
-    create unique_index(:built, [:key])
     create unique_index(:built, [:built_template_id, :option_values])
 
     create table(:built_psu) do

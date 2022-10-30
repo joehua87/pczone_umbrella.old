@@ -1,5 +1,5 @@
 defmodule Pczone.Barebone do
-  use Ecto.Schema
+  use Pczone.Schema
   import Ecto.Changeset
 
   @required [:slug, :code, :name, :motherboard_id, :chassis_id, :brand_id]

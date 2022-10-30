@@ -16,6 +16,7 @@ config :pczone,
 
 config :pczone, Pczone.Repo,
   types: Pczone.PostgresTypes,
+  migration_primary_key: [name: :id, type: :binary_id],
   migration_timestamps: [type: :utc_datetime]
 
 # Configures the mailer

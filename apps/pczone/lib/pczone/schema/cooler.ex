@@ -1,5 +1,5 @@
 defmodule Pczone.Cooler do
-  use Ecto.Schema
+  use Pczone.Schema
   import Ecto.Changeset
 
   @required [:slug, :code, :name, :supported_types, :brand_id]

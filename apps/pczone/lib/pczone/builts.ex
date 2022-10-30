@@ -41,7 +41,6 @@ defmodule Pczone.Builts do
                  on_conflict:
                    {:replace,
                     [
-                      :key,
                       :barebone_id,
                       :barebone_product_id,
                       :motherboard_id,

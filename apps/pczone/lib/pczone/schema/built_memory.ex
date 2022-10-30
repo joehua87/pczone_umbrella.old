@@ -1,5 +1,5 @@
 defmodule Pczone.BuiltMemory do
-  use Ecto.Schema
+  use Pczone.Schema
   import Ecto.Changeset
 
   @required [

@@ -1,5 +1,5 @@
 defmodule Pczone.StockMovementItem do
-  use Ecto.Schema
+  use Pczone.Schema
   import Ecto.Changeset
 
   @required [

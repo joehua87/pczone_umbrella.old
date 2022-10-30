@@ -1,14 +1,13 @@
 defmodule Pczone.BuiltTemplateMemory do
-  use Ecto.Schema
+  use Pczone.Schema
   import Ecto.Changeset
 
   @derive Jason.Encoder
 
-  @required [:key, :built_template_id, :memory_id, :memory_product_id]
+  @required [:built_template_id, :memory_id, :memory_product_id]
   @optional [:quantity, :label]
 
   schema "built_template_memory" do
-    field :key, :string
     belongs_to :built_template, Pczone.BuiltTemplate
     belongs_to :memory, Pczone.Memory
     belongs_to :memory_product, Pczone.Product

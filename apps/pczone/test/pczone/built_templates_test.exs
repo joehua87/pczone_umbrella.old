@@ -61,29 +61,29 @@ defmodule Pczone.BuiltTemplatesTest do
     test "make builts" do
       [built_template | _] = built_templates_fixture()
 
-      assert [
-               %{
-                 barebone_id: _,
-                 barebone_product_id: _,
-                 built_gpus: [],
-                 built_hard_drives: [],
-                 built_memories: [],
-                 built_processors: [%{processor_id: _, product_id: _, quantity: 1}],
-                 built_template_id: _,
-                 name: "i5-6500T,Ko RAM + Ko SSD",
-                 option_values: ["i5-6500T", "Ko RAM + Ko SSD"],
-                 position: 0,
-                 slug: "i5-6500t-ko-ram-ko-ssd"
-               }
-               | _
-             ] = BuiltTemplates.make_builts(built_template)
+      assert [%{} | _] = builts = BuiltTemplates.make_builts(built_template)
+
+      assert %{
+               barebone_id: _,
+               barebone_product_id: _,
+               built_gpus: [],
+               built_hard_drives: [],
+               built_memories: [],
+               built_processors: [%{processor_id: _, product_id: _, quantity: 1}],
+               built_template_id: _,
+               name: "i5-6500T,Ko RAM + Ko SSD",
+               option_values: ["i5-6500T", "Ko RAM + Ko SSD"],
+               position: _,
+               slug: "i5-6500t-ko-ram-ko-ssd"
+             } = Enum.find(builts, &(&1.slug == "i5-6500t-ko-ram-ko-ssd"))
     end
 
+    @tag :wip
     test "generate builts" do
       [built_template | _] = built_templates_fixture()
       assert {:ok, _} = BuiltTemplates.generate_builts(built_template)
 
-      assert [%{price: 3_500_000} | _] =
+      assert [%{} | _] =
                Repo.all(
                  from v in Pczone.Built, where: v.state == :published, order_by: [asc: :position]
                )

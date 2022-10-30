@@ -37,56 +37,58 @@ defmodule Pczone.BuiltsTest do
              } = Builts.create(built_params)
 
       assert %{
-               items: [
-                 %{
-                   component_type: :barebone,
-                   price: 2_000_000,
-                   product_id: _,
-                   quantity: 1,
-                   stock: 10,
-                   title: "HP EliteDesk 800 G2 Mini 65w (Used)",
-                   total: 2_000_000
-                 },
-                 %{
-                   component_type: :processor,
-                   price: 1_700_000,
-                   product_id: _,
-                   quantity: 1,
-                   stock: 10,
-                   title: "Intel® Core™ i5-6500 Processor (Tray)",
-                   total: 1_700_000
-                 },
-                 %{
-                   component_type: :memory,
-                   price: 520_000,
-                   product_id: _,
-                   quantity: 2,
-                   stock: 5,
-                   title: "8Gb SODIMM DDR4 2133 Mixed (Used)",
-                   total: 1_040_000
-                 },
-                 %{
-                   component_type: :hard_drive,
-                   price: 800_000,
-                   product_id: _,
-                   quantity: 1,
-                   stock: 10,
-                   title: "256Gb Samsung PM981 NVMe PCIe 3.0 x4 (100%)",
-                   total: 800_000
-                 },
-                 %{
-                   component_type: :hard_drive,
-                   price: 2_000_000,
-                   product_id: _,
-                   quantity: 1,
-                   stock: 10,
-                   title: "1Tb Samsung 860 Evo Sata 3 (100%)",
-                   total: 2_000_000
-                 }
-               ],
+               items: items,
                stock: 5,
                total: 7_540_000
              } = Builts.calculate_built_price(id)
+
+      assert [
+               %{
+                 component_type: :hard_drive,
+                 price: 2_000_000,
+                 product_id: _,
+                 quantity: 1,
+                 stock: 10,
+                 title: "1Tb Samsung 860 Evo Sata 3 (100%)",
+                 total: 2_000_000
+               },
+               %{
+                 component_type: :hard_drive,
+                 price: 800_000,
+                 product_id: _,
+                 quantity: 1,
+                 stock: 10,
+                 title: "256Gb Samsung PM981 NVMe PCIe 3.0 x4 (100%)",
+                 total: 800_000
+               },
+               %{
+                 component_type: :memory,
+                 price: 520_000,
+                 product_id: _,
+                 quantity: 2,
+                 stock: 5,
+                 title: "8Gb SODIMM DDR4 2133 Mixed (Used)",
+                 total: 1_040_000
+               },
+               %{
+                 component_type: :barebone,
+                 price: 2_000_000,
+                 product_id: _,
+                 quantity: 1,
+                 stock: 10,
+                 title: "HP EliteDesk 800 G2 Mini 65w (Used)",
+                 total: 2_000_000
+               },
+               %{
+                 component_type: :processor,
+                 price: 1_700_000,
+                 product_id: _,
+                 quantity: 1,
+                 stock: 10,
+                 title: "Intel® Core™ i5-6500 Processor (Tray)",
+                 total: 1_700_000
+               }
+             ] = Enum.sort(items, &(&1.title < &2.title))
     end
 
     test "calculate built price" do

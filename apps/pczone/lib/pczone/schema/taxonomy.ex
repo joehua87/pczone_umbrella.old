@@ -1,5 +1,5 @@
 defmodule Pczone.Taxonomy do
-  use Ecto.Schema
+  use Pczone.Schema
   import Ecto.Changeset
 
   @required [:code, :name]

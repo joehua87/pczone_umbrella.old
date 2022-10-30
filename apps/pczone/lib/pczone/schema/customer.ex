@@ -1,5 +1,5 @@
 defmodule Pczone.Customer do
-  use Ecto.Schema
+  use Pczone.Schema
   import Ecto.Changeset
 
   @required [:name, :phone]

@@ -1,5 +1,5 @@
 defmodule Pczone.BuiltTemplateTaxon do
-  use Ecto.Schema
+  use Pczone.Schema
   import Ecto.Changeset
 
   @required [:built_template_id, :taxonomy_id, :taxon_id]

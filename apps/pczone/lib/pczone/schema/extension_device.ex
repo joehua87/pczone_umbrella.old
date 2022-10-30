@@ -1,5 +1,5 @@
 defmodule Pczone.ExtensionDevice do
-  use Ecto.Schema
+  use Pczone.Schema
   import Ecto.Changeset
 
   @required [:slug, :code, :name, :type, :brand_id]

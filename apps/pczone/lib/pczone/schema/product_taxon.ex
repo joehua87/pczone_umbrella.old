@@ -1,5 +1,5 @@
 defmodule Pczone.ProductTaxon do
-  use Ecto.Schema
+  use Pczone.Schema
   import Ecto.Changeset
 
   @required [:product_id, :taxonomy_id, :taxon_id]

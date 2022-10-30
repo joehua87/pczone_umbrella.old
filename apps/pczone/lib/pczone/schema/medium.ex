@@ -1,5 +1,5 @@
 defmodule Pczone.Medium do
-  use Ecto.Schema
+  use Pczone.Schema
   import Ecto.Changeset
 
   @primary_key {:id, :string, autogenerate: false}

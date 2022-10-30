@@ -1,5 +1,5 @@
 defmodule Pczone.ChipsetProcessor do
-  use Ecto.Schema
+  use Pczone.Schema
 
   schema "chipset_processor" do
     belongs_to :processor, Pczone.Processor

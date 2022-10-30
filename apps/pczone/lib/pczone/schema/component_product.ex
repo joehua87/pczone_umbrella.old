@@ -1,5 +1,5 @@
 defmodule Pczone.ComponentProduct do
-  use Ecto.Schema
+  use Pczone.Schema
   import Ecto.Changeset
 
   @required [:product_id, :type]

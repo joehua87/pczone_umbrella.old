@@ -1,5 +1,5 @@
 defmodule Pczone.Chassis do
-  use Ecto.Schema
+  use Pczone.Schema
   import Ecto.Changeset
 
   @required [:slug, :code, :name, :form_factor, :psu_form_factors, :brand_id]

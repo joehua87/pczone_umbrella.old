@@ -1,5 +1,5 @@
 defmodule Pczone.OrderBuilt do
-  use Ecto.Schema
+  use Pczone.Schema
   import Ecto.Changeset
 
   @required [:order_id, :built_id, :quantity, :price, :amount]

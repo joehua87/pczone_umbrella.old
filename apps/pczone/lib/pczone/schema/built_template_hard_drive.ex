@@ -1,14 +1,13 @@
 defmodule Pczone.BuiltTemplateHardDrive do
-  use Ecto.Schema
+  use Pczone.Schema
   import Ecto.Changeset
 
   @derive Jason.Encoder
 
-  @required [:key, :built_template_id, :hard_drive_id, :hard_drive_product_id]
+  @required [:built_template_id, :hard_drive_id, :hard_drive_product_id]
   @optional [:quantity, :label]
 
   schema "built_template_hard_drive" do
-    field :key, :string
     belongs_to :built_template, Pczone.BuiltTemplate
     belongs_to :hard_drive, Pczone.HardDrive
     belongs_to :hard_drive_product, Pczone.Product

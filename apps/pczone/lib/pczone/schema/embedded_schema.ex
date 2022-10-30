@@ -1,5 +1,5 @@
 defmodule Pczone.AttributeGroup do
-  use Ecto.Schema
+  use Pczone.Schema
   import Ecto.Changeset
 
   @primary_key false
@@ -11,7 +11,7 @@ defmodule Pczone.AttributeGroup do
   end
 
   defmodule Attribute do
-    use Ecto.Schema
+    use Pczone.Schema
 
     @primary_key false
     @derive Jason.Encoder
@@ -32,7 +32,7 @@ defmodule Pczone.AttributeGroup do
 end
 
 defmodule Pczone.EmbeddedMedium do
-  use Ecto.Schema
+  use Pczone.Schema
   import Ecto.Changeset
 
   @primary_key false
@@ -52,7 +52,7 @@ defmodule Pczone.EmbeddedMedium do
 end
 
 defmodule Pczone.Seo do
-  use Ecto.Schema
+  use Pczone.Schema
   import Ecto.Changeset
 
   @primary_key false
@@ -73,7 +73,7 @@ defmodule Pczone.Seo do
 end
 
 defmodule Pczone.ProcessorSlot do
-  use Ecto.Schema
+  use Pczone.Schema
   import Ecto.Changeset
 
   @primary_key false
@@ -91,7 +91,7 @@ defmodule Pczone.ProcessorSlot do
 end
 
 defmodule Pczone.MemorySlot do
-  use Ecto.Schema
+  use Pczone.Schema
   import Ecto.Changeset
 
   @primary_key false
@@ -111,7 +111,7 @@ defmodule Pczone.MemorySlot do
 end
 
 defmodule Pczone.SataSlot do
-  use Ecto.Schema
+  use Pczone.Schema
   import Ecto.Changeset
 
   @primary_key false
@@ -130,7 +130,7 @@ defmodule Pczone.SataSlot do
 end
 
 defmodule Pczone.M2Slot do
-  use Ecto.Schema
+  use Pczone.Schema
   import Ecto.Changeset
 
   @primary_key false
@@ -150,7 +150,7 @@ defmodule Pczone.M2Slot do
 end
 
 defmodule Pczone.PciSlot do
-  use Ecto.Schema
+  use Pczone.Schema
   import Ecto.Changeset
 
   @primary_key false
@@ -169,7 +169,7 @@ defmodule Pczone.PciSlot do
 end
 
 defmodule Pczone.HardDriveSlot do
-  use Ecto.Schema
+  use Pczone.Schema
   import Ecto.Changeset
 
   @primary_key false
@@ -186,7 +186,7 @@ defmodule Pczone.HardDriveSlot do
 end
 
 defmodule Pczone.Address do
-  use Ecto.Schema
+  use Pczone.Schema
   import Ecto.Changeset
 
   @primary_key false
@@ -229,7 +229,7 @@ defmodule Pczone.Address do
 end
 
 defmodule Pczone.TaxInfo do
-  use Ecto.Schema
+  use Pczone.Schema
   import Ecto.Changeset
 
   @primary_key false

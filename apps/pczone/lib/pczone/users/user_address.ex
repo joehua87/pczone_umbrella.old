@@ -1,5 +1,5 @@
 defmodule Pczone.UserAddress do
-  use Ecto.Schema
+  use Pczone.Schema
   import Ecto.Changeset
 
   @required [:user_id]

@@ -1,5 +1,5 @@
 defmodule Pczone.BuiltExtensionDevice do
-  use Ecto.Schema
+  use Pczone.Schema
   import Ecto.Changeset
 
   @required [

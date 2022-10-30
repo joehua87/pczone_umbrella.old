@@ -1,5 +1,5 @@
 defmodule Pczone.ProcessorScore do
-  use Ecto.Schema
+  use Pczone.Schema
   import Ecto.Changeset
 
   @required [:processor_id, :test_name, :single, :multi]

@@ -1,5 +1,5 @@
 defmodule Pczone.Store do
-  use Ecto.Schema
+  use Pczone.Schema
   import Ecto.Changeset
 
   @required [:code, :name, :platform]

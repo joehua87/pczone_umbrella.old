@@ -1,5 +1,5 @@
 defmodule Pczone.OrderItem do
-  use Ecto.Schema
+  use Pczone.Schema
   import Ecto.Changeset
 
   @timestamps_opts [type: :utc_datetime]

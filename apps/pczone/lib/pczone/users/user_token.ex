@@ -1,5 +1,5 @@
 defmodule Pczone.Users.UserToken do
-  use Ecto.Schema
+  use Pczone.Schema
   import Ecto.Query
 
   @hash_algorithm :sha256

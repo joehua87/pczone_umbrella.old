@@ -346,15 +346,6 @@ defmodule Pczone.BuiltTemplates do
                 processor_quantity = Map.get(params, "processor_quantity", 1)
 
                 %{
-                  key:
-                    [
-                      built_template_id,
-                      processor_product_id,
-                      processor_quantity,
-                      gpu_product_id || 0,
-                      gpu_quantity
-                    ]
-                    |> Enum.join(":"),
                   built_template_id: built_template_id,
                   processor_id: processor_id,
                   processor_product_id: processor_product_id,
@@ -369,11 +360,7 @@ defmodule Pczone.BuiltTemplates do
             )
           end)
 
-        with {inserted, _} <-
-               Repo.insert_all(Pczone.BuiltTemplateProcessor, entities,
-                 on_conflict: :replace_all,
-                 conflict_target: [:key]
-               ) do
+        with {inserted, _} <- Repo.insert_all(Pczone.BuiltTemplateProcessor, entities) do
           {:ok, inserted}
         end
       end
@@ -397,7 +384,6 @@ defmodule Pczone.BuiltTemplates do
               quantity = Map.get(params, "quantity", 1)
 
               %{
-                key: [built_template_id, memory_product_id, quantity] |> Enum.join(":"),
                 built_template_id: built_template_id,
                 memory_id: memory_id,
                 memory_product_id: memory_product_id,
@@ -408,11 +394,7 @@ defmodule Pczone.BuiltTemplates do
           )
         end)
 
-      with {inserted, _} <-
-             Repo.insert_all(Pczone.BuiltTemplateMemory, entities,
-               on_conflict: :replace_all,
-               conflict_target: [:key]
-             ) do
+      with {inserted, _} <- Repo.insert_all(Pczone.BuiltTemplateMemory, entities) do
         {:ok, inserted}
       end
     end)
@@ -437,7 +419,6 @@ defmodule Pczone.BuiltTemplates do
                 quantity = Map.get(params, "quantity", 1)
 
                 %{
-                  key: [built_template_id, hard_drive_product_id, quantity] |> Enum.join(":"),
                   built_template_id: built_template_id,
                   hard_drive_id: hard_drive_id,
                   hard_drive_product_id: hard_drive_product_id,
@@ -448,11 +429,7 @@ defmodule Pczone.BuiltTemplates do
             )
           end)
 
-        with {inserted, _} <-
-               Repo.insert_all(Pczone.BuiltTemplateHardDrive, entities,
-                 on_conflict: :replace_all,
-                 conflict_target: [:key]
-               ) do
+        with {inserted, _} <- Repo.insert_all(Pczone.BuiltTemplateHardDrive, entities) do
           {:ok, inserted}
         end
       end
@@ -471,7 +448,6 @@ defmodule Pczone.BuiltTemplates do
     memories_and_hard_drives =
       [%Pczone.BuiltTemplateMemory{quantity: 0, memory_product: nil} | memories]
       |> Enum.flat_map(fn %Pczone.BuiltTemplateMemory{
-                            key: memory_key,
                             memory_id: memory_id,
                             memory_product: memory_product,
                             quantity: memory_quantity,
@@ -479,7 +455,6 @@ defmodule Pczone.BuiltTemplates do
                           } ->
         [%Pczone.BuiltTemplateHardDrive{quantity: 0, hard_drive_product: nil} | hard_drives]
         |> Enum.map(fn %Pczone.BuiltTemplateHardDrive{
-                         key: hard_drive_key,
                          hard_drive_id: hard_drive_id,
                          hard_drive_product: hard_drive_product,
                          quantity: hard_drive_quantity,
@@ -516,8 +491,6 @@ defmodule Pczone.BuiltTemplates do
             )
 
           %{
-            memory_key: memory_key,
-            hard_drive_key: hard_drive_key,
             option_value_2:
               Enum.join(
                 [memory_label || "Ko RAM", hard_drive_label || "Ko SSD"],
@@ -531,7 +504,6 @@ defmodule Pczone.BuiltTemplates do
 
     processors
     |> Enum.flat_map(fn %Pczone.BuiltTemplateProcessor{
-                          key: processor_key,
                           processor_id: processor_id,
                           processor_product: processor_product,
                           processor_quantity: processor_quantity,
@@ -560,8 +532,6 @@ defmodule Pczone.BuiltTemplates do
       Enum.map(
         memories_and_hard_drives,
         fn memory_and_hard_drive = %{
-             memory_key: memory_key,
-             hard_drive_key: hard_drive_key,
              option_value_2: option_value_2
            } ->
           name = Enum.join([option_value_1, option_value_2], ",")
@@ -570,7 +540,6 @@ defmodule Pczone.BuiltTemplates do
           %{
             slug: slug,
             name: name,
-            key: Enum.join([processor_key, memory_key, hard_drive_key], "_"),
             built_template_id: built_template_id,
             barebone_id: barebone_id,
             barebone_product_id: barebone_product.id,

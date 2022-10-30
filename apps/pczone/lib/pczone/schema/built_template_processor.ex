@@ -1,10 +1,10 @@
 defmodule Pczone.BuiltTemplateProcessor do
-  use Ecto.Schema
+  use Pczone.Schema
   import Ecto.Changeset
 
   @derive Jason.Encoder
 
-  @required [:key, :built_template_id, :processor_id, :processor_product_id]
+  @required [:built_template_id, :processor_id, :processor_product_id]
   @optional [
     :processor_quantity,
     :processor_label,
@@ -15,7 +15,6 @@ defmodule Pczone.BuiltTemplateProcessor do
   ]
 
   schema "built_template_processor" do
-    field :key, :string
     belongs_to :built_template, Pczone.BuiltTemplate
     belongs_to :processor, Pczone.Processor
     belongs_to :processor_product, Pczone.Product
