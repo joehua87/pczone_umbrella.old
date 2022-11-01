@@ -7,6 +7,25 @@ defmodule PczoneWeb.Schema.Orders do
     field :phone, non_null(:string)
   end
 
+  enum :order_state do
+    value :cart
+    value :submitted
+    value :canceled
+    value :approved
+    value :processing
+    value :shipping
+    value :completed
+  end
+
+  enum :order_action do
+    value :submit
+    value :approve
+    value :cancel
+    value :process
+    value :ship
+    value :complete
+  end
+
   object :order_item do
     field :id, non_null(:id)
     field :order_id, non_null(:id)
@@ -37,7 +56,7 @@ defmodule PczoneWeb.Schema.Orders do
     field :customer, :customer, resolve: Helpers.dataloader(PczoneWeb.Dataloader)
     field :shipping_address, :address
     field :tax_info, :tax_info
-    field :state, non_null(:string)
+    field :state, non_null(:order_state)
     field :total, non_null(:integer)
 
     field :items, non_null(list_of(non_null(:order_item))),
@@ -191,11 +210,12 @@ defmodule PczoneWeb.Schema.Orders do
       end)
     end
 
-    field :submit_order, non_null(:order) do
+    field :transit_order, non_null(:order) do
+      arg :action, non_null(:order_action)
       arg :data, non_null(:submit_order_input)
 
-      resolve(fn %{data: data}, %{context: context} ->
-        Pczone.Orders.submit(data, context)
+      resolve(fn %{action: action, data: data}, %{context: context} ->
+        Pczone.Orders.Transition.transit(action, data, context)
       end)
     end
   end

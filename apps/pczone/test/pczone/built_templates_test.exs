@@ -78,7 +78,6 @@ defmodule Pczone.BuiltTemplatesTest do
              } = Enum.find(builts, &(&1.slug == "i5-6500t-ko-ram-ko-ssd"))
     end
 
-    @tag :wip
     test "generate builts" do
       [built_template | _] = built_templates_fixture()
       assert {:ok, _} = BuiltTemplates.generate_builts(built_template)

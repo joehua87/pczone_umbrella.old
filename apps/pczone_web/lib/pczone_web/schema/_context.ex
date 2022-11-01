@@ -10,8 +10,11 @@ defmodule PczoneWeb.Context do
   end
 
   defp build_context(conn) do
+    user = fetch_current_user(conn)
+
     %{
-      user: fetch_current_user(conn),
+      user: user,
+      user_id: Map.get(user, :id),
       order_token: fetch_order_token(conn)
     }
   end

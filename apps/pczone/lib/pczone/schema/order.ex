@@ -5,6 +5,15 @@ defmodule Pczone.Order do
   @timestamps_opts [type: :utc_datetime]
   @required [:code, :token]
   @optional [:user_id, :customer_id, :state, :total]
+  @order_states [
+    :cart,
+    :submitted,
+    :canceled,
+    :approved,
+    :processing,
+    :shipping,
+    :completed
+  ]
 
   schema "order" do
     field :code, :string
@@ -12,7 +21,7 @@ defmodule Pczone.Order do
     belongs_to :customer, Pczone.Customer
     embeds_one :shipping_address, Pczone.Address
     embeds_one :tax_info, Pczone.TaxInfo
-    field :state, Ecto.Enum, values: [:cart, :submitted, :approved, :cancel], default: :cart
+    field :state, Ecto.Enum, values: @order_states, default: :cart
     field :total, :integer, default: 0
     field :token, :string
     has_many :items, Pczone.OrderItem
