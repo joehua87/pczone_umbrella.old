@@ -25,7 +25,7 @@ db_config =
 config :pczone, Pczone.Repo, db_config
 
 config :pczone, Pczone.MongoRepo,
-  url: "mongodb://localhost:27017/pczone",
+  url: "mongodb://localhost:27017/xeon",
   timeout: 60_000,
   idle_interval: 10_000,
   queue_target: 5_000

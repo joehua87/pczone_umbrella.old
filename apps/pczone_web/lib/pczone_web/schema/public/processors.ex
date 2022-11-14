@@ -8,7 +8,7 @@ defmodule PczoneWeb.Schema.Processors do
     field :code, non_null(:string)
     field :slug, non_null(:string)
     field :name, non_null(:string)
-    field :sub, non_null(:string)
+    field :sub, :string
     field :collection_name, non_null(:string)
     field :launch_date, non_null(:string)
     field :status, non_null(:string)
@@ -22,7 +22,7 @@ defmodule PczoneWeb.Schema.Processors do
     field :tdp, :decimal
     field :tdp_up, :decimal
     field :tdp_down, :decimal
-    field :cache_size, :decimal
+    field :l3_cache, :decimal
     field :cores, :integer
     field :threads, :integer
     field :processor_graphics, :string

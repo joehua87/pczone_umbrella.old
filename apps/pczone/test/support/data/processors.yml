@@ -1,5 +1,5 @@
 ---
-- cache_size: '3'
+- l3_cache: '3'
   code: i3-6100T
   code_name: Skylake
   collection_name: 6th Generation Intel® Core™ i3 Processors
@@ -14,7 +14,7 @@
   url: https://ark.intel.com/content/www/us/en/ark/products/90734/intel-core-i36100t-processor-3m-cache-3-20-ghz.html
   vertical_segment: Desktop
 
-- cache_size: '4'
+- l3_cache: '4'
   code: i3-6300
   code_name: Skylake
   collection_name: 6th Generation Intel® Core™ i3 Processors
@@ -29,7 +29,7 @@
   url: https://ark.intel.com/content/www/us/en/ark/products/90731/intel-core-i36300-processor-4m-cache-3-80-ghz.html
   vertical_segment: Desktop
 
-- cache_size: '4'
+- l3_cache: '4'
   code: i3-6300T
   code_name: Skylake
   collection_name: 6th Generation Intel® Core™ i3 Processors
@@ -44,7 +44,7 @@
   url: https://ark.intel.com/content/www/us/en/ark/products/90728/intel-core-i36300t-processor-4m-cache-3-30-ghz.html
   vertical_segment: Desktop
 
-- cache_size: '4'
+- l3_cache: '4'
   code: i3-6320
   code_name: Skylake
   collection_name: 6th Generation Intel® Core™ i3 Processors
@@ -59,7 +59,7 @@
   url: https://ark.intel.com/content/www/us/en/ark/products/90733/intel-core-i36320-processor-4m-cache-3-90-ghz.html
   vertical_segment: Desktop
 
-- cache_size: '6'
+- l3_cache: '6'
   code: i5-6400T
   code_name: Skylake
   collection_name: 6th Generation Intel® Core™ i5 Processors
@@ -74,7 +74,7 @@
   url: https://ark.intel.com/content/www/us/en/ark/products/88187/intel-core-i56400t-processor-6m-cache-up-to-2-80-ghz.html
   vertical_segment: Desktop
 
-- cache_size: '6'
+- l3_cache: '6'
   code: i5-6500
   code_name: Skylake
   collection_name: 6th Generation Intel® Core™ i5 Processors
@@ -89,7 +89,7 @@
   url: https://ark.intel.com/content/www/us/en/ark/products/88184/intel-core-i56500-processor-6m-cache-up-to-3-60-ghz.html
   vertical_segment: Desktop
 
-- cache_size: '6'
+- l3_cache: '6'
   code: i5-6500T
   code_name: Skylake
   collection_name: 6th Generation Intel® Core™ i5 Processors
@@ -104,7 +104,7 @@
   url: https://ark.intel.com/content/www/us/en/ark/products/88183/intel-core-i56500t-processor-6m-cache-up-to-3-10-ghz.html
   vertical_segment: Desktop
 
-- cache_size: '6'
+- l3_cache: '6'
   code: i5-6600
   code_name: Skylake
   collection_name: 6th Generation Intel® Core™ i5 Processors
@@ -119,7 +119,7 @@
   url: https://ark.intel.com/content/www/us/en/ark/products/88188/intel-core-i56600-processor-6m-cache-up-to-3-90-ghz.html
   vertical_segment: Desktop
 
-- cache_size: '6'
+- l3_cache: '6'
   code: i5-6600T
   code_name: Skylake
   collection_name: 6th Generation Intel® Core™ i5 Processors
@@ -134,7 +134,7 @@
   url: https://ark.intel.com/content/www/us/en/ark/products/88189/intel-core-i56600t-processor-6m-cache-up-to-3-50-ghz.html
   vertical_segment: Desktop
 
-- cache_size: '6'
+- l3_cache: '6'
   code: i5-6600K
   code_name: Skylake
   collection_name: 6th Generation Intel® Core™ i5 Processors
@@ -149,7 +149,7 @@
   url: https://ark.intel.com/content/www/us/en/ark/products/88191/intel-core-i56600k-processor-6m-cache-up-to-3-90-ghz.html
   vertical_segment: Desktop
 
-- cache_size: '8'
+- l3_cache: '8'
   code: i7-6700
   code_name: Skylake
   collection_name: 6th Generation Intel® Core™ i7 Processors
@@ -164,7 +164,7 @@
   url: https://ark.intel.com/content/www/us/en/ark/products/88196/intel-core-i76700-processor-8m-cache-up-to-4-00-ghz.html
   vertical_segment: Desktop
 
-- cache_size: '8'
+- l3_cache: '8'
   code: i7-6700T
   code_name: Skylake
   collection_name: 6th Generation Intel® Core™ i7 Processors
@@ -179,7 +179,7 @@
   url: https://ark.intel.com/content/www/us/en/ark/products/88200/intel-core-i76700t-processor-8m-cache-up-to-3-60-ghz.html
   vertical_segment: Desktop
 
-- cache_size: '8'
+- l3_cache: '8'
   code: i7-6700K
   code_name: Skylake
   collection_name: 6th Generation Intel® Core™ i7 Processors
@@ -194,7 +194,7 @@
   url: https://ark.intel.com/content/www/us/en/ark/products/88195/intel-core-i76700k-processor-8m-cache-up-to-4-20-ghz.html
   vertical_segment: Desktop
 
-- cache_size: '6'
+- l3_cache: '6'
   code: i3-9100
   code_name: Coffee Lake
   collection_name: 9th Generation Intel® Core™ i3 Processors
@@ -209,7 +209,7 @@
   url: https://ark.intel.com/content/www/vn/vi/ark/products/134870/intel-core-i39100-processor-6m-cache-up-to-4-20-ghz.html
   vertical_segment: Desktop
 
-- cache_size: '6'
+- l3_cache: '6'
   code: i3-9100F
   code_name: Coffee Lake
   collection_name: 9th Generation Intel® Core™ i3 Processors

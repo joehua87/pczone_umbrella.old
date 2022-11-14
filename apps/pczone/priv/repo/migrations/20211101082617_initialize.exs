@@ -192,7 +192,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :slug, :string, null: false
       add :code, :string, null: false
       add :name, :string, null: false
-      add :sub, :string, null: false
+      add :sub, :string
       add :code_name, :string, null: false
       add :collection_name, :string, null: false
       add :launch_date, :string, null: false
@@ -208,7 +208,9 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :tdp, :decimal
       add :tdp_up, :decimal
       add :tdp_down, :decimal
-      add :cache_size, :decimal, null: false
+      add :l1_cache, :decimal
+      add :l2_cache, :decimal
+      add :l3_cache, :decimal, null: false
       add :cores, :integer, null: false
       add :threads, :integer, null: false
       add :processor_graphics, :string

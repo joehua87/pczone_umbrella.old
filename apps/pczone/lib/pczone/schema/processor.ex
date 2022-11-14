@@ -14,7 +14,7 @@ defmodule Pczone.Processor do
     :launch_date,
     :status,
     :vertical_segment,
-    :cache_size,
+    :l3_cache,
     :cores,
     :threads,
     :url,
@@ -32,6 +32,8 @@ defmodule Pczone.Processor do
     :tdp,
     :tdp_up,
     :tdp_down,
+    :l1_cache,
+    :l2_cache,
     :processor_graphics,
     :gpu_id,
     :memory_types,
@@ -59,7 +61,9 @@ defmodule Pczone.Processor do
     field :tdp, :decimal
     field :tdp_up, :decimal
     field :tdp_down, :decimal
-    field :cache_size, :decimal
+    field :l1_cache, :decimal
+    field :l2_cache, :decimal
+    field :l3_cache, :decimal
     field :cores, :integer
     field :threads, :integer
     field :processor_graphics, :string
