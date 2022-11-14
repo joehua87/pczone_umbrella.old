@@ -14,7 +14,7 @@ defmodule PczoneWeb.Context do
 
     %{
       user: user,
-      user_id: Map.get(user, :id),
+      user_id: user && Map.get(user, :id),
       order_token: fetch_order_token(conn)
     }
   end
