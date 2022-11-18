@@ -59,6 +59,7 @@ defmodule Pczone do
     psus = read_from_files!(files, ~r/^psus.*?\.(ya?ml|xlsx)/)
     coolers = read_from_files!(files, ~r/^coolers.*?\.(ya?ml|xlsx)/)
     products = read_from_files!(files, ~r/^products.*?\.(ya?ml|xlsx)/)
+    built_templates = read_from_files!(files, ~r/^built_templates.*?\.(ya?ml)/)
 
     with {:ok, _} <- Pczone.Stores.upsert(stores),
          {:ok, _} <- Pczone.Brands.upsert(brands),
@@ -74,7 +75,8 @@ defmodule Pczone do
          {:ok, _} <- Pczone.Barebones.upsert(barebones),
          {:ok, _} <- Pczone.Chipsets.upsert_chipset_processors(chipsets),
          {:ok, _} <- Pczone.Motherboards.upsert_motherboard_processors(motherboards),
-         {:ok, _} <- Pczone.Products.upsert(products) do
+         {:ok, _} <- Pczone.Products.upsert(products),
+         {:ok, _} <- Pczone.BuiltTemplates.upsert(built_templates) do
       true
     end
   end
