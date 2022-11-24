@@ -5,6 +5,7 @@ defmodule PczoneWeb.Schema.Builts do
   alias PczoneWeb.Dataloader
 
   object :built_psu do
+    field :id, non_null(:id)
     field :built_id, non_null(:id)
     field :psu_id, non_null(:id)
     field :product_id, non_null(:id)
@@ -15,6 +16,7 @@ defmodule PczoneWeb.Schema.Builts do
   end
 
   object :built_extension_device do
+    field :id, non_null(:id)
     field :built_id, non_null(:id)
     field :built, non_null(:built), resolve: dataloader(Dataloader)
     field :extension_device_id, non_null(:id)
@@ -26,6 +28,7 @@ defmodule PczoneWeb.Schema.Builts do
   end
 
   object :built_processor do
+    field :id, non_null(:id)
     field :built_id, non_null(:id)
     field :extension_device_id, :id
     field :processor_id, non_null(:id)
@@ -39,6 +42,7 @@ defmodule PczoneWeb.Schema.Builts do
   end
 
   object :built_memory do
+    field :id, non_null(:id)
     field :built_id, non_null(:id)
     field :extension_device_id, :id
     field :memory_id, non_null(:id)
@@ -52,6 +56,7 @@ defmodule PczoneWeb.Schema.Builts do
   end
 
   object :built_hard_drive do
+    field :id, non_null(:id)
     field :built_id, non_null(:id)
     field :extension_device_id, :id
     field :hard_drive_id, non_null(:id)
@@ -65,6 +70,7 @@ defmodule PczoneWeb.Schema.Builts do
   end
 
   object :built_gpu do
+    field :id, non_null(:id)
     field :built_id, non_null(:id)
     field :gpu_id, non_null(:id)
     field :product_id, non_null(:id)
@@ -76,6 +82,7 @@ defmodule PczoneWeb.Schema.Builts do
   end
 
   object :built_store do
+    field :id, non_null(:id)
     field :built_id, non_null(:id)
     field :built, non_null(:built), resolve: dataloader(Dataloader)
     field :store_id, non_null(:id)
@@ -85,6 +92,7 @@ defmodule PczoneWeb.Schema.Builts do
   end
 
   object :built_product do
+    field :id, non_null(:id)
     field :built_id, non_null(:id)
     field :built, non_null(:built), resolve: dataloader(Dataloader)
     field :product_id, non_null(:id)
