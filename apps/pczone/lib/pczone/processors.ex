@@ -376,6 +376,6 @@ defmodule Pczone.Processors do
   end
 
   defp processor_filter() do
-    %{"attributes.0" => %{"$exists" => true}}
+    %{"valid" => true}
   end
 end
