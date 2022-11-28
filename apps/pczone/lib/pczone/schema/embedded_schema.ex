@@ -250,3 +250,46 @@ defmodule Pczone.TaxInfo do
     |> validate_required(@required_fields)
   end
 end
+
+defmodule Pczone.RichTextItem do
+  use Pczone.Schema
+  import Ecto.Changeset
+
+  @primary_key {:id, :string, []}
+  @required_fields [:id, :type, :value]
+  @optional_fields [:theme]
+
+  @types [:markdown, :info_item, :image_item, :label_value_list, :gallery, :product_list]
+
+  embedded_schema do
+    field :type, Ecto.Enum, values: @types
+    field :value, :map
+    field :theme, :map, default: %{}
+  end
+
+  def changeset(entity, attrs) do
+    entity
+    |> cast(attrs, @required_fields ++ @optional_fields)
+    |> validate_required(@required_fields)
+  end
+end
+
+defmodule Pczone.RichText do
+  use Pczone.Schema
+  import Ecto.Changeset
+
+  @primary_key false
+  @required_fields []
+  @optional_fields []
+
+  embedded_schema do
+    embeds_many :items, Pczone.RichTextItem, on_replace: :delete
+  end
+
+  def changeset(entity, attrs) do
+    entity
+    |> cast(attrs, @required_fields ++ @optional_fields)
+    |> validate_required(@required_fields)
+    |> cast_embed(:items)
+  end
+end

@@ -13,6 +13,7 @@ defmodule Pczone.Post do
     field :description, :string
     field :md, :string
     field :state, :string
+    embeds_one :rich_text, Pczone.RichText, on_replace: :update
     embeds_one :seo, Pczone.Seo, on_replace: :update
     embeds_many :media, Pczone.EmbeddedMedium, on_replace: :delete
   end
@@ -21,8 +22,9 @@ defmodule Pczone.Post do
     entity
     |> cast(params, @required ++ @optional)
     |> validate_required(@required)
-    |> cast_embed(:seo)
+    |> cast_embed(:rich_text)
     |> cast_embed(:media)
+    |> cast_embed(:seo)
   end
 
   def new_changeset(params) do

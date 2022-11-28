@@ -48,6 +48,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :featured, :boolean, null: false, default: false
       add :position, :integer, default: 0
       add :md, :text
+      add :rich_text, :map, default: "[]"
       add :media, :map
       add :seo, :map
       add :state, :string

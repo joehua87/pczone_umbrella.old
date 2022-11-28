@@ -1,6 +1,37 @@
 defmodule PczoneWeb.Schema.Posts do
   use Absinthe.Schema.Notation
 
+  enum :rich_text_item_type do
+    value :markdown
+    value :info_item
+    value :image_item
+    value :label_value_list
+    value :gallery
+    value :product_list
+  end
+
+  object :rich_text_item do
+    field :id, non_null(:id)
+    field :type, non_null(:rich_text_item_type)
+    field :value, non_null(:json)
+    field :theme, non_null(:json)
+  end
+
+  object :rich_text do
+    field :items, non_null(list_of(non_null(:rich_text_item)))
+  end
+
+  input_object :rich_text_item_input do
+    field :id, non_null(:id)
+    field :type, non_null(:rich_text_item_type)
+    field :value, non_null(:json)
+    field :theme, :json
+  end
+
+  input_object :rich_text_input do
+    field :items, non_null(list_of(non_null(:rich_text_item_input)))
+  end
+
   object :post do
     field :id, non_null(:id)
     field :slug, :string
@@ -8,6 +39,7 @@ defmodule PczoneWeb.Schema.Posts do
     field :type, :string
     field :description, :string
     field :md, :string
+    field :rich_text, :rich_text
     field :state, :string
     field :seo, :seo
     field :media, non_null(list_of(non_null(:embedded_medium)))
@@ -63,6 +95,7 @@ defmodule PczoneWeb.Schema.Posts do
     field :title, non_null(:string)
     field :description, :string
     field :md, :string
+    field :rich_text, :rich_text_input
     field :media, list_of(non_null(:embedded_medium_input))
     field :seo, :seo_input
     field :state, :string
@@ -73,6 +106,7 @@ defmodule PczoneWeb.Schema.Posts do
     field :title, :string
     field :description, :string
     field :md, :string
+    field :rich_text, :rich_text_input
     field :media, list_of(non_null(:embedded_medium_input))
     field :seo, :seo_input
     field :state, :string
