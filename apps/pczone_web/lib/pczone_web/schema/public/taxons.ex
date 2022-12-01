@@ -1,10 +1,13 @@
 defmodule PczoneWeb.Schema.Taxons do
   use Absinthe.Schema.Notation
+  alias Absinthe.Resolution.Helpers
 
   object :taxon do
     field :id, non_null(:id)
     field :name, non_null(:string)
     field :path, non_null(:string)
+    field :taxonomy_id, non_null(:id)
+    field :taxonomy, non_null(:taxonomy), resolve: Helpers.dataloader(PczoneWeb.Dataloader)
     field :description, :string
   end
 

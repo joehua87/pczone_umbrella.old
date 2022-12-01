@@ -5,6 +5,8 @@ defmodule PczoneWeb.Schema.Posts do
     value :markdown
     value :info_item
     value :image_item
+    value :info_item_list
+    value :image_item_list
     value :label_value_list
     value :gallery
     value :product_list
