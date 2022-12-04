@@ -74,7 +74,7 @@ defmodule Pczone.BuiltTemplates do
     Ecto.Multi.new()
     |> Ecto.Multi.insert_all(:posts, Pczone.Post, posts, returning: true)
     |> Ecto.Multi.run(:update_ids, fn _, %{posts: {_, posts}} ->
-      codes = Enum.map(posts, & &1.ref_code) |> IO.inspect()
+      codes = Enum.map(posts, & &1.ref_code)
 
       Repo.query(
         """
@@ -86,6 +86,67 @@ defmodule Pczone.BuiltTemplates do
       )
     end)
     |> Repo.transaction()
+  end
+
+  def sync_media(codes \\ []) do
+    source_media_dir = "/Users/achilles/pczone/media-source"
+
+    code_patterns =
+      case codes do
+        ["" <> _, _] -> "{#{Enum.join(codes, ",")}}"
+        _ -> "*"
+      end
+
+    files =
+      Path.join(source_media_dir, "built-templates/#{code_patterns}")
+      |> Path.wildcard()
+      |> Enum.map(fn path ->
+        [code | _] = String.split(path, "/") |> Enum.reverse()
+        media_files = Path.join(path, "*.{png,jpe?g}") |> Path.wildcard()
+        uploads = Enum.map(media_files, &%{filename: Path.basename(&1), path: &1})
+        media = Enum.map(uploads, &%{id: &1.filename})
+
+        %{
+          code: String.replace(code, "--", "/"),
+          media: media,
+          uploads: uploads
+        }
+      end)
+
+    media_entities = Enum.flat_map(files, & &1.uploads)
+
+    with {:ok, _media} <- Pczone.Media.sync_media(media_entities) do
+      tmp_table_name = "table_#{DateTime.utc_now() |> DateTime.to_unix()}"
+
+      Ecto.Multi.new()
+      |> Ecto.Multi.run(:create_tmp_table, fn _, _ ->
+        """
+        CREATE TEMPORARY TABLE "#{tmp_table_name}" (
+          code VARCHAR NOT NULL,
+          media JSONB NOT NULL,
+          uploads JSONB NOT NULL
+        );
+        """
+        |> Repo.query()
+      end)
+      |> Ecto.Multi.insert_all(:insert_tmp_table_data, tmp_table_name, files)
+      |> Ecto.Multi.run(:update_built_template_media, fn _, _ ->
+        built_template_codes = Enum.map(files, & &1.code)
+
+        Repo.query(
+          """
+          UPDATE built_template
+          SET media = (
+            SELECT media FROM #{tmp_table_name} tmp
+            WHERE tmp.code = built_template.code
+          )
+          WHERE built_template.code = ANY($1)
+          """,
+          [built_template_codes]
+        )
+      end)
+      |> Repo.transaction()
+    end
   end
 
   def upsert(list) do

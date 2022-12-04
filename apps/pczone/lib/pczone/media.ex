@@ -26,11 +26,8 @@ defmodule Pczone.Media do
   def upload(%{path: uploaded_path, filename: filename} = upload) do
     path = get_image_path(filename)
 
-    with {:ok, params} <- make_image_params(upload),
-         %Ecto.Changeset{valid?: true} = changeset <-
-           params
-           |> Map.merge(%{id: filename})
-           |> Medium.new(),
+    with %{} = params <- make_image_params(upload),
+         %Ecto.Changeset{valid?: true} = changeset <- Medium.new(params),
          {:ok, %Medium{id: id, ext: ext}} = result <- Repo.insert(changeset),
          :ok <- File.mkdir_p(Path.dirname(path)),
          {:ok, _} <- File.copy(uploaded_path, path) do
@@ -96,8 +93,11 @@ defmodule Pczone.Media do
            args,
            env: [{"DEWCMS_ASSETS_DIR", media_dir()}]
          ) do
-      {_, 0} -> :ok
-      _ -> {:error, "Cannot transform"}
+      {_, 0} ->
+        Repo.get(Medium, id) |> Ecto.Changeset.change(%{status: :uploaded}) |> Repo.update()
+
+      _ ->
+        {:error, "Cannot transform"}
     end
   end
 
@@ -120,6 +120,34 @@ defmodule Pczone.Media do
     {:ok, images}
   end
 
+  @doc """
+  Ensure all media files is uploaded to database
+  """
+  def sync_media(uploads) do
+    entities = Enum.map(uploads, &make_image_params/1)
+    map = Enum.map(uploads, &{&1.filename, &1.path}) |> Enum.into(%{})
+
+    ensure_image_path!()
+
+    with {:ok, {_, media}} <-
+           Repo.insert_all_2(Medium, entities, on_conflict: :nothing, returning: true) do
+      Task.async_stream(
+        media,
+        fn %{id: id} ->
+          source = map[id]
+          dest = get_image_path(id)
+          File.copy!(source, dest)
+          transform(id)
+        end,
+        max_concurrency: 8,
+        timeout: 30_000
+      )
+      |> Enum.into([])
+
+      {:ok, media}
+    end
+  end
+
   def upload_dir(dir) do
     params =
       File.ls!(dir)
@@ -136,7 +164,7 @@ defmodule Pczone.Media do
   end
 
   def delete(id) when is_bitstring(id) do
-    case Repo.one(from Medium, where: [id: ^id]) do
+    case Repo.one(from(Medium, where: [id: ^id])) do
       nil ->
         {:error, :not_found}
 
@@ -159,19 +187,27 @@ defmodule Pczone.Media do
   end
 
   defp make_image_params(%{filename: filename, path: path}) do
+    now = DateTime.utc_now()
+
     with {:ok, size} <- get_size(path) do
-      {:ok,
-       %{
-         name: filename,
-         ext: Path.extname(filename),
-         size: size,
-         status: :in_process
-       }}
+      %{
+        id: filename,
+        name: filename,
+        ext: Path.extname(filename),
+        size: size,
+        status: :in_process,
+        inserted_at: now,
+        updated_at: now
+      }
     end
   end
 
   def get_image_path(id) do
     Path.join([media_dir(), "default/origin", id])
+  end
+
+  def ensure_image_path!() do
+    Path.join([media_dir(), "default/origin"]) |> File.mkdir_p!()
   end
 
   def parse_filter(filter \\ %{}) do
