@@ -314,4 +314,34 @@ defmodule Pczone.Products do
   end
 
   def parse_taxons_filter(acc, _), do: acc
+
+  def create_posts() do
+    products = Repo.all(from bt in Product, where: is_nil(bt.post_id))
+
+    posts =
+      Enum.map(products, fn %{title: title, code: ref_code} ->
+        %{
+          title: title,
+          slug: Slug.slugify(title),
+          ref_type: "product",
+          ref_code: ref_code
+        }
+      end)
+
+    Ecto.Multi.new()
+    |> Ecto.Multi.insert_all(:posts, Pczone.Post, posts, returning: true)
+    |> Ecto.Multi.run(:update_ids, fn _, %{posts: {_, posts}} ->
+      codes = Enum.map(posts, & &1.ref_code) |> IO.inspect()
+
+      Repo.query(
+        """
+        UPDATE "product"
+        SET post_id = (SELECT id FROM post WHERE post.ref_code = product.code AND post.ref_type = 'product')
+        WHERE "product".code = ANY($1)
+        """,
+        [codes]
+      )
+    end)
+    |> Repo.transaction()
+  end
 end

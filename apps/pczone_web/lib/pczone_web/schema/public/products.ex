@@ -57,6 +57,7 @@ defmodule PczoneWeb.Schema.Products do
           non_null(list_of(non_null(:taxon))),
           resolve: Helpers.dataloader(PczoneWeb.Dataloader)
 
+    field :post_id, :id
     field :post, :post, resolve: Helpers.dataloader(PczoneWeb.Dataloader)
   end
 

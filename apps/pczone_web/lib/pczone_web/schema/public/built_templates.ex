@@ -66,6 +66,7 @@ defmodule PczoneWeb.Schema.BuiltTemplates do
     field :barebone_product_id, non_null(:id)
     field :barebone, non_null(:barebone), resolve: Helpers.dataloader(Dataloader)
     field :barebone_product, non_null(:product), resolve: Helpers.dataloader(Dataloader)
+    field :post_id, :id
     field :post, :post, resolve: Helpers.dataloader(Dataloader)
 
     field :processors,

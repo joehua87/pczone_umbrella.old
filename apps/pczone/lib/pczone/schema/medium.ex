@@ -44,6 +44,7 @@ defmodule Pczone.Medium do
     entity
     |> cast(params, @required_fields ++ @optional_fields)
     |> validate_required(@required_fields)
+    |> unique_constraint(:id, name: :medium_pkey)
   end
 
   def new(params) do

@@ -43,19 +43,20 @@ defmodule Pczone.Repo.Migrations.Initialize do
     create table(:post) do
       add :slug, :string
       add :title, :string, null: false
-      add :type, :string
+      add :ref_type, :string
+      add :ref_code, :string
       add :description, :text
       add :featured, :boolean, null: false, default: false
       add :position, :integer, default: 0
       add :md, :text
-      add :rich_text, :map, default: "[]"
+      add :rich_text, :map
       add :media, :map
       add :seo, :map
       add :state, :string
     end
 
     create unique_index(:post, [:slug])
-    create index(:post, [:type])
+    create unique_index(:post, [:ref_type, :ref_code])
     create index(:post, [:featured])
     create index(:post, [:position])
 

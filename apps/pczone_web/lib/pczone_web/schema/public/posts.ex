@@ -38,7 +38,8 @@ defmodule PczoneWeb.Schema.Posts do
     field :id, non_null(:id)
     field :slug, :string
     field :title, non_null(:string)
-    field :type, :string
+    field :ref_type, :string
+    field :ref_code, :string
     field :description, :string
     field :md, :string
     field :rich_text, :rich_text

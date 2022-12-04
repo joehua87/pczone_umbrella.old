@@ -58,6 +58,36 @@ defmodule Pczone.BuiltTemplates do
     end
   end
 
+  def create_posts() do
+    built_templates = Repo.all(from bt in Pczone.BuiltTemplate, where: is_nil(bt.post_id))
+
+    posts =
+      Enum.map(built_templates, fn %{name: title, code: ref_code} ->
+        %{
+          title: title,
+          slug: Slug.slugify(title),
+          ref_type: "built_template",
+          ref_code: ref_code
+        }
+      end)
+
+    Ecto.Multi.new()
+    |> Ecto.Multi.insert_all(:posts, Pczone.Post, posts, returning: true)
+    |> Ecto.Multi.run(:update_ids, fn _, %{posts: {_, posts}} ->
+      codes = Enum.map(posts, & &1.ref_code) |> IO.inspect()
+
+      Repo.query(
+        """
+        UPDATE "built_template"
+        SET post_id = (SELECT id FROM post WHERE post.ref_code = built_template.code AND post.ref_type = 'built_template')
+        WHERE "built_template".code = ANY($1)
+        """,
+        [codes]
+      )
+    end)
+    |> Repo.transaction()
+  end
+
   def upsert(list) do
     barebone_product_codes =
       Enum.map(list, fn %{"barebone_product" => barebone_product} ->

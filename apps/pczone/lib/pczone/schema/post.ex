@@ -4,12 +4,14 @@ defmodule Pczone.Post do
 
   @derive Jason.Encoder
 
-  @required [:title]
-  @optional [:type, :description, :md, :state]
+  @required [:slug, :title]
+  @optional [:ref_type, :ref_code, :description, :md, :state]
 
   schema "post" do
+    field :slug, :string
     field :title, :string
-    field :type, :string
+    field :ref_type, :string
+    field :ref_code, :string
     field :description, :string
     field :md, :string
     field :state, :string
