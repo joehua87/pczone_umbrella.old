@@ -2,7 +2,8 @@ import Config
 
 config :pczone,
   report_dir: "/Users/achilles/pczone/reports",
-  media_dir: "/Users/achilles/pczone/media"
+  media_dir: "/Users/achilles/pczone/media",
+  source_media_dir: "/Users/achilles/pczone/media-source"
 
 db_config =
   if url = System.get_env("DEV_DATABASE_URL") do

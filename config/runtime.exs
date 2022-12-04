@@ -17,7 +17,8 @@ end
 if config_env() == :prod do
   config :pczone,
     report_dir: get_env.("REPORTS_DIR", "/mnt/reports"),
-    media_dir: get_env.("MEDIA_DIR", "/mnt/media")
+    media_dir: get_env.("MEDIA_DIR", "/mnt/media"),
+    media_dir: get_env.("SOURCE_MEDIA_DIR", "/hdd-pool/pczone-data/product-images/pczone")
 
   config :pczone, Pczone.Repo,
     # ssl: true,

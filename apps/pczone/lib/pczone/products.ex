@@ -346,7 +346,7 @@ defmodule Pczone.Products do
   end
 
   def sync_media(codes \\ []) do
-    source_media_dir = "/Users/achilles/pczone/media-source"
+    source_media_dir = Application.get_env(:pczone, :source_media_dir)
 
     code_patterns =
       case codes do
