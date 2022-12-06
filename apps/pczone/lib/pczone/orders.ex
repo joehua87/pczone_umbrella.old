@@ -21,7 +21,7 @@ defmodule Pczone.Orders do
   def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
 
   def get_cart(context = %{user_id: "" <> user_id}) do
-    case Repo.one(from(Pczone.Order, where: [user_id: ^user_id, state: :cart])) do
+    case Repo.one(from Pczone.Order, where: [user_id: ^user_id, state: :cart]) do
       nil ->
         {:ok, order} = create(context)
         order
@@ -32,7 +32,7 @@ defmodule Pczone.Orders do
   end
 
   def get_cart(context = %{order_token: "" <> order_token}) do
-    case Repo.one(from(Pczone.Order, where: [token: ^order_token, state: :cart])) do
+    case Repo.one(from Pczone.Order, where: [token: ^order_token, state: :cart]) do
       nil ->
         {:ok, order} = create(context)
         order
@@ -64,12 +64,23 @@ defmodule Pczone.Orders do
     |> Repo.insert()
   end
 
+  def ensure_cart(context) do
+    case get_cart(context) do
+      %{} = order ->
+        order
+
+      _ ->
+        {:ok, order} = create()
+        order
+    end
+  end
+
   def approve() do
     # TODO: Add stock_movement
   end
 
   def add_built(%{built_id: built_id, quantity: quantity}, context) do
-    order = get_cart(context) || create()
+    order = ensure_cart(context)
     %{price: price} = Pczone.Builts.get(built_id)
 
     %{
@@ -80,14 +91,20 @@ defmodule Pczone.Orders do
       amount: price * quantity
     }
     |> Pczone.OrderBuilt.new_changeset()
-    |> Repo.insert()
+    |> Repo.insert(
+      on_conflict: [
+        set: [price: price],
+        inc: [quantity: quantity, amount: price * quantity]
+      ],
+      conflict_target: [:order_id, :built_id]
+    )
   end
 
   def update_built(%{built_id: built_id, quantity: quantity}, context) do
-    order = get_cart(context) || create()
+    order = ensure_cart(context)
 
     with %Pczone.OrderBuilt{} = order_item <-
-           Repo.one(from(Pczone.OrderBuilt, where: [order_id: ^order.id, built_id: ^built_id])) do
+           Repo.one(from Pczone.OrderBuilt, where: [order_id: ^order.id, built_id: ^built_id]) do
       %{price: price} = Builts.get(built_id)
 
       order_item
@@ -101,10 +118,10 @@ defmodule Pczone.Orders do
   end
 
   def remove_built(%{built_id: built_id}, context) do
-    order = get_cart(context) || create()
+    order = ensure_cart(context)
 
     with %Pczone.OrderBuilt{} = order_built <-
-           Repo.one(from(Pczone.OrderBuilt, where: [order_id: ^order.id, built_id: ^built_id])) do
+           Repo.one(from Pczone.OrderBuilt, where: [order_id: ^order.id, built_id: ^built_id]) do
       order_built
       |> Pczone.OrderBuilt.changeset(%{})
       |> Repo.delete()
@@ -112,7 +129,7 @@ defmodule Pczone.Orders do
   end
 
   def add_item(%{product_id: product_id, quantity: quantity}, context) do
-    order = get_cart(context) || create()
+    order = ensure_cart(context)
     %{sale_price: price} = Products.get(product_id)
 
     %{
@@ -123,11 +140,17 @@ defmodule Pczone.Orders do
       amount: price * quantity
     }
     |> Pczone.OrderItem.new_changeset()
-    |> Repo.insert()
+    |> Repo.insert(
+      on_conflict: [
+        set: [price: price],
+        inc: [quantity: quantity, amount: price * quantity]
+      ],
+      conflict_target: [:order_id, :product_id]
+    )
   end
 
   def update_item(%{product_id: product_id, quantity: quantity}, context) do
-    order = get_cart(context) || create()
+    order = ensure_cart(context)
 
     with %Pczone.OrderItem{} = order_item <-
            Repo.one(from Pczone.OrderItem, where: [order_id: ^order.id, product_id: ^product_id]) do
@@ -144,10 +167,10 @@ defmodule Pczone.Orders do
   end
 
   def remove_item(%{product_id: product_id}, context) do
-    order = get_cart(context) || create()
+    order = ensure_cart(context)
 
     with %Pczone.OrderItem{} = order_item <-
-           Repo.one(from(Pczone.OrderItem, where: [order_id: ^order.id, product_id: ^product_id])) do
+           Repo.one(from Pczone.OrderItem, where: [order_id: ^order.id, product_id: ^product_id]) do
       order_item
       |> Pczone.OrderItem.changeset(%{})
       |> Repo.delete()
