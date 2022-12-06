@@ -50,7 +50,8 @@ defmodule Pczone.Orders.OrderTransitionTest do
                  context
                )
 
-      assert %{paging: %{total_entities: 0}} = Orders.get_cart_items(context)
+      assert %{items: [], builts: []} =
+               Orders.get_cart(context) |> Repo.preload([:items, :builts])
     end
   end
 

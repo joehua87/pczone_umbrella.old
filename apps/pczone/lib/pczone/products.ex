@@ -48,7 +48,7 @@ defmodule Pczone.Products do
            Repo.get(Pczone.Product, id) do
       Ecto.Multi.new()
       |> Ecto.Multi.run(:post, fn _, _ ->
-        Pczone.Posts.create(%{title: title})
+        Pczone.Posts.create(%{slug: Slug.slugify(title), title: title})
       end)
       |> Ecto.Multi.run(:update, fn _, %{post: %{id: post_id}} ->
         entity |> Ecto.Changeset.change(%{post_id: post_id}) |> Repo.update()

@@ -20,7 +20,7 @@ defmodule Pczone.Orders do
 
   def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
 
-  def get(context = %{user_id: "" <> user_id}) do
+  def get_cart(context = %{user_id: "" <> user_id}) do
     case Repo.one(from(Pczone.Order, where: [user_id: ^user_id, state: :cart])) do
       nil ->
         {:ok, order} = create(context)
@@ -31,7 +31,7 @@ defmodule Pczone.Orders do
     end
   end
 
-  def get(context = %{order_token: "" <> order_token}) do
+  def get_cart(context = %{order_token: "" <> order_token}) do
     case Repo.one(from(Pczone.Order, where: [token: ^order_token, state: :cart])) do
       nil ->
         {:ok, order} = create(context)
@@ -42,14 +42,8 @@ defmodule Pczone.Orders do
     end
   end
 
-  def get(_context) do
-    {:ok, order} = create()
-    order
-  end
-
-  def get_cart_items(context) do
-    order = get(context)
-    Repo.paginate(from(i in Pczone.OrderItem, where: i.order_id == ^order.id))
+  def get_cart(_context) do
+    nil
   end
 
   def create(params \\ %{}, context \\ %{})
@@ -74,11 +68,12 @@ defmodule Pczone.Orders do
     # TODO: Add stock_movement
   end
 
-  def add_built(%{order_id: order_id, built_id: built_id, quantity: quantity}) do
+  def add_built(%{built_id: built_id, quantity: quantity}, context) do
+    order = get_cart(context) || create()
     %{price: price} = Pczone.Builts.get(built_id)
 
     %{
-      order_id: order_id,
+      order_id: order.id,
       built_id: built_id,
       price: price,
       quantity: quantity,
@@ -88,9 +83,11 @@ defmodule Pczone.Orders do
     |> Repo.insert()
   end
 
-  def update_built(%{order_id: order_id, built_id: built_id, quantity: quantity}) do
+  def update_built(%{built_id: built_id, quantity: quantity}, context) do
+    order = get_cart(context) || create()
+
     with %Pczone.OrderBuilt{} = order_item <-
-           Repo.one(from(Pczone.OrderBuilt, where: [order_id: ^order_id, built_id: ^built_id])) do
+           Repo.one(from(Pczone.OrderBuilt, where: [order_id: ^order.id, built_id: ^built_id])) do
       %{price: price} = Builts.get(built_id)
 
       order_item
@@ -103,9 +100,11 @@ defmodule Pczone.Orders do
     end
   end
 
-  def remove_built(%{order_id: order_id, built_id: built_id}) do
+  def remove_built(%{built_id: built_id}, context) do
+    order = get_cart(context) || create()
+
     with %Pczone.OrderBuilt{} = order_built <-
-           Repo.one(from(Pczone.OrderBuilt, where: [order_id: ^order_id, built_id: ^built_id])) do
+           Repo.one(from(Pczone.OrderBuilt, where: [order_id: ^order.id, built_id: ^built_id])) do
       order_built
       |> Pczone.OrderBuilt.changeset(%{})
       |> Repo.delete()
@@ -113,28 +112,25 @@ defmodule Pczone.Orders do
   end
 
   def add_item(%{product_id: product_id, quantity: quantity}, context) do
-    with %{id: order_id, state: :cart} <- get(context) do
-      %{sale_price: price} = Products.get(product_id)
+    order = get_cart(context) || create()
+    %{sale_price: price} = Products.get(product_id)
 
-      %{
-        order_id: order_id,
-        product_id: product_id,
-        price: price,
-        quantity: quantity,
-        amount: price * quantity
-      }
-      |> Pczone.OrderItem.new_changeset()
-      |> Repo.insert()
-    else
-      %{id: _} ->
-        {:error, "Invalid order"}
-    end
+    %{
+      order_id: order.id,
+      product_id: product_id,
+      price: price,
+      quantity: quantity,
+      amount: price * quantity
+    }
+    |> Pczone.OrderItem.new_changeset()
+    |> Repo.insert()
   end
 
   def update_item(%{product_id: product_id, quantity: quantity}, context) do
-    with %{id: order_id, state: :cart} <- get(context),
-         %Pczone.OrderItem{} = order_item <-
-           Repo.one(from(Pczone.OrderItem, where: [order_id: ^order_id, product_id: ^product_id])) do
+    order = get_cart(context) || create()
+
+    with %Pczone.OrderItem{} = order_item <-
+           Repo.one(from Pczone.OrderItem, where: [order_id: ^order.id, product_id: ^product_id]) do
       %{sale_price: price} = Products.get(product_id)
 
       order_item
@@ -144,22 +140,17 @@ defmodule Pczone.Orders do
         amount: price * quantity
       })
       |> Repo.update()
-    else
-      %{id: _} ->
-        {:error, "Invalid order"}
     end
   end
 
   def remove_item(%{product_id: product_id}, context) do
-    with %{id: order_id, state: :cart} <- get(context),
-         %Pczone.OrderItem{} = order_item <-
-           Repo.one(from(Pczone.OrderItem, where: [order_id: ^order_id, product_id: ^product_id])) do
+    order = get_cart(context) || create()
+
+    with %Pczone.OrderItem{} = order_item <-
+           Repo.one(from(Pczone.OrderItem, where: [order_id: ^order.id, product_id: ^product_id])) do
       order_item
       |> Pczone.OrderItem.changeset(%{})
       |> Repo.delete()
-    else
-      %{id: _} ->
-        {:error, "Invalid order"}
     end
   end
 

@@ -39,6 +39,7 @@ defmodule PczoneWeb.Schema.Orders do
   end
 
   object :order_built do
+    field :id, non_null(:id)
     field :order_id, non_null(:id)
     field :order, non_null(:order), resolve: Helpers.dataloader(PczoneWeb.Dataloader)
     field :built_id, non_null(:id)
@@ -85,13 +86,9 @@ defmodule PczoneWeb.Schema.Orders do
   end
 
   object :order_queries do
-    field :cart_items, non_null(:order_item_list_result) do
-      arg :filter, :order_item_filter_input
-      arg :order_by, list_of(non_null(:order_by_input))
-      arg :paging, :paging_input
-
+    field :cart, :order do
       resolve(fn _args, %{context: context} ->
-        {:ok, Pczone.Orders.get_cart_items(context)}
+        {:ok, Pczone.Orders.get_cart(context)}
       end)
     end
 
@@ -189,24 +186,24 @@ defmodule PczoneWeb.Schema.Orders do
     field :add_order_built, non_null(:order_built) do
       arg :data, non_null(:add_order_built_input)
 
-      resolve(fn %{data: data}, _info ->
-        Pczone.Orders.add_built(data)
+      resolve(fn %{data: data}, %{context: context} ->
+        Pczone.Orders.add_built(data, context)
       end)
     end
 
     field :update_order_built, non_null(:order_built) do
       arg :data, non_null(:update_order_built_input)
 
-      resolve(fn %{data: data}, _info ->
-        Pczone.Orders.update_built(data)
+      resolve(fn %{data: data}, %{context: context} ->
+        Pczone.Orders.update_built(data, context)
       end)
     end
 
     field :remove_order_built, non_null(:order_built) do
       arg :data, non_null(:remove_order_built_input)
 
-      resolve(fn %{data: data}, _info ->
-        Pczone.Orders.remove_built(data)
+      resolve(fn %{data: data}, %{context: context} ->
+        Pczone.Orders.remove_built(data, context)
       end)
     end
 

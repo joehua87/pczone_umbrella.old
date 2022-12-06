@@ -71,13 +71,16 @@ defmodule Pczone.OrdersTest do
                 amount: 5_320_000,
                 inserted_at: _,
                 updated_at: _
-              }} = Orders.add_built(%{order_id: order.id, built_id: built.id, quantity: 1})
+              }} =
+               Orders.add_built(%{built_id: built.id, quantity: 1}, %{order_token: order.token})
     end
 
     test "update order built" do
       built = get_built()
       assert {:ok, order} = Orders.create()
-      assert {:ok, _} = Orders.add_built(%{order_id: order.id, built_id: built.id, quantity: 1})
+
+      assert {:ok, _} =
+               Orders.add_built(%{built_id: built.id, quantity: 1}, %{order_token: order.token})
 
       assert {:ok,
               %{
@@ -88,19 +91,22 @@ defmodule Pczone.OrdersTest do
                 amount: 10_640_000,
                 inserted_at: _,
                 updated_at: _
-              }} = Orders.update_built(%{order_id: order.id, built_id: built.id, quantity: 2})
+              }} =
+               Orders.update_built(%{built_id: built.id, quantity: 2}, %{order_token: order.token})
     end
 
     test "remove order built" do
       built = get_built()
       assert {:ok, order} = Orders.create()
-      assert {:ok, _} = Orders.add_built(%{order_id: order.id, built_id: built.id, quantity: 1})
+
+      assert {:ok, _} =
+               Orders.add_built(%{built_id: built.id, quantity: 1}, %{order_token: order.token})
 
       assert {:ok,
               %{
                 price: 5_320_000,
                 quantity: 1
-              }} = Orders.remove_built(%{order_id: order.id, built_id: built.id})
+              }} = Orders.remove_built(%{built_id: built.id}, %{order_token: order.token})
 
       assert %{builts: []} =
                Repo.one(from o in Pczone.Order, preload: [:builts], where: o.id == ^order.id)
