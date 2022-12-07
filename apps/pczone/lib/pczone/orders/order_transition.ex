@@ -2,16 +2,14 @@ defmodule Pczone.Orders.Transition do
   import Ecto.Query, only: [from: 2]
   alias Pczone.{Repo, Products, Orders}
 
-  def transit(action, order_id, params, context) when is_bitstring(order_id) do
+  def submit(order_id, params) when is_bitstring(order_id) do
     order = Repo.get(Pczone.Order, order_id)
-    transit(action, order, params, context)
+    submit(order, params)
   end
 
-  def transit(
-        :submit,
-        %Pczone.Order{id: order_id, state: :cart},
-        %{item_ids: item_ids} = params,
-        context
+  def submit(
+        %Pczone.Order{id: order_id, state: :cart} = order,
+        %{item_ids: item_ids} = params
       ) do
     shipping_address = get_shipping_address(params)
     tax_info = get_tax_info(params)
@@ -45,15 +43,14 @@ defmodule Pczone.Orders.Transition do
         |> Ecto.Multi.run(:order, fn _, _ ->
           total = items |> Enum.map(& &1.amount) |> Enum.sum()
 
-          Orders.create(
-            %{
-              state: :submitted,
-              shipping_address: shipping_address,
-              tax_info: tax_info,
-              total: total
-            },
-            context
-          )
+          Orders.create(%{
+            state: :submitted,
+            shipping_address: shipping_address,
+            tax_info: tax_info,
+            total: total,
+            user_id: order.user_id,
+            customer_id: order.customer_id
+          })
         end)
         |> Ecto.Multi.run(:items, fn _, %{order: new_order} ->
           items = Enum.map(items, &Map.put(&1, :order_id, new_order.id))
@@ -64,15 +61,6 @@ defmodule Pczone.Orders.Transition do
         end)
         |> Repo.transaction()
     end
-  end
-
-  def transit(
-        :submit,
-        %Pczone.Order{state: _},
-        _params,
-        _context
-      ) do
-    {:error, "We can only submit order in cart state"}
   end
 
   defp get_tax_info(%{tax_info_id: tax_info_id}) when is_bitstring(tax_info_id) do

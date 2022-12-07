@@ -20,6 +20,10 @@ defmodule Pczone.Orders do
 
   def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
 
+  def get(id) do
+    Repo.get(Pczone.Order, id)
+  end
+
   def get_cart(context = %{user_id: "" <> user_id}) do
     case Repo.one(from Pczone.Order, where: [user_id: ^user_id, state: :cart]) do
       nil ->

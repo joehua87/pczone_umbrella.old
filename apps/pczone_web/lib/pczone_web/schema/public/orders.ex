@@ -50,6 +50,7 @@ defmodule PczoneWeb.Schema.Orders do
   end
 
   object :order do
+    field :id, non_null(:id)
     field :code, non_null(:string)
     field :user_id, :id
     field :user, :user, resolve: Helpers.dataloader(PczoneWeb.Dataloader)
@@ -89,6 +90,14 @@ defmodule PczoneWeb.Schema.Orders do
     field :cart, :order do
       resolve(fn _args, %{context: context} ->
         {:ok, Pczone.Orders.get_cart(context)}
+      end)
+    end
+
+    field :order, non_null(:order) do
+      arg :id, non_null(:id)
+
+      resolve(fn %{id: id}, %{context: _context} ->
+        {:ok, Pczone.Orders.get(id)}
       end)
     end
 
@@ -207,12 +216,12 @@ defmodule PczoneWeb.Schema.Orders do
       end)
     end
 
-    field :transit_order, non_null(:order) do
-      arg :action, non_null(:order_action)
+    field :submit_order, non_null(:order) do
       arg :data, non_null(:submit_order_input)
 
-      resolve(fn %{action: action, data: data}, %{context: context} ->
-        Pczone.Orders.Transition.transit(action, data, context)
+      resolve(fn %{data: data}, %{context: context} ->
+        order = Pczone.Orders.get_cart(context)
+        Pczone.Orders.Transition.submit(order, data)
       end)
     end
   end

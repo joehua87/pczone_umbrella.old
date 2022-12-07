@@ -12,11 +12,9 @@ defmodule Pczone.Orders.OrderTransitionTest do
       assert {:ok, _} = Orders.add_item(%{product_id: product.id, quantity: 1}, context)
 
       assert {:error, "Item ids must be more than 1"} =
-               Orders.Transition.transit(
-                 :submit,
-                 order.id,
-                 %{item_ids: [], shipping_address: address_fixture()},
-                 context
+               Orders.Transition.submit(
+                 order,
+                 %{item_ids: [], shipping_address: address_fixture()}
                )
     end
 
@@ -43,11 +41,9 @@ defmodule Pczone.Orders.OrderTransitionTest do
                 },
                 remove_cart_items: {1, nil}
               }} =
-               Orders.Transition.transit(
-                 :submit,
-                 order.id,
-                 %{item_ids: [order_item_id], shipping_address: address_fixture()},
-                 context
+               Orders.Transition.submit(
+                 order,
+                 %{item_ids: [order_item_id], shipping_address: address_fixture()}
                )
 
       assert %{items: [], builts: []} =
