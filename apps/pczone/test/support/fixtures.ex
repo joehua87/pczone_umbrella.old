@@ -16,7 +16,14 @@ defmodule Pczone.Fixtures do
   end
 
   def store_fixture() do
-    {:ok, store} = Pczone.Stores.create(%{code: "shopee", name: "Shopee", rate: 1.05})
+    {:ok, store} =
+      Pczone.Stores.create(%{
+        code: "76922911",
+        name: "xeonstorevn",
+        platform: "shopee",
+        rate: 1.05
+      })
+
     store
   end
 

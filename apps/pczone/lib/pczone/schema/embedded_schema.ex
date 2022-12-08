@@ -293,3 +293,22 @@ defmodule Pczone.RichText do
     |> cast_embed(:items)
   end
 end
+
+defmodule Pczone.ProductOption do
+  use Pczone.Schema
+  import Ecto.Changeset
+
+  @primary_key false
+  @derive Jason.Encoder
+
+  embedded_schema do
+    field :name, :string
+    field :values, {:array, :string}
+  end
+
+  def changeset(entity, params) do
+    entity
+    |> cast(params, [:name, :values])
+    |> validate_required([:name, :values])
+  end
+end
