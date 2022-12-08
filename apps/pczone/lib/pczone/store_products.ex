@@ -4,7 +4,7 @@ defmodule Pczone.StoreProducts do
   end
 
   def upsert(store_id, list, opts \\ []) do
-    entities = Enum.map(list, &parse_item(&1, store_id: store_id))
+    entities = Enum.map(list, &parse_list_item(&1, store_id: store_id))
 
     Pczone.Repo.insert_all(
       Pczone.StoreProduct,
@@ -16,7 +16,54 @@ defmodule Pczone.StoreProducts do
     )
   end
 
-  defp parse_item(
+  def update(store_product_id, data) do
+    %{id: id, store_id: store_id} =
+      store_product = Pczone.Repo.get(Pczone.StoreProduct, store_product_id)
+
+    %{
+      description: description,
+      variants: variants
+    } = parse_detail_item(data, store_product_id: id, store_id: store_id)
+
+    Ecto.Multi.new()
+    |> Ecto.Multi.update(:update, Ecto.Changeset.change(store_product, description: description))
+    |> Ecto.Multi.insert_all(:variants, Pczone.StoreVariant, variants)
+    |> Pczone.Repo.transaction()
+  end
+
+  defp parse_detail_item(
+         %{
+           "data" => %{
+             "id" => product_code,
+             "model_list" => model_list,
+             "description" => description
+           }
+         },
+         store_product_id: store_product_id,
+         store_id: store_id
+       ) do
+    now = DateTime.utc_now()
+
+    variants =
+      Enum.map(model_list, fn %{"id" => variant_code, "name" => name} ->
+        %{
+          store_product_id: store_product_id,
+          store_id: store_id,
+          product_code: "#{product_code}",
+          variant_code: "#{variant_code}",
+          name: name,
+          inserted_at: now,
+          updated_at: now
+        }
+      end)
+
+    %{
+      description: description,
+      variants: variants
+    }
+  end
+
+  defp parse_list_item(
          %{
            "itemid" => product_code,
            "item_basic" => %{
@@ -31,6 +78,8 @@ defmodule Pczone.StoreProducts do
          },
          store_id: store_id
        ) do
+    now = DateTime.utc_now()
+
     %{
       store_id: store_id,
       product_code: "#{product_code}",
@@ -43,8 +92,8 @@ defmodule Pczone.StoreProducts do
         "like_count" => like_count
       },
       created_at: DateTime.from_unix!(created_at),
-      inserted_at: DateTime.utc_now(),
-      updated_at: DateTime.utc_now()
+      inserted_at: now,
+      updated_at: now
     }
   end
 

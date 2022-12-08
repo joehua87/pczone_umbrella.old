@@ -19,7 +19,7 @@ defmodule Pczone.Repo.Migrations.AddStore do
       add :store_id, references(:store), null: false
       add :product_code, :string, null: false
       add :name, :string, null: false
-      add :description, :string
+      add :description, :text
       add :product_id, references(:product, on_delete: :delete_all)
       add :built_template_id, references(:built_template, on_delete: :delete_all)
       add :options, :map, null: false, default: "[]"
@@ -37,12 +37,13 @@ defmodule Pczone.Repo.Migrations.AddStore do
       add :store_id, references(:store), null: false
       add :product_code, :string, null: false
       add :variant_code, :string, null: false
-      add :name, :string, null: false
+      add :name, :string
       add :product_id, references(:product, on_delete: :delete_all)
       add :built_id, references(:built, on_delete: :delete_all)
-      add :variants, :map, null: false, default: "[]"
       timestamps()
     end
+
+    create unique_index(:store_variant, [:store_id, :variant_code])
 
     create table(:built_template_store) do
       add :built_template_id, references(:built_template, on_delete: :delete_all), null: false

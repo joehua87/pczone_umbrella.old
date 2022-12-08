@@ -1,0 +1,1458 @@
+{
+  "code": 0,
+  "message": "success",
+  "user_message": "success",
+  "data": {
+    "id": 15618662714,
+    "name": "Máy tính mini HP 800 G2 mini - EliteDesk 800 G2 chạy chip Core i5 thế hệ 6",
+    "images": [
+      "cd831729ea261a98772ebd849332cb70",
+      "1fd4c71d24fc1969be06122eca0d0a29",
+      "ee25df7b577c4335e6afaa5e50ade646",
+      "fa8ae1d77b8c7d322182dd6468663f28"
+    ],
+    "category_status": 1,
+    "category_path": [100644, 101932, 101945],
+    "stock": 1,
+    "promotion_stock": 0,
+    "flash_sale_status": "empty",
+    "days_to_ship": 2,
+    "attributes": [
+      {
+        "attribute_id": 100460,
+        "attribute_value_id": 2802,
+        "custom_value": { "raw_value": "", "unit": "" }
+      },
+      {
+        "attribute_id": 100095,
+        "attribute_value_id": 0,
+        "custom_value": { "raw_value": "1200", "unit": "g" }
+      },
+      {
+        "attribute_id": 100427,
+        "attribute_value_id": 2619,
+        "custom_value": { "raw_value": "", "unit": "" }
+      },
+      {
+        "attribute_id": 100413,
+        "attribute_value_id": 2556,
+        "custom_value": { "raw_value": "", "unit": "" }
+      },
+      {
+        "attribute_id": 100048,
+        "attribute_value_id": 490,
+        "custom_value": { "raw_value": "", "unit": "" }
+      },
+      {
+        "attribute_id": 100370,
+        "attribute_value_id": 0,
+        "custom_value": { "raw_value": "Tem bảo hành", "unit": "" }
+      },
+      {
+        "attribute_id": 100447,
+        "attribute_value_id": 2602,
+        "custom_value": { "raw_value": "", "unit": "" }
+      },
+      {
+        "attribute_id": 100447,
+        "attribute_value_id": 2655,
+        "custom_value": { "raw_value": "", "unit": "" }
+      },
+      {
+        "attribute_id": 100447,
+        "attribute_value_id": 3009,
+        "custom_value": { "raw_value": "", "unit": "" }
+      },
+      {
+        "attribute_id": 100447,
+        "attribute_value_id": 3046,
+        "custom_value": { "raw_value": "", "unit": "" }
+      },
+      {
+        "attribute_id": 100447,
+        "attribute_value_id": 3058,
+        "custom_value": { "raw_value": "", "unit": "" }
+      },
+      {
+        "attribute_id": 100442,
+        "attribute_value_id": 0,
+        "custom_value": { "raw_value": "3.1", "unit": "Ghz" }
+      },
+      {
+        "attribute_id": 100121,
+        "attribute_value_id": 776,
+        "custom_value": { "raw_value": "", "unit": "" }
+      }
+    ],
+    "status": 1,
+    "parent_sku": "",
+    "price_min": "2100000.00",
+    "price_max": "4798500.00",
+    "view_count": 0,
+    "like_count": 27,
+    "sold": 16,
+    "boost_cool_down_seconds": 0,
+    "flag": "0",
+    "use_bundle_sale": false,
+    "use_wholesale": false,
+    "add_on_deal": [],
+    "model_list": [
+      {
+        "add_on_deal": [],
+        "id": 86774553144,
+        "in_promotion": false,
+        "is_default": false,
+        "is_partial_fulfillment": false,
+        "price_info": {
+          "price_lock_type": 0,
+          "input_normal_price": "3591000.00",
+          "input_promotion_price": "0.00",
+          "normal_price": "3591000.00",
+          "promotion_price": "0.00",
+          "price_strategy": 0,
+          "item_price": null
+        },
+        "stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "wms_stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "sku": "",
+        "name": "i5-6500T,16GB + Ko SSD",
+        "price_before_discount": "0.00",
+        "price": "3591000.00",
+        "stock": 0,
+        "reserved_stock": 0,
+        "flash_sale_status": "empty",
+        "tier_index": [1, 1],
+        "promotion_id": 0,
+        "promotion_source": 0,
+        "pre_order": false,
+        "days_to_ship": 2,
+        "stock_detail": {
+          "seller_stock_info": { "sellable_stock": 0 },
+          "wms_stock_info": { "sellable_stock": 0 },
+          "total_reserved_stock": 0,
+          "total_available_stock": 0
+        }
+      },
+      {
+        "add_on_deal": [],
+        "id": 86774553146,
+        "in_promotion": false,
+        "is_default": false,
+        "is_partial_fulfillment": false,
+        "price_info": {
+          "price_lock_type": 0,
+          "input_normal_price": "3696000.00",
+          "input_promotion_price": "0.00",
+          "normal_price": "3696000.00",
+          "promotion_price": "0.00",
+          "price_strategy": 0,
+          "item_price": null
+        },
+        "stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "wms_stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "sku": "",
+        "name": "i5-6600T,16GB + Ko SSD",
+        "price_before_discount": "0.00",
+        "price": "3696000.00",
+        "stock": 0,
+        "reserved_stock": 0,
+        "flash_sale_status": "empty",
+        "tier_index": [2, 1],
+        "promotion_id": 0,
+        "promotion_source": 0,
+        "pre_order": false,
+        "days_to_ship": 2,
+        "stock_detail": {
+          "seller_stock_info": { "sellable_stock": 0 },
+          "wms_stock_info": { "sellable_stock": 0 },
+          "total_reserved_stock": 0,
+          "total_available_stock": 0
+        }
+      },
+      {
+        "add_on_deal": [],
+        "id": 107583269013,
+        "in_promotion": false,
+        "is_default": false,
+        "is_partial_fulfillment": false,
+        "price_info": {
+          "price_lock_type": 0,
+          "input_normal_price": "4168500.00",
+          "input_promotion_price": "0.00",
+          "normal_price": "4168500.00",
+          "promotion_price": "0.00",
+          "price_strategy": 0,
+          "item_price": null
+        },
+        "stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "wms_stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "sku": "",
+        "name": "i3-6100T,16GB + 512GB NVMe",
+        "price_before_discount": "0.00",
+        "price": "4168500.00",
+        "stock": 0,
+        "reserved_stock": 0,
+        "flash_sale_status": "empty",
+        "tier_index": [0, 4],
+        "promotion_id": 0,
+        "promotion_source": 0,
+        "pre_order": false,
+        "days_to_ship": 2,
+        "stock_detail": {
+          "seller_stock_info": { "sellable_stock": 0 },
+          "wms_stock_info": { "sellable_stock": 0 },
+          "total_reserved_stock": 0,
+          "total_available_stock": 0
+        }
+      },
+      {
+        "add_on_deal": [],
+        "id": 107583269014,
+        "in_promotion": false,
+        "is_default": false,
+        "is_partial_fulfillment": false,
+        "price_info": {
+          "price_lock_type": 0,
+          "input_normal_price": "3696000.00",
+          "input_promotion_price": "0.00",
+          "normal_price": "3696000.00",
+          "promotion_price": "0.00",
+          "price_strategy": 0,
+          "item_price": null
+        },
+        "stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "wms_stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "sku": "",
+        "name": "i3-6100T,16GB + 256GB NVMe",
+        "price_before_discount": "0.00",
+        "price": "3696000.00",
+        "stock": 0,
+        "reserved_stock": 0,
+        "flash_sale_status": "empty",
+        "tier_index": [0, 3],
+        "promotion_id": 0,
+        "promotion_source": 0,
+        "pre_order": false,
+        "days_to_ship": 2,
+        "stock_detail": {
+          "seller_stock_info": { "sellable_stock": 0 },
+          "wms_stock_info": { "sellable_stock": 0 },
+          "total_reserved_stock": 0,
+          "total_available_stock": 0
+        }
+      },
+      {
+        "add_on_deal": [],
+        "id": 107583269015,
+        "in_promotion": false,
+        "is_default": false,
+        "is_partial_fulfillment": false,
+        "price_info": {
+          "price_lock_type": 0,
+          "input_normal_price": "3213000.00",
+          "input_promotion_price": "0.00",
+          "normal_price": "3213000.00",
+          "promotion_price": "0.00",
+          "price_strategy": 0,
+          "item_price": null
+        },
+        "stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "wms_stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "sku": "",
+        "name": "i3-6100T,8GB + 256GB NVMe",
+        "price_before_discount": "0.00",
+        "price": "3213000.00",
+        "stock": 0,
+        "reserved_stock": 0,
+        "flash_sale_status": "empty",
+        "tier_index": [0, 7],
+        "promotion_id": 0,
+        "promotion_source": 0,
+        "pre_order": false,
+        "days_to_ship": 2,
+        "stock_detail": {
+          "seller_stock_info": { "sellable_stock": 0 },
+          "wms_stock_info": { "sellable_stock": 0 },
+          "total_reserved_stock": 0,
+          "total_available_stock": 0
+        }
+      },
+      {
+        "add_on_deal": [],
+        "id": 107583269016,
+        "in_promotion": false,
+        "is_default": false,
+        "is_partial_fulfillment": false,
+        "price_info": {
+          "price_lock_type": 0,
+          "input_normal_price": "2100000.00",
+          "input_promotion_price": "0.00",
+          "normal_price": "2100000.00",
+          "promotion_price": "0.00",
+          "price_strategy": 0,
+          "item_price": null
+        },
+        "stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "wms_stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "sku": "",
+        "name": "i3-6100T,Ko RAM + Ko SSD",
+        "price_before_discount": "0.00",
+        "price": "2100000.00",
+        "stock": 0,
+        "reserved_stock": 0,
+        "flash_sale_status": "empty",
+        "tier_index": [0, 0],
+        "promotion_id": 0,
+        "promotion_source": 0,
+        "pre_order": false,
+        "days_to_ship": 2,
+        "stock_detail": {
+          "seller_stock_info": { "sellable_stock": 0 },
+          "wms_stock_info": { "sellable_stock": 0 },
+          "total_reserved_stock": 0,
+          "total_available_stock": 0
+        }
+      },
+      {
+        "add_on_deal": [],
+        "id": 107583269017,
+        "in_promotion": false,
+        "is_default": false,
+        "is_partial_fulfillment": false,
+        "price_info": {
+          "price_lock_type": 0,
+          "input_normal_price": "3685500.00",
+          "input_promotion_price": "0.00",
+          "normal_price": "3685500.00",
+          "promotion_price": "0.00",
+          "price_strategy": 0,
+          "item_price": null
+        },
+        "stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "wms_stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "sku": "",
+        "name": "i3-6100T,8GB + 512GB NVMe",
+        "price_before_discount": "0.00",
+        "price": "3685500.00",
+        "stock": 0,
+        "reserved_stock": 0,
+        "flash_sale_status": "empty",
+        "tier_index": [0, 8],
+        "promotion_id": 0,
+        "promotion_source": 0,
+        "pre_order": false,
+        "days_to_ship": 2,
+        "stock_detail": {
+          "seller_stock_info": { "sellable_stock": 0 },
+          "wms_stock_info": { "sellable_stock": 0 },
+          "total_reserved_stock": 0,
+          "total_available_stock": 0
+        }
+      },
+      {
+        "add_on_deal": [],
+        "id": 107583269018,
+        "in_promotion": false,
+        "is_default": false,
+        "is_partial_fulfillment": false,
+        "price_info": {
+          "price_lock_type": 0,
+          "input_normal_price": "2583000.00",
+          "input_promotion_price": "0.00",
+          "normal_price": "2583000.00",
+          "promotion_price": "0.00",
+          "price_strategy": 0,
+          "item_price": null
+        },
+        "stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "wms_stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "sku": "",
+        "name": "i3-6100T,8GB + Ko SSD",
+        "price_before_discount": "0.00",
+        "price": "2583000.00",
+        "stock": 0,
+        "reserved_stock": 0,
+        "flash_sale_status": "empty",
+        "tier_index": [0, 5],
+        "promotion_id": 0,
+        "promotion_source": 0,
+        "pre_order": false,
+        "days_to_ship": 2,
+        "stock_detail": {
+          "seller_stock_info": { "sellable_stock": 0 },
+          "wms_stock_info": { "sellable_stock": 0 },
+          "total_reserved_stock": 0,
+          "total_available_stock": 0
+        }
+      },
+      {
+        "add_on_deal": [],
+        "id": 107583269019,
+        "in_promotion": false,
+        "is_default": false,
+        "is_partial_fulfillment": false,
+        "price_info": {
+          "price_lock_type": 0,
+          "input_normal_price": "3066000.00",
+          "input_promotion_price": "0.00",
+          "normal_price": "3066000.00",
+          "promotion_price": "0.00",
+          "price_strategy": 0,
+          "item_price": null
+        },
+        "stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "wms_stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "sku": "",
+        "name": "i3-6100T,16GB + Ko SSD",
+        "price_before_discount": "0.00",
+        "price": "3066000.00",
+        "stock": 0,
+        "reserved_stock": 0,
+        "flash_sale_status": "empty",
+        "tier_index": [0, 1],
+        "promotion_id": 0,
+        "promotion_source": 0,
+        "pre_order": false,
+        "days_to_ship": 2,
+        "stock_detail": {
+          "seller_stock_info": { "sellable_stock": 0 },
+          "wms_stock_info": { "sellable_stock": 0 },
+          "total_reserved_stock": 0,
+          "total_available_stock": 0
+        }
+      },
+      {
+        "add_on_deal": [],
+        "id": 107583269020,
+        "in_promotion": false,
+        "is_default": false,
+        "is_partial_fulfillment": false,
+        "price_info": {
+          "price_lock_type": 0,
+          "input_normal_price": "3486000.00",
+          "input_promotion_price": "0.00",
+          "normal_price": "3486000.00",
+          "promotion_price": "0.00",
+          "price_strategy": 0,
+          "item_price": null
+        },
+        "stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "wms_stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "sku": "",
+        "name": "i3-6100T,16GB + 128GB NVMe",
+        "price_before_discount": "0.00",
+        "price": "3486000.00",
+        "stock": 0,
+        "reserved_stock": 0,
+        "flash_sale_status": "empty",
+        "tier_index": [0, 2],
+        "promotion_id": 0,
+        "promotion_source": 0,
+        "pre_order": false,
+        "days_to_ship": 2,
+        "stock_detail": {
+          "seller_stock_info": { "sellable_stock": 0 },
+          "wms_stock_info": { "sellable_stock": 0 },
+          "total_reserved_stock": 0,
+          "total_available_stock": 0
+        }
+      },
+      {
+        "add_on_deal": [],
+        "id": 107583269021,
+        "in_promotion": false,
+        "is_default": false,
+        "is_partial_fulfillment": false,
+        "price_info": {
+          "price_lock_type": 0,
+          "input_normal_price": "3003000.00",
+          "input_promotion_price": "0.00",
+          "normal_price": "3003000.00",
+          "promotion_price": "0.00",
+          "price_strategy": 0,
+          "item_price": null
+        },
+        "stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 1,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "wms_stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "sku": "",
+        "name": "i3-6100T,8GB + 128GB NVMe",
+        "price_before_discount": "0.00",
+        "price": "3003000.00",
+        "stock": 1,
+        "reserved_stock": 0,
+        "flash_sale_status": "empty",
+        "tier_index": [0, 6],
+        "promotion_id": 0,
+        "promotion_source": 0,
+        "pre_order": false,
+        "days_to_ship": 2,
+        "stock_detail": {
+          "seller_stock_info": { "sellable_stock": 1 },
+          "wms_stock_info": { "sellable_stock": 0 },
+          "total_reserved_stock": 0,
+          "total_available_stock": 1
+        }
+      },
+      {
+        "add_on_deal": [],
+        "id": 125926292988,
+        "in_promotion": false,
+        "is_default": false,
+        "is_partial_fulfillment": false,
+        "price_info": {
+          "price_lock_type": 0,
+          "input_normal_price": "2730000.00",
+          "input_promotion_price": "0.00",
+          "normal_price": "2730000.00",
+          "promotion_price": "0.00",
+          "price_strategy": 0,
+          "item_price": null
+        },
+        "stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "wms_stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "sku": "",
+        "name": "i5-6600T,Ko RAM + Ko SSD",
+        "price_before_discount": "0.00",
+        "price": "2730000.00",
+        "stock": 0,
+        "reserved_stock": 0,
+        "flash_sale_status": "empty",
+        "tier_index": [2, 0],
+        "promotion_id": 0,
+        "promotion_source": 0,
+        "pre_order": false,
+        "days_to_ship": 2,
+        "stock_detail": {
+          "seller_stock_info": { "sellable_stock": 0 },
+          "wms_stock_info": { "sellable_stock": 0 },
+          "total_reserved_stock": 0,
+          "total_available_stock": 0
+        }
+      },
+      {
+        "add_on_deal": [],
+        "id": 125926292989,
+        "in_promotion": false,
+        "is_default": false,
+        "is_partial_fulfillment": false,
+        "price_info": {
+          "price_lock_type": 0,
+          "input_normal_price": "2625000.00",
+          "input_promotion_price": "0.00",
+          "normal_price": "2625000.00",
+          "promotion_price": "0.00",
+          "price_strategy": 0,
+          "item_price": null
+        },
+        "stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "wms_stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "sku": "",
+        "name": "i5-6500T,Ko RAM + Ko SSD",
+        "price_before_discount": "0.00",
+        "price": "2625000.00",
+        "stock": 0,
+        "reserved_stock": 0,
+        "flash_sale_status": "empty",
+        "tier_index": [1, 0],
+        "promotion_id": 0,
+        "promotion_source": 0,
+        "pre_order": false,
+        "days_to_ship": 2,
+        "stock_detail": {
+          "seller_stock_info": { "sellable_stock": 0 },
+          "wms_stock_info": { "sellable_stock": 0 },
+          "total_reserved_stock": 0,
+          "total_available_stock": 0
+        }
+      },
+      {
+        "add_on_deal": [],
+        "id": 126320072813,
+        "in_promotion": false,
+        "is_default": false,
+        "is_partial_fulfillment": false,
+        "price_info": {
+          "price_lock_type": 0,
+          "input_normal_price": "4011000.00",
+          "input_promotion_price": "0.00",
+          "normal_price": "4011000.00",
+          "promotion_price": "0.00",
+          "price_strategy": 0,
+          "item_price": null
+        },
+        "stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "wms_stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "sku": "",
+        "name": "i5-6500T,16GB + 128GB NVMe",
+        "price_before_discount": "0.00",
+        "price": "4011000.00",
+        "stock": 0,
+        "reserved_stock": 0,
+        "flash_sale_status": "empty",
+        "tier_index": [1, 2],
+        "promotion_id": 0,
+        "promotion_source": 0,
+        "pre_order": false,
+        "days_to_ship": 2,
+        "stock_detail": {
+          "seller_stock_info": { "sellable_stock": 0 },
+          "wms_stock_info": { "sellable_stock": 0 },
+          "total_reserved_stock": 0,
+          "total_available_stock": 0
+        }
+      },
+      {
+        "add_on_deal": [],
+        "id": 126320072814,
+        "in_promotion": false,
+        "is_default": false,
+        "is_partial_fulfillment": false,
+        "price_info": {
+          "price_lock_type": 0,
+          "input_normal_price": "4693500.00",
+          "input_promotion_price": "0.00",
+          "normal_price": "4693500.00",
+          "promotion_price": "0.00",
+          "price_strategy": 0,
+          "item_price": null
+        },
+        "stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "wms_stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "sku": "",
+        "name": "i5-6500T,16GB + 512GB NVMe",
+        "price_before_discount": "0.00",
+        "price": "4693500.00",
+        "stock": 0,
+        "reserved_stock": 0,
+        "flash_sale_status": "empty",
+        "tier_index": [1, 4],
+        "promotion_id": 0,
+        "promotion_source": 0,
+        "pre_order": false,
+        "days_to_ship": 2,
+        "stock_detail": {
+          "seller_stock_info": { "sellable_stock": 0 },
+          "wms_stock_info": { "sellable_stock": 0 },
+          "total_reserved_stock": 0,
+          "total_available_stock": 0
+        }
+      },
+      {
+        "add_on_deal": [],
+        "id": 126320072815,
+        "in_promotion": false,
+        "is_default": false,
+        "is_partial_fulfillment": false,
+        "price_info": {
+          "price_lock_type": 0,
+          "input_normal_price": "3843000.00",
+          "input_promotion_price": "0.00",
+          "normal_price": "3843000.00",
+          "promotion_price": "0.00",
+          "price_strategy": 0,
+          "item_price": null
+        },
+        "stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "wms_stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "sku": "",
+        "name": "i5-6600T,8GB + 256GB NVMe",
+        "price_before_discount": "0.00",
+        "price": "3843000.00",
+        "stock": 0,
+        "reserved_stock": 0,
+        "flash_sale_status": "empty",
+        "tier_index": [2, 7],
+        "promotion_id": 0,
+        "promotion_source": 0,
+        "pre_order": false,
+        "days_to_ship": 2,
+        "stock_detail": {
+          "seller_stock_info": { "sellable_stock": 0 },
+          "wms_stock_info": { "sellable_stock": 0 },
+          "total_reserved_stock": 0,
+          "total_available_stock": 0
+        }
+      },
+      {
+        "add_on_deal": [],
+        "id": 126320072816,
+        "in_promotion": false,
+        "is_default": false,
+        "is_partial_fulfillment": false,
+        "price_info": {
+          "price_lock_type": 0,
+          "input_normal_price": "4315500.00",
+          "input_promotion_price": "0.00",
+          "normal_price": "4315500.00",
+          "promotion_price": "0.00",
+          "price_strategy": 0,
+          "item_price": null
+        },
+        "stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "wms_stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "sku": "",
+        "name": "i5-6600T,8GB + 512GB NVMe",
+        "price_before_discount": "0.00",
+        "price": "4315500.00",
+        "stock": 0,
+        "reserved_stock": 0,
+        "flash_sale_status": "empty",
+        "tier_index": [2, 8],
+        "promotion_id": 0,
+        "promotion_source": 0,
+        "pre_order": false,
+        "days_to_ship": 2,
+        "stock_detail": {
+          "seller_stock_info": { "sellable_stock": 0 },
+          "wms_stock_info": { "sellable_stock": 0 },
+          "total_reserved_stock": 0,
+          "total_available_stock": 0
+        }
+      },
+      {
+        "add_on_deal": [],
+        "id": 126320072817,
+        "in_promotion": false,
+        "is_default": false,
+        "is_partial_fulfillment": false,
+        "price_info": {
+          "price_lock_type": 0,
+          "input_normal_price": "4116000.00",
+          "input_promotion_price": "0.00",
+          "normal_price": "4116000.00",
+          "promotion_price": "0.00",
+          "price_strategy": 0,
+          "item_price": null
+        },
+        "stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "wms_stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "sku": "",
+        "name": "i5-6600T,16GB + 128GB NVMe",
+        "price_before_discount": "0.00",
+        "price": "4116000.00",
+        "stock": 0,
+        "reserved_stock": 0,
+        "flash_sale_status": "empty",
+        "tier_index": [2, 2],
+        "promotion_id": 0,
+        "promotion_source": 0,
+        "pre_order": false,
+        "days_to_ship": 2,
+        "stock_detail": {
+          "seller_stock_info": { "sellable_stock": 0 },
+          "wms_stock_info": { "sellable_stock": 0 },
+          "total_reserved_stock": 0,
+          "total_available_stock": 0
+        }
+      },
+      {
+        "add_on_deal": [],
+        "id": 126320072818,
+        "in_promotion": false,
+        "is_default": false,
+        "is_partial_fulfillment": false,
+        "price_info": {
+          "price_lock_type": 0,
+          "input_normal_price": "3213000.00",
+          "input_promotion_price": "0.00",
+          "normal_price": "3213000.00",
+          "promotion_price": "0.00",
+          "price_strategy": 0,
+          "item_price": null
+        },
+        "stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "wms_stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "sku": "",
+        "name": "i5-6600T,8GB + Ko SSD",
+        "price_before_discount": "0.00",
+        "price": "3213000.00",
+        "stock": 0,
+        "reserved_stock": 0,
+        "flash_sale_status": "empty",
+        "tier_index": [2, 5],
+        "promotion_id": 0,
+        "promotion_source": 0,
+        "pre_order": false,
+        "days_to_ship": 2,
+        "stock_detail": {
+          "seller_stock_info": { "sellable_stock": 0 },
+          "wms_stock_info": { "sellable_stock": 0 },
+          "total_reserved_stock": 0,
+          "total_available_stock": 0
+        }
+      },
+      {
+        "add_on_deal": [],
+        "id": 126320072819,
+        "in_promotion": false,
+        "is_default": false,
+        "is_partial_fulfillment": false,
+        "price_info": {
+          "price_lock_type": 0,
+          "input_normal_price": "4210500.00",
+          "input_promotion_price": "0.00",
+          "normal_price": "4210500.00",
+          "promotion_price": "0.00",
+          "price_strategy": 0,
+          "item_price": null
+        },
+        "stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "wms_stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "sku": "",
+        "name": "i5-6500T,8GB + 512GB NVMe",
+        "price_before_discount": "0.00",
+        "price": "4210500.00",
+        "stock": 0,
+        "reserved_stock": 0,
+        "flash_sale_status": "empty",
+        "tier_index": [1, 8],
+        "promotion_id": 0,
+        "promotion_source": 0,
+        "pre_order": false,
+        "days_to_ship": 2,
+        "stock_detail": {
+          "seller_stock_info": { "sellable_stock": 0 },
+          "wms_stock_info": { "sellable_stock": 0 },
+          "total_reserved_stock": 0,
+          "total_available_stock": 0
+        }
+      },
+      {
+        "add_on_deal": [],
+        "id": 126320072820,
+        "in_promotion": false,
+        "is_default": false,
+        "is_partial_fulfillment": false,
+        "price_info": {
+          "price_lock_type": 0,
+          "input_normal_price": "3108000.00",
+          "input_promotion_price": "0.00",
+          "normal_price": "3108000.00",
+          "promotion_price": "0.00",
+          "price_strategy": 0,
+          "item_price": null
+        },
+        "stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "wms_stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "sku": "",
+        "name": "i5-6500T,8GB + Ko SSD",
+        "price_before_discount": "0.00",
+        "price": "3108000.00",
+        "stock": 0,
+        "reserved_stock": 0,
+        "flash_sale_status": "empty",
+        "tier_index": [1, 5],
+        "promotion_id": 0,
+        "promotion_source": 0,
+        "pre_order": false,
+        "days_to_ship": 2,
+        "stock_detail": {
+          "seller_stock_info": { "sellable_stock": 0 },
+          "wms_stock_info": { "sellable_stock": 0 },
+          "total_reserved_stock": 0,
+          "total_available_stock": 0
+        }
+      },
+      {
+        "add_on_deal": [],
+        "id": 126320072821,
+        "in_promotion": false,
+        "is_default": false,
+        "is_partial_fulfillment": false,
+        "price_info": {
+          "price_lock_type": 0,
+          "input_normal_price": "3738000.00",
+          "input_promotion_price": "0.00",
+          "normal_price": "3738000.00",
+          "promotion_price": "0.00",
+          "price_strategy": 0,
+          "item_price": null
+        },
+        "stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "wms_stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "sku": "",
+        "name": "i5-6500T,8GB + 256GB NVMe",
+        "price_before_discount": "0.00",
+        "price": "3738000.00",
+        "stock": 0,
+        "reserved_stock": 0,
+        "flash_sale_status": "empty",
+        "tier_index": [1, 7],
+        "promotion_id": 0,
+        "promotion_source": 0,
+        "pre_order": false,
+        "days_to_ship": 2,
+        "stock_detail": {
+          "seller_stock_info": { "sellable_stock": 0 },
+          "wms_stock_info": { "sellable_stock": 0 },
+          "total_reserved_stock": 0,
+          "total_available_stock": 0
+        }
+      },
+      {
+        "add_on_deal": [],
+        "id": 126320072822,
+        "in_promotion": false,
+        "is_default": false,
+        "is_partial_fulfillment": false,
+        "price_info": {
+          "price_lock_type": 0,
+          "input_normal_price": "4798500.00",
+          "input_promotion_price": "0.00",
+          "normal_price": "4798500.00",
+          "promotion_price": "0.00",
+          "price_strategy": 0,
+          "item_price": null
+        },
+        "stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "wms_stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "sku": "",
+        "name": "i5-6600T,16GB + 512GB NVMe",
+        "price_before_discount": "0.00",
+        "price": "4798500.00",
+        "stock": 0,
+        "reserved_stock": 0,
+        "flash_sale_status": "empty",
+        "tier_index": [2, 4],
+        "promotion_id": 0,
+        "promotion_source": 0,
+        "pre_order": false,
+        "days_to_ship": 2,
+        "stock_detail": {
+          "seller_stock_info": { "sellable_stock": 0 },
+          "wms_stock_info": { "sellable_stock": 0 },
+          "total_reserved_stock": 0,
+          "total_available_stock": 0
+        }
+      },
+      {
+        "add_on_deal": [],
+        "id": 126320072823,
+        "in_promotion": false,
+        "is_default": false,
+        "is_partial_fulfillment": false,
+        "price_info": {
+          "price_lock_type": 0,
+          "input_normal_price": "4326000.00",
+          "input_promotion_price": "0.00",
+          "normal_price": "4326000.00",
+          "promotion_price": "0.00",
+          "price_strategy": 0,
+          "item_price": null
+        },
+        "stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "wms_stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "sku": "",
+        "name": "i5-6600T,16GB + 256GB NVMe",
+        "price_before_discount": "0.00",
+        "price": "4326000.00",
+        "stock": 0,
+        "reserved_stock": 0,
+        "flash_sale_status": "empty",
+        "tier_index": [2, 3],
+        "promotion_id": 0,
+        "promotion_source": 0,
+        "pre_order": false,
+        "days_to_ship": 2,
+        "stock_detail": {
+          "seller_stock_info": { "sellable_stock": 0 },
+          "wms_stock_info": { "sellable_stock": 0 },
+          "total_reserved_stock": 0,
+          "total_available_stock": 0
+        }
+      },
+      {
+        "add_on_deal": [],
+        "id": 126320072824,
+        "in_promotion": false,
+        "is_default": false,
+        "is_partial_fulfillment": false,
+        "price_info": {
+          "price_lock_type": 0,
+          "input_normal_price": "4221000.00",
+          "input_promotion_price": "0.00",
+          "normal_price": "4221000.00",
+          "promotion_price": "0.00",
+          "price_strategy": 0,
+          "item_price": null
+        },
+        "stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "wms_stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "sku": "",
+        "name": "i5-6500T,16GB + 256GB NVMe",
+        "price_before_discount": "0.00",
+        "price": "4221000.00",
+        "stock": 0,
+        "reserved_stock": 0,
+        "flash_sale_status": "empty",
+        "tier_index": [1, 3],
+        "promotion_id": 0,
+        "promotion_source": 0,
+        "pre_order": false,
+        "days_to_ship": 2,
+        "stock_detail": {
+          "seller_stock_info": { "sellable_stock": 0 },
+          "wms_stock_info": { "sellable_stock": 0 },
+          "total_reserved_stock": 0,
+          "total_available_stock": 0
+        }
+      },
+      {
+        "add_on_deal": [],
+        "id": 126320072825,
+        "in_promotion": false,
+        "is_default": false,
+        "is_partial_fulfillment": false,
+        "price_info": {
+          "price_lock_type": 0,
+          "input_normal_price": "3528000.00",
+          "input_promotion_price": "0.00",
+          "normal_price": "3528000.00",
+          "promotion_price": "0.00",
+          "price_strategy": 0,
+          "item_price": null
+        },
+        "stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "wms_stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "sku": "",
+        "name": "i5-6500T,8GB + 128GB NVMe",
+        "price_before_discount": "0.00",
+        "price": "3528000.00",
+        "stock": 0,
+        "reserved_stock": 0,
+        "flash_sale_status": "empty",
+        "tier_index": [1, 6],
+        "promotion_id": 0,
+        "promotion_source": 0,
+        "pre_order": false,
+        "days_to_ship": 2,
+        "stock_detail": {
+          "seller_stock_info": { "sellable_stock": 0 },
+          "wms_stock_info": { "sellable_stock": 0 },
+          "total_reserved_stock": 0,
+          "total_available_stock": 0
+        }
+      },
+      {
+        "add_on_deal": [],
+        "id": 126320072826,
+        "in_promotion": false,
+        "is_default": false,
+        "is_partial_fulfillment": false,
+        "price_info": {
+          "price_lock_type": 0,
+          "input_normal_price": "3633000.00",
+          "input_promotion_price": "0.00",
+          "normal_price": "3633000.00",
+          "promotion_price": "0.00",
+          "price_strategy": 0,
+          "item_price": null
+        },
+        "stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "wms_stock_info": {
+          "stock_lock_type": 0,
+          "normal_stock": 0,
+          "reserved_stock": 0,
+          "promotion_stock": 0,
+          "sip_stock": 0
+        },
+        "sku": "",
+        "name": "i5-6600T,8GB + 128GB NVMe",
+        "price_before_discount": "0.00",
+        "price": "3633000.00",
+        "stock": 0,
+        "reserved_stock": 0,
+        "flash_sale_status": "empty",
+        "tier_index": [2, 6],
+        "promotion_id": 0,
+        "promotion_source": 0,
+        "pre_order": false,
+        "days_to_ship": 2,
+        "stock_detail": {
+          "seller_stock_info": { "sellable_stock": 0 },
+          "wms_stock_info": { "sellable_stock": 0 },
+          "total_reserved_stock": 0,
+          "total_available_stock": 0
+        }
+      }
+    ],
+    "wholesale_list": [],
+    "wholesale": false,
+    "installment_tenures": { "status": 0, "enables": [] },
+    "stock_locked": false,
+    "stock_aggregate": { "seller_current_stock": 1 },
+    "condition": 4,
+    "description_type": "normal",
+    "description": "**Máy tính để bàn HP 800 G2 mini** là dòng nhỏ gọn, mạnh mẽ, tiết kiệm năng lượng cho không gian làm việc tối giản.\n\nTuyệt vời khi dùng cho công việc văn phòng, học online, giải trí, xem phim, chơi game, chỉnh sửa đồ họa nhẹ như Photoshop, Illustrator, CAD...\n\nChơi được game nhẹ, low setting.\n\n✅Ứng dụng linh hoạt:\n\n• Kết nối với màn hình vi tính sử dụng giống như các cây máy tính PC thông thường khác\n• Kết nối máy chiếu để trình chiếu\n• Kết nối tivi xem giải trí youtube, facebook, đọc báo\n• Kết nối được với tivi thành bộ máy tính tiết kiệm chi phí.\n• Dễ dàng đem theo khi di chuyển.\n• Chạy mượt mà, hầu như không có tiếng động.\n\n🔥 Cấu hình chuẩn cao cấp:\n\n• RAM: từ 8 GB DDR4, nâng cấp tối đa đến 32GB.\n• Ổ cứng: SSD NVMe 256GB, gấp 3-5 lần SSD thông thường (tùy chọn)\n• Hệ điều hành: Windows 10 Pro bản quyền theo máy\n• Wifi, bluetooth tích hợp\n• Adapter, sạc theo máy\n\n✅ Đa dạng cổng giao tiếp:\n\n• 6 cổng USB 3.0 (4 mặt sau, 2 mặt trước)\n• 1 cổng DisplayPort\n• 2 cổng optional: VGA, HDMI, I/O.\n\nSản phẩm đã bao gồm sạc (adapter) đi kèm. Cắm điện là chạy.\n\n⭐️Chính sách bảo hành:\n\n• Sản phẩm đã được kiểm tra vận hành ổn định trước khi gửi đi.\n• Bao test máy 1 tuần kể từ khi khách nhận được máy.\n• Bảo hành 3 tháng, lỗi đổi cái khác, hoặc hoàn tiền.\n• Nhận nâng cấp cấu hình theo yêu cầu, chi tiết vui lòng inbox shop nha.\n\n*Cổng optional có thể thay đổi tùy theo từng đợt nhập hàng. Khách cần cổng xuất hình cụ thể nào vui lòng chat với shop để được tặng kèm cáp chuyển tương ứng.\n\n### Chú thích về linh kiện RAM và ổ cứng\n\n- RAM laptop DDR4, shop build theo cấu hình CPU tối đa. RAM theo máy shop cam kết chỉ sử dụng các hãng danh tiếng như: Samsung, Micron, SK Hynix, Kingston...\n- SSD chuẩn NVMe có tốc độ đọc nhanh gấp 4-6 lần so với SSD 2.5 in SATA thông thường. Dung lượng càng lớn tốc độ đọc càng cao. NVMe ráp máy bảo đảm có sức khỏe từ 97-100%, từ các thương hiệu nổi tiếng như Samsung, Western Digital, Micron, SK Hynix,...",
+    "pre_order": false,
+    "size_chart": "",
+    "dangerous_goods": 0,
+    "tier_variation": [
+      {
+        "name": "CPU",
+        "options": ["i3-6100T", "i5-6500T", "i5-6600T"],
+        "images": []
+      },
+      {
+        "name": "RAM / Ổ cứng",
+        "options": [
+          "Ko RAM + Ko SSD",
+          "16GB + Ko SSD",
+          "16GB + 128GB NVMe",
+          "16GB + 256GB NVMe",
+          "16GB + 512GB NVMe",
+          "8GB + Ko SSD",
+          "8GB + 128GB NVMe",
+          "8GB + 256GB NVMe",
+          "8GB + 512GB NVMe"
+        ],
+        "images": []
+      }
+    ],
+    "weight": "2000",
+    "dimension": { "width": 30, "length": 30, "height": 10 },
+    "video_list": [],
+    "banned_reason": "",
+    "brand": "HP",
+    "brand_id": 1146556,
+    "dts_lock": false,
+    "video_task_id": "",
+    "reserved_stock": 0,
+    "min_purchase_limit_info": { "min_purchase_limit": 1, "lock_type": 0 },
+    "max_purchase_limit_info": {
+      "type": 0,
+      "purchase_limit": 0,
+      "start_date": "",
+      "end_date": "",
+      "repeated_times": 0
+    },
+    "promotion_source": 0,
+    "deboosted_infos": { "reasons": [] },
+    "model_lock": false,
+    "banned_infos": { "banned_time": 0, "banned_reason": [], "reasons": [] },
+    "category_recommend": [],
+    "self_discount_id": 0,
+    "enable_model_level_dts": false,
+    "size_chart_id": 0,
+    "is_converted_size_chart": false,
+    "item_tag": { "is_b2c_sku_fbs_shop": false }
+  }
+}
