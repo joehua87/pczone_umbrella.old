@@ -12,6 +12,7 @@ defmodule PczoneWeb.Schema do
   import_types PczoneWeb.Schema.Posts
   import_types PczoneWeb.Schema.Brands
   import_types PczoneWeb.Schema.Stores
+  import_types PczoneWeb.Schema.StoreProducts
   import_types PczoneWeb.Schema.Chipsets
   import_types PczoneWeb.Schema.Motherboards
   import_types PczoneWeb.Schema.Barebones
@@ -40,6 +41,7 @@ defmodule PczoneWeb.Schema do
     import_fields :taxon_queries
     import_fields :brand_queries
     import_fields :store_queries
+    import_fields :store_product_queries
     import_fields :chipset_queries
     import_fields :processor_queries
     import_fields :chassis_queries

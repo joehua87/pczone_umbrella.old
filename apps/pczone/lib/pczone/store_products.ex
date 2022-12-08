@@ -1,12 +1,37 @@
 defmodule Pczone.StoreProducts do
+  import Ecto.Query, only: [where: 2]
+  import Dew.FilterParser
+  alias Pczone.Repo
+
+  def list(attrs \\ %{})
+
+  def list(%Dew.Filter{
+        filter: filter,
+        paging: paging,
+        selection: selection,
+        order_by: order_by
+      }) do
+    Pczone.StoreProduct
+    |> where(^parse_filter(filter))
+    |> select_fields(selection, [])
+    |> sort_by(order_by, [])
+    |> Repo.paginate(paging)
+  end
+
+  def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
+
   def upsert(store_id) when is_bitstring(store_id) do
     # TODO: Get data from store code
+    with %{merchant_id: store_code} <- Pczone.Repo.get(Pczone.Store, store_id),
+         list <- Pczone.Scraper.Shopee.get_all_products(store_code) do
+      upsert(store_id, list)
+    end
   end
 
   def upsert(store_id, list, opts \\ []) do
     entities = Enum.map(list, &parse_list_item(&1, store_id: store_id))
 
-    Pczone.Repo.insert_all(
+    Repo.insert_all(
       Pczone.StoreProduct,
       entities,
       [
@@ -18,7 +43,7 @@ defmodule Pczone.StoreProducts do
 
   def update(store_product_id, data) do
     %{id: id, store_id: store_id} =
-      store_product = Pczone.Repo.get(Pczone.StoreProduct, store_product_id)
+      store_product = Repo.get(Pczone.StoreProduct, store_product_id)
 
     %{
       description: description,
@@ -28,7 +53,17 @@ defmodule Pczone.StoreProducts do
     Ecto.Multi.new()
     |> Ecto.Multi.update(:update, Ecto.Changeset.change(store_product, description: description))
     |> Ecto.Multi.insert_all(:variants, Pczone.StoreVariant, variants)
-    |> Pczone.Repo.transaction()
+    |> Repo.transaction()
+  end
+
+  def parse_filter(filter) do
+    filter
+    |> Enum.reduce(nil, fn {field, value}, acc ->
+      case field do
+        :store_id -> parse_id_filter(acc, field, value)
+        _ -> acc
+      end
+    end) || true
   end
 
   defp parse_detail_item(

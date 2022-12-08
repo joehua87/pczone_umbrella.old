@@ -1,17 +1,17 @@
 defmodule Pczone.Scraper.Shopee do
   @limit 100
-  def get_all_products(shop_id, opts \\ []) do
-    {:ok, %{"total_count" => total}} = get_products(shop_id, limit: nil)
+  def get_all_products(store_code, opts \\ []) do
+    {:ok, %{"total_count" => total}} = get_products(store_code, limit: nil)
     page_count = ceil(total / @limit) - 1
 
     0..page_count
     |> Enum.flat_map(fn page ->
-      {:ok, %{"items" => items}} = get_products(shop_id, opts ++ [offset: page * @limit])
+      {:ok, %{"items" => items}} = get_products(store_code, opts ++ [offset: page * @limit])
       items
     end)
   end
 
-  def get_products(shop_id, opts \\ []) do
+  def get_products(store_code, opts \\ []) do
     offset = Keyword.get(opts, :offset, 0)
     limit = Keyword.get(opts, :limit, @limit)
     sort_by = Keyword.get(opts, :sort_by, "sales")
@@ -20,7 +20,7 @@ defmodule Pczone.Scraper.Shopee do
 
     query =
       [
-        shopid: shop_id,
+        shopid: store_code,
         limit: limit,
         offset: offset,
         sort_by: sort_by,
