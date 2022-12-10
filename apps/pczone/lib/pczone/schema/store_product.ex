@@ -17,6 +17,7 @@ defmodule Pczone.StoreProduct do
     field :sold, :integer
     field :stats, {:map, :integer}, default: %{}
     field :created_at, :utc_datetime
+    has_many :variants, Pczone.StoreVariant
     timestamps()
   end
 

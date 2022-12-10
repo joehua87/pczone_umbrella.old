@@ -1,9 +1,17 @@
 defmodule PczoneWeb.Schema.StoreProducts do
   use Absinthe.Schema.Notation
+  alias Absinthe.Resolution.Helpers
 
   object :product_option do
     field :name, non_null(:string)
     field :values, non_null(list_of(non_null(:string)))
+  end
+
+  object :store_variant do
+    field :id, non_null(:id)
+    field :product_code, non_null(:string)
+    field :variant_code, non_null(:string)
+    field :name, non_null(:string)
   end
 
   object :store_product do
@@ -19,6 +27,10 @@ defmodule PczoneWeb.Schema.StoreProducts do
     field :built_template, :built_template
     field :options, non_null(list_of(non_null(:product_option)))
     field :images, non_null(list_of(non_null(:embedded_medium)))
+
+    field :variants, non_null(list_of(non_null(:store_variant))),
+      resolve: Helpers.dataloader(PczoneWeb.Dataloader)
+
     field :sold, :integer
     field :stats, :json
     field :created_at, non_null(:datetime)
@@ -34,6 +46,16 @@ defmodule PczoneWeb.Schema.StoreProducts do
   end
 
   object :store_product_queries do
+    field :store_product, non_null(:store_product) do
+      arg :id, non_null(:id)
+
+      resolve(fn %{id: id}, _info ->
+        with %{} = entity <- Pczone.StoreProducts.get(id) do
+          {:ok, entity}
+        end
+      end)
+    end
+
     field :store_products, non_null(:store_product_list_result) do
       arg :filter, :store_product_filter_input
       arg :order_by, list_of(non_null(:order_by_input))

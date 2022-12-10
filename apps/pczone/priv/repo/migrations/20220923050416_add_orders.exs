@@ -76,7 +76,10 @@ defmodule Pczone.Repo.Migrations.AddOrders do
 
     create table(:order_item) do
       add :order_id, references(:order), null: false
-      add :product_id, references(:product), null: false
+      add :product_id, references(:product)
+      add :product_image, :map
+      add :product_name, :string, null: false
+      add :variant_name, :string, null: false
       add :from_built, :boolean, default: false, null: false
       add :price, :integer, null: false
       add :quantity, :integer, null: false

@@ -3,6 +3,10 @@ defmodule Pczone.StoreProducts do
   import Dew.FilterParser
   alias Pczone.Repo
 
+  def get(id) do
+    Repo.get(Pczone.StoreProduct, id)
+  end
+
   def list(attrs \\ %{})
 
   def list(%Dew.Filter{
@@ -41,10 +45,22 @@ defmodule Pczone.StoreProducts do
     )
   end
 
-  def update(store_product_id, data) do
-    %{id: id, store_id: store_id} =
-      store_product = Repo.get(Pczone.StoreProduct, store_product_id)
+  def update_all_products() do
+    Repo.all(Pczone.StoreProduct)
+    |> Task.async_stream(&update/1, timeout: 15_000, max_concurrency: 2)
+    |> Enum.into([])
+  end
 
+  def update(store_product = %Pczone.StoreProduct{product_code: product_code}) do
+    {:ok, data} = Pczone.Scraper.Shopee.get_product(product_code)
+    update(store_product, data)
+  end
+
+  def update(store_product_id) do
+    Repo.get(Pczone.StoreProduct, store_product_id) |> update()
+  end
+
+  def update(%Pczone.StoreProduct{id: id, store_id: store_id} = store_product, data) do
     %{
       description: description,
       variants: variants
@@ -52,7 +68,10 @@ defmodule Pczone.StoreProducts do
 
     Ecto.Multi.new()
     |> Ecto.Multi.update(:update, Ecto.Changeset.change(store_product, description: description))
-    |> Ecto.Multi.insert_all(:variants, Pczone.StoreVariant, variants)
+    |> Ecto.Multi.insert_all(:variants, Pczone.StoreVariant, variants,
+      on_conflict: {:replace, [:name]},
+      conflict_target: [:store_id, :variant_code]
+    )
     |> Repo.transaction()
   end
 
@@ -64,6 +83,9 @@ defmodule Pczone.StoreProducts do
         _ -> acc
       end
     end) || true
+  end
+
+  defp parse_order() do
   end
 
   defp parse_detail_item(

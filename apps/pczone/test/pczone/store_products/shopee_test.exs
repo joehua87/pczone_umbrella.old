@@ -19,7 +19,16 @@ defmodule Pczone.StoreProducts.ShopeeTest do
       {_, products} = Pczone.StoreProducts.upsert(store.id, list, returning: true)
       product = Enum.find(products, &(&1.product_code == product_id))
       detail = read_fixture("shopee-product.json")
-      assert {:ok, %{variants: {27, _}}} = Pczone.StoreProducts.update(product.id, detail)
+      assert {:ok, %{variants: {27, _}}} = Pczone.StoreProducts.update(product, detail)
+    end
+
+    test "valid from id" do
+      store = store_fixture()
+      list = read_fixture("shopee-products.json")
+      product_id = "15618662714"
+      {_, products} = Pczone.StoreProducts.upsert(store.id, list, returning: true)
+      product = Enum.find(products, &(&1.product_code == product_id))
+      assert {:ok, %{variants: {27, _}}} = Pczone.StoreProducts.update(product.id)
     end
   end
 end
