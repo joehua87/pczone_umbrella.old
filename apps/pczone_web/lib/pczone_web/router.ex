@@ -51,6 +51,8 @@ defmodule PczoneWeb.Router do
 
   scope "/", PczoneWeb do
     pipe_through :api
+    get "/regions", RegionsController, :index
+
     post "/upsert/barebones", UpsertController, :barebones
     post "/upsert/brands", UpsertController, :brands
     post "/upsert/chassises", UpsertController, :chassises

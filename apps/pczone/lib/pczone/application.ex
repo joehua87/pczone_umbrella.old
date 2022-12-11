@@ -13,7 +13,8 @@ defmodule Pczone.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Pczone.PubSub},
       {Mongo, Pczone.MongoRepo.config()},
-      {Finch, name: MyFinch}
+      {Finch, name: MyFinch},
+      Pczone.Regions
       # Start a worker by calling: Pczone.Worker.start_link(arg)
       # {Pczone.Worker, arg}
     ]
