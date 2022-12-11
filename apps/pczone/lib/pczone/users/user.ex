@@ -72,10 +72,6 @@ defmodule Pczone.Users.User do
     end
   end
 
-  def role_changeset(user, role) do
-    cast(user, %{role: role}, [:role])
-  end
-
   @doc """
   A user changeset for changing the email.
 

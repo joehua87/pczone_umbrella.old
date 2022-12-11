@@ -348,6 +348,16 @@ defmodule Pczone.Users do
     end
   end
 
+  def set_role(%User{} = user, role) do
+    user
+    |> Ecto.Changeset.change(%{role: role})
+    |> Repo.update()
+  end
+
+  def set_role(user_id, role) do
+    set_role(Repo.get(User, user_id), role)
+  end
+
   def add_address(user_id, params) do
     %{user_id: user_id, address: params}
     |> Pczone.UserAddress.new_changeset()
