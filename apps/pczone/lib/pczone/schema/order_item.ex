@@ -3,12 +3,14 @@ defmodule Pczone.OrderItem do
   import Ecto.Changeset
 
   @timestamps_opts [type: :utc_datetime]
-  @required [:order_id, :product_id, :quantity, :price, :amount]
-  @optional []
+  @required [:order_id, :product_name, :quantity, :price, :amount]
+  @optional [:product_id]
 
   schema "order_item" do
     belongs_to :order, Pczone.Order
     belongs_to :product, Pczone.Product
+    field :product_name, :string
+    embeds_one :image, Pczone.EmbeddedMedium
     field :from_built, :boolean, default: false
     field :price, :integer
     field :quantity, :integer

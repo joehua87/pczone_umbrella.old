@@ -2,12 +2,14 @@ defmodule Pczone.OrderBuilt do
   use Pczone.Schema
   import Ecto.Changeset
 
-  @required [:order_id, :built_id, :quantity, :price, :amount]
-  @optional []
+  @required [:order_id, :built_template_name, :quantity, :price, :amount]
+  @optional [:built_id]
 
   schema "order_built" do
     belongs_to :order, Pczone.Order
     belongs_to :built, Pczone.Built
+    field :built_template_name, :string
+    embeds_one :image, Pczone.EmbeddedMedium
     field :price, :integer
     field :quantity, :integer
     field :amount, :integer

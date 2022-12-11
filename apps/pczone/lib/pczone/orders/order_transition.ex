@@ -25,12 +25,18 @@ defmodule Pczone.Orders.Transition do
         products_price_map = items |> Enum.map(& &1.product_id) |> Products.get_price_map()
 
         items =
-          Enum.map(items, fn %{product_id: product_id, quantity: quantity} ->
+          Enum.map(items, fn %{
+                               product_id: product_id,
+                               product_name: product_name,
+                               quantity: quantity
+                             } ->
             price = products_price_map[product_id]
             now = DateTime.utc_now() |> DateTime.truncate(:second)
 
             %{
               product_id: product_id,
+              product_id: product_id,
+              product_name: product_name,
               price: price,
               quantity: quantity,
               amount: price * quantity,
