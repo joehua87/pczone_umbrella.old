@@ -3,9 +3,14 @@ defmodule Pczone.Users.User do
   import Ecto.Changeset
 
   schema "user" do
+    field :username, :string
+    field :name, :string
+    field :phone, :string
     field :email, :string
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
+    embeds_one :avatar, Pczone.EmbeddedMedium
+    field :bio, :string
     field :role, Ecto.Enum, values: [:user, :admin], default: :user
     field :confirmed_at, :naive_datetime
     has_many :user_addresses, Pczone.UserAddress
@@ -33,7 +38,8 @@ defmodule Pczone.Users.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :password])
+    |> cast(attrs, [:username, :name, :phone, :email, :password])
+    |> validate_required([:username, :name])
     |> validate_email()
     |> validate_password(opts)
   end

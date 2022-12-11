@@ -85,12 +85,19 @@ defmodule Pczone.Orders do
 
   def add_built(%{built_id: built_id, quantity: quantity}, context) do
     order = ensure_cart(context)
-    %{price: price, name: built_template_name} = Pczone.Builts.get(built_id)
+
+    %{
+      name: built_name,
+      price: price,
+      built_template: %{name: built_template_name, media: media}
+    } = Pczone.Builts.get(built_id) |> Repo.preload(:built_template)
 
     %{
       order_id: order.id,
       built_id: built_id,
+      image: List.first(media),
       built_template_name: built_template_name,
+      built_name: built_name,
       price: price,
       quantity: quantity,
       amount: price * quantity
@@ -98,7 +105,7 @@ defmodule Pczone.Orders do
     |> Pczone.OrderBuilt.new_changeset()
     |> Repo.insert(
       on_conflict: [
-        set: [price: price],
+        set: [price: price, built_template_name: built_template_name],
         inc: [quantity: quantity, amount: price * quantity]
       ],
       conflict_target: [:order_id, :built_id]
@@ -135,12 +142,13 @@ defmodule Pczone.Orders do
 
   def add_item(%{product_id: product_id, quantity: quantity}, context) do
     order = ensure_cart(context)
-    %{sale_price: price, title: product_name} = Products.get(product_id)
+    %{sale_price: price, title: product_name, media: media} = Products.get(product_id)
 
     %{
       order_id: order.id,
       product_id: product_id,
       product_name: product_name,
+      image: List.first(media),
       price: price,
       quantity: quantity,
       amount: price * quantity

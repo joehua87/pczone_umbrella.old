@@ -20,7 +20,12 @@ defmodule PczoneWeb.Schema.Users do
 
   object :user do
     field :id, non_null(:id)
+    field :username, non_null(:string)
+    field :name, non_null(:string)
     field :email, non_null(:string)
+    field :phone, :string
+    field :avatar, :embedded_medium
+    field :bio, :string
     field :role, non_null(:role)
     field :confirmed_at, :datetime
 
@@ -32,7 +37,10 @@ defmodule PczoneWeb.Schema.Users do
   end
 
   input_object :register_user_input do
+    field :username, non_null(:string)
     field :email, non_null(:string)
+    field :name, non_null(:string)
+    field :phone, :string
     field :password, non_null(:string)
   end
 

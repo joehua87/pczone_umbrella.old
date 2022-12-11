@@ -11,6 +11,12 @@
 # and so on) as they will fail if something goes wrong.
 
 with {:ok, user} <-
-       Pczone.Users.register_user(%{email: "admin@pczone.vn", password: "fdsajkl;", role: :admin}) do
+       Pczone.Users.register_user(%{
+         username: "admin",
+         email: "admin@pczone.vn",
+         name: "Admin",
+         password: "fdsajkl;",
+         role: :admin
+       }) do
   Pczone.Users.set_role(user, :admin)
 end

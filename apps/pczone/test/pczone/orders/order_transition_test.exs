@@ -11,10 +11,10 @@ defmodule Pczone.Orders.OrderTransitionTest do
       context = %{order_token: order.token}
       assert {:ok, _} = Orders.add_item(%{product_id: product.id, quantity: 1}, context)
 
-      assert {:error, "Item ids must be more than 1"} =
+      assert {:error, "Must have at least 1 item or 1 built"} =
                Orders.Transition.submit(
                  order,
-                 %{item_ids: [], shipping_address: address_fixture()}
+                 %{item_ids: [], built_ids: [], shipping_address: address_fixture()}
                )
     end
 
@@ -43,7 +43,7 @@ defmodule Pczone.Orders.OrderTransitionTest do
               }} =
                Orders.Transition.submit(
                  order,
-                 %{item_ids: [order_item_id], shipping_address: address_fixture()}
+                 %{item_ids: [order_item_id], built_ids: [], shipping_address: address_fixture()}
                )
 
       assert %{items: [], builts: []} =

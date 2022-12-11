@@ -4,7 +4,20 @@ defmodule Pczone.Order do
 
   @timestamps_opts [type: :utc_datetime]
   @required [:code, :token]
-  @optional [:user_id, :customer_id, :state, :total]
+  @optional [
+    :user_id,
+    :customer_id,
+    :state,
+    :total,
+    :submitted_at,
+    :submitted_by_id,
+    :approved_at,
+    :approved_by_id,
+    :canceled_at,
+    :canceled_by_id,
+    :shipped_at,
+    :completed_at
+  ]
   @order_states [
     :cart,
     :submitted,
@@ -24,6 +37,14 @@ defmodule Pczone.Order do
     field :state, Ecto.Enum, values: @order_states, default: :cart
     field :total, :integer, default: 0
     field :token, :string
+    field :submitted_at, :utc_datetime
+    belongs_to :submitted_by, Pczone.Users.User
+    field :approved_at, :utc_datetime
+    belongs_to :approved_by, Pczone.Users.User
+    field :canceled_at, :utc_datetime
+    belongs_to :canceled_by, Pczone.Users.User
+    field :shipped_at, :utc_datetime
+    field :completed_at, :utc_datetime
     has_many :items, Pczone.OrderItem
     has_many :builts, Pczone.OrderBuilt
     timestamps()

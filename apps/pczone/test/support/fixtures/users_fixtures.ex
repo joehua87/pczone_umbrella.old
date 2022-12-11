@@ -4,11 +4,14 @@ defmodule Pczone.UsersFixtures do
   entities via the `Pczone.Users` context.
   """
 
+  def unique_user_username, do: "user#{System.unique_integer()}"
   def unique_user_email, do: "user#{System.unique_integer()}@example.com"
   def valid_user_password, do: "hello world!"
 
   def valid_user_taxonomies(attrs \\ %{}) do
     Enum.into(attrs, %{
+      username: unique_user_username(),
+      name: "User #{System.unique_integer()}",
       email: unique_user_email(),
       password: valid_user_password()
     })

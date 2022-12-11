@@ -155,6 +155,7 @@ defmodule PczoneWeb.Schema.Orders do
 
   input_object :submit_order_input do
     field :item_ids, non_null(list_of(non_null(:id)))
+    field :built_ids, non_null(list_of(non_null(:id)))
     field :shipping_address, :address_input
     field :tax_info, :tax_info_input
     field :shipping_address_id, :id
@@ -221,7 +222,10 @@ defmodule PczoneWeb.Schema.Orders do
 
       resolve(fn %{data: data}, %{context: context} ->
         order = Pczone.Orders.get_cart(context)
-        Pczone.Orders.Transition.submit(order, data)
+
+        with {:ok, %{order: order}} <- Pczone.Orders.Transition.submit(order, data) do
+          {:ok, order}
+        end
       end)
     end
   end

@@ -58,6 +58,14 @@ defmodule Pczone.Repo.Migrations.AddOrders do
       add :state, :string
       add :total, :integer, null: false
       add :token, :string, null: false
+      add :submitted_at, :utc_datetime
+      add :submitted_by_id, references(:user)
+      add :approved_at, :utc_datetime
+      add :approved_by_id, references(:user)
+      add :canceled_at, :utc_datetime
+      add :canceled_by_id, references(:user)
+      add :shipped_at, :utc_datetime
+      add :completed_at, :utc_datetime
       timestamps()
     end
 
@@ -90,6 +98,13 @@ defmodule Pczone.Repo.Migrations.AddOrders do
     end
 
     create unique_index(:order_item, [:order_id, :product_id])
+
+    create table(:order_adjustment) do
+      add :order_id, references(:order), null: false
+      add :type, :string, null: false
+      add :amount, :integer, null: false
+      timestamps()
+    end
 
     create table(:order_item_stock) do
       add :order_id, references(:order), null: false

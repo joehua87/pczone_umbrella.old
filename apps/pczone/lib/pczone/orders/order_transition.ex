@@ -8,8 +8,22 @@ defmodule Pczone.Orders.Transition do
   end
 
   def submit(
+        %Pczone.Order{state: :cart},
+        %{item_ids: [], built_ids: []}
+      ) do
+    {:error, "Must have at least 1 item or 1 built"}
+  end
+
+  def submit(
+        %Pczone.Order{state: :cart},
+        %{shipping_address_id: nil, shipping_address: nil}
+      ) do
+    {:error, "Missing shipping address"}
+  end
+
+  def submit(
         %Pczone.Order{id: order_id, state: :cart} = order,
-        %{item_ids: item_ids} = params
+        %{item_ids: item_ids, built_ids: built_ids} = params
       ) do
     shipping_address = get_shipping_address(params)
     tax_info = get_tax_info(params)
@@ -17,56 +31,61 @@ defmodule Pczone.Orders.Transition do
     items =
       Repo.all(from(i in Pczone.OrderItem, where: i.order_id == ^order_id and i.id in ^item_ids))
 
-    case items do
-      [] ->
-        {:error, "Item ids must be more than 1"}
+    builts =
+      Repo.all(
+        from(i in Pczone.OrderBuilt, where: i.order_id == ^order_id and i.id in ^built_ids)
+      )
 
-      _ ->
-        products_price_map = items |> Enum.map(& &1.product_id) |> Products.get_price_map()
+    products_price_map = items |> Enum.map(& &1.product_id) |> Products.get_price_map()
 
-        items =
-          Enum.map(items, fn %{
-                               product_id: product_id,
-                               product_name: product_name,
-                               quantity: quantity
-                             } ->
-            price = products_price_map[product_id]
-            now = DateTime.utc_now() |> DateTime.truncate(:second)
+    items =
+      Enum.map(items, fn %{
+                           product_id: product_id,
+                           product_name: product_name,
+                           quantity: quantity
+                         } ->
+        price = products_price_map[product_id]
+        now = DateTime.utc_now() |> DateTime.truncate(:second)
 
-            %{
-              product_id: product_id,
-              product_id: product_id,
-              product_name: product_name,
-              price: price,
-              quantity: quantity,
-              amount: price * quantity,
-              inserted_at: now,
-              updated_at: now
-            }
-          end)
+        %{
+          product_id: product_id,
+          product_name: product_name,
+          price: price,
+          quantity: quantity,
+          amount: price * quantity,
+          inserted_at: now,
+          updated_at: now
+        }
+      end)
 
-        Ecto.Multi.new()
-        |> Ecto.Multi.run(:order, fn _, _ ->
-          total = items |> Enum.map(& &1.amount) |> Enum.sum()
+    Ecto.Multi.new()
+    |> Ecto.Multi.run(:order, fn _, _ ->
+      total = items |> Enum.map(& &1.amount) |> Enum.sum()
 
-          Orders.create(%{
-            state: :submitted,
-            shipping_address: shipping_address,
-            tax_info: tax_info,
-            total: total,
-            user_id: order.user_id,
-            customer_id: order.customer_id
-          })
-        end)
-        |> Ecto.Multi.run(:items, fn _, %{order: new_order} ->
-          items = Enum.map(items, &Map.put(&1, :order_id, new_order.id))
-          Repo.insert_all_2(Pczone.OrderItem, items)
-        end)
-        |> Ecto.Multi.run(:remove_cart_items, fn _, %{} ->
-          Repo.delete_all_2(from(i in Pczone.OrderItem, where: i.id in ^item_ids))
-        end)
-        |> Repo.transaction()
-    end
+      Orders.create(%{
+        state: :submitted,
+        shipping_address: shipping_address,
+        tax_info: tax_info,
+        total: total,
+        user_id: order.user_id,
+        customer_id: order.customer_id
+      })
+    end)
+    |> Ecto.Multi.run(:items, fn _, %{order: new_order} ->
+      items = Enum.map(items, &Map.put(&1, :order_id, new_order.id))
+      Repo.insert_all_2(Pczone.OrderItem, items)
+    end)
+    |> Ecto.Multi.run(:builts, fn _, %{order: new_order} ->
+      builts = Enum.map(builts, &Map.put(&1, :order_id, new_order.id))
+      Repo.insert_all_2(Pczone.OrderBuilt, builts)
+    end)
+    |> Ecto.Multi.run(:remove_cart_items, fn _, %{} ->
+      Repo.delete_all_2(from(i in Pczone.OrderItem, where: i.id in ^item_ids))
+    end)
+    |> Ecto.Multi.run(:remove_cart_builts, fn _, %{} ->
+      Repo.delete_all_2(from(i in Pczone.OrderBuilt, where: i.id in ^built_ids))
+    end)
+    |> Repo.transaction()
   end
 
   defp get_tax_info(%{tax_info_id: tax_info_id}) when is_bitstring(tax_info_id) do
