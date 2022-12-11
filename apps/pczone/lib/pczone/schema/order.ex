@@ -9,6 +9,8 @@ defmodule Pczone.Order do
     :customer_id,
     :state,
     :total,
+    :items_count,
+    :builts_count,
     :submitted_at,
     :submitted_by_id,
     :approved_at,
@@ -35,6 +37,8 @@ defmodule Pczone.Order do
     embeds_one :shipping_address, Pczone.Address
     embeds_one :tax_info, Pczone.TaxInfo
     field :state, Ecto.Enum, values: @order_states, default: :cart
+    field :items_count, :integer, default: 0
+    field :builts_count, :integer, default: 0
     field :total, :integer, default: 0
     field :token, :string
     field :submitted_at, :utc_datetime

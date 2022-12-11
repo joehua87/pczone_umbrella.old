@@ -56,6 +56,8 @@ defmodule Pczone.Repo.Migrations.AddOrders do
       add :shipping_address, :map
       add :tax_info, :map
       add :state, :string
+      add :items_count, :integer, null: false, default: 0
+      add :builts_count, :integer, null: false, default: 0
       add :total, :integer, null: false
       add :token, :string, null: false
       add :submitted_at, :utc_datetime
