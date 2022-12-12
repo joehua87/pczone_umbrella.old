@@ -59,6 +59,8 @@ defmodule PczoneWeb.Schema.BuiltTemplates do
     field :id, non_null(:id)
     field :code, non_null(:string)
     field :name, non_null(:string)
+    field :slug, non_null(:string)
+    field :title, non_null(:string)
     field :option_types, non_null(list_of(non_null(:string)))
     field :option_value_seperator, non_null(:string)
     field :media, non_null(list_of(non_null(:embedded_medium)))

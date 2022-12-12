@@ -4,6 +4,7 @@ defmodule Pczone.Product do
 
   @required [
     :code,
+    :name,
     :slug,
     :title,
     :condition,
@@ -24,6 +25,7 @@ defmodule Pczone.Product do
     field :sku, :string
     field :code, :string
     field :slug, :string
+    field :name, :string
     field :title, :string
     field :condition, :string
     field :component_type, Ecto.Enum, values: Pczone.Enum.product_component_types()

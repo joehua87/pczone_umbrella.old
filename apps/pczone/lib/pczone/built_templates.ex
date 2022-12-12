@@ -323,15 +323,20 @@ defmodule Pczone.BuiltTemplates do
              "body_template" => body_template,
              "barebone_product" => barebone_product_code,
              "option_types" => option_types
-           } ->
+           } = params ->
           %{
             id: barebone_id,
             product_id: barebone_product_id
           } = Map.get(barebone_products_map, barebone_product_code)
 
+          title = Map.get(params, "title", name)
+          slug = Map.get(params, "slug", Slug.slugify(title))
+
           %{
             code: code,
             name: name,
+            slug: slug,
+            title: title,
             body_template: body_template,
             barebone_id: barebone_id,
             barebone_product_id: barebone_product_id,
@@ -352,6 +357,7 @@ defmodule Pczone.BuiltTemplates do
               {:replace,
                [
                  :name,
+                 :title,
                  :body_template,
                  :barebone_id,
                  :barebone_product_id,

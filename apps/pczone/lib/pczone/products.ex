@@ -125,6 +125,7 @@ defmodule Pczone.Products do
       product_fields = [
         :sku,
         :slug,
+        :name,
         :title,
         :condition,
         :component_type,
@@ -228,8 +229,10 @@ defmodule Pczone.Products do
 
           %{id: id, slug: slug, title: title} ->
             product =
-              %{
+              params
+              |> Map.merge(%{
                 "slug" => get_slug(params) || Slug.slugify("#{slug} #{condition}"),
+                "name" => get_title(params) || "#{title} (#{condition})",
                 "title" => get_title(params) || "#{title} (#{condition})",
                 "list_price" => list_price,
                 "sale_price" => sale_price,
@@ -237,8 +240,7 @@ defmodule Pczone.Products do
                 "cost" => cost,
                 "component_type" => type,
                 "is_bundled" => false
-              }
-              |> Map.merge(params)
+              })
               |> Pczone.Product.new_changeset()
               |> Pczone.Helpers.get_changeset_changes()
 

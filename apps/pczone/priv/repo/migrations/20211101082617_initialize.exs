@@ -310,6 +310,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
       add :sku, :string
       add :code, :string, null: false
       add :slug, :string, null: false
+      add :name, :string, null: false
       add :title, :string, null: false
       add :condition, :string, null: false
       add :component_type, :string
@@ -326,6 +327,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
     end
 
     create unique_index(:product, [:code])
+    create unique_index(:product, [:slug])
     create index(:product, [:is_bundled])
     create index(:product, [:condition])
     create index(:product, [:list_price])
@@ -374,6 +376,8 @@ defmodule Pczone.Repo.Migrations.Initialize do
     create table(:built_template) do
       add :code, :string, null: false
       add :name, :string, null: false
+      add :slug, :string, null: false
+      add :title, :string, null: false
       add :media, :map, null: false, default: "[]"
       add :body_template, :string, null: false
       add :featured, :boolean, null: false, default: false
@@ -387,6 +391,7 @@ defmodule Pczone.Repo.Migrations.Initialize do
     end
 
     create unique_index(:built_template, [:code])
+    create unique_index(:built_template, [:slug])
     create index(:built_template, [:featured])
     create index(:built_template, [:position])
 
