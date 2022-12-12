@@ -125,12 +125,26 @@ defmodule Pczone.Media do
   """
   def sync_media(uploads) do
     entities = Enum.map(uploads, &make_image_params/1)
-    map = Enum.map(uploads, &{&1.filename, &1.path}) |> Enum.into(%{})
+    ids = Enum.map(entities, & &1.id)
 
+    exists_media_map =
+      Repo.all(from m in Medium, where: m.id in ^ids, select: {m.id, m.size})
+      |> Enum.into(%{})
+
+    entities_to_upload =
+      Enum.filter(entities, fn %{id: id, size: size} ->
+        !Decimal.eq?(Map.get(exists_media_map, id), size)
+      end)
+
+    map = Enum.map(uploads, &{&1.filename, &1.path}) |> Enum.into(%{})
     ensure_image_path!()
 
     with {:ok, {_, media}} <-
-           Repo.insert_all_2(Medium, entities, on_conflict: :nothing, returning: true) do
+           Repo.insert_all_2(Medium, entities_to_upload,
+             on_conflict: {:replace, [:size]},
+             conflict_target: [:id],
+             returning: true
+           ) do
       Task.async_stream(
         media,
         fn %{id: id} ->
@@ -145,6 +159,13 @@ defmodule Pczone.Media do
       |> Enum.into([])
 
       {:ok, media}
+    end
+  end
+
+  def check_image(%{id: id, size: size}) do
+    case File.stat(get_image_path(id)) do
+      {:ok, %{size: ^size}} -> true
+      _ -> false
     end
   end
 
@@ -164,7 +185,7 @@ defmodule Pczone.Media do
   end
 
   def delete(id) when is_bitstring(id) do
-    case Repo.one(from(Medium, where: [id: ^id])) do
+    case Repo.one(from Medium, where: [id: ^id]) do
       nil ->
         {:error, :not_found}
 
