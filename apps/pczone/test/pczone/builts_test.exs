@@ -13,7 +13,7 @@ defmodule Pczone.BuiltsTest do
 
       built_query =
         from Pczone.Built,
-          preload: [:built_processors, :built_memories, :built_hard_drives]
+          preload: [:built_processors, :built_memories, :built_hard_drives, :built_products]
 
       assert %{
                built_memories: [%{quantity: 2}],

@@ -679,7 +679,8 @@ defmodule Pczone.BuiltTemplates do
 
   def generate_builts(ids, _opts) when is_list(ids) do
     built_templates = Repo.all(from bt in built_template_query(), where: bt.id in ^ids)
-    built_templates |> Enum.flat_map(&make_builts/1) |> Pczone.Builts.upsert()
+    builts = Enum.flat_map(built_templates, &make_builts/1)
+    Pczone.Builts.upsert(builts)
   end
 
   def generate_all_builts(opts \\ []) do

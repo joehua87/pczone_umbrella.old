@@ -82,9 +82,18 @@ defmodule Pczone.BuiltTemplatesTest do
       [built_template | _] = built_templates_fixture()
       assert {:ok, _} = BuiltTemplates.generate_builts(built_template)
 
-      assert [%{} | _] =
-               Repo.all(
-                 from v in Pczone.Built, where: v.state == :published, order_by: [asc: :position]
+      assert %{
+               price: 3_500_000,
+               built_products: [
+                 %Pczone.BuiltProduct{quantity: 1},
+                 %Pczone.BuiltProduct{quantity: 1}
+               ]
+             } =
+               Repo.one(
+                 from v in Pczone.Built,
+                   where: v.state == :published and v.name == "i5-6500T,Ko RAM + Ko SSD",
+                   order_by: [asc: :position],
+                   preload: [:built_products]
                )
 
       assert 123 = Repo.aggregate(Pczone.BuiltProduct, :count)

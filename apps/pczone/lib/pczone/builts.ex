@@ -132,30 +132,49 @@ defmodule Pczone.Builts do
       end)
       |> Ecto.Multi.run(:built_products, fn _, %{builts_map: builts_map} ->
         built_ids = builts_map |> Map.values() |> Enum.map(& &1.id)
-        Pczone.Builts.calculate_built_products(built_ids)
+        calculate_built_products(built_ids)
       end)
+      |> Ecto.Multi.run(:create_tmp_table, fn _, _ ->
+        tmp_table_name = "table_#{DateTime.utc_now() |> DateTime.to_unix()}"
 
-    multi =
-      builts
-      |> Enum.reduce(multi, fn built, acc ->
-        key = get_built_key(built)
-
-        Ecto.Multi.run(
-          acc,
-          "update price #{key}",
-          fn _,
-             %{
-               builts_map: builts_map
-             } ->
-            built = builts_map[key]
-            %{total: price, stock: stock} = Pczone.Builts.calculate_built_price(built.id)
-
-            Repo.update_all_2(from(Pczone.Built, where: [id: ^built.id]),
-              set: [price: price, stock: stock]
-            )
-          end
-        )
+        with {:ok, _} <-
+               Repo.query("""
+               CREATE TEMPORARY TABLE "#{tmp_table_name}" (
+                 built_id UUID NOT NULL,
+                 stock INTEGER NOT NULL,
+                 price INTEGER NOT NULL
+               );
+               """) do
+          {:ok, tmp_table_name}
+        end
       end)
+      |> Ecto.Multi.run(
+        :insert_tmp_table,
+        fn _, %{builts_map: builts_map, create_tmp_table: tmp_table_name} ->
+          rows =
+            builts_map
+            |> Map.values()
+            |> Enum.map(& &1.id)
+            |> calculate_builts_price()
+            |> Enum.map(fn {built_id, %{stock: stock, total: price}} ->
+              %{built_id: Ecto.UUID.dump!(built_id), stock: stock, price: price}
+            end)
+
+          Repo.insert_all_2(tmp_table_name, rows)
+        end
+      )
+      |> Ecto.Multi.run(
+        :calculate_price,
+        fn _, %{create_tmp_table: tmp_table_name} ->
+          Repo.query("""
+          UPDATE "built"
+          SET
+            price = (SELECT price FROM "#{tmp_table_name}" t WHERE t.built_id = built.id),
+            stock = (SELECT stock FROM "#{tmp_table_name}" t WHERE t.built_id = built.id)
+          WHERE id IN (SELECT built_id from "#{tmp_table_name}")
+          """)
+        end
+      )
 
     with {:ok, %{insert_all: list}} <- Repo.transaction(multi) do
       {:ok, list}
