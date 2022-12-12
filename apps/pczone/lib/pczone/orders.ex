@@ -20,6 +20,24 @@ defmodule Pczone.Orders do
 
   def list(attrs = %{}), do: list(struct(Dew.Filter, attrs))
 
+  def my_list(
+        %Dew.Filter{
+          filter: filter,
+          paging: paging,
+          selection: selection,
+          order_by: order_by
+        },
+        %{user_id: "" <> user_id}
+      ) do
+    from(o in Pczone.Order, where: o.state != :cart and o.user_id == ^user_id)
+    |> where(^parse_filter(filter))
+    |> select_fields(selection, [:shipping_address, :tax_info])
+    |> sort_by(order_by, [])
+    |> Repo.paginate(paging)
+  end
+
+  def my_list(attrs = %{}, context), do: my_list(struct(Dew.Filter, attrs), context)
+
   def get(id) do
     Repo.get(Pczone.Order, id)
   end

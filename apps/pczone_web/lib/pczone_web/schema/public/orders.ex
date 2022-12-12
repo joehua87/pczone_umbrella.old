@@ -123,6 +123,23 @@ defmodule PczoneWeb.Schema.Orders do
         {:ok, list}
       end)
     end
+
+    field :my_orders, non_null(:order_list_result) do
+      arg :filter, :order_filter_input
+      arg :order_by, list_of(non_null(:order_by_input))
+      arg :paging, :paging_input
+
+      resolve(fn args, info = %{context: context} ->
+        list =
+          args
+          |> Map.merge(%{
+            selection: PczoneWeb.AbsintheHelper.project(info) |> Keyword.get(:entities)
+          })
+          |> Pczone.Orders.my_list(context)
+
+        {:ok, list}
+      end)
+    end
   end
 
   input_object :add_order_item_input do
