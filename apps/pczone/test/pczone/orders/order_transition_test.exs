@@ -27,19 +27,21 @@ defmodule Pczone.Orders.OrderTransitionTest do
                Orders.add_item(%{product_id: product.id, quantity: 1}, context)
 
       assert {:ok,
-              %{
-                items: {1, nil},
-                order: %Pczone.Order{
-                  id: _,
-                  shipping_address: %{
-                    first_name: "Dew",
-                    last_name: "John",
-                    full_name: "Dew John"
-                  },
-                  total: 1_900_000,
-                  state: :submitted
+              %Pczone.Order{
+                id: _,
+                shipping_address: %{
+                  first_name: "Dew",
+                  last_name: "John",
+                  full_name: "Dew John"
                 },
-                remove_cart_items: {1, nil}
+                items_count: 1,
+                builts_count: 0,
+                items_quantity: 1,
+                builts_quantity: 0,
+                items_total: 1_900_000,
+                builts_total: 0,
+                total: 1_900_000,
+                state: :submitted
               }} =
                Orders.Transition.submit(
                  order,

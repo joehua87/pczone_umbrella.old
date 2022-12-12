@@ -58,6 +58,10 @@ defmodule Pczone.Repo.Migrations.AddOrders do
       add :state, :string
       add :items_count, :integer, null: false, default: 0
       add :builts_count, :integer, null: false, default: 0
+      add :items_quantity, :integer, null: false, default: 0
+      add :builts_quantity, :integer, null: false, default: 0
+      add :items_total, :integer, null: false, default: 0
+      add :builts_total, :integer, null: false, default: 0
       add :total, :integer, null: false
       add :token, :string, null: false
       add :submitted_at, :utc_datetime

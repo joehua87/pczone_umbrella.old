@@ -59,6 +59,12 @@ defmodule PczoneWeb.Schema.Orders do
     field :shipping_address, :address
     field :tax_info, :tax_info
     field :state, non_null(:order_state)
+    field :items_count, non_null(:integer)
+    field :builts_count, non_null(:integer)
+    field :items_quantity, non_null(:integer)
+    field :builts_quantity, non_null(:integer)
+    field :items_total, non_null(:integer)
+    field :builts_total, non_null(:integer)
     field :total, non_null(:integer)
 
     field :items, non_null(list_of(non_null(:order_item))),
@@ -222,10 +228,7 @@ defmodule PczoneWeb.Schema.Orders do
 
       resolve(fn %{data: data}, %{context: context} ->
         order = Pczone.Orders.get_cart(context)
-
-        with {:ok, %{order: order}} <- Pczone.Orders.Transition.submit(order, data) do
-          {:ok, order}
-        end
+        Pczone.Orders.Transition.submit(order, data)
       end)
     end
   end
