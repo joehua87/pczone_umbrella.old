@@ -133,7 +133,7 @@ defmodule Pczone.Media do
 
     entities_to_upload =
       Enum.filter(entities, fn %{id: id, size: size} ->
-        !Decimal.eq?(Map.get(exists_media_map, id), size)
+        !Decimal.eq?(Map.get(exists_media_map, id, 0), size)
       end)
 
     map = Enum.map(uploads, &{&1.filename, &1.path}) |> Enum.into(%{})
