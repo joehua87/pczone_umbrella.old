@@ -47,7 +47,8 @@ defmodule Pczone.Regions do
 
   def get() do
     items =
-      "/Users/achilles/Projects/pczone_umbrella/data/provinces.json"
+      :code.priv_dir(:pczone)
+      |> Path.join("regions.json")
       |> File.read!()
       |> Jason.decode!()
 
